@@ -3,3 +3,4 @@
 /output
 /test/*.xml
 config.json
+client/node_modules
