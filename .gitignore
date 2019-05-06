@@ -3,6 +3,7 @@
 /output
 /test/*.xml
 config.json
+node_modules
 # dependencies
 /client/node_modules
 
