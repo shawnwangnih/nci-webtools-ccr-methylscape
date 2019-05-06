@@ -24,24 +24,3 @@ node_modules
 /client/yarn-debug.log*
 /client/yarn-error.log*
 /client/package-lock.json
-
-# dependencies
-/client-test/node_modules
-
-# testing
-/client-test/coverage
-
-# production
-/client-test/build
-
-# misc
-/client-test/.DS_Store
-/client-test/.env.local
-/client-test/.env.development.local
-/client-test/.env.test.local
-/client-test/.env.production.local
-
-/client-test/npm-debug.log*
-/client-test/yarn-debug.log*
-/client-test/yarn-error.log*
-/client-test/package-lock.json
