@@ -1,49 +1,96 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
-import Home from '../home'
-import CNSProfiling from "../cnsprofiling"
-import Help from "../help"
+import React from "react";
+import {withRouter, Route , Link} from "react-router-dom";
+import Home from "../home";
+import CNSProfiling from "../cnsprofiling";
+import Help from "../help";
 
-import { Layout } from "antd"
-import Navbar from "./components/navbar"
-import FooterContent from "./components/footer"
-import HeaderContent from './components/header'
+import { Layout, Menu } from "antd";
+import FooterContent from "./components/footer";
 
-const { Header, Content, Footer } = Layout
+const { Header, Content, Footer } = Layout;
 
-const App = () => (
-  <div>
-    <Layout>
-        <Header
-          style={{
-            theme: "light",
-            background: "#fff",
-            position: "fixed",
-            zIndex: 1,
-            width: "100%",
-            padding: '0 50px'
-          }}
-        >
-          <HeaderContent />
-        </Header>
-        <Content
-          style={{ padding: "10px 50px", marginTop: 64 }}
-        >
-        <div><h2>MethylScape</h2></div>
-          <Navbar/>
-          <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/cns-profiling" component={CNSProfiling} />
-            <Route exact path="/help" component={Help} />
-          </div>
-        </Content>
+class App extends React.Component {
+  state = {
+    current: "home"
+  };
+  handleClick = e => {
+    console.log(withRouter);
 
-        <Footer style={{ textAlign: "center" }}>
-          <FooterContent />
-        </Footer>
-      </Layout>
-  </div>
- 
-)
+    console.log("click ", e);
+    this.setState({
+      current: e.key
+    });
+  };
+  render() {
+    return (
+      <div>
+        <Layout>
+          <Header
+            className="header"
+            style={{
+              height: "60px",
+              theme: "light",
+              background: "#fff",
+              position: "fixed",
+              zIndex: 1,
+              width: "100%",
+              padding: "0 50px"
+            }}
+          >
+            <div>
+              {" "}
+              <a href="https://ccr.cancer.gov/">
+                <img
+                  className="logo"
+                  src="/assets/img/nci-ccr-logo.png"
+                  alt="National Cancer Institute"
+                />
+              </a>
+            </div>
+            <Menu
+              onClick={this.handleClick}
+              selectedKeys={[this.state.current]}
+              theme="light"
+              mode="horizontal"
+              style={{
+                width: "100%",
+                height: "60px",
+                lineHeight: "60px",
+                align: "right"
+              }}
+            >
+              <Menu.Item key="home">
+                <Link to="/">Home</Link>
+              </Menu.Item>
 
-export default App
+              <Menu.Item key="cns">
+                <Link to="/cns-profiling">CNS Profiling</Link>
+              </Menu.Item>
+
+              <Menu.Item key="help">
+                <Link to="/help">Help</Link>
+              </Menu.Item>
+            </Menu>
+          </Header>
+          <Content
+            style={{ padding: "10px 50px", marginTop: 64, height: "100%" }}
+          >
+            <div>
+              <h2>MethylScape</h2>
+            </div>
+            <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/cns-profiling" component={CNSProfiling} />
+              <Route exact path="/help" component={Help} />
+            </div>
+          </Content>
+
+          <Footer style={{ textAlign: "center" }}>
+            <FooterContent />
+          </Footer>
+        </Layout>
+      </div>
+    );
+  }
+}
+export default App;

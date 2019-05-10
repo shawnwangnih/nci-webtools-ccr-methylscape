@@ -13,34 +13,34 @@ createMethylTree = async (s3Tree) => {
       if(folder === "indexFile.json"){
         continue;
       }
-        methylTree[folder] = {}
-        methylTree[folder]["files"] = {}
-        for (file in s3Tree[folder]) {
-            if (file === "Metadata.csv") {
-                methylTree[folder]["metaData"] = await parseMetaFile(s3Tree[folder][file], folder)
-            } else {
-                methylTree[folder]["files"][file] = s3Tree[folder][file]
-            }
-        }
+      methylTree[folder] = {}
+      methylTree[folder]["files"] = {}
+      for (file in s3Tree[folder]) {
+          if (file === "Metadata.csv") {
+              methylTree[folder]["metaData"] = await parseMetaFile(s3Tree[folder][file])
+          } else {
+              methylTree[folder]["files"][file] = s3Tree[folder][file]
+          }
+      }
     }
     return methylTree
 }
 
-parseMetaFile = async (metaFileKey, folder) => {
+parseMetaFile = async (metaFileKey) => {
     var metaData = await getMetaData(metaFileKey).then(res => {
-        var data = {}
-        data["header"] = res[7]
-        data["data"] = []
-        var i = 0;
-        for (i = 8; i < res.length; i++) {
-            data["data"] = [...data["data"], res[i]]
-        }
+        // var data = {}
+        // data["header"] = res[7]
+        // data["data"] = []
+        // var i = 0;
+        // for (i = 8; i < res.length; i++) {
+        //     data["data"] = [...data["data"], res[i]]
+        // }
         return {
             "investigator": res[1][1],
             "project": res[2][1],
             "experiment": res[3][1],
             "date": res[4][1],
-            "data": data
+            "sampleSize": res.length - 8
         }
     })
     return metaData
@@ -87,9 +87,7 @@ createIndexFile = async () => {
   return data 
 }
 
-createIndexFile.prototype.getIndexFile = async () => {
-    const data = await createIndexFile()
-    return data
+module.exports.getIndexFile = async function() {
+  data = await createIndexFile()
+  return data
 }
-
-exports.Request = createIndexFile

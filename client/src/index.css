@@ -2,7 +2,10 @@
 
 .logo {
   /* width: 120px; */
-  height: 40px; 
-  margin: 16px 24px 16px 0px;
+  height: 35px; 
+  margin: 13px 40px 0px 0px;
   float: left;
+}
+body{
+  background: #f0f2f5;
 }
