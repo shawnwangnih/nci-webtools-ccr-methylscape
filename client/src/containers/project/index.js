@@ -17,22 +17,42 @@ class ProjectPage extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-      projectID: props.match.params.id
+      projectID: props.match.params.id,
+      experiments: []
     };
   }
+
+//   componentDidMount() {
+//       fetch("http://localhost:5000/api/project", {
+//           method: "POST",
+//           headers: {
+//             'Accept': 'application/json',
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify({
+//             projectID: this.state.projectID,
+//           })
+//       })
+//       .then(res => res.json())
+//       .then(data => {
+//           console.log(data)
+//           this.setState({experiments: data})
+//       })
+//   }
+
   render() {
     return (
       <div>
         <PageHeader onBack={() => null} title={this.state.projectID} />
         <Tabs defaultActiveKey="summary" onChange={callback}>
           <TabPane tab="Summary" key="summary">
-            <Summary />
+            <Summary projectID={this.state.projectID}/>
           </TabPane>
           <TabPane tab="Experiments" key="experiments">
-            <Experiments />
+            <Experiments projectID={this.state.projectID}/>
           </TabPane>
           <TabPane tab="Samples" key="samples">
-            <Samples />
+            <Samples projectID={this.state.projectID}/>
           </TabPane>
         </Tabs>
       </div>
