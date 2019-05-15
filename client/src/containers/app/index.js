@@ -3,6 +3,7 @@ import {withRouter, Route , Link} from "react-router-dom";
 import Home from "../home";
 import CNSProfiling from "../cnsprofiling";
 import Help from "../help";
+import ProjectPage from "../project"
 
 import { Layout, Menu } from "antd";
 import FooterContent from "./components/footer";
@@ -82,6 +83,7 @@ class App extends React.Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/cns-profiling" component={CNSProfiling} />
               <Route exact path="/help" component={Help} />
+              <Route exact path="/project-page/:id" component={ProjectPage} />
             </div>
           </Content>
 

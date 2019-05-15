@@ -9,6 +9,5 @@ const Home = props => (
   </div>
 )
 
-
 export default connect(
 )(Home)

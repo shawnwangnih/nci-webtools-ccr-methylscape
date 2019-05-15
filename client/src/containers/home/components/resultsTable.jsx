@@ -1,157 +1,153 @@
-import React from 'react'
-import {
-    Table, Input, Button, Icon, Tag
-  } from 'antd';
-import Highlighter from 'react-highlight-words';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Table, Input, Button, Form, Select } from "antd";
 
 
 class resultsTable extends React.Component {
-    constructor(){
-      super()
-      this.state = {
-        loading: true,
-        searchText: '',
-        pagination: { position: "bottom", size: 5 },
-        data: []
-      };
-    }
+  constructor() {
+    super();
+    this.state = {
+      filterProject: "",
+      filterInvestigator: "",
+      loading: true,
+      pagination: {
+        position: "bottom",
+        size: 5,
+        pageSize: 15
+      },
+      data: [],
+      filteredData: []
+    };
+  }
 
-    createDataTable = (indexData) => {
-      var data = []
-      // experiment will be a unqie key, Key is nessecary
-      var tempKey = 1
-      for(var file in indexData){
-        var cur = {}
-        console.log(indexData[file]["metaData"])
-        cur = indexData[file]["metaData"]
-        cur["key"] = indexData[file]["metaData"]["experiment"] + tempKey
-        tempKey ++
-        data = [...data, cur]
-      }
-      console.log(data)
-      this.setState({data})
+  createDataTable = indexData => {
+    var data = [];
+    // experiment will be a unqie key, Key is nessecary
+    var tempKey = 1;
+    for (var file in indexData) {
+      var cur = {};
+      console.log(indexData[file]["metaData"]);
+      cur = indexData[file]["metaData"];
+      cur["key"] = indexData[file]["metaData"]["experiment"] + tempKey;
+      tempKey++;
+      data = [...data, cur];
     }
+    console.log(data);
+    this.setState({ data });
+    this.setState({ filteredData: data });
+  };
 
-    componentDidMount(){
-      fetch('http://localhost:5000/api/methylScapeIndexFile')
+  componentDidMount() {
+    fetch("http://localhost:5000/api/methylScapeIndexFile")
       .then(res => res.json())
       .then(data => {
         // console.log(data)
         // this.setState({data})
-        this.createDataTable(data)
-        this.setState({loading: false})
+        this.createDataTable(data);
+        this.setState({ loading: false });
+      });
+  }
+
+  handleFilter = () => {
+    this.setState({
+      filteredData: this.state.data.filter(row => {
+        return row.project
+          .toLowerCase()
+          .includes(
+            this.state.filterProject.toLowerCase(),
+            this.state.filterInvestigator.toLowerCase(),
+            );
       })
-    }
-   
-    
-    getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({
-          setSelectedKeys, selectedKeys, confirm, clearFilters,
-        }) => (
-          <div style={{ padding: 8 }}>
-            <Input
-              ref={node => { this.searchInput = node; }}
-              placeholder={`Search ${dataIndex}`}
-              value={selectedKeys[0]}
-              onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-              style={{ width: 188, marginBottom: 8, display: 'block' }}
-            />
-            <Button
-              type="primary"
-              onClick={() => this.handleSearch(selectedKeys, confirm)}
-              icon="search"
-              size="small"
-              style={{ width: 90, marginRight: 8 }}
-            >
-              Search
-            </Button>
-            <Button
-              onClick={() => this.handleReset(clearFilters)}
-              size="small"
-              style={{ width: 90 }}
-            >
-              Reset
-            </Button>
-          </div>
-        ),
-        filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: (visible) => {
-          if (visible) {
-            setTimeout(() => this.searchInput.select());
-          }
-        },
-        render: (text) => (
-          <Highlighter
-            highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-            searchWords={[this.state.searchText]}
-            autoEscape
-            textToHighlight={text.toString()}
-          />
-        ),
-    })
+    });
+  };
 
-    handleSearch = (selectedKeys, confirm) => {
-        confirm();
-        this.setState({ searchText: selectedKeys[0] });
+  render() {
+    const columns = [
+      {
+        title: "Project",
+        dataIndex: "project",
+        sorter: true,
+        width: "20%",
+        render: (text, record) => <Link to={`/project-page/${record.project}`}>{record.project}</Link>
+      },
+      {
+        title: "Investigator Name",
+        dataIndex: "investigator",
+        sorter: true,
+        width: "20%"
+      },
+      {
+        title: "# of samples",
+        dataIndex: "sampleSize",
+        sorter: true,
+        width: "20%"
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        sorter: true,
+        width: "15%"
+      },
+      {
+        title: "Summary Stats",
+        sorter: true,
+        width: "20%",
+        render: record => <a href="google.com">{record.key}</a>
       }
-    
-    handleReset = (clearFilters) => {
-        clearFilters();
-        this.setState({ searchText: '' });
-    }
-    
-    render(){
-        const columns = [
-            {
-                title: 'Project',
-                dataIndex: 'project',
-                sorter: true,
-                width: '20%',
-                ...this.getColumnSearchProps('project'),
-                render: (text, record )=> <a href='google.com'>{record.project}</a>
-            },{
-                title: 'Investigator Name',
-                dataIndex: 'investigator',
-                sorter: true,
-                width: '20%',
-                ...this.getColumnSearchProps('investigator'),
-            },{
-                title: '# of samples',
-                dataIndex: 'sampleSize',
-                sorter: true,
-                width: '20%',
-                ...this.getColumnSearchProps('sampleSize'),
-            },{
-                title: 'Date',
-                dataIndex: 'date',
-                sorter: true,
-                width: '15%',
-            },{
-              title: 'Summary Stats',
-              // dataIndex: 'data.metaData.investigator',
-              sorter: true,
-              width: '20%',
-              render: record => <a href='google.com'>{record.key}</a>
-          }];
+    ];
 
-        return(
-            <div>
-                <div>
-                    <h4>Filter</h4>
-                    <Tag closable >Filter 1 test</Tag>
-                    <Tag closable >Filter 2 test</Tag>
-                </div>
-                <br></br>
-                <Table
-                    {...this.state}
-                    columns={columns}
-                    dataSource={this.state.data}
-                    onChange={this.handleTableChange}
-                />
-            </div>
-        )
-    }
+    const Option = Select.Option;
+    const InputGroup = Input.Group;
+
+    return (
+      <div>
+        <div>
+          <Form layout="inline">
+            <Form.Item label="Project">
+              <Input
+                value={this.state.filterProject}
+                onChange={e => this.setState({ filterProject: e.target.value })}
+                placeholder="MethylScape"
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item label="Investigator">
+              <Input 
+                value={this.state.filterInvestigator}
+                onChange={e => this.setState({ filterInvestigator: e.target.value })}
+                onPressEnter={this.handleFilter}
+                placeholder="Jane Doe" />
+            </Form.Item>
+            <Form.Item>
+              <Button icon="search" type="primary" onClick={this.handleFilter}>
+                Search
+              </Button>
+            </Form.Item>
+            <Form.Item label="Display">
+              <InputGroup compact>
+                <Select defaultValue="15">
+                  <Option value="15">15</Option>
+                  <Option value="25">25</Option>
+                  <Option value="50">50</Option>
+                  <Option value="75">75</Option>
+                </Select>
+              </InputGroup>
+            </Form.Item>
+            <span
+              style={{verticalAlign: "-webkit-baseline-middle" }}
+            >of {this.state.data.length} results
+            </span>
+          </Form>
+        </div>
+        <br />
+        <Table
+          {...this.state}
+          columns={columns}
+          dataSource={this.state.filteredData}
+          onChange={this.handleTableChange}
+        />
+      </div>
+    );
+  }
 }
-export default resultsTable
+export default resultsTable;
