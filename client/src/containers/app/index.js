@@ -76,9 +76,9 @@ class App extends React.Component {
           <Content
             style={{ padding: "10px 50px", marginTop: 64, height: "100%" }}
           >
-            <div>
+            {/* <div>
               <h2>MethylScape</h2>
-            </div>
+            </div> */}
             <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
               <Route exact path="/" component={Home} />
               <Route exact path="/cns-profiling" component={CNSProfiling} />

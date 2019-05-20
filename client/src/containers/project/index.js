@@ -44,7 +44,7 @@ class ProjectPage extends React.Component {
     return (
       <div>
         <PageHeader onBack={() => null} title={this.state.projectID} />
-        <Tabs defaultActiveKey="summary" onChange={callback}>
+        <Tabs defaultActiveKey="summary" onChange={callback} style={{ theme: 'dark'}}>
           <TabPane tab="Summary" key="summary">
             <Summary projectID={this.state.projectID}/>
           </TabPane>

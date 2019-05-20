@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Table, Input, Button, Form, Select } from "antd";
+import { Table, Input, Button, Form, Select, PageHeader } from "antd";
 
 
 class resultsTable extends React.Component {
@@ -13,7 +13,7 @@ class resultsTable extends React.Component {
       pagination: {
         position: "bottom",
         size: 5,
-        pageSize: 15
+        showSizeChanger: true
       },
       data: [],
       filteredData: []
@@ -51,12 +51,11 @@ class resultsTable extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project
-          .toLowerCase()
-          .includes(
-            this.state.filterProject.toLowerCase(),
-            this.state.filterInvestigator.toLowerCase(),
-            );
+        return row.project.toLowerCase()
+                .includes(this.state.filterProject.toLowerCase()) &&
+              row.investigator.toLowerCase()
+                .includes(this.state.filterInvestigator.toLowerCase())
+        
       })
     });
   };
@@ -95,13 +94,12 @@ class resultsTable extends React.Component {
         render: record => <a href="google.com">{record.key}</a>
       }
     ];
-
-    const Option = Select.Option;
-    const InputGroup = Input.Group;
-
+    
     return (
       <div>
         <div>
+        <PageHeader title={"MethylScape Results"} />
+        <br></br>
           <Form layout="inline">
             <Form.Item label="Project">
               <Input
@@ -123,20 +121,6 @@ class resultsTable extends React.Component {
                 Search
               </Button>
             </Form.Item>
-            <Form.Item label="Display">
-              <InputGroup compact>
-                <Select defaultValue="15">
-                  <Option value="15">15</Option>
-                  <Option value="25">25</Option>
-                  <Option value="50">50</Option>
-                  <Option value="75">75</Option>
-                </Select>
-              </InputGroup>
-            </Form.Item>
-            <span
-              style={{verticalAlign: "-webkit-baseline-middle" }}
-            >of {this.state.data.length} results
-            </span>
           </Form>
         </div>
         <br />

@@ -12,7 +12,8 @@ class Experiments extends React.Component {
       pagination: {
         position: "bottom",
         size: 5,
-        pageSize: 15
+        // pageSize: 15,
+        showSizeChanger: true
       },
       data: [],
       filteredData: []
@@ -42,12 +43,8 @@ class Experiments extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project
-          .toLowerCase()
-          .includes(
-            this.state.filterProject.toLowerCase(),
-            this.state.filterInvestigator.toLowerCase(),
-            );
+        return row.project.toLowerCase()
+          .includes(this.state.filterExperiment.toLowerCase());
       })
     });
   };
@@ -82,13 +79,13 @@ class Experiments extends React.Component {
         title: "Experimental Worksheet",
         sorter: true,
         width: "20%",
-        render: record => <a href="google.com">{record.key}</a>
+        render: record => <a href="...">{record.key}</a>
       },
       {
         title: "Experiment Details",
         sorter: true,
         width: "20%",
-        render: record => <a href="google.com">{record.key}</a>
+        render: record => <a href="...">{record.key}</a>
       }
     ];
 
@@ -97,13 +94,15 @@ class Experiments extends React.Component {
 
     return (
       <div>
-        <br></br>
+        <br />
         <div>
           <Form layout="inline">
             <Form.Item label="Experiment">
               <Input
                 value={this.state.filterExperiment}
-                onChange={e => this.setState({ filterExperiment: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
                 placeholder="MethylScape"
                 onPressEnter={this.handleFilter}
               />
@@ -111,9 +110,7 @@ class Experiments extends React.Component {
             <Form.Item label="Date">
               <Input
                 value={this.state.filterDate}
-                onChange={e =>
-                  this.setState({ filterDate: e.target.value })
-                }
+                onChange={e => this.setState({ filterDate: e.target.value })}
                 onPressEnter={this.handleFilter}
                 placeholder="Jane Doe"
               />
@@ -123,31 +120,17 @@ class Experiments extends React.Component {
                 Search
               </Button>
             </Form.Item>
-            <Form.Item label="Display">
-              <InputGroup compact>
-                <Select defaultValue="15">
-                  <Option value="15">15</Option>
-                  <Option value="25">25</Option>
-                  <Option value="50">50</Option>
-                  <Option value="75">75</Option>
-                </Select>
-              </InputGroup>
-            </Form.Item>
-            <span style={{ verticalAlign: "-webkit-baseline-middle" }}>
-              of {this.state.data.length} results
-            </span>
           </Form>
         </div>
-        <br></br>
+        <br />
         <div>
-        <Table
-          {...this.state}
-          columns={columns}
-          dataSource={this.state.filteredData}
-          onChange={this.handleTableChange}
-        />
+          <Table
+            {...this.state}
+            columns={columns}
+            dataSource={this.state.filteredData}
+            onChange={this.handleTableChange}
+          />
         </div>
-       
       </div>
     );
   }
