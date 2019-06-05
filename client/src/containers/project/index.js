@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { Tabs, PageHeader } from "antd";
 
-import Summary from "./components/summary";
-import Experiments from "./components/experiments";
-import Samples from "./components/samples";
+import Summary from "./components/Summary";
+import Experiments from "./components/Experiments";
+import Samples from "./components/Samples";
 
 const TabPane = Tabs.TabPane;
 

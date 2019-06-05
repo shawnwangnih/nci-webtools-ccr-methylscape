@@ -1,50 +1,34 @@
 import React from 'react'
 import * as d3 from 'd3'
+import Pie from './PieSVG'
 
 
-var exspenses = [
-    {
-        name: 'coofee',
-        amount: 4,
-        date: new Date()
-    },{
-        name: 'Safeway',
-        amount: 46,
-        date: new Date()
-    },{
-        name: 'Valero',
-        amount: 40,
-        date: new Date()
-    }
-]
-
-var width = 900
-var height = 900
-var simulation = d3.forceSimulation()
+const Arc = ({ data, index, createArc, colors, format }) => (
+    <g key={index} className="arc">
+      <path className="arc" d={createArc(data)} fill={colors(index)} />
+      <text
+        transform={`translate(${createArc.centroid(data)})`}
+        textAnchor="middle"
+        alignmentBaseline="middle"
+        fill="white"
+        fontSize="10"
+      >
+        {format(data.value)}
+      </text>
+    </g>
+  );
+  
 
 
 class Summary extends React.Component{
+
     constructor(props){
         super(props)
-        // this.state = {
-        //     data = [30
     }
 
-    temperatureData = [ 8, 5, 13, 9, 12 ];
 
     componentDidMount(){
-        this.container = d3.select(this.refs.container)
-        var circles = this.container.selectAll('circle')
-            .data(exspenses, d => d.name)
     }
-
-    // d3.select(this.refs.temperatures)
-    //     .selectAll("h2")
-    //     .data(temperatureData)
-    //     .enter()
-    //         .append("h2")
-    //         .text("New Temperature")
-
 
     // componentDidMount() {
     //     fetch("http://localhost:5000/api/project/experiments", {
