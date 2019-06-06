@@ -20,7 +20,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <PageHeader />
+        {/* <PageHeader /> */}
         <Tabs defaultActiveKey="project" style={{ theme: 'dark'}}>
           <TabPane tab="Project" key="project">
             <Projects projectID={this.state.projectID}/>
