@@ -1,9 +1,9 @@
 import React from "react";
-import {withRouter, Route , Link} from "react-router-dom";
+import { Route , Link} from "react-router-dom";
 import Home from "../home";
-import CNSProfiling from "../cnsprofiling";
-import Help from "../help";
-import ProjectPage from "../project"
+// import CNSProfiling from "../cnsprofiling";
+// import Help from "../help";
+// import ProjectPage from "../project"
 
 import { Layout, Menu } from "antd";
 import FooterContent from "./components/footer";
@@ -15,7 +15,7 @@ class App extends React.Component {
     current: "home"
   };
   handleClick = e => {
-    console.log(withRouter);
+    // console.log(withRouter);
 
     console.log("click ", e);
     this.setState({
@@ -48,7 +48,7 @@ class App extends React.Component {
                 />
               </a>
             </div>
-            <Menu
+            {/* <Menu
               onClick={this.handleClick}
               selectedKeys={[this.state.current]}
               theme="light"
@@ -71,7 +71,7 @@ class App extends React.Component {
               <Menu.Item key="help">
                 <Link to="/help">Help</Link>
               </Menu.Item>
-            </Menu>
+            </Menu> */}
           </Header>
           <Content
             style={{ padding: "10px 50px", marginTop: 64, height: "100%" }}
@@ -80,10 +80,11 @@ class App extends React.Component {
               <h2>MethylScape</h2>
             </div> */}
             <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/cns-profiling" component={CNSProfiling} />
+              <Home />
+              {/* <Route exact path="/" component={Home} /> */}
+              {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
               <Route exact path="/help" component={Help} />
-              <Route exact path="/project-page/:id" component={ProjectPage} />
+              <Route exact path="/project-page/:id" component={ProjectPage} /> */}
             </div>
           </Content>
 

@@ -4,8 +4,8 @@ import { Table, Input, Button, Form, Select, PageHeader } from "antd";
 
 
 class Projects extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       filterProject: "",
       filterInvestigator: "",
@@ -20,33 +20,36 @@ class Projects extends React.Component {
     };
   }
 
-  createDataTable = indexData => {
-    var data = [];
-    // experiment will be a unqie key, Key is nessecary
-    var tempKey = 1;
-    for (var file in indexData) {
-      var cur = {};
-      console.log(indexData[file]["metaData"]);
-      cur = indexData[file]["metaData"];
-      cur["key"] = indexData[file]["metaData"]["experiment"] + tempKey;
-      tempKey++;
-      data = [...data, cur];
-    }
-    console.log(data);
-    this.setState({ data });
-    this.setState({ filteredData: data });
-  };
-
-  componentDidMount() {
-    fetch("http://localhost:5000/api/methylScapeIndexFile")
-      .then(res => res.json())
-      .then(data => {
-        // console.log(data)
-        // this.setState({data})
-        this.createDataTable(data);
-        this.setState({ loading: false });
-      });
+  async componentWillReceiveProps(props) {
+    await this.createDataTable(props.data).then(
+      this.setState({loading: false})
+    )
   }
+
+  createDataTable = async(rawData) => {
+    var projectData = {}
+    rawData.map( sample => {
+      var curProject = sample.project
+      if(curProject == null) {
+      }
+      else if(curProject in projectData){
+        projectData[curProject].sampleSize = projectData[curProject].sampleSize + 1
+        projectData[curProject].experiments.add(sample.experiment)
+      }else{
+        projectData[curProject] = {
+          key: curProject,
+          project: curProject,
+          sampleSize: 1,
+          date: sample.date,
+          investigator: sample.investigator,
+          experiments: new Set([])
+        }
+        projectData[curProject].experiments.add(sample.experiment)
+      }
+    })
+    this.setState({data: Object.values(projectData)})
+    this.setState({filteredData:  Object.values(projectData)})
+  };
 
   handleFilter = () => {
     this.setState({
@@ -63,41 +66,39 @@ class Projects extends React.Component {
     const columns = [
       {
         title: "Project",
-        dataIndex: "project",
+        dataIndex: "key",
         sorter: true,
         width: "20%",
-        render: (text, record) => <Link to={`/project-page/${record.project}`}>{record.project}</Link>
-      },
-      {
+        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{record.project}</Link>
+      },{
         title: "Investigator Name",
         dataIndex: "investigator",
         sorter: true,
         width: "20%"
-      },
-      {
-        title: "# of samples",
+      },{
+        title: "# of Experiments",
+        dataIndex: "experiments",
+        sorter: true,
+        width: "20%",
+        render: (text, record) => <a onClick={() => this.props.action("experiments")}>{record.experiments.size}</a>
+      },{
+        title: "# of Samples",
         dataIndex: "sampleSize",
         sorter: true,
-        width: "20%"
-      },
-      {
-        title: "Date",
+        width: "20%",
+        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{text}</Link>
+      },{
+        title: "Project Date",
         dataIndex: "date",
         sorter: true,
         width: "15%"
       },
-      {
-        title: "Summary Stats",
-        sorter: true,
-        width: "20%",
-        render: record => <a href="google.com">{record.key}</a>
-      }
     ];
 
     return (
       <div>
         <div>
-        <PageHeader title={"MethylScape Results"} />
+        {/* <PageHeader title={"MethylScape Results"} /> */}
         <br></br>
           <Form layout="inline">
             <Form.Item label="Project">
@@ -109,7 +110,7 @@ class Projects extends React.Component {
               />
             </Form.Item>
             <Form.Item label="Investigator">
-              <Input 
+              <Input
                 value={this.state.filterInvestigator}
                 onChange={e => this.setState({ filterInvestigator: e.target.value })}
                 onPressEnter={this.handleFilter}

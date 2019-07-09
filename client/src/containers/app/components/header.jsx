@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { Layout, Menu} from 'antd'
 
 const { Header} = Layout
@@ -26,7 +26,7 @@ class Header extends React.Component {
                 padding: '0 50px'
               }}>
               <div> <a href="https://ccr.cancer.gov/"><img className='logo' src='/assets/img/nci-ccr-logo.png' alt='National Cancer Institute'></img></a></div>
-                <Menu
+                {/* <Menu
                     onClick={this.handleClick}
                     selectedKeys={[this.state.current]}
                     theme="light"
@@ -36,7 +36,7 @@ class Header extends React.Component {
                         height: '60px',
                         lineHeight: '60px',
                         align: 'right' }}
-                >   
+                >
 
                     <Menu.Item key="home">
                     <Link to="/">Home</Link>
@@ -48,8 +48,8 @@ class Header extends React.Component {
 
                     <Menu.Item key="help">
                         <Link to="/help">Help</Link>
-                    </Menu.Item>
-                </Menu>
+                    </Menu.Item> */}
+                {/* </Menu> */}
             </Header>
         )
     }

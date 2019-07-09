@@ -1,10 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Table, Input, Button, Form, Select } from "antd";
 
 class Experiments extends React.Component {
   constructor(props) {
-    super(props);
-    console.log(props);
+    super(props)
     this.state = {
       filterExperiment: "",
       filterDate: "",
@@ -15,30 +15,42 @@ class Experiments extends React.Component {
         // pageSize: 15,
         showSizeChanger: true
       },
+      rawData: props.data,
       data: [],
       filteredData: []
     };
   }
 
-  componentDidMount() {
-    fetch("http://localhost:5000/api/project/experiments", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        projectID: this.state.projectID
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ experiments: data });
-        this.setState({ filteredData: data });
-        this.setState({ loading: false });
-      });
+  async componentDidMount() {
+    await this.createDataTable(this.state.rawData).then(
+      this.setState({loading: false})
+    )
   }
+
+  createDataTable = async (rawData) => {
+    var experimentData = {}
+    rawData.map( sample => {
+      var curExperiment = sample.experiment
+      if(curExperiment == null) {
+      }
+      else if(curExperiment in experimentData){
+        experimentData[curExperiment].sampleSize = experimentData[curExperiment].sampleSize + 1
+      }else{
+        experimentData[curExperiment] = {
+          key: curExperiment,
+          project:  sample.project,
+          sampleSize: 1,
+          date: sample.date,
+          investigator: sample.investigator,
+          experiment: curExperiment
+        }
+      }
+    })
+    this.setState({data: Object.values(experimentData)})
+    this.setState({filteredData:  Object.values(experimentData)})
+  }
+
+
 
   handleFilter = () => {
     this.setState({
@@ -46,26 +58,32 @@ class Experiments extends React.Component {
         return row.project.toLowerCase()
           .includes(this.state.filterExperiment.toLowerCase());
       })
-    });
-  };
+    })
+  }
 
   render() {
     const columns = [
       {
+        title: "Project",
+        dataIndex: "key",
+        sorter: true,
+        width: "20%",
+        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{record.project}</Link>
+      },{
         title: "Experiment",
         dataIndex: "experiment",
         sorter: true,
         width: "20%"
       },
       {
-        title: "Date created",
-        dataIndex: "date",
+        title: "Investigator Name",
+        dataIndex: "investigator",
         sorter: true,
         width: "10%"
       },
       {
-        title: "Investigator Name",
-        dataIndex: "investigator",
+        title: "Date created",
+        dataIndex: "date",
         sorter: true,
         width: "10%"
       },
@@ -76,16 +94,16 @@ class Experiments extends React.Component {
         width: "10%"
       },
       {
-        title: "Experimental Worksheet",
+        title: "QC Sheet",
         sorter: true,
         width: "20%",
-        render: record => <a href="...">{record.key}</a>
+        render: record => <a href="...">show detials</a>
       },
       {
-        title: "Experiment Details",
+        title: "QC supplementary",
         sorter: true,
         width: "20%",
-        render: record => <a href="...">{record.key}</a>
+        render: record => <a href="...">show detials</a>
       }
     ];
 

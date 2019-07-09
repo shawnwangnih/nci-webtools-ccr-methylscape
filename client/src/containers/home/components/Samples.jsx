@@ -4,7 +4,6 @@ import { Table, Input, Button, Form, Select } from "antd";
 class Samples extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       filterSample: "",
       filterSentrixID: "",
@@ -15,29 +14,31 @@ class Samples extends React.Component {
         // pageSize: 15,
         showSizeChanger: true
       },
+      rawData: props.data,
       data: [],
       filteredData: []
     };
   }
 
-  componentDidMount() {
-    fetch("http://localhost:5000/api/project/samples", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        projectID: this.state.projectID
-      })
+  async componentDidMount() {
+    await this.createDataTable(this.state.rawData).then(
+      this.setState({loading: false})
+    )
+  }
+
+  createDataTable = async (rawData) => {
+    var sampleData = {}
+    sampleData = rawData.map( sample => {
+      sample.key = sample.id
+      var cp = sample.classifier_prediction
+      sample.family = this.getMF(cp)
+      sample.family_score = this.getMFScore(cp)
+      sample.class = this.getMC(cp)
+      sample.class_score = this.getMCScore(cp)
+      return sample
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ experiments: data });
-        this.setState({ filteredData: data });
-        this.setState({ loading: false });
-      });
+    this.setState({data: sampleData})
+    this.setState({filteredData:  sampleData})
   }
 
   handleFilter = () => {
@@ -49,91 +50,134 @@ class Samples extends React.Component {
     });
   };
 
+
+  getMF = data => {
+    return (Object.keys(data).length > 2) ? Object.keys(data["0"]) : ""
+  }
+
+  getMFScore = data => {
+    return (Object.values(data).length > 2) ? Object.values(data["0"]) : ""
+  }
+
+  getMC = data => {
+    const size = Object.keys(data).length
+    if (size > 2) {
+      return Object.keys(data["2"])[0]
+    } else if (size == 2) {
+      return Object.keys(data["1"])[0]
+    } else {
+      return ""
+    }
+  }
+
+  getMCScore = data => {
+    const size = Object.keys(data).length
+    if (size > 2) {
+      return Object.values(data["2"])[0]
+    } else if (size == 2) {
+      return Object.values(data["1"])[0]
+    } else {
+      return ""
+    }
+  }
+
   render() {
     const columns = [
       {
         title: "Sample Name",
-        dataIndex: "",
+        dataIndex: "sample_name",
         sorter: true,
-        width: "200",
+        width: "300",
         fixed: 'left',
       },{
         title: "Project",
-        dataIndex: "",
+        dataIndex: "project",
+        sorter: true,
+        width: "300"
+      },{
+        title: "Experiment",
+        dataIndex: "experiment",
+        sorter: true,
+        width: "300"
+      },{
+        title: "Date",
+        dataIndex: "date",
         sorter: true,
         width: "200"
       },{
         title: "Surgical Case",
-        dataIndex: "",
+        dataIndex: "surgical_case",
         sorter: true,
         width: "200"
       },{
         title: "Gender",
-        dataIndex: "",
+        dataIndex: "gender",
         sorter: true,
         width: "200"
       },{
         title: "Age",
-        dataIndex: "",
+        dataIndex: "age",
         sorter: true,
         width: "200"
       },{
         title: "Diagnosis",
-        dataIndex: "",
+        dataIndex: "diagnosis",
         sorter: true,
         width: "200"
       },{
-        title: "Methylation Family",
-        dataIndex: "",
+        title: "Methylation Family (MF)",
+        dataIndex: "family",
         sorter: true,
-        width: "200"
+        width: "200",
       },{
         title: "MF Calibrated Scores",
-        dataIndex: "",
+        dataIndex: "family_score",
+        sorter: true,
+        width: "200"
+      },{
+        title: "Methylation Class (MC)",
+        dataIndex: "class",
+        sorter: true,
+        width: "200"
+      },{
+        title: "MC Calibrated Scores",
+        dataIndex: "class_score",
+        sorter: true,
+        width: "200"
+      },{
+        title: "MGMT status",
+        dataIndex: "mgmt_prediction.Status",
+        sorter: true,
+        width: "200"
+      },{
+        title: "MGMT score",
+        dataIndex: "mgmt_prediction.Estimated",
         sorter: true,
         width: "200"
       },{
         title: "t-SNE plot",
         dataIndex: "",
         sorter: true,
-        width: "200"
+        width: "200",
+        render: record => <a href="...">link to html</a>
       },{
-        title: "Sequencing report",
+        title: "NGS reports (pdf-files)",
         dataIndex: "",
         sorter: true,
-        width: "200"
+        width: "200",
+        render: record => <a href="...">link to pdf</a>
       },{
-        title: "Sentrix ID",
+        title: "Slide Image",
         dataIndex: "",
         sorter: true,
-        width: "200"
+        width: "200",
+        render: record => <a href="...">link to image file</a>
       },{
-        title: "notes",
-        dataIndex: "",
-        sorter: true,
-        width: "200"
-      },{
-        title: "Sample well",
-        dataIndex: "",
-        sorter: true,
-        width: "200"
-      },{
-        title: "Sample group",
-        dataIndex: "",
-        sorter: true,
-        width: "200"
-      },{
-        title: "Pool ID",
-        dataIndex: "",
-        sorter: true,
-        width: "200"
-      },{
-        title: "Material Type",
-        dataIndex: "",
+        title: "Notes",
+        dataIndex: "notes",
         sorter: true,
         width: "200"
       }
-      
     ];
 
     const Option = Select.Option;
@@ -176,7 +220,7 @@ class Samples extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            scroll={{ x: 2100 }}
+            scroll={{ x: 3500 }}
           />
         </div>
       </div>
