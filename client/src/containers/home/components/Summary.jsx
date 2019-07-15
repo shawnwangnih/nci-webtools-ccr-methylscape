@@ -17,8 +17,6 @@ const Arc = ({ data, index, createArc, colors, format }) => (
       </text>
     </g>
   );
-  
-
 
 class Summary extends React.Component{
 
@@ -29,26 +27,6 @@ class Summary extends React.Component{
 
     componentDidMount(){
     }
-
-    // componentDidMount() {
-    //     fetch("http://localhost:5000/api/project/experiments", {
-    //       method: "POST",
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json"
-    //       },
-    //       body: JSON.stringify({
-    //         projectID: this.state.projectID
-    //       })
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         console.log(data);
-    //         this.setState({ experiments: data });
-    //         this.setState({ filteredData: data });
-    //         this.setState({ loading: false });
-    //       });
-    //   }
 
     render(){
         return(

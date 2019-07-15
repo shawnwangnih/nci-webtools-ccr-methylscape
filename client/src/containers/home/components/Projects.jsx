@@ -80,13 +80,13 @@ class Projects extends React.Component {
         dataIndex: "experiments",
         sorter: true,
         width: "20%",
-        render: (text, record) => <a onClick={() => this.props.action("experiments")}>{record.experiments.size}</a>
+        render: (text, record) => <a onClick={() => this.props.changeTab("experiments", {project:record.project})}>{record.experiments.size}</a>
       },{
         title: "# of Samples",
         dataIndex: "sampleSize",
         sorter: true,
         width: "20%",
-        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{text}</Link>
+        render: (text, record) => <a onClick={() => this.props.changeTab("samples")}>{text}</a>
       },{
         title: "Project Date",
         dataIndex: "date",

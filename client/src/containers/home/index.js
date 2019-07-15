@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
-import { Tabs, PageHeader } from "antd";
+import { Tabs, PageHeader, Menu } from "antd";
 // import Summary from "./components/Summary";
 import Experiments from "./components/Experiments";
 import Samples from "./components/Samples";
@@ -14,19 +14,32 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      activeTab: "project",
+      data: [],
+      filter: {
+        project: "",
+        experiment: "",
+      }
     };
-    this.handler = this.handler.bind(this);
   }
 
-  async handler(someValue) {
-    this.setState({
-      key: someValue
-    });
-  }
+  // changeExperimentFilter =
+
+  changeTab = (activeTab, filter={}) => {
+    this.setState({filter})
+    // console.log(activeTab);
+    // console.log("2------------", filter)
+    // console.log("3------------", this.state.filter)
+    // if(Object.keys(filter).length != 0){
+    //   this.setState({filter})
+    // }
+    this.setState({activeTab});
+  };
 
   async componentDidMount() {
-    fetch("http://localhost:5000/api/methylScapeTableData", {
+   const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
+   console.log(prefix)
+    fetch(prefix + "/api/methylScapeTableData", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -35,7 +48,6 @@ class Home extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         this.setState({ data });
         this.setState({ loading: false });
       });
@@ -45,12 +57,12 @@ class Home extends React.Component {
     return (
       <div>
         {/* <PageHeader /> */}
-        <Tabs>
+        <Tabs activeKey={this.state.activeTab} onChange={this.changeTab} defaultActiveKey="project">
           <TabPane tab="Project" key="project">
-            <Projects data={this.state.data} action={this.handler} />
+            <Projects data={this.state.data} changeTab={this.changeTab} />
           </TabPane>
           <TabPane tab="Experiments" key="experiments">
-            <Experiments data={this.state.data} />
+            <Experiments data={this.state.data}  changeTab={this.changeTab} />
           </TabPane>
           <TabPane tab="Samples" key="samples">
             <Samples data={this.state.data} />

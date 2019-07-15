@@ -34,12 +34,12 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps('Hello from Lambda!')
         }
-        
+
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
     }
-    
+
 def updateTable(sample_id, data):
     data.update({'id':sample_id})
     data = {k: None if not v else v for k, v in data.items() }

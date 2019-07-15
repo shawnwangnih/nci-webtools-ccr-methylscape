@@ -5,8 +5,9 @@ import { Table, Input, Button, Form, Select } from "antd";
 class Experiments extends React.Component {
   constructor(props) {
     super(props)
+    console.log("44 --", props)
     this.state = {
-      filterExperiment: "",
+      filterProject: "",
       filterDate: "",
       loading: true,
       pagination: {
@@ -21,9 +22,16 @@ class Experiments extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    // this.setState({ filterProject: nextProps.filter.project });
+    // this.handleFilter();
+  }
+
   async componentDidMount() {
-    await this.createDataTable(this.state.rawData).then(
-      this.setState({loading: false})
+    await this.createDataTable(this.state.rawData).then( () => {
+        this.setState({loading: false});
+        // this.handleFilter();
+      }
     )
   }
 
@@ -53,10 +61,11 @@ class Experiments extends React.Component {
 
 
   handleFilter = () => {
+    console.log("2-------------", this.state.data)
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase()
-          .includes(this.state.filterExperiment.toLowerCase());
+          .includes(this.state.filterProject.toLowerCase());
       })
     })
   }
@@ -115,11 +124,11 @@ class Experiments extends React.Component {
         <br />
         <div>
           <Form layout="inline">
-            <Form.Item label="Experiment">
+            <Form.Item label="Project">
               <Input
-                value={this.state.filterExperiment}
+                value={this.state.filterProject}
                 onChange={e =>
-                  this.setState({ filterExperiment: e.target.value })
+                  this.setState({ filterProject: e.target.value })
                 }
                 placeholder="MethylScape"
                 onPressEnter={this.handleFilter}

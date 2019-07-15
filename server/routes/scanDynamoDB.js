@@ -15,5 +15,4 @@ module.exports.scanTable  = async (tableName) => {
     }while(typeof items.LastEvaluatedKey != "undefined");
 
     return scanResults;
-
 };
