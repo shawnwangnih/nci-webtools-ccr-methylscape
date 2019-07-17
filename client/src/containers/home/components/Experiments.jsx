@@ -5,9 +5,8 @@ import { Table, Input, Button, Form, Select } from "antd";
 class Experiments extends React.Component {
   constructor(props) {
     super(props)
-    console.log("44 --", props)
     this.state = {
-      filterProject: "",
+      filterProject: props.filter.project,
       filterDate: "",
       loading: true,
       pagination: {
@@ -22,15 +21,21 @@ class Experiments extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     // this.setState({ filterProject: nextProps.filter.project });
     // this.handleFilter();
+    console.log("WHAT", nextProps)
+    if(nextProps.filter.project){
+      this.setState({filterProject: nextProps.filter.project},() =>{
+        this.handleFilter();
+      })
+    }
   }
 
   async componentDidMount() {
     await this.createDataTable(this.state.rawData).then( () => {
         this.setState({loading: false});
-        // this.handleFilter();
+        this.handleFilter();
       }
     )
   }
@@ -65,9 +70,13 @@ class Experiments extends React.Component {
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase()
-          .includes(this.state.filterProject.toLowerCase());
+          .includes(this.getFilterProject());
       })
     })
+  }
+
+  getFilterProject = () => {
+    return this.state.filterProject ? this.state.filterProject.toLowerCase() : ""
   }
 
   render() {
@@ -77,7 +86,7 @@ class Experiments extends React.Component {
         dataIndex: "key",
         sorter: true,
         width: "20%",
-        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{record.project}</Link>
+        render: (text, record) => <a onClick={() => this.props.changeTab("projects", {project:record.project})}>{record.project}</a>
       },{
         title: "Experiment",
         dataIndex: "experiment",
@@ -89,16 +98,16 @@ class Experiments extends React.Component {
         dataIndex: "investigator",
         sorter: true,
         width: "10%"
+      },{
+        title: "# of samples",
+        dataIndex: "sampleSize",
+        sorter: true,
+        width: "10%",
+        render: (text, record) =>  <a onClick={() => this.props.changeTab("samples", {project:record.project})}>{text}</a>
       },
       {
         title: "Date created",
         dataIndex: "date",
-        sorter: true,
-        width: "10%"
-      },
-      {
-        title: "# of samples",
-        dataIndex: "sampleSize",
         sorter: true,
         width: "10%"
       },
@@ -127,6 +136,16 @@ class Experiments extends React.Component {
             <Form.Item label="Project">
               <Input
                 value={this.state.filterProject}
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value })
+                }
+                placeholder="MethylScape"
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item label="Experiments">
+              <Input
+                value={this.state.filterExperiment}
                 onChange={e =>
                   this.setState({ filterProject: e.target.value })
                 }

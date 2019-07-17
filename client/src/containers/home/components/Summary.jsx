@@ -18,12 +18,17 @@ const Arc = ({ data, index, createArc, colors, format }) => (
     </g>
   );
 
+
 class Summary extends React.Component{
-
-    constructor(props){
-        super(props)
+  constructor(props){
+    super(props)
+    this.state = {
+      data: props.data
     }
-
+  }
+    componentWillReceiveProps(nextProps){
+      console.log("PROPS", nextProps.filter)
+    }
 
     componentDidMount(){
     }

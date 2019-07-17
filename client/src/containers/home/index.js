@@ -7,6 +7,7 @@ import Samples from "./components/Samples";
 import Projects from "./components/Projects";
 
 import { connect } from "react-redux";
+import Summary from "./components/Summary";
 
 const TabPane = Tabs.TabPane;
 
@@ -23,16 +24,11 @@ class Home extends React.Component {
     };
   }
 
-  // changeExperimentFilter =
-
   changeTab = (activeTab, filter={}) => {
-    this.setState({filter})
-    // console.log(activeTab);
-    // console.log("2------------", filter)
-    // console.log("3------------", this.state.filter)
-    // if(Object.keys(filter).length != 0){
-    //   this.setState({filter})
-    // }
+    if(this.filter != {}){
+      this.setState({filter})
+      console.log("2------------", this.state.filter)
+    }
     this.setState({activeTab});
   };
 
@@ -59,15 +55,18 @@ class Home extends React.Component {
         {/* <PageHeader /> */}
         <Tabs activeKey={this.state.activeTab} onChange={this.changeTab} defaultActiveKey="project">
           <TabPane tab="Project" key="project">
-            <Projects data={this.state.data} changeTab={this.changeTab} />
+            <Projects data={this.state.data} changeTab={this.changeTab} filter={this.state.filter}/>
           </TabPane>
           <TabPane tab="Experiments" key="experiments">
-            <Experiments data={this.state.data}  changeTab={this.changeTab} />
+            <Experiments data={this.state.data}  changeTab={this.changeTab} filter={this.state.filter}/>
           </TabPane>
           <TabPane tab="Samples" key="samples">
-            <Samples data={this.state.data} />
+            <Samples data={this.state.data} changeTab={this.changeTab} filter={this.state.filter}/>
           </TabPane>
         </Tabs>
+        {this.state.activeTab == "project"?
+        (<Summary data={this.state.data} filter={this.state.filter}/>) : (<br />)
+        }
       </div>
     );
   }

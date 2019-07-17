@@ -6,6 +6,7 @@ class Samples extends React.Component {
     super(props);
     this.state = {
       filterSample: "",
+      filterProject:props.filter.project,
       filterSentrixID: "",
       loading: true,
       pagination: {
@@ -18,6 +19,14 @@ class Samples extends React.Component {
       data: [],
       filteredData: []
     };
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if(nextProps.filter.project){
+      this.setState({filterProject: nextProps.filter.project},() =>{
+        this.handleFilter();
+      })
+    }
   }
 
   async componentDidMount() {
@@ -45,10 +54,15 @@ class Samples extends React.Component {
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase()
-          .includes(this.state.filterExperiment.toLowerCase());
+          .includes(this.getFilterProject());
       })
     });
   };
+
+  getFilterProject = () => {
+    return this.state.filterProject ? this.state.filterProject.toLowerCase() : ""
+  }
+
 
 
   getMF = data => {
@@ -98,7 +112,8 @@ class Samples extends React.Component {
         title: "Experiment",
         dataIndex: "experiment",
         sorter: true,
-        width: "300"
+        width: "300",
+        render: (text, record) => <a onClick={() => this.props.changeTab("experiments", {project:record.project})}>{text}</a>
       },{
         title: "Date",
         dataIndex: "date",
@@ -188,6 +203,16 @@ class Samples extends React.Component {
         <br />
         <div>
           <Form layout="inline">
+          <Form.Item label="Project">
+              <Input
+                value={this.state.filterProject}
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value })
+                }
+                placeholder="MethylScape"
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
             <Form.Item label="Sample">
               <Input
                 value={this.state.filterSample}

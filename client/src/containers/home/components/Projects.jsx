@@ -2,12 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Table, Input, Button, Form, Select, PageHeader } from "antd";
 
-
 class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterProject: "",
+      filterProject: this.props.filter.project,
       filterInvestigator: "",
       loading: true,
       pagination: {
@@ -16,14 +15,31 @@ class Projects extends React.Component {
         showSizeChanger: true
       },
       data: [],
-      filteredData: []
+      filteredData: [],
+      rawData: props.data
     };
   }
-
-  async componentWillReceiveProps(props) {
-    await this.createDataTable(props.data).then(
+  async componentDidMount() {
+    console.log("Project compnoenet Did mount")
+    await this.createDataTable(this.state.data).then(
       this.setState({loading: false})
     )
+  }
+  // async componentWillReceiveProps(props) {
+  //   await this.createDataTable(props.data).then(
+  //     this.setState({loading: false})
+  //   )
+  // }
+  async componentWillReceiveProps(nextProps) {
+    console.log("Project compnoenet REC PROP")
+    console.log("YEAH", nextProps)
+    this.createDataTable(nextProps.data)
+    if(nextProps.filter.project){
+      this.setState({filterProject: nextProps.filter.project},() => {
+        this.handleFilter();
+      })
+    }
+    this.handleFilter();
   }
 
   createDataTable = async(rawData) => {
@@ -52,15 +68,21 @@ class Projects extends React.Component {
   };
 
   handleFilter = () => {
+    console.log("?????",this.state.data)
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase()
-                .includes(this.state.filterProject.toLowerCase()) &&
+                .includes(this.getFilterProject()) &&
               row.investigator.toLowerCase()
                 .includes(this.state.filterInvestigator.toLowerCase())
       })
     });
   };
+
+
+  getFilterProject = () => {
+    return this.state.filterProject ? this.state.filterProject.toLowerCase() : ""
+  }
 
   render() {
     const columns = [
@@ -69,7 +91,7 @@ class Projects extends React.Component {
         dataIndex: "key",
         sorter: true,
         width: "20%",
-        render: (text, record) => <Link to={`/TEMP/${record.project}`}>{record.project}</Link>
+        // render: (text, record) => <a onClick={() => this.props.updateSummery(record.project)}>{record.project}</a>
       },{
         title: "Investigator Name",
         dataIndex: "investigator",
@@ -86,7 +108,7 @@ class Projects extends React.Component {
         dataIndex: "sampleSize",
         sorter: true,
         width: "20%",
-        render: (text, record) => <a onClick={() => this.props.changeTab("samples")}>{text}</a>
+        render: (text, record) => <a onClick={() => this.props.changeTab("samples", {project:record.project})}>{text}</a>
       },{
         title: "Project Date",
         dataIndex: "date",
@@ -130,6 +152,7 @@ class Projects extends React.Component {
           dataSource={this.state.filteredData}
           onChange={this.handleTableChange}
         />
+        <br/>
       </div>
     );
   }
