@@ -19,27 +19,24 @@ class Projects extends React.Component {
       rawData: props.data
     };
   }
-  async componentDidMount() {
-    console.log("Project compnoenet Did mount")
-    await this.createDataTable(this.state.data).then(
-      this.setState({loading: false})
-    )
-  }
-  // async componentWillReceiveProps(props) {
-  //   await this.createDataTable(props.data).then(
+
+  // async componentDidMount() {
+  //   console.log("Project compnoenet Did mount")
+  //   await this.createDataTable(this.state.data).then(
   //     this.setState({loading: false})
   //   )
   // }
+
   async componentWillReceiveProps(nextProps) {
-    console.log("Project compnoenet REC PROP")
-    console.log("YEAH", nextProps)
+    console.log("Project Recieve prop", nextProps)
     this.createDataTable(nextProps.data)
     if(nextProps.filter.project){
       this.setState({filterProject: nextProps.filter.project},() => {
         this.handleFilter();
       })
+    }else{
+      this.handleFilter();
     }
-    this.handleFilter();
   }
 
   createDataTable = async(rawData) => {
@@ -68,7 +65,7 @@ class Projects extends React.Component {
   };
 
   handleFilter = () => {
-    console.log("?????",this.state.data)
+    console.log("Handle filter in project",this.state.data)
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase()
@@ -76,7 +73,7 @@ class Projects extends React.Component {
               row.investigator.toLowerCase()
                 .includes(this.state.filterInvestigator.toLowerCase())
       })
-    });
+    }, this.setState({loading: false}));
   };
 
 

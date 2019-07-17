@@ -24,7 +24,7 @@ class Experiments extends React.Component {
   async componentWillReceiveProps(nextProps) {
     // this.setState({ filterProject: nextProps.filter.project });
     // this.handleFilter();
-    console.log("WHAT", nextProps)
+    console.log("Experiment receive prop", nextProps)
     if(nextProps.filter.project){
       this.setState({filterProject: nextProps.filter.project},() =>{
         this.handleFilter();
