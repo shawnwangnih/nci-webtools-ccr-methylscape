@@ -1,47 +1,52 @@
 import React from 'react'
-import * as d3 from 'd3'
 import Pie from './PieSVG'
-
-
-const Arc = ({ data, index, createArc, colors, format }) => (
-    <g key={index} className="arc">
-      <path className="arc" d={createArc(data)} fill={colors(index)} />
-      <text
-        transform={`translate(${createArc.centroid(data)})`}
-        textAnchor="middle"
-        alignmentBaseline="middle"
-        fill="white"
-        fontSize="10"
-      >
-        {format(data.value)}
-      </text>
-    </g>
-  );
 
 
 class Summary extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      data: props.data
+      project: "",
+      filteredData: []
     }
   }
-    componentWillReceiveProps(nextProps){
-      console.log("PROPS", nextProps.filter)
-    }
 
-    componentDidMount(){
-    }
 
-    render(){
-        return(
+
+  componentWillReceiveProps(nextProps){
+    console.log("3------", nextProps.project)
+    // this.setState({data:nextProps.data}, () => {
+      if(nextProps.project == ""){
+        this.setState({project:nextProps.data[1].project})
+        this.setState({data:this.filterData(nextProps.data[1].project)})
+      }else{
+        console.log("4--------", nextProps.project)
+        this.setState({project:nextProps.project})
+        this.setState({data:this.filterData(nextProps.project)})
+      }
+    // })
+  }
+
+  filterData = (filter) => {
+    console.log("FILTER: ", filter)
+    // this.setState({
+    // return this.state.data.filter(row => {
+    //     return row.project.toLowerCase()
+    //       .includes(filter.toLowerCase());
+    //   })
+    // });
+  }
+
+  render(){
+      return(
+          <div>
+            <h2>Project summery: {this.state.project}</h2>
             <div>
-                <svg>
-
-                </svg>
+              {/* <Pie data={this.getData(this.state.project)} width="100px" heigth="100px"/> */}
             </div>
-        )
-    }
+          </div>
+      )
+  }
 }
 
 export default Summary;

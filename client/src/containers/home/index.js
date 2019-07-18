@@ -15,12 +15,13 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: "project",
+      activeTab: "projects",
       data: [],
       filter: {
         project: "",
         experiment: "",
-      }
+      },
+      projectSummery: ""
     };
   }
 
@@ -31,6 +32,10 @@ class Home extends React.Component {
     }
     this.setState({activeTab});
   };
+
+  updateSummeryData = (filter) => {
+    
+  }
 
   async componentDidMount() {
    const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
@@ -54,8 +59,9 @@ class Home extends React.Component {
       <div>
         {/* <PageHeader /> */}
         <Tabs activeKey={this.state.activeTab} onChange={this.changeTab} defaultActiveKey="project">
-          <TabPane tab="Project" key="project">
-            <Projects data={this.state.data} changeTab={this.changeTab} filter={this.state.filter}/>
+          <TabPane tab="Project" key="projects">
+            <Projects data={this.state.data} changeTab={this.changeTab} filter={this.state.filter} changeSummeryPorject={this.changeSummeryPorject}/>
+            <Summary data={this.state.data} project={this.state.filter.project}/>
           </TabPane>
           <TabPane tab="Experiments" key="experiments">
             <Experiments data={this.state.data}  changeTab={this.changeTab} filter={this.state.filter}/>
@@ -64,9 +70,6 @@ class Home extends React.Component {
             <Samples data={this.state.data} changeTab={this.changeTab} filter={this.state.filter}/>
           </TabPane>
         </Tabs>
-        {this.state.activeTab == "project"?
-        (<Summary data={this.state.data} filter={this.state.filter}/>) : (<br />)
-        }
       </div>
     );
   }
