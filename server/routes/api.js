@@ -13,7 +13,6 @@ router.get('/ping', (req, res) => res.json(true));
 
 router.get('/methylScapeTableData', (req, res) => {
   scanDynamoDB.scanTable(config.methylscapeTable).then(data => res.json(data))
-
   }
 )
 
