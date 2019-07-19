@@ -34,6 +34,11 @@ class Home extends React.Component {
     this.setState({activeTab});
   };
 
+  changeSummeryPorject = (projectSummery) => {
+    this.setState({projectSummery})
+
+  }
+
   // updateSummeryData = (filter) => {
   // }
 
@@ -61,9 +66,9 @@ class Home extends React.Component {
   async componentDidMount() {
     console.log("AWS_TEST")
     this.scanTable("MethylscapeSamples-prod").then(data => {
-            this.setState({ data });
-            this.setState({ loading: false });
-          });
+      this.setState({ data });
+      this.setState({ loading: false });
+    });
 
   //  const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
   //  console.log(prefix)
@@ -88,7 +93,11 @@ class Home extends React.Component {
         <Tabs activeKey={this.state.activeTab} onChange={this.changeTab} defaultActiveKey="project">
           <TabPane tab="Project" key="projects">
             <Projects data={this.state.data} changeTab={this.changeTab} filter={this.state.filter} changeSummeryPorject={this.changeSummeryPorject}/>
-            <Summary data={this.state.data} project={this.state.filter.project}/>
+            <Summary
+              data={this.state.data}
+              project={this.state.projectSummery}
+              changeSummeryPorject={this.changeSummeryPorject}
+            />
           </TabPane>
           <TabPane tab="Experiments" key="experiments">
             <Experiments data={this.state.data}  changeTab={this.changeTab} filter={this.state.filter}/>

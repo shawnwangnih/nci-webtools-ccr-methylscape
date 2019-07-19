@@ -88,7 +88,7 @@ class Projects extends React.Component {
         dataIndex: "key",
         sorter: true,
         width: "20%",
-        render: (text, record) => <a onClick={() => this.props.change("projects", {project:record.project})}>{text}</a>
+        render: (text, record) => <a onClick={() => this.props.changeSummeryPorject(record.project)}>{text}</a>
       },{
         title: "Investigator Name",
         dataIndex: "investigator",

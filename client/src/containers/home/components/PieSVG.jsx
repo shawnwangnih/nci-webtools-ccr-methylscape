@@ -17,7 +17,6 @@ const Arc = ({ data, index, createArc, colors, format }) => (
 );
 
 const Pie = props => {
-  console.log(props.data)
   const createPie = d3
     .pie()
     .value(d => d.value)
