@@ -1,13 +1,15 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
 import { Tabs, PageHeader, Menu } from "antd";
-// import Summary from "./components/Summary";
+import Summary from "./components/Summary";
 import Experiments from "./components/Experiments";
 import Samples from "./components/Samples";
 import Projects from "./components/Projects";
 
 import { connect } from "react-redux";
-import Summary from "./components/Summary";
+
+import AWS from 'aws-sdk';
+
 
 const TabPane = Tabs.TabPane;
 
@@ -28,30 +30,55 @@ class Home extends React.Component {
   changeTab = (activeTab, filter={}) => {
     if(this.filter != {}){
       this.setState({filter})
-      console.log("2------------", this.state.filter)
     }
     this.setState({activeTab});
   };
 
-  updateSummeryData = (filter) => {
-    
-  }
+  // updateSummeryData = (filter) => {
+  // }
+
+  async scanTable(tableName){
+    AWS.config.update({
+      region: 'us-east-1',
+      accessKeyId: "AKIA3VFBLQNOE7Y4LDUU",
+      secretAccessKey:"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"
+    });
+    var documentClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+    const params = {
+        TableName: tableName,
+    };
+    let scanResults = [];
+    let items;
+    do{
+        items =  await documentClient.scan(params).promise();
+        items.Items.forEach((item) => scanResults.push(item));
+        params.ExclusiveStartKey  = items.LastEvaluatedKey;
+    }while(typeof items.LastEvaluatedKey != "undefined");
+
+    return scanResults;
+};
 
   async componentDidMount() {
-   const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
-   console.log(prefix)
-    fetch(prefix + "/api/methylScapeTableData", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ data });
-        this.setState({ loading: false });
-      });
+    console.log("AWS_TEST")
+    this.scanTable("MethylscapeSamples-prod").then(data => {
+            this.setState({ data });
+            this.setState({ loading: false });
+          });
+
+  //  const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
+  //  console.log(prefix)
+  //   fetch(prefix + "/api/methylScapeTableData", {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       this.setState({ data });
+  //       this.setState({ loading: false });
+  //     });
   }
 
   render() {

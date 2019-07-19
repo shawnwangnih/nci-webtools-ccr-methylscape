@@ -1,7 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser')
-const config = require('../../config.json');
+// const config = require('../../config.json');
 const router = express.Router();
 const scanDynamoDB = require('./scanDynamoDB')
 
