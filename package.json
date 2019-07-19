@@ -1,40 +1,40 @@
 {
-  "name": "express-starter",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server/server.js",
+  "private": true,
+  "homepage": "https://create-react-app-redux.now.sh",
   "scripts": {
-    "build": "cd client && npm run build",
-    "start": "pm2 start server/server.js --name methylscape",
-    "stop": "pm2 stop server/server.js --name methylscape",
-    "start:dev": "npm run start -- --watch && pm2 logs methylscape",
-    "start:client": "cd client && npm run start",
-    "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
-    "test:e2e": "mocha -R xunit -O output=test/e2e.xml test/end-to-end/*test.js && shx cat test/e2e.xml",
-    "test:integration": "mocha -R xunit -O output=test/integration.xml test/integration/*test.js && shx cat test/integration.xml",
-    "test:unit": "mocha -R xunit -O output=test/unit.xml test/unit/*test.js && shx cat test/unit.xml"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "2.449.0",
-    "body-parser": "1.19.0",
-    "compose-middleware": "5.0.1",
-    "compression": "^1.7.3",
-    "cors": "2.8.5",
-    "daemon": "1.1.0",
-    "express": "^4.16.4",
-    "fs-extra": "7.0.1",
-    "helmet": "3.15.0",
-    "moment": "2.23.0",
-    "morgan": "^1.9.1",
-    "pm2": "3.2.9",
-    "rotating-file-stream": "1.4.0",
-    "shx": "0.3.2",
-    "winston": "^3.1.0"
+    "deploy": "now && now alias",
+    "start": "react-scripts start",
+    "now-start": "serve -s ./build",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "precommit": "pretty-quick --staged"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0"
-  }
+    "prettier": "1.17.0",
+    "react-scripts": "2.1.8"
+  },
+  "dependencies": {
+    "antd": "3.16.6",
+    "aws-sdk": "2.495.0",
+    "babel-loader": "8.0.5",
+    "connected-react-router": "4.5.0",
+    "d3": "5.9.2",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-highlight-words": "0.16.0",
+    "react-redux": "5.1.1",
+    "react-router": "4.4.0-beta.8",
+    "react-router-dom": "4.4.0-beta.8",
+    "redux": "4.0.1",
+    "redux-thunk": "2.3.0",
+    "sanitize.css": "7.0.3",
+    "serve": "10.1.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

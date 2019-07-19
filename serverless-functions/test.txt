@@ -1,7 +1,0 @@
-//////
-
-aws s3 mb s3://methylscape-lambda
-
-aws cloudformation package --template-file template.yml --s3-bucket methylscape-lambda --output-template-file package-template.yml
-
-aws cloudformation deploy --template-file /Users/abdullahz2/Desktop/analysis_tools/Methylscape2/nci-webtools-ccr-methylscape/serverless-functions/package-template.yml --stack-name methylscape-serverless-function --capabilities CAPABILITY_IAM
