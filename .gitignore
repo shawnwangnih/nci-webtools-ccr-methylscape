@@ -5,13 +5,13 @@
 config.json
 node_modules
 # dependencies
-/node_modules
+/node_modules/*
 
 # testing
 /coverage
 
 # production
-/build
+/build/*
 /public/*
 
 # misc
