@@ -86,16 +86,19 @@ class Summary extends React.Component{
             <h3>Project summery: {this.state.project}</h3>
             <br></br>
             <Row type="flex" justify="center" align="middle" >
-              <Col span={8} order={1}>
-                <h4>Methylation Classes</h4>
+              <Col span={8} order={1} >
+                <h4 className='summery-data-title'>Methylation Classes</h4>
+                <br></br>
                 <PieChart data={this.getMethylationClasses()}  legend="bottom"/>
               </Col>
               <Col span={8} order={2}>
-                <h4>Gender</h4>
+                <h4 className='summery-data-title'>Gender</h4>
+                <br></br>
                 <PieChart data={this.getGender()}  legend="bottom"/>
               </Col>
               <Col span={8} order={3}>
-                <h4>Age Distribution</h4>
+                <h4 className='summery-data-title'>Age Distribution</h4>
+                <br></br>
                 <ColumnChart data={this.getAgeDistribution()} />
               </Col>
               </Row>
