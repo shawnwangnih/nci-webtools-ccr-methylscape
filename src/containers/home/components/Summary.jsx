@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+// import { Container, Row, Col } from 'react-bootstrap';
 import Pie from './PieSVG'
 
 
@@ -54,7 +54,7 @@ class Summary extends React.Component{
   render(){
       return(
           <div>
-            <Container>
+            {/* <Container>
             <Row>
               <Col>1 of 2</Col>
               <Col>2 of 2</Col>
@@ -64,7 +64,7 @@ class Summary extends React.Component{
               <Col>2 of 3</Col>
               <Col>3 of 3</Col>
             </Row>
-            </Container>
+            </Container> */}
             <h3>Project summery: {this.state.project}</h3>
             <div>
               <Pie
