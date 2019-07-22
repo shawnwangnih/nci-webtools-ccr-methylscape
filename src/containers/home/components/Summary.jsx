@@ -1,7 +1,8 @@
 import React from 'react'
 // import { Container, Row, Col } from 'react-bootstrap';
 import { Row, Col } from 'antd';
-import Pie from './PieSVG'
+import { ColumnChart, PieChart } from 'react-chartkick'
+import 'chart.js'
 
 
 class Summary extends React.Component{
@@ -23,7 +24,6 @@ class Summary extends React.Component{
       this.setState({project:nextProps.project})
       this.filterData(nextProps.project, nextProps.data)
     }
-    this.getPieData()
   }
 
   filterData = (filter, data) => {
@@ -36,7 +36,7 @@ class Summary extends React.Component{
     });
   }
 
-   getPieData = () => {
+   getMethylationClasses = () => {
     let cur = {}
     let pieData = []
     this.state.filteredData.map(row => {
@@ -47,7 +47,35 @@ class Summary extends React.Component{
       })
     })
     Object.keys(cur).forEach(k => {
-        pieData.push({label:k, value:cur[k]})
+        // pieData.push({label:k, value:cur[k]})
+        pieData.push([k.replace("methylation class ", ""), cur[k]])
+
+    })
+    return pieData
+  }
+
+  getGender = () => {
+    let cur = {}
+    let pieData = []
+    this.state.filteredData.map(row => {
+      cur[row.gender] = (cur[row.gender] + 1) || 1 ;
+    })
+    Object.keys(cur).forEach(k => {
+      pieData.push([k, cur[k]])
+
+    })
+    return pieData
+  }
+
+  getAgeDistribution = () => {
+    let cur = {}
+    let pieData = []
+    this.state.filteredData.map(row => {
+      cur[row.age] = (cur[row.age] + 1) || 1 ;
+    })
+    Object.keys(cur).forEach(k => {
+      pieData.push([k, cur[k]])
+
     })
     return pieData
   }
@@ -58,22 +86,17 @@ class Summary extends React.Component{
             <h3>Project summery: {this.state.project}</h3>
             <br></br>
             <Row type="flex" justify="center" align="middle" >
-              <Col span={8} order={3}>
-              TODO
+              <Col span={8} order={1}>
+                <h4>Methylation Classes</h4>
+                <PieChart data={this.getMethylationClasses()}  legend="bottom"/>
               </Col>
               <Col span={8} order={2}>
-                TODO
+                <h4>Gender</h4>
+                <PieChart data={this.getGender()}  legend="bottom"/>
               </Col>
-              <Col span={8} order={1}>
-                <div className="summery-data">
-                  <Pie
-                    data={this.getPieData()}
-                    width="200"
-                    heigth="200"
-                    innerRadius={10}
-                    outerRadius={100}
-                    />
-                </div>
+              <Col span={8} order={3}>
+                <h4>Age Distribution</h4>
+                <ColumnChart data={this.getAgeDistribution()} />
               </Col>
               </Row>
           </div>
