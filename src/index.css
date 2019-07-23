@@ -1,17 +1,15 @@
 @import '~antd/dist/antd.css';
 
-
 .logo {
   /* width: 120px; */
-  height: 35px; 
+  height: 35px;
   margin: 13px 40px 0px 0px;
   float: left;
 }
-body{
+body {
   background: #f0f2f5;
 }
 
-.summery-data-title{
+.summery-data-title {
   text-align: center;
-
 }

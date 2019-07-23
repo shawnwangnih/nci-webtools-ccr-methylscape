@@ -1,23 +1,23 @@
-import React from "react";
-import { Route , Link} from "react-router-dom";
-import Home from "../home";
+import React from 'react';
+import { Route, Link } from 'react-router-dom';
+import Home from '../home';
 // import CNSProfiling from "../cnsprofiling";
 // import Help from "../help";
 // import ProjectPage from "../project"
 
-import { Layout, Menu } from "antd";
-import FooterContent from "./components/footer";
+import { Layout, Menu } from 'antd';
+import FooterContent from './components/footer';
 
 const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
   state = {
-    current: "home"
+    current: 'home'
   };
   handleClick = e => {
     // console.log(withRouter);
 
-    console.log("click ", e);
+    console.log('click ', e);
     this.setState({
       current: e.key
     });
@@ -29,17 +29,16 @@ class App extends React.Component {
           <Header
             className="header"
             style={{
-              height: "60px",
-              theme: "light",
-              background: "#fff",
-              position: "fixed",
+              height: '60px',
+              theme: 'light',
+              background: '#fff',
+              position: 'fixed',
               zIndex: 1,
-              width: "100%",
-              padding: "0 50px"
-            }}
-          >
+              width: '100%',
+              padding: '0 50px'
+            }}>
             <div>
-              {" "}
+              {' '}
               <a href="https://ccr.cancer.gov/">
                 <img
                   className="logo"
@@ -74,12 +73,11 @@ class App extends React.Component {
             </Menu> */}
           </Header>
           <Content
-            style={{ padding: "10px 50px", marginTop: 64, height: "100%" }}
-          >
+            style={{ padding: '10px 50px', marginTop: 64, height: '100%' }}>
             {/* <div>
               <h2>MethylScape</h2>
             </div> */}
-            <div style={{ background: "#fff", padding: 24, minHeight: 380 }}>
+            <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
               <Home />
               {/* <Route exact path="/" component={Home} /> */}
               {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
@@ -88,7 +86,7 @@ class App extends React.Component {
             </div>
           </Content>
 
-          <Footer style={{ textAlign: "center" }}>
+          <Footer style={{ textAlign: 'center' }}>
             <FooterContent />
           </Footer>
         </Layout>

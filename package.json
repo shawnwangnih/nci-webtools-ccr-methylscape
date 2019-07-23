@@ -5,10 +5,11 @@
     "deploy": "now && now alias",
     "start": "react-scripts start",
     "now-start": "serve -s ./build",
-    "build": "react-scripts build",
+    "build": "npm run format && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "format": "prettier --single-quote --jsx-bracket-same-line --write \"src/**/*.{js,json,css,scss}\""
   },
   "devDependencies": {
     "prettier": "1.17.0",
