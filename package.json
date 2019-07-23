@@ -15,7 +15,7 @@
     "react-scripts": "2.1.8"
   },
   "dependencies": {
-    "antd": "3.16.6",
+    "antd": "3.20.5",
     "aws-sdk": "2.495.0",
     "babel-loader": "8.0.5",
     "chart.js": "2.8.0",
