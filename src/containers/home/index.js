@@ -42,9 +42,7 @@ class Home extends React.Component {
 
   async scanTable(tableName) {
     AWS.config.update({
-      region: 'us-east-1',
-      accessKeyId: 'AKIA3VFBLQNOE7Y4LDUU',
-      secretAccessKey: '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'
+      region: 'us-east-1'
     });
     var documentClient = new AWS.DynamoDB.DocumentClient({
       apiVersion: '2012-08-10'
