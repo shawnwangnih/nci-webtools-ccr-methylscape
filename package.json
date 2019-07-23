@@ -1,6 +1,7 @@
 {
   "private": true,
-  "homepage": "https://create-react-app-redux.now.sh",
+  "version": "0.1.0",
+  "homepage": "./",
   "scripts": {
     "deploy": "now && now alias",
     "start": "react-scripts start",
