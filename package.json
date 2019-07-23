@@ -10,7 +10,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "precommit": "pretty-quick --staged",
-    "format": "prettier --single-quote --jsx-bracket-same-line --write \"src/**/*.{js,json,css,scss}\""
+    "format": "prettier --single-quote --jsx-bracket-same-line --write \"src/**/*.{js,json,css,scss,jsx}\""
   },
   "devDependencies": {
     "prettier": "1.17.0",

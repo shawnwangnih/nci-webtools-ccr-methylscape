@@ -44,6 +44,14 @@ class Home extends React.Component {
     AWS.config.update({
       region: 'us-east-1'
     });
+    if(process.env.NODE_ENV === 'development'){
+      console.log("IN DEV MODE")
+      const awsCreds =  require('../../aws-credentials.json')
+      AWS.config.update({
+        secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
+        accessKeyId: awsCreds.dynamoDBCredentials.accessKey
+      });
+    }
     var documentClient = new AWS.DynamoDB.DocumentClient({
       apiVersion: '2012-08-10'
     });
@@ -57,15 +65,19 @@ class Home extends React.Component {
       items.Items.forEach(item => scanResults.push(item));
       params.ExclusiveStartKey = items.LastEvaluatedKey;
     } while (typeof items.LastEvaluatedKey != 'undefined');
-
     return scanResults;
   }
 
   async componentDidMount() {
     console.log('AWS_TEST');
-    this.scanTable('MethylscapeSamples-prod').then(data => {
-      this.setState({ data });
-      this.setState({ loading: false });
+    this.scanTable('MethylscapeSamples-prod').then((data, error) => {
+      if(error){
+        console.log("ERROR", error)
+      }
+      if(data){
+        this.setState({ data });
+        this.setState({ loading: false });
+      }
     });
 
     //  const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
