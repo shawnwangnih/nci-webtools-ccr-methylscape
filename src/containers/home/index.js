@@ -44,9 +44,9 @@ class Home extends React.Component {
     AWS.config.update({
       region: 'us-east-1'
     });
-    if(process.env.NODE_ENV === 'development'){
-      console.log("IN DEV MODE")
-      const awsCreds =  require('../../aws-credentials.json')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('IN DEV MODE');
+      const awsCreds = require('../../aws-credentials.json');
       AWS.config.update({
         secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
         accessKeyId: awsCreds.dynamoDBCredentials.accessKey
@@ -71,10 +71,10 @@ class Home extends React.Component {
   async componentDidMount() {
     console.log('AWS_TEST');
     this.scanTable('MethylscapeSamples-prod').then((data, error) => {
-      if(error){
-        console.log("ERROR", error)
+      if (error) {
+        console.log('ERROR', error);
       }
-      if(data){
+      if (data) {
         this.setState({ data });
         this.setState({ loading: false });
       }

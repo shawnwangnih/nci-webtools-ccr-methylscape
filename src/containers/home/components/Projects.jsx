@@ -1,16 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Table, Input, Button, Form, Select, PageHeader } from "antd";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Table, Input, Button, Form, Select, PageHeader } from 'antd';
 
 class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       filterProject: this.props.filter.project,
-      filterInvestigator: "",
+      filterInvestigator: '',
       loading: true,
       pagination: {
-        position: "bottom",
+        position: 'bottom',
         size: 5,
         showSizeChanger: true
       },
@@ -28,27 +28,27 @@ class Projects extends React.Component {
   // }
 
   async componentWillReceiveProps(nextProps) {
-    console.log("Project Recieve prop", nextProps)
-    this.createDataTable(nextProps.data)
-    if(nextProps.filter.project){
-      this.setState({filterProject: nextProps.filter.project},() => {
+    console.log('Project Recieve prop', nextProps);
+    this.createDataTable(nextProps.data);
+    if (nextProps.filter.project) {
+      this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();
-      })
-    }else{
+      });
+    } else {
       this.handleFilter();
     }
   }
 
-  createDataTable = async(rawData) => {
-    var projectData = {}
-    rawData.map( sample => {
-      var curProject = sample.project
-      if(curProject == null) {
-      }
-      else if(curProject in projectData){
-        projectData[curProject].sampleSize = projectData[curProject].sampleSize + 1
-        projectData[curProject].experiments.add(sample.experiment)
-      }else{
+  createDataTable = async rawData => {
+    var projectData = {};
+    rawData.map(sample => {
+      var curProject = sample.project;
+      if (curProject == null) {
+      } else if (curProject in projectData) {
+        projectData[curProject].sampleSize =
+          projectData[curProject].sampleSize + 1;
+        projectData[curProject].experiments.add(sample.experiment);
+      } else {
         projectData[curProject] = {
           key: curProject,
           project: curProject,
@@ -56,69 +56,109 @@ class Projects extends React.Component {
           date: sample.date,
           investigator: sample.investigator,
           experiments: new Set([])
-        }
-        projectData[curProject].experiments.add(sample.experiment)
+        };
+        projectData[curProject].experiments.add(sample.experiment);
       }
-    })
-    this.setState({data: Object.values(projectData)})
-    this.setState({filteredData:  Object.values(projectData)})
+    });
+    this.setState({ data: Object.values(projectData) });
+    this.setState({ filteredData: Object.values(projectData) });
   };
 
   handleFilter = () => {
-    console.log("Handle filter in project",this.state.data)
-    this.setState({
-      filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase()
-                .includes(this.getFilterProject()) &&
-              row.investigator.toLowerCase()
-                .includes(this.state.filterInvestigator.toLowerCase())
-      })
-    }, this.setState({loading: false}));
+    console.log('Handle filter in project', this.state.data);
+    this.setState(
+      {
+        filteredData: this.state.data.filter(row => {
+          return (
+            row.project.toLowerCase().includes(this.getFilterProject()) &&
+            row.investigator
+              .toLowerCase()
+              .includes(this.state.filterInvestigator.toLowerCase())
+          );
+        })
+      },
+      this.setState({ loading: false })
+    );
   };
 
+  handleReset = () => {
+    this.setState(
+      {
+        filterProject: '',
+        filterInvestigator: ''
+      },
+      () => {
+        this.handleFilter();
+      }
+    );
+  };
 
   getFilterProject = () => {
-    return this.state.filterProject ? this.state.filterProject.toLowerCase() : ""
-  }
+    return this.state.filterProject
+      ? this.state.filterProject.toLowerCase()
+      : '';
+  };
 
   render() {
     const columns = [
       {
-        title: "Project",
-        dataIndex: "key",
+        title: 'Project',
+        dataIndex: 'key',
         sorter: true,
-        width: "20%",
-        render: (text, record) => <a onClick={() => this.props.changeSummeryPorject(record.project)}>{text}</a>
-      },{
-        title: "Investigator Name",
-        dataIndex: "investigator",
-        sorter: true,
-        width: "20%"
-      },{
-        title: "# of Experiments",
-        dataIndex: "experiments",
-        sorter: true,
-        width: "20%",
-        render: (text, record) => <a onClick={() => this.props.changeTab("experiments", {project:record.project})}>{record.experiments.size}</a>
-      },{
-        title: "# of Samples",
-        dataIndex: "sampleSize",
-        sorter: true,
-        width: "20%",
-        render: (text, record) => <a onClick={() => this.props.changeTab("samples", {project:record.project})}>{text}</a>
-      },{
-        title: "Project Date",
-        dataIndex: "date",
-        sorter: true,
-        width: "15%"
+        width: '20%',
+        render: (text, record) => (
+          <a onClick={() => this.props.changeSummeryPorject(record.project)}>
+            {text}
+          </a>
+        )
       },
+      {
+        title: 'Investigator Name',
+        dataIndex: 'investigator',
+        sorter: true,
+        width: '20%'
+      },
+      {
+        title: '# of Experiments',
+        dataIndex: 'experiments',
+        sorter: true,
+        width: '20%',
+        render: (text, record) => (
+          <a
+            onClick={() =>
+              this.props.changeTab('experiments', { project: record.project })
+            }>
+            {record.experiments.size}
+          </a>
+        )
+      },
+      {
+        title: '# of Samples',
+        dataIndex: 'sampleSize',
+        sorter: true,
+        width: '20%',
+        render: (text, record) => (
+          <a
+            onClick={() =>
+              this.props.changeTab('samples', { project: record.project })
+            }>
+            {text}
+          </a>
+        )
+      },
+      {
+        title: 'Project Date',
+        dataIndex: 'date',
+        sorter: true,
+        width: '15%'
+      }
     ];
 
     return (
       <div>
         <div>
-        {/* <PageHeader title={"MethylScape Results"} /> */}
-        <br></br>
+          {/* <PageHeader title={"MethylScape Results"} /> */}
+          <br />
           <Form layout="inline">
             <Form.Item label="Project">
               <Input
@@ -131,13 +171,19 @@ class Projects extends React.Component {
             <Form.Item label="Investigator">
               <Input
                 value={this.state.filterInvestigator}
-                onChange={e => this.setState({ filterInvestigator: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterInvestigator: e.target.value })
+                }
                 onPressEnter={this.handleFilter}
-                placeholder="Jane Doe" />
+                placeholder="Jane Doe"
+              />
             </Form.Item>
             <Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                Clear
               </Button>
             </Form.Item>
           </Form>
@@ -149,7 +195,7 @@ class Projects extends React.Component {
           dataSource={this.state.filteredData}
           onChange={this.handleTableChange}
         />
-        <br/>
+        <br />
       </div>
     );
   }

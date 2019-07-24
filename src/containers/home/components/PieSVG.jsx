@@ -1,5 +1,5 @@
-import React from "react";
-import * as d3 from "d3";
+import React from 'react';
+import * as d3 from 'd3';
 
 const Arc = ({ data, index, createArc, colors, format }) => (
   <g key={index} className="arc">
@@ -9,8 +9,7 @@ const Arc = ({ data, index, createArc, colors, format }) => (
       textAnchor="middle"
       alignmentBaseline="middle"
       fill="white"
-      fontSize="10"
-    >
+      fontSize="10">
       {format(data.value)}
     </text>
   </g>
@@ -26,7 +25,7 @@ const Pie = props => {
     .innerRadius(props.innerRadius)
     .outerRadius(props.outerRadius);
   const colors = d3.scaleOrdinal(d3.schemeCategory10);
-  const format = d3.format(".2f");
+  const format = d3.format('.2f');
   const data = createPie(props.data);
 
   return (

@@ -1,32 +1,43 @@
-import React from 'react'
+import React from 'react';
 // import { Link } from 'react-router-dom'
-import { Layout, Menu} from 'antd'
+import { Layout, Menu } from 'antd';
 
-const { Header} = Layout
+const { Header } = Layout;
 
 class Header extends React.Component {
-    state = {
-        current: 'home',
-    }
-    handleClick = (e) => {
-        console.log('click ', e);
-        this.setState({
-          current: e.key,
-        });
-    }
-    render() {
-        return (
-            <Header className="header" style={{
-                height: '60px',
-                theme: "light",
-                background: "#fff",
-                position: "fixed",
-                zIndex: 1,
-                width: "100%",
-                padding: '0 50px'
-              }}>
-              <div> <a href="https://ccr.cancer.gov/"><img className='logo' src='/assets/img/nci-ccr-logo.png' alt='National Cancer Institute'></img></a></div>
-                {/* <Menu
+  state = {
+    current: 'home'
+  };
+  handleClick = e => {
+    console.log('click ', e);
+    this.setState({
+      current: e.key
+    });
+  };
+  render() {
+    return (
+      <Header
+        className="header"
+        style={{
+          height: '60px',
+          theme: 'light',
+          background: '#fff',
+          position: 'fixed',
+          zIndex: 1,
+          width: '100%',
+          padding: '0 50px'
+        }}>
+        <div>
+          {' '}
+          <a href="https://ccr.cancer.gov/">
+            <img
+              className="logo"
+              src="/assets/img/nci-ccr-logo.png"
+              alt="National Cancer Institute"
+            />
+          </a>
+        </div>
+        {/* <Menu
                     onClick={this.handleClick}
                     selectedKeys={[this.state.current]}
                     theme="light"
@@ -49,12 +60,10 @@ class Header extends React.Component {
                     <Menu.Item key="help">
                         <Link to="/help">Help</Link>
                     </Menu.Item> */}
-                {/* </Menu> */}
-            </Header>
-        )
-    }
-
+        {/* </Menu> */}
+      </Header>
+    );
+  }
 }
 
-
-export default Header
+export default Header;

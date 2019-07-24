@@ -1,16 +1,16 @@
-import React from "react";
-import { Table, Input, Button, Form, Select } from "antd";
+import React from 'react';
+import { Table, Input, Button, Form, Select } from 'antd';
 
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
     this.state = {
-      filterExperiment: "",
-      filterDate: "",
+      filterExperiment: '',
+      filterDate: '',
       loading: true,
       pagination: {
-        position: "bottom",
+        position: 'bottom',
         size: 5,
         // pageSize: 15,
         showSizeChanger: true
@@ -21,11 +21,11 @@ class Experiments extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/api/project/experiments", {
-      method: "POST",
+    fetch('http://localhost:5000/api/project/experiments', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         projectID: this.state.projectID
@@ -43,7 +43,8 @@ class Experiments extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase()
+        return row.project
+          .toLowerCase()
           .includes(this.state.filterExperiment.toLowerCase());
       })
     });
@@ -52,39 +53,39 @@ class Experiments extends React.Component {
   render() {
     const columns = [
       {
-        title: "Experiment",
-        dataIndex: "experiment",
+        title: 'Experiment',
+        dataIndex: 'experiment',
         sorter: true,
-        width: "20%"
+        width: '20%'
       },
       {
-        title: "Date created",
-        dataIndex: "date",
+        title: 'Date created',
+        dataIndex: 'date',
         sorter: true,
-        width: "10%"
+        width: '10%'
       },
       {
-        title: "Investigator Name",
-        dataIndex: "investigator",
+        title: 'Investigator Name',
+        dataIndex: 'investigator',
         sorter: true,
-        width: "10%"
+        width: '10%'
       },
       {
-        title: "# of samples",
-        dataIndex: "sampleSize",
+        title: '# of samples',
+        dataIndex: 'sampleSize',
         sorter: true,
-        width: "10%"
+        width: '10%'
       },
       {
-        title: "Experimental Worksheet",
+        title: 'Experimental Worksheet',
         sorter: true,
-        width: "20%",
+        width: '20%',
         render: record => <a href="...">{record.key}</a>
       },
       {
-        title: "Experiment Details",
+        title: 'Experiment Details',
         sorter: true,
-        width: "20%",
+        width: '20%',
         render: record => <a href="...">{record.key}</a>
       }
     ];

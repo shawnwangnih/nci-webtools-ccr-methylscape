@@ -1,16 +1,16 @@
-import React from "react";
-import { Table, Input, Button, Form, Select } from "antd";
+import React from 'react';
+import { Table, Input, Button, Form, Select } from 'antd';
 
 class Samples extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
     this.state = {
-      filterSample: "",
-      filterSentrixID: "",
+      filterSample: '',
+      filterSentrixID: '',
       loading: true,
       pagination: {
-        position: "bottom",
+        position: 'bottom',
         size: 5,
         // pageSize: 15,
         showSizeChanger: true
@@ -21,11 +21,11 @@ class Samples extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/api/project/samples", {
-      method: "POST",
+    fetch('http://localhost:5000/api/project/samples', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         projectID: this.state.projectID
@@ -43,7 +43,8 @@ class Samples extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase()
+        return row.project
+          .toLowerCase()
           .includes(this.state.filterExperiment.toLowerCase());
       })
     });
@@ -52,88 +53,102 @@ class Samples extends React.Component {
   render() {
     const columns = [
       {
-        title: "Sample Name",
-        dataIndex: "",
+        title: 'Sample Name',
+        dataIndex: '',
         sorter: true,
-        width: "200",
-        fixed: 'left',
-      },{
-        title: "Project",
-        dataIndex: "",
+        width: '200',
+        fixed: 'left'
+      },
+      {
+        title: 'Project',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Surgical Case",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Surgical Case',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Gender",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Gender',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Age",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Age',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Diagnosis",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Diagnosis',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Methylation Family",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Methylation Family',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "MF Calibrated Scores",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'MF Calibrated Scores',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "t-SNE plot",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 't-SNE plot',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Sequencing report",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Sequencing report',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Sentrix ID",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Sentrix ID',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "notes",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'notes',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Sample well",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Sample well',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Sample group",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Sample group',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Pool ID",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Pool ID',
+        dataIndex: '',
         sorter: true,
-        width: "200"
-      },{
-        title: "Material Type",
-        dataIndex: "",
+        width: '200'
+      },
+      {
+        title: 'Material Type',
+        dataIndex: '',
         sorter: true,
-        width: "200"
+        width: '200'
       }
-      
     ];
 
     const Option = Select.Option;
@@ -147,9 +162,7 @@ class Samples extends React.Component {
             <Form.Item label="Sample">
               <Input
                 value={this.state.filterSample}
-                onChange={e =>
-                  this.setState({ filterSample: e.target.value })
-                }
+                onChange={e => this.setState({ filterSample: e.target.value })}
                 placeholder="Sample"
                 onPressEnter={this.handleFilter}
               />
@@ -157,7 +170,9 @@ class Samples extends React.Component {
             <Form.Item label="Sentrix ID">
               <Input
                 value={this.state.filterSentrixID}
-                onChange={e => this.setState({ filterSentrixID: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterSentrixID: e.target.value })
+                }
                 onPressEnter={this.handleFilter}
                 placeholder="ABD123"
               />
