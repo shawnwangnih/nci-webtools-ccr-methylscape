@@ -14,6 +14,7 @@ class Projects extends React.Component {
         size: 5,
         showSizeChanger: true
       },
+      sortedInfo: null,
       data: [],
       filteredData: [],
       rawData: props.data
@@ -99,6 +100,15 @@ class Projects extends React.Component {
       : '';
   };
 
+  setProjSort = () => {
+    this.setState({
+      sortedInfo: {
+        order: 'descend',
+        columnKey: 'key'
+      }
+    });
+  };
+
   render() {
     const columns = [
       {
@@ -106,6 +116,7 @@ class Projects extends React.Component {
         dataIndex: 'key',
         sorter: true,
         width: '20%',
+        sorter: (a, b) => a.key < b.key,
         render: (text, record) => (
           <a onClick={() => this.props.changeSummeryPorject(record.project)}>
             {text}
@@ -116,13 +127,15 @@ class Projects extends React.Component {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
-        width: '20%'
+        width: '20%',
+        sorter: (a, b) => a.investigator < b.investigator
       },
       {
         title: '# of Experiments',
         dataIndex: 'experiments',
         sorter: true,
         width: '20%',
+        sorter: (a, b) => parseInt(a.experiments) > parseInt(b.experiments),
         render: (text, record) => (
           <a
             onClick={() =>

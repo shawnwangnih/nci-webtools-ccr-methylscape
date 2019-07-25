@@ -8,7 +8,7 @@ class Samples extends React.Component {
     this.state = {
       filterSample: '',
       filterProject: props.filter.project,
-      filterSentrixID: '',
+      filterSentrixID: props.filter.experiment,
       loading: true,
       pagination: {
         position: 'bottom',
@@ -97,12 +97,19 @@ class Samples extends React.Component {
         this.handleFilter();
       });
     }
+    console.log(nextProps);
+    if (nextProps.filter.experiment) {
+      this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
+        this.handleFilter();
+      });
+    }
   }
 
   async componentDidMount() {
     await this.createDataTable(this.state.rawData).then(
       this.setState({ loading: false })
     );
+    this.handleFilter();
   }
 
   createDataTable = async rawData => {
@@ -123,9 +130,18 @@ class Samples extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase().includes(this.getFilterProject());
+        return (
+          row.project.toLowerCase().includes(this.getFilterProject()) &&
+          row.experiment.toLowerCase().includes(this.getExperimentFilter())
+        );
       })
     });
+  };
+
+  getExperimentFilter = () => {
+    return this.state.filterSentrixID
+      ? this.state.filterSentrixID.toLowerCase()
+      : '';
   };
 
   getFilterProject = () => {
@@ -164,13 +180,25 @@ class Samples extends React.Component {
     }
   };
 
+  handleReset = () => {
+    this.setState(
+      {
+        filterProject: '',
+        filterSentrixID: ''
+      },
+      () => {
+        this.handleFilter();
+      }
+    );
+  };
+
   render() {
     const columns = [
       {
         title: 'Sample Name',
         dataIndex: 'sample_name',
         sorter: true,
-        width: '300',
+        width: '320',
         fixed: 'left',
         ...this.getColumnSearchProps('sample_name')
       },
@@ -185,12 +213,16 @@ class Samples extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '300',
+        width: '350',
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
           <a
+            // onClick={() =>
+            //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
-              this.props.changeTab('experiments', { project: record.project })
+              this.setState({ filterSentrixID: record.experiment }, () =>
+                this.handleFilter()
+              )
             }>
             {text}
           </a>
@@ -319,14 +351,14 @@ class Samples extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Sample">
+            {/* <Form.Item label="Sample">
               <Input
                 value={this.state.filterSample}
                 onChange={e => this.setState({ filterSample: e.target.value })}
                 placeholder="Sample"
                 onPressEnter={this.handleFilter}
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item label="Sentrix ID">
               <Input
                 value={this.state.filterSentrixID}
@@ -341,6 +373,9 @@ class Samples extends React.Component {
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                Clear
+              </Button>
             </Form.Item>
           </Form>
         </div>
@@ -351,7 +386,7 @@ class Samples extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            scroll={{ x: 3500 }}
+            scroll={{ x: 3800 }}
           />
         </div>
       </div>

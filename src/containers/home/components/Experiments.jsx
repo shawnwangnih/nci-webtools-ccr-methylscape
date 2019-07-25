@@ -7,7 +7,7 @@ class Experiments extends React.Component {
     super(props);
     this.state = {
       filterProject: props.filter.project,
-      filterDate: '',
+      // filterDate: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -63,7 +63,7 @@ class Experiments extends React.Component {
   };
 
   handleFilter = () => {
-    console.log('2-------------', this.state.data);
+    // console.log('2-------------', this.state.data);
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase().includes(this.getFilterProject());
@@ -75,6 +75,18 @@ class Experiments extends React.Component {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
       : '';
+  };
+
+  handleReset = () => {
+    this.setState(
+      {
+        filterProject: ''
+        // f: ''
+      },
+      () => {
+        this.handleFilter();
+      }
+    );
   };
 
   render() {
@@ -97,7 +109,15 @@ class Experiments extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '20%'
+        width: '20%',
+        render: (text, record) => (
+          <a
+            onClick={() =>
+              this.props.changeTab('samples', { experiment: record.experiment })
+            }>
+            {text}
+          </a>
+        )
       },
       {
         title: 'Investigator Name',
@@ -113,7 +133,7 @@ class Experiments extends React.Component {
         render: (text, record) => (
           <a
             onClick={() =>
-              this.props.changeTab('samples', { project: record.project })
+              this.props.changeTab('samples', { experiment: record.experiment })
             }>
             {text}
           </a>
@@ -163,17 +183,20 @@ class Experiments extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Date">
+            {/* <Form.Item label="Date">
               <Input
                 value={this.state.filterDate}
                 onChange={e => this.setState({ filterDate: e.target.value })}
                 onPressEnter={this.handleFilter}
                 placeholder="Jane Doe"
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                Clear
               </Button>
             </Form.Item>
           </Form>

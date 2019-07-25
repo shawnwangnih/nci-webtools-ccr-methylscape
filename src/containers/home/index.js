@@ -29,11 +29,16 @@ class Home extends React.Component {
   changeTab = (activeTab, filter = {}) => {
     if (this.filter != {}) {
       this.setState({ filter });
+      console.log('FILTER *********', filter.project);
+      if (filter.project) {
+        this.changeSummeryPorject(filter.project);
+      }
     }
     this.setState({ activeTab });
   };
 
   changeSummeryPorject = projectSummery => {
+    // this.setState({ [filter project:projectSummery });
     this.setState({ projectSummery });
   };
 
@@ -75,25 +80,11 @@ class Home extends React.Component {
         console.log('ERROR', error);
       }
       if (data) {
+        console.log('DATA', data);
         this.setState({ data });
         this.setState({ loading: false });
       }
     });
-
-    //  const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ""
-    //  console.log(prefix)
-    //   fetch(prefix + "/api/methylScapeTableData", {
-    //     method: "GET",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json"
-    //     }
-    //   })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //       this.setState({ data });
-    //       this.setState({ loading: false });
-    //     });
   }
 
   render() {
