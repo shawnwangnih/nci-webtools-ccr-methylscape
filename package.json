@@ -1,7 +1,7 @@
 {
   "private": true,
   "version": "0.1.0",
-  "homepage": "./",
+  // "homepage": "./",
   "scripts": {
     "deploy": "now && now alias",
     "start": "react-scripts start",
