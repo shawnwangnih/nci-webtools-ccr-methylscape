@@ -200,6 +200,7 @@ class Samples extends React.Component {
         sorter: true,
         width: '320',
         fixed: 'left',
+        sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
       },
       {
@@ -207,6 +208,7 @@ class Samples extends React.Component {
         dataIndex: 'project',
         sorter: true,
         width: '300',
+        sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project')
       },
       {
@@ -214,6 +216,7 @@ class Samples extends React.Component {
         dataIndex: 'experiment',
         sorter: true,
         width: '350',
+        sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
           <a
@@ -231,7 +234,7 @@ class Samples extends React.Component {
       {
         title: 'Date',
         dataIndex: 'date',
-        sorter: true,
+        // sorter: true,
         ...this.getColumnSearchProps('date'),
         width: '200'
       },
@@ -239,6 +242,7 @@ class Samples extends React.Component {
         title: 'Surgical Case',
         dataIndex: 'surgical_case',
         sorter: true,
+        sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
         width: '200'
       },
@@ -246,6 +250,7 @@ class Samples extends React.Component {
         title: 'Gender',
         dataIndex: 'gender',
         sorter: true,
+        sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
         width: '200'
       },
@@ -253,6 +258,7 @@ class Samples extends React.Component {
         title: 'Age',
         dataIndex: 'age',
         sorter: true,
+        sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
         ...this.getColumnSearchProps('age'),
         width: '200'
       },
@@ -260,6 +266,7 @@ class Samples extends React.Component {
         title: 'Diagnosis',
         dataIndex: 'diagnosis',
         sorter: true,
+        sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
         width: '200'
       },
@@ -267,6 +274,7 @@ class Samples extends React.Component {
         title: 'Methylation Family (MF)',
         dataIndex: 'family',
         sorter: true,
+        sorter: (a, b) => a.family.localeCompare(b.family),
         ...this.getColumnSearchProps('family'),
         width: '200'
       },
@@ -274,6 +282,7 @@ class Samples extends React.Component {
         title: 'MF Calibrated Scores',
         dataIndex: 'family_score',
         sorter: true,
+        sorter: (a, b) => a.family_score.localeCompare(b.family_score),
         ...this.getColumnSearchProps('family_score'),
         width: '200'
       },
@@ -281,6 +290,7 @@ class Samples extends React.Component {
         title: 'Methylation Class (MC)',
         dataIndex: 'class',
         sorter: true,
+        sorter: (a, b) => a.class.localeCompare(b.class),
         ...this.getColumnSearchProps('class'),
         width: '200'
       },
@@ -288,6 +298,7 @@ class Samples extends React.Component {
         title: 'MC Calibrated Scores',
         dataIndex: 'class_score',
         sorter: true,
+        sorter: (a, b) => a.class_score.localeCompare(b.class_score),
         ...this.getColumnSearchProps('class_score'),
         width: '200'
       },
@@ -295,6 +306,8 @@ class Samples extends React.Component {
         title: 'MGMT status',
         dataIndex: 'mgmt_prediction.Status',
         sorter: true,
+        sorter: (a, b) =>
+          a.mgmt_prediction.Status.localeCompare(b.mgmt_prediction.Status),
         ...this.getColumnSearchProps('mgmt_prediction.Status'),
         width: '200'
       },
@@ -302,27 +315,31 @@ class Samples extends React.Component {
         title: 'MGMT score',
         dataIndex: 'mgmt_prediction.Estimated',
         sorter: true,
+        sorter: (a, b) =>
+          a.mgmt_prediction.Estimated.localeCompare(
+            b.mgmt_prediction.Estimated
+          ),
         ...this.getColumnSearchProps('mgmt_prediction.Estimated'),
         width: '200'
       },
       {
         title: 't-SNE plot',
         dataIndex: '',
-        sorter: true,
+        // sorter: true,
         width: '200',
         render: record => <a href="...">link to html</a>
       },
       {
         title: 'NGS reports (pdf-files)',
         dataIndex: '',
-        sorter: true,
+        // sorter: true,
         width: '200',
         render: record => <a href="...">link to pdf</a>
       },
       {
         title: 'Slide Image',
         dataIndex: '',
-        sorter: true,
+        // sorter: true,
         width: '200',
         render: record => <a href="...">link to image file</a>
       },
@@ -331,6 +348,7 @@ class Samples extends React.Component {
         dataIndex: 'notes',
         sorter: true,
         ...this.getColumnSearchProps('notes'),
+        sorter: (a, b) => a.notes.localeCompare(b.notes),
         width: '200'
       }
     ];

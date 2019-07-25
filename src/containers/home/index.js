@@ -46,9 +46,6 @@ class Home extends React.Component {
   // }
 
   async scanTable(tableName) {
-    AWS.config.update({
-      region: 'us-east-1'
-    });
     if (process.env.NODE_ENV === 'development') {
       console.log('IN DEV MODE');
       const awsCreds = require('../../aws-credentials.json');
@@ -56,7 +53,16 @@ class Home extends React.Component {
         secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
         accessKeyId: awsCreds.dynamoDBCredentials.accessKey
       });
+    } else {
+      var AWS = require('aws-sdk');
+      var default_credentials = new AWS.SharedIniFileCredentials({
+        profile: 'default'
+      });
     }
+    AWS.config.update({
+      region: 'us-east-1',
+      credentials: default_credentials
+    });
     var documentClient = new AWS.DynamoDB.DocumentClient({
       apiVersion: '2012-08-10'
     });

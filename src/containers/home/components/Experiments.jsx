@@ -93,9 +93,10 @@ class Experiments extends React.Component {
     const columns = [
       {
         title: 'Project',
-        dataIndex: 'key',
+        dataIndex: 'project',
         sorter: true,
         width: '20%',
+        sorter: (a, b) => a.project.localeCompare(b.project),
         render: (text, record) => (
           <a
             onClick={() =>
@@ -110,6 +111,7 @@ class Experiments extends React.Component {
         dataIndex: 'experiment',
         sorter: true,
         width: '20%',
+        sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         render: (text, record) => (
           <a
             onClick={() =>
@@ -123,13 +125,15 @@ class Experiments extends React.Component {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
-        width: '10%'
+        width: '10%',
+        sorter: (a, b) => a.investigator.localeCompare(b.investigator)
       },
       {
         title: '# of samples',
         dataIndex: 'sampleSize',
         sorter: true,
         width: '10%',
+        sorter: (a, b) => a.sampleSize - b.sampleSize,
         render: (text, record) => (
           <a
             onClick={() =>
@@ -147,13 +151,11 @@ class Experiments extends React.Component {
       },
       {
         title: 'QC Sheet',
-        sorter: true,
         width: '20%',
         render: record => <a href="...">show detials</a>
       },
       {
         title: 'QC supplementary',
-        sorter: true,
         width: '20%',
         render: record => <a href="...">show detials</a>
       }
