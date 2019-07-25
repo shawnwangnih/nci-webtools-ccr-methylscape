@@ -36,3 +36,4 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 src/aws-credentials.json
+yarn.lock
