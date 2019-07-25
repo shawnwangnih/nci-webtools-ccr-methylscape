@@ -58,7 +58,7 @@ class Home extends React.Component {
     //   var default_credentials = new AWS.SharedIniFileCredentials({
     //     profile: 'default'
     //   });
-    // }
+    }
     AWS.config.update({
       region: 'us-east-1',
       // credentials: default_credentials
