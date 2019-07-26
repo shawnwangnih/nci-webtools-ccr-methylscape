@@ -116,7 +116,7 @@ class Projects extends React.Component {
         dataIndex: 'key',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.key.localeCompare(b.key),
+        sorter: (a, b) => a.key < b.key,
         render: (text, record) => (
           <a onClick={() => this.props.changeSummeryPorject(record.project)}>
             {text}
@@ -128,14 +128,14 @@ class Projects extends React.Component {
         dataIndex: 'investigator',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.investigator.localeCompare(b.investigator)
+        sorter: (a, b) => a.investigator < b.investigator
       },
       {
         title: '# of Experiments',
         dataIndex: 'experiments',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.experiments.size - b.experiments.size,
+        sorter: (a, b) => a.experiments.size < b.experiments.size,
         render: (text, record) => (
           <a
             onClick={() =>
@@ -150,7 +150,7 @@ class Projects extends React.Component {
         dataIndex: 'sampleSize',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.sampleSize - b.sampleSize,
+        sorter: (a, b) => a.sampleSize < b.sampleSize,
         render: (text, record) => (
           <a
             onClick={() =>
