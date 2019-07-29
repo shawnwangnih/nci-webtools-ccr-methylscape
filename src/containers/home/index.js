@@ -22,7 +22,7 @@ class Home extends React.Component {
         project: '',
         experiment: ''
       },
-      scanCheck:true,
+      scanCheck: true,
       showErrorAlert: false,
       projectSummery: ''
     };
@@ -95,24 +95,32 @@ class Home extends React.Component {
     let items;
     let failedScan = false;
     do {
-      items = await documentClient.scan(params).promise().catch(error => {failedScan=true});
-      if(failedScan) {this.failedScanSetPage(); break;}
+      items = await documentClient
+        .scan(params)
+        .promise()
+        .catch(error => {
+          failedScan = true;
+        });
+      if (failedScan) {
+        this.failedScanSetPage();
+        break;
+      }
       items.Items.forEach(item => scanResults.push(item));
       params.ExclusiveStartKey = items.LastEvaluatedKey;
     } while (typeof items.LastEvaluatedKey != 'undefined');
-    if(scanResults.length> 0){
-      this.successScan()
+    if (scanResults.length > 0) {
+      this.successScan();
     }
     return scanResults;
   }
 
-  failedScanSetPage(){
+  failedScanSetPage() {
     //TODO error msg
-    this.setState({showErrorAlert:true})
+    this.setState({ showErrorAlert: true });
   }
 
-  successScan(){
-    this.setState({scanCheck:false})
+  successScan() {
+    this.setState({ scanCheck: false });
   }
 
   async componentDidMount() {
@@ -132,11 +140,14 @@ class Home extends React.Component {
     return (
       <div>
         {/* <PageHeader /> */}
-        {this.state.showErrorAlert && <Alert
-          message="Error"
-          description="Failed to connect to table..."
-          type="error"
-          showIcon />}
+        {this.state.showErrorAlert && (
+          <Alert
+            message="Error"
+            description="Failed to connect to table..."
+            type="error"
+            showIcon
+          />
+        )}
         <Tabs
           activeKey={this.state.activeTab}
           onChange={this.changeTab}
@@ -154,7 +165,10 @@ class Home extends React.Component {
               changeSummeryPorject={this.changeSummeryPorject}
             />
           </TabPane>
-          <TabPane tab="Experiments" key="experiments" disabled={this.state.scanCheck}>
+          <TabPane
+            tab="Experiments"
+            key="experiments"
+            disabled={this.state.scanCheck}>
             <Experiments
               data={this.state.data}
               changeTab={this.changeTab}

@@ -29,8 +29,8 @@ class Projects extends React.Component {
   // }
 
   async componentWillReceiveProps(nextProps) {
-    if(nextProps.data.length == 0){
-      return
+    if (nextProps.data.length == 0) {
+      return;
     }
     console.log('Project Recieve prop', nextProps);
     this.createDataTable(nextProps.data);

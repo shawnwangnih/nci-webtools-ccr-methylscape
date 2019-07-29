@@ -14,8 +14,8 @@ class Summary extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.data.length == 0){
-      return
+    if (nextProps.data.length == 0) {
+      return;
     }
     if (nextProps.project == '') {
       this.setState({ project: nextProps.data[1].project });
