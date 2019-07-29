@@ -63,7 +63,6 @@ class Experiments extends React.Component {
   };
 
   handleFilter = () => {
-    // console.log('2-------------', this.state.data);
     this.setState({
       filteredData: this.state.data.filter(row => {
         return row.project.toLowerCase().includes(this.getFilterProject());

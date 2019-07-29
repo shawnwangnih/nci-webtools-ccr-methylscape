@@ -42,7 +42,7 @@ class App extends React.Component {
               <a href="https://ccr.cancer.gov/">
                 <img
                   className="logo"
-                  src="/assets/img/nci-ccr-logo.png"
+                  src="./assets/img/nci-ccr-logo.png"
                   alt="National Cancer Institute"
                 />
               </a>

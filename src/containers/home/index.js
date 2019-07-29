@@ -46,19 +46,24 @@ class Home extends React.Component {
   // }
 
   async scanTable(tableName) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('IN DEV MODE');
-      const awsCreds = require('../../aws-credentials.json');
-      AWS.config.update({
-        secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
-        accessKeyId: awsCreds.dynamoDBCredentials.accessKey
-      });
-      // } else {
-      //   var AWS = require('aws-sdk');
-      //   var default_credentials = new AWS.SharedIniFileCredentials({
-      //     profile: 'default'
-      //   });
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   console.log('IN DEV MODE');
+    const awsCreds = require('../../aws-credentials.json');
+    AWS.config.update({
+      secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
+      accessKeyId: awsCreds.dynamoDBCredentials.accessKey
+    });
+    // } else {
+    // var AWS = require('aws-sdk');
+    // var default_credentials = new AWS.SharedIniFileCredentials({
+    //   profile: 'default'
+    // });
+    // console.log(default_credentials);
+    //   AWS.config.update({
+    //     secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
+    //     accessKeyId: awsCreds.dynamoDBCredentials.accessKey
+    //   });
+    // }
     AWS.config.update({
       region: 'us-east-1'
       // credentials: default_credentials
