@@ -391,9 +391,9 @@ class Samples extends React.Component {
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+              {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 Clear
-              </Button>
+              </Button> */}
             </Form.Item>
           </Form>
         </div>

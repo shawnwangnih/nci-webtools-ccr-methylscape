@@ -29,6 +29,9 @@ class Projects extends React.Component {
   // }
 
   async componentWillReceiveProps(nextProps) {
+    if(nextProps.data.length == 0){
+      return
+    }
     console.log('Project Recieve prop', nextProps);
     this.createDataTable(nextProps.data);
     if (nextProps.filter.project) {
@@ -196,9 +199,9 @@ class Projects extends React.Component {
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+              {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 Clear
-              </Button>
+              </Button> */}
             </Form.Item>
           </Form>
         </div>

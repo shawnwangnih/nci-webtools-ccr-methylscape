@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
-import { Tabs, PageHeader, Menu } from 'antd';
+import { Alert, Tabs, PageHeader, Menu } from 'antd';
 import Summary from './components/Summary';
 import Experiments from './components/Experiments';
 import Samples from './components/Samples';
@@ -22,6 +22,8 @@ class Home extends React.Component {
         project: '',
         experiment: ''
       },
+      scanCheck:true,
+      showErrorAlert: false,
       projectSummery: ''
     };
   }
@@ -41,9 +43,6 @@ class Home extends React.Component {
     // this.setState({ [filter project:projectSummery });
     this.setState({ projectSummery });
   };
-
-  // updateSummeryData = (filter) => {
-  // }
 
   async scanTable(tableName) {
     // if (process.env.NODE_ENV === 'development') {
@@ -94,12 +93,26 @@ class Home extends React.Component {
     };
     let scanResults = [];
     let items;
+    let failedScan = false;
     do {
-      items = await documentClient.scan(params).promise();
+      items = await documentClient.scan(params).promise().catch(error => {failedScan=true});
+      if(failedScan) {this.failedScanSetPage(); break;}
       items.Items.forEach(item => scanResults.push(item));
       params.ExclusiveStartKey = items.LastEvaluatedKey;
     } while (typeof items.LastEvaluatedKey != 'undefined');
+    if(scanResults.length> 0){
+      this.successScan()
+    }
     return scanResults;
+  }
+
+  failedScanSetPage(){
+    //TODO error msg
+    this.setState({showErrorAlert:true})
+  }
+
+  successScan(){
+    this.setState({scanCheck:false})
   }
 
   async componentDidMount() {
@@ -119,11 +132,16 @@ class Home extends React.Component {
     return (
       <div>
         {/* <PageHeader /> */}
+        {this.state.showErrorAlert && <Alert
+          message="Error"
+          description="Failed to connect to table..."
+          type="error"
+          showIcon />}
         <Tabs
           activeKey={this.state.activeTab}
           onChange={this.changeTab}
           defaultActiveKey="project">
-          <TabPane tab="Project" key="projects">
+          <TabPane tab="Project" key="projects" disabled={this.state.scanCheck}>
             <Projects
               data={this.state.data}
               changeTab={this.changeTab}
@@ -136,14 +154,14 @@ class Home extends React.Component {
               changeSummeryPorject={this.changeSummeryPorject}
             />
           </TabPane>
-          <TabPane tab="Experiments" key="experiments">
+          <TabPane tab="Experiments" key="experiments" disabled={this.state.scanCheck}>
             <Experiments
               data={this.state.data}
               changeTab={this.changeTab}
               filter={this.state.filter}
             />
           </TabPane>
-          <TabPane tab="Samples" key="samples">
+          <TabPane tab="Samples" key="samples" disabled={this.state.scanCheck}>
             <Samples
               data={this.state.data}
               changeTab={this.changeTab}
