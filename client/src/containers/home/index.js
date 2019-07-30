@@ -61,7 +61,7 @@ class Home extends React.Component {
     console.log(process.env.NODE_ENV);
     const root =
       process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:9000/'
+        ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
     console.log(`${root}/scanMethylScapeTable`);
     console.log('PATH NAME ', window.location.pathname);
