@@ -21,19 +21,12 @@ class Projects extends React.Component {
     };
   }
 
-  // async componentDidMount() {
-  //   console.log("Project compnoenet Did mount")
-  //   await this.createDataTable(this.state.data).then(
-  //     this.setState({loading: false})
-  //   )
-  // }
-
   async componentWillReceiveProps(nextProps) {
     if (nextProps.data.length == 0) {
       return;
     }
     console.log('Project Recieve prop', nextProps);
-    this.createDataTable(nextProps.data);
+    await this.createDataTable(nextProps.data);
     if (nextProps.filter.project) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();

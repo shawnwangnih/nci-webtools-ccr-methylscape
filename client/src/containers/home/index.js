@@ -8,7 +8,7 @@ import Projects from './components/Projects';
 
 import { connect } from 'react-redux';
 
-import AWS from 'aws-sdk';
+// import AWS from 'aws-sdk';
 
 const TabPane = Tabs.TabPane;
 
@@ -44,97 +44,31 @@ class Home extends React.Component {
     this.setState({ projectSummery });
   };
 
-  async scanTable(tableName) {
-    // if (process.env.NODE_ENV === 'development') {
-    //   console.log('IN DEV MODE');
-    // const awsCreds = require('../../aws-credentials.json');
-    // AWS.config.update({
-    //   secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
-    //   accessKeyId: awsCreds.dynamoDBCredentials.accessKey
-    // });
-    // } else {
-    // var AWS = require('aws-sdk');
-    // var default_credentials = new AWS.SharedIniFileCredentials({
-    //   profile: 'default'
-    // });
-    // console.log(default_credentials);
-    //   AWS.config.update({
-    //     secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
-    //     accessKeyId: awsCreds.dynamoDBCredentials.accessKey
-    //   });
-    // }
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('IN DEV MODE');
-      const awsCreds = require('../../aws-credentials.json');
-      AWS.config.update({
-        secretAccessKey: awsCreds.dynamoDBCredentials.secretKey,
-        accessKeyId: awsCreds.dynamoDBCredentials.accessKey
-      });
-      // } else {
-      //   var AWS = require('aws-sdk');
-      //   var default_credentials = new AWS.SharedIniFileCredentials({
-      //     profile: 'default'
-      //   });
-    }
-    AWS.config.update({
-      region: 'us-east-1'
-      // credentials: default_credentials
-    });
-    AWS.config.update({
-      region: 'us-east-1'
-      // credentials: default_credentials
-    });
-    var documentClient = new AWS.DynamoDB.DocumentClient({
-      apiVersion: '2012-08-10'
-    });
-    const params = {
-      TableName: tableName
-    };
-    let scanResults = [];
-    let items;
-    let failedScan = false;
-    do {
-      items = await documentClient
-        .scan(params)
-        .promise()
-        .catch(error => {
-          failedScan = true;
-        });
-      if (failedScan) {
-        this.failedScanSetPage();
-        break;
-      }
-      items.Items.forEach(item => scanResults.push(item));
-      params.ExclusiveStartKey = items.LastEvaluatedKey;
-    } while (typeof items.LastEvaluatedKey != 'undefined');
-    if (scanResults.length > 0) {
-      this.successScan();
-    }
-    return scanResults;
-  }
-
-  failedScanSetPage() {
-    //TODO error msg
+  failedScanSetPage(error) {
+    console.log(error);
     this.setState({ showErrorAlert: true });
   }
 
-  successScan() {
-    this.setState({ scanCheck: false });
+  successScan(data) {
+    this.setState({
+      data: data,
+      scanCheck: false
+    });
   }
 
   async componentDidMount() {
-    console.log('AWS_TEST');
-    this.scanTable('MethylscapeSamples-prod').then((data, error) => {
-      if (error) {
-        console.log('ERROR', error);
-      }
-      if (data) {
-        console.log('DATA', data);
-        this.setState({ data });
-        this.setState({ loading: false });
-      }
-    });
+    console.log('*************');
+    console.log(process.env.NODE_ENV);
+    const root =
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:9000/'
+        : window.location.pathname;
+    console.log(`${root}/scanMethylScapeTable`);
+    console.log('PATH NAME ', window.location.pathname);
+    fetch(`${root}scanMethylScapeTable`)
+      .then(response => response.json())
+      .then(data => this.successScan(data))
+      .catch(error => this.failedScanSetPage(error));
   }
   render() {
     return (
