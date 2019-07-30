@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "antd": "3.20.5",
-    "aws-sdk": "2.495.0",
     "babel-loader": "8.0.5",
     "chart.js": "2.8.0",
     "connected-react-router": "4.5.0",

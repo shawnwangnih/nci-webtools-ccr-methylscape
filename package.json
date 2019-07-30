@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/CBIIT/nci-webtools-ccr-methylscape#readme",
   "dependencies": {
+    "aws-sdk": "2.503.0",
     "better-sqlite3": "^5.4.1",
     "fastify": "^2.6.0",
     "fastify-cors": "^2.1.3",
