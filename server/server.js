@@ -15,7 +15,7 @@ app.get('/ping', (req, res) => res.send(true));
 
 app.get('/scanMethylScapeTable', (req, res) => {
     try{
-        scanTable("MethylscapeSamples-prod").then((data, error) => {
+        scanTable("MethylScapeSamplesTable").then((data, error) => {
             if (error) {
               console.log('ERROR', error);
               res.send(error)
