@@ -29,7 +29,7 @@ class App extends React.Component {
           <Header
             className="header"
             style={{
-              height: '60px',
+              height: '80px',
               theme: 'light',
               background: '#fff',
               position: 'fixed',
@@ -73,7 +73,7 @@ class App extends React.Component {
             </Menu> */}
           </Header>
           <Content
-            style={{ padding: '10px 50px', marginTop: 64, height: '100%' }}>
+            style={{ padding: '10px 50px', marginTop: 80, height: '100%' }}>
             {/* <div>
               <h2>MethylScape</h2>
             </div> */}
