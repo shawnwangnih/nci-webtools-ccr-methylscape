@@ -5,7 +5,7 @@ import Home from '../home';
 // import Help from "../help";
 // import ProjectPage from "../project"
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
 
 const { Header, Content, Footer } = Layout;
@@ -25,24 +25,25 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Layout>
+        <Layout style={{
+              // background: 'black',
+            }}>
           <Header
             className="header"
             style={{
-              height: '80px',
+              height: '90px',
               theme: 'light',
-              background: '#fff',
-              position: 'fixed',
+              background: 'back',
+              // position: 'fixed',
               zIndex: 1,
               width: '100%',
-              padding: '0 50px'
+              padding: '0px 50px'
             }}>
             <div>
-              {' '}
               <a href="https://ccr.cancer.gov/">
                 <img
                   className="logo"
-                  src="./assets/img/nci-ccr-logo.png"
+                  src="./assets/img/test-2.svg"
                   alt="National Cancer Institute"
                 />
               </a>
@@ -72,11 +73,60 @@ class App extends React.Component {
               </Menu.Item>
             </Menu> */}
           </Header>
+
+          <Header
+            className="header"
+            style={{
+              height: '40px',
+              theme: 'light',
+              background: '#1890FF',
+              // position: 'fixed',
+              zIndex: 1,
+              width: '100%',
+              padding: '0 50px'
+            }}>
+          </Header>
+
+
+
+          <Header
+            className="header"
+            style={{
+              height: '40px',
+              zIndex: 1,
+              width: '100%',
+              padding: '0 50px',
+              // position: 'fixed',
+
+              // background: '#fff',
+            }}>
+            <Menu
+              onClick={this.handleClick}
+              selectedKeys={[this.state.current]}
+              theme="dark"
+              mode="horizontal"
+              style={{
+                width: "100%",
+                height: "40px",
+                lineHeight: "40px",
+              }}
+            >
+                {/* Home */}
+              <Menu.Item key="home">
+                <Link to="/">Home</Link>
+              </Menu.Item>
+
+              <Menu.Item key="cns">
+                <Link to="/cns-profiling">CNS Profiling</Link>
+              </Menu.Item>
+
+              <Menu.Item key="help">
+                <Link to="/help">Help</Link>
+              </Menu.Item>
+            </Menu>
+          </Header>
           <Content
-            style={{ padding: '10px 50px', marginTop: 80, height: '100%' }}>
-            {/* <div>
-              <h2>MethylScape</h2>
-            </div> */}
+            style={{ padding: '10px 50px', height: '100%' }}>
             <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
               <Home />
               {/* <Route exact path="/" component={Home} /> */}
