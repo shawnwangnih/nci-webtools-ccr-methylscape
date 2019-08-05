@@ -32,7 +32,7 @@ class App extends React.Component {
             className="header"
             style={{
               height: '90px',
-              theme: 'light',
+              // theme: 'light',
               background: 'back',
               // position: 'fixed',
               zIndex: 1,
@@ -48,45 +48,21 @@ class App extends React.Component {
                 />
               </a>
             </div>
-            {/* <Menu
-              onClick={this.handleClick}
-              selectedKeys={[this.state.current]}
-              theme="light"
-              mode="horizontal"
-              style={{
-                width: "100%",
-                height: "60px",
-                lineHeight: "60px",
-                align: "right"
-              }}
-            >
-              <Menu.Item key="home">
-                <Link to="/">Home</Link>
-              </Menu.Item>
-
-              <Menu.Item key="cns">
-                <Link to="/cns-profiling">CNS Profiling</Link>
-              </Menu.Item>
-
-              <Menu.Item key="help">
-                <Link to="/help">Help</Link>
-              </Menu.Item>
-            </Menu> */}
           </Header>
-
+{/*
           <Header
             className="header"
             style={{
               height: '40px',
               theme: 'light',
-              background: '#1890FF',
+              background: '#0d2943',
               // position: 'fixed',
               zIndex: 1,
               width: '100%',
               padding: '0 50px'
             }}>
           </Header>
-
+ */}
 
 
           <Header
@@ -98,12 +74,12 @@ class App extends React.Component {
               padding: '0 50px',
               // position: 'fixed',
 
-              // background: '#fff',
+              background: '#001529',
             }}>
             <Menu
               onClick={this.handleClick}
               selectedKeys={[this.state.current]}
-              theme="dark"
+              theme="light"
               mode="horizontal"
               style={{
                 width: "100%",
@@ -128,8 +104,7 @@ class App extends React.Component {
           <Content
             style={{ padding: '10px 50px', height: '100%' }}>
             <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-              <Home />
-              {/* <Route exact path="/" component={Home} /> */}
+              <Route exact path="/" component={Home} />
               {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
               <Route exact path="/help" component={Help} />
               <Route exact path="/project-page/:id" component={ProjectPage} /> */}
