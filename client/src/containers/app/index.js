@@ -104,7 +104,8 @@ class App extends React.Component {
           <Content
             style={{ padding: '10px 50px', height: '100%' }}>
             <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-              <Route exact path="/" component={Home} />
+              <Home/>
+              {/* <Route path="/" component={Home} /> */}
               {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
               <Route exact path="/help" component={Help} />
               <Route exact path="/project-page/:id" component={ProjectPage} /> */}
