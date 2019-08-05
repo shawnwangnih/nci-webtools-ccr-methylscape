@@ -25,9 +25,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Layout style={{
+        <Layout
+          style={
+            {
               // background: 'black',
-            }}>
+            }
+          }>
           <Header
             className="header"
             style={{
@@ -49,7 +52,7 @@ class App extends React.Component {
               </a>
             </div>
           </Header>
-{/*
+          {/*
           <Header
             className="header"
             style={{
@@ -64,7 +67,6 @@ class App extends React.Component {
           </Header>
  */}
 
-
           <Header
             className="header"
             style={{
@@ -74,7 +76,7 @@ class App extends React.Component {
               padding: '0 50px',
               // position: 'fixed',
 
-              background: '#001529',
+              background: '#001529'
             }}>
             <Menu
               onClick={this.handleClick}
@@ -82,12 +84,11 @@ class App extends React.Component {
               theme="light"
               mode="horizontal"
               style={{
-                width: "100%",
-                height: "40px",
-                lineHeight: "40px",
-              }}
-            >
-                {/* Home */}
+                width: '100%',
+                height: '40px',
+                lineHeight: '40px'
+              }}>
+              {/* Home */}
               <Menu.Item key="home">
                 <Link to="/">Home</Link>
               </Menu.Item>
@@ -101,10 +102,9 @@ class App extends React.Component {
               </Menu.Item>
             </Menu>
           </Header>
-          <Content
-            style={{ padding: '10px 50px', height: '100%' }}>
+          <Content style={{ padding: '10px 50px', height: '100%' }}>
             <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-              <Home/>
+              <Home />
               {/* <Route path="/" component={Home} /> */}
               {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
               <Route exact path="/help" component={Help} />
