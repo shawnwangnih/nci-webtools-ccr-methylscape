@@ -1,3 +1,5 @@
 {
-    "port": 8290
+    "port": 8290,
+    "MethylScapeTable":"MethylScapeSamplesTable",
+    "MethylScapeBucket": "methylscape"
 }

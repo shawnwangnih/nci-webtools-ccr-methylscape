@@ -1,5 +1,5 @@
 const path = require('path');
-const { port } = require('./config.json');
+const { port, MethylScapeTable } = require('./config.json');
 const { scanTable } = require('./utils/scanDynamoDB');
 
 const app = require('fastify')({
@@ -15,7 +15,7 @@ app.get('/ping', (req, res) => res.send(true));
 
 app.get('/scanMethylScapeTable', (req, res) => {
     try{
-        scanTable("MethylScapeSamplesTable").then((data, error) => {
+        scanTable(MethylScapeTable).then((data, error) => {
             if (error) {
               console.log('ERROR', error);
               res.send(error)
