@@ -193,27 +193,29 @@ class Samples extends React.Component {
   };
 
   downloadFile = (sampleId, file) => {
-  const root =
-    process.env.NODE_ENV === 'development'
-      ? 'http://0.0.0.0:8290/'
-      : window.location.pathname;
+    const root =
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
     fetch(`${root}getMethylScapeFile`, {
       method: 'POST',
       body: JSON.stringify({
         sampleId: sampleId,
         fileName: file
       }),
-      contentType: "application/json; charset=utf-8",
-    }).then((res, error) => {
-      console.log("RESOVLED ",res.json())
-    }).then((body) => {
-      console.log("BODY", body);
-    });
+      contentType: 'application/json; charset=utf-8'
+    })
+      .then((res, error) => {
+        console.log('RESOVLED ', res.json());
+      })
+      .then(body => {
+        console.log('BODY', body);
+      });
     // .then(response => response.json())
     // .then(data => this.successScan(data))
     // .catch(error => this.failedScanSetPage(error));
     // console.log("DOWNLOAD", sampleId, file)
-  }
+  };
 
   render() {
     const columns = [
@@ -348,17 +350,29 @@ class Samples extends React.Component {
       {
         title: 't-SNE plot',
         width: '200',
-        render: record => <a onClick={() => this.downloadFile(record.id, "t-sne.txt")}>link to pdf</a>
+        render: record => (
+          <a onClick={() => this.downloadFile(record.id, 't-sne.txt')}>
+            link to pdf
+          </a>
+        )
       },
       {
         title: 'NGS reports (pdf-files)',
         width: '200',
-        render: record => <a onClick={() => this.downloadFile(record.id, "ngs-report")}>link to pdf</a>
+        render: record => (
+          <a onClick={() => this.downloadFile(record.id, 'ngs-report')}>
+            link to pdf
+          </a>
+        )
       },
       {
         title: 'Slide Image',
         width: '200',
-        render: record => <a onClick={() => this.downloadFile(record.id, "slide-image")}>link to image file</a>
+        render: record => (
+          <a onClick={() => this.downloadFile(record.id, 'slide-image')}>
+            link to image file
+          </a>
+        )
       },
       {
         title: 'Notes',
