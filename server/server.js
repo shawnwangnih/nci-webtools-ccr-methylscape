@@ -1,14 +1,19 @@
-const path = require('path');
-const { port, MethylScapeTable } = require('./config.json');
+var cors = require('cors');
+const AWS = require('aws-sdk');
+const bodyParser  = require('body-parser');
+const { port, MethylScapeTable, MethylScapeBucket } = require('./config.json');
 const { scanTable } = require('./utils/scanDynamoDB');
+const express = require('express');
+const app = express();
+// const { getS3File } = require('./utils/getS3File')
 
-const app = require('fastify')({
-    ignoreTrailingSlash: true,
-});
-app.register(require('fastify-cors'));
-app.register(require('fastify-static'), {
-    root: path.resolve('client', 'build')
-});
+const portST = port || '0.0.0.0';
+
+app.listen(portST, () => console.log(`Listening on port ${port}`));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // todo: check connectivity to database
 app.get('/ping', (req, res) => res.send(true));
@@ -31,9 +36,37 @@ app.get('/scanMethylScapeTable', (req, res) => {
 });
 
 
-app.listen(port, '0.0.0.0')
-    .then(addr => console.log(`Application is running on: ${addr}`))
-    .catch(error => {
-        console.error(error);
-        process.exit(1);
-});
+app.post('/getMethylScapeFile', (req, res) => {
+    const data = JSON.parse(req.body)
+    console.log(data)
+    const params = {
+        Bucket: MethylScapeBucket,
+        Key: "ClassifierReports/" + data.sampleId + "/" + data.fileName
+      };
+    // getS3File(params).then((data, error) => {
+    //     if (error) {
+    //         console.log('ERROR', error);
+    //         res.send(error)
+    //       }
+    //       if (data) {
+    //         console.log('DATA', data);
+    //         res.send(data)
+    //       }
+    // })
+    var s3 = new AWS.S3();
+    AWS.config.update({ region: 'us-east-1' });
+    s3.getObject(params, (err, result) => {
+        console.log("INSIDE S#",err, result)
+        if (err === null) {
+            res.attachment(data.fileName);
+            console.log("++++", result)
+            // const stream = fs.createReadStream(resolvePath('index.html'))
+
+            // return res
+        } else {
+            res.status(500).send(err);
+            return err
+        }
+    });
+    res.send({"TEST":"TEST"})
+})
