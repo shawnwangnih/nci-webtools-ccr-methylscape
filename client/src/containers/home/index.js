@@ -69,7 +69,6 @@ class Home extends React.Component {
       .catch(error => this.failedScanSetPage(error));
   }
 
-
   render() {
     return (
       <div>

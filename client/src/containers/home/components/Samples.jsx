@@ -1,8 +1,7 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
-import fileSaver from 'file-saver'
-
+import fileSaver from 'file-saver';
 
 class Samples extends React.Component {
   constructor(props) {
@@ -194,9 +193,8 @@ class Samples extends React.Component {
     );
   };
 
-
   downloadFile = (sampleId, file) => {
-    console.log("______ DOWNLOAD S3 FILE _____ ")
+    console.log('______ DOWNLOAD S3 FILE _____ ');
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -209,12 +207,12 @@ class Samples extends React.Component {
         fileName: file
       })
     })
-    .then(res => res.blob())
-    .then(blob => { fileSaver(blob, file)})
-    .catch(error => console.log(error))
+      .then(res => res.blob())
+      .then(blob => {
+        fileSaver(blob, file);
+      })
+      .catch(error => console.log(error));
   };
-
-
 
   render() {
     const columns = [

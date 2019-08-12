@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({
     type: ['application/json', 'text/plain']
-  }))
+}))
 
 app.use(express.static(path.join('client', 'build')));
 
