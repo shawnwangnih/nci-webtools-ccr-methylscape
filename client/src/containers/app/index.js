@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import Home from '../home';
-// import CNSProfiling from "../cnsprofiling";
-// import Help from "../help";
+import CNSProfiling from "../cnsprofiling";
+import Help from "../help";
 // import ProjectPage from "../project"
 
 import { Layout, Menu, PageHeader } from 'antd';
@@ -15,8 +15,6 @@ class App extends React.Component {
     current: 'home'
   };
   handleClick = e => {
-    // console.log(withRouter);
-
     console.log('click ', e);
     this.setState({
       current: e.key
@@ -90,25 +88,23 @@ class App extends React.Component {
               }}>
               {/* Home */}
               <Menu.Item key="home">
-                <Link to="/">Home</Link>
+                <Link to="/methylscape">Home</Link>
               </Menu.Item>
 
               <Menu.Item key="cns">
-                <Link to="/cns-profiling">CNS Profiling</Link>
+                <Link to="/methylscape/cns-profiling">CNS Profiling</Link>
               </Menu.Item>
 
               <Menu.Item key="help">
-                <Link to="/help">Help</Link>
+                <Link to="/methylscape/help">Help</Link>
               </Menu.Item>
             </Menu>
           </Header>
           <Content style={{ padding: '10px 50px', height: '100%' }}>
             <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-              <Home />
-              {/* <Route path="/" component={Home} /> */}
-              {/* <Route exact path="/cns-profiling" component={CNSProfiling} />
-              <Route exact path="/help" component={Help} />
-              <Route exact path="/project-page/:id" component={ProjectPage} /> */}
+              <Route exact path="/methylscape" component={Home} />
+              <Route exact path="/methylscape/cns-profiling" component={CNSProfiling} />
+              <Route exact path="/methylscape/help" component={Help} />
             </div>
           </Content>
 

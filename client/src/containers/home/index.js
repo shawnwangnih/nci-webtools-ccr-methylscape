@@ -8,8 +8,6 @@ import Projects from './components/Projects';
 
 import { connect } from 'react-redux';
 
-// import AWS from 'aws-sdk';
-
 const TabPane = Tabs.TabPane;
 
 class Home extends React.Component {
@@ -63,13 +61,15 @@ class Home extends React.Component {
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
-    console.log(`${root}/scanMethylScapeTable`);
+    console.log(`${root}scanMethylScapeTable`);
     console.log('PATH NAME ', window.location.pathname);
     fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
   }
+
+
   render() {
     return (
       <div>

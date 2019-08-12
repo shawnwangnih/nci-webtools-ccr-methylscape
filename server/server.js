@@ -1,7 +1,6 @@
 var cors = require('cors');
 const AWS = require('aws-sdk');
 const path = require('path');
-// const bodyParser  = require('body-parser');
 const { port, MethylScapeTable, MethylScapeBucket } = require('./config.json');
 const { scanTable } = require('./utils/scanDynamoDB');
 const express = require('express');
@@ -11,11 +10,12 @@ const app = express();
 const portST = port || '0.0.0.0';
 
 app.use(cors());
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json({
+    type: ['application/json', 'text/plain']
+  }))
 
 app.use(express.static(path.join('client', 'build')));
 
@@ -38,31 +38,23 @@ app.get('/scanMethylScapeTable', (req, res) => {
     }
 });
 
-
 app.post('/getMethylScapeFile', (req, res) => {
-    console.log("REQ S3", req)
-    const data = JSON.parse(req.body)
-    console.log(data)
-    const params = {
-        Bucket: MethylScapeBucket,
-        Key: "ClassifierReports/" + data.sampleId + "/" + data.fileName
-      };
-    var s3 = new AWS.S3();
-    AWS.config.update({ region: 'us-east-1' });
-    s3.getObject(params, (err, result) => {
-        console.log("INSIDE S#",err, result)
-        if (err === null) {
-            res.attachment(data.fileName);
-            console.log("++++", result)
-            // const stream = fs.createReadStream(resolvePath('index.html'))
-
-            // return res
-        } else {
-            res.status(500).send(err);
-            return err
-        }
-    });
-    res.send({"TEST":"TEST"})
+    try{
+        const s3 = new AWS.S3();
+        AWS.config.update({ region: 'us-east-1' });
+        const data = req.body
+        const params = {
+            Bucket: MethylScapeBucket,
+            Key: "ClassifierReports/" + data.sampleId + "/" + data.fileName
+        };
+        res.attachment(data.fileName);
+        var fileStream = s3.getObject(params).createReadStream();
+        fileStream.pipe(res);
+    }catch (e){
+        res.send(e)
+    }
 })
+
+
 
 app.listen(portST, () => console.log(`Listening on port ${port}`));

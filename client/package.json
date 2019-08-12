@@ -21,6 +21,7 @@
     "babel-loader": "8.0.5",
     "chart.js": "2.8.0",
     "connected-react-router": "4.5.0",
+    "file-saver": "2.0.2",
     "react": "16.8.6",
     "react-chartkick": "0.3.2",
     "react-dom": "16.8.6",

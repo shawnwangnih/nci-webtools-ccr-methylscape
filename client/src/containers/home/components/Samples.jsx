@@ -1,6 +1,8 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
+import fileSaver from 'file-saver'
+
 
 class Samples extends React.Component {
   constructor(props) {
@@ -192,30 +194,27 @@ class Samples extends React.Component {
     );
   };
 
+
   downloadFile = (sampleId, file) => {
+    console.log("______ DOWNLOAD S3 FILE _____ ")
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
+
     fetch(`${root}getMethylScapeFile`, {
       method: 'POST',
       body: JSON.stringify({
         sampleId: sampleId,
         fileName: file
-      }),
-      contentType: 'application/json; charset=utf-8'
-    })
-      .then((res, error) => {
-        console.log('RESOVLED ', res.json());
       })
-      .then(body => {
-        console.log('BODY', body);
-      });
-    // .then(response => response.json())
-    // .then(data => this.successScan(data))
-    // .catch(error => this.failedScanSetPage(error));
-    // console.log("DOWNLOAD", sampleId, file)
+    })
+    .then(res => res.blob())
+    .then(blob => { fileSaver(blob, file)})
+    .catch(error => console.log(error))
   };
+
+
 
   render() {
     const columns = [
