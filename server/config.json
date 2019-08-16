@@ -1,5 +1,5 @@
 {
     "port": 8290,
-    "MethylScapeTable":"MethylScapeSamplesTable",
-    "MethylScapeBucket": "methylscape"
+    "MethylScapeTable":"MethylScapeSamples-dev",
+    "MethylScapeBucket": "nci-cbiit-analysistools"
 }

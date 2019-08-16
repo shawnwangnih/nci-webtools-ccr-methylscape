@@ -45,10 +45,12 @@ app.post('/getMethylScapeFile', (req, res) => {
         const data = req.body
         const params = {
             Bucket: MethylScapeBucket,
-            Key: "ClassifierReports/" + data.sampleId + "/" + data.fileName
+            Key: "methylscape/ClassifierReports/" + data.sampleId + "/" + data.fileName
         };
+        var fileStream = s3.getObject(params).createReadStream().on('error', e => {
+            res.send(e)
+        });;
         res.attachment(data.fileName);
-        var fileStream = s3.getObject(params).createReadStream();
         fileStream.pipe(res);
     }catch (e){
         res.send(e)

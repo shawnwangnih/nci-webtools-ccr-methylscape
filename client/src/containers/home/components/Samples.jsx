@@ -207,7 +207,10 @@ class Samples extends React.Component {
         fileName: file
       })
     })
-      .then(res => res.blob())
+      .then(res => {
+        console.log(res);
+        return res.blob();
+      })
       .then(blob => {
         fileSaver(blob, file);
       })
