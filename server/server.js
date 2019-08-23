@@ -1,6 +1,7 @@
 var cors = require('cors');
 const AWS = require('aws-sdk');
 const path = require('path');
+const logger = require('./utils/loggerUtil').logger;
 const { port, dynamoDBTableName, S3BucketName, S3SamplesKey } = require('./config.json');
 const { scanTable } = require('./utils/scanDynamoDB');
 const express = require('express');
@@ -20,20 +21,20 @@ app.use(express.static(path.join('client', 'build')));
 app.get('/ping', (req, res) => res.send(true));
 
 app.get('/scanMethylScapeTable', (req, res) => {
-    console.log("__ Scanning Methylscape table")
+    logger.log('info', 'Request scan on dynamoDB table: %s', dynamoDBTableName)
     try{
         scanTable(dynamoDBTableName).then((data, error) => {
             if (error) {
-              console.log('__ ERROR', error);
-              res.send(error)
+                logger.error('error', '1 - DynamoDB scan fail: %s', error)
+                res.send(error)
             }
             if (data) {
-              console.log('__ Sample Size: ', data.length);
-              res.send(data)
+                logger.info('info', 'Sameple size: %s', data.length)
+                res.send(data)
             }
           });
     }catch (e){
-        console.log("ERROR 2")
+        logger.error('error', '2 - DynamoDB scan fail: %s', e)
         res.send(e)
     }
 });
@@ -59,5 +60,7 @@ app.post('/getMethylScapeFile', (req, res) => {
 
 const appPort = process.env.PORT || port;
 
-
-app.listen(appPort, () => console.log(`Listening on port ${appPort}`));
+app.listen(appPort, () => {
+    logger.log('info', 'Application running on port: %s',appPort)
+    console.log(`Listening on port ${appPort}`)
+});
