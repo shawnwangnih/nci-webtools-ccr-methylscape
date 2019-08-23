@@ -41,3 +41,4 @@ src/aws-credentials.json
 yarn.lock
 
 server/config.json
+server/config.json
