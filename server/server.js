@@ -40,7 +40,7 @@ app.get('/scanMethylScapeTable', (req, res) => {
 });
 
 app.post('/getMethylScapeFile', (req, res) => {
-    logger.log('info', 'Request file download data: %s', req.body)
+    logger.log('info', 'Request file download data: %j', req.body)
     try{
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
@@ -50,7 +50,7 @@ app.post('/getMethylScapeFile', (req, res) => {
             Bucket: S3BucketName,
             Key: key
         };
-        logger.log('info', 'Request file download params: %s', params)
+        logger.log('info', 'Request file download params: %j', params)
         var fileStream = s3.getObject(params).createReadStream().on('error', e => {
             logger.log('error', 'Request file download failed: %s', e)
             res.send(e)
