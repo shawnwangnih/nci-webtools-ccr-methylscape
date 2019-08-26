@@ -29,7 +29,7 @@ app.get('/scanMethylScapeTable', (req, res) => {
                 res.send(error)
             }
             if (data) {
-                logger.info('info', 'Sameple size: %s', data.length)
+                logger.log('info', 'Sample table size %s', data.length)
                 res.send(data)
             }
           });
