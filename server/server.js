@@ -40,20 +40,25 @@ app.get('/scanMethylScapeTable', (req, res) => {
 });
 
 app.post('/getMethylScapeFile', (req, res) => {
+    logger.log('info', 'Request file download data: %s', req.body)
     try{
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
         const data = req.body
+        const key = path.join('methylscape', S3SamplesKey, data.sampleId, data.fileName)
         const params = {
             Bucket: S3BucketName,
-            Key: "methylscape/" + S3SamplesKey + data.sampleId + "/" + data.fileName
+            Key: key
         };
+        logger.log('info', 'Request file download params: %s', params)
         var fileStream = s3.getObject(params).createReadStream().on('error', e => {
+            logger.log('error', 'Request file download failed: %s', e)
             res.send(e)
         });;
         res.attachment(data.fileName);
         fileStream.pipe(res);
     }catch (e){
+        logger.log('error', 'File download failed: %s', e)
         res.send(e)
     }
 })
