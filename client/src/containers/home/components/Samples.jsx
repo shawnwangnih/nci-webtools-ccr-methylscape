@@ -351,7 +351,7 @@ class Samples extends React.Component {
         title: 't-SNE plot',
         width: '200',
         render: record => (
-          <a onClick={() => this.downloadFile(record.id, 't-sne.txt')}>
+          <a onClick={() => this.downloadFile(record.id, record.sample_name + ".html")}>
             link to pdf
           </a>
         )
@@ -360,7 +360,7 @@ class Samples extends React.Component {
         title: 'NGS reports (pdf-files)',
         width: '200',
         render: record => (
-          <a onClick={() => this.downloadFile(record.id, record.name + "_NGS.pdf")}>
+          <a onClick={() => this.downloadFile(record.id, record.sample_name + "_NGS.pdf")}>
             link to pdf
           </a>
         )
@@ -369,7 +369,7 @@ class Samples extends React.Component {
         title: 'Slide Image',
         width: '200',
         render: record => (
-          <a onClick={() => this.downloadFile(record.id, 'slide-image')}>
+          <a onClick={() => this.downloadFile(record.id, record.sample_name + ".jpg")}>
             link to image file
           </a>
         )
