@@ -7,7 +7,6 @@ class Experiments extends React.Component {
     super(props);
     this.state = {
       filterProject: props.filter.project,
-      // filterDate: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -22,9 +21,6 @@ class Experiments extends React.Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    // this.setState({ filterProject: nextProps.filter.project });
-    // this.handleFilter();
-    console.log('Experiment receive prop', nextProps);
     if (nextProps.filter.project) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();

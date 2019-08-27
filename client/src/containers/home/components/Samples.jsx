@@ -98,7 +98,6 @@ class Samples extends React.Component {
         this.handleFilter();
       });
     }
-    console.log(nextProps);
     if (nextProps.filter.experiment) {
       this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
         this.handleFilter();
@@ -163,7 +162,7 @@ class Samples extends React.Component {
     const size = Object.keys(data).length;
     if (size > 2) {
       return Object.keys(data['2'])[0];
-    } else if (size == 2) {
+    } else if (size === 2) {
       return Object.keys(data['1'])[0];
     } else {
       return '';
@@ -174,7 +173,7 @@ class Samples extends React.Component {
     const size = Object.keys(data).length;
     if (size > 2) {
       return Object.values(data['2'])[0];
-    } else if (size == 2) {
+    } else if (size === 2) {
       return Object.values(data['1'])[0];
     } else {
       return '';
@@ -194,7 +193,6 @@ class Samples extends React.Component {
   };
 
   downloadFile = (sampleId, file) => {
-    console.log('______ DOWNLOAD S3 FILE _____ ');
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -208,7 +206,6 @@ class Samples extends React.Component {
       })
     })
       .then(res => {
-        console.log(res);
         return res.blob();
       })
       .then(blob => {

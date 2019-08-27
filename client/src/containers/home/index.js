@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
-import { Alert, Tabs, PageHeader, Menu } from 'antd';
+// import { Route, Link } from 'react-router-dom';
+import { Alert, Tabs } from 'antd';
 import Summary from './components/Summary';
 import Experiments from './components/Experiments';
 import Samples from './components/Samples';
@@ -27,9 +27,8 @@ class Home extends React.Component {
   }
 
   changeTab = (activeTab, filter = {}) => {
-    if (this.filter != {}) {
+    if (this.filter !== {}) {
       this.setState({ filter });
-      console.log('FILTER *********', filter.project);
       if (filter.project) {
         this.changeSummeryPorject(filter.project);
       }
@@ -38,12 +37,10 @@ class Home extends React.Component {
   };
 
   changeSummeryPorject = projectSummery => {
-    // this.setState({ [filter project:projectSummery });
     this.setState({ projectSummery });
   };
 
   failedScanSetPage(error) {
-    console.log(error);
     this.setState({ showErrorAlert: true });
   }
 
@@ -55,14 +52,10 @@ class Home extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('*************');
-    console.log(process.env.NODE_ENV);
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
-    console.log(`${root}scanMethylScapeTable`);
-    console.log('PATH NAME ', window.location.pathname);
     fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Input, Button, Form, Select, PageHeader } from 'antd';
+// import { Link } from 'react-router-dom';
+import { Table, Input, Button, Form } from 'antd';
 
 class Projects extends React.Component {
   constructor(props) {
@@ -25,7 +25,6 @@ class Projects extends React.Component {
     if (nextProps.data.length == 0) {
       return;
     }
-    console.log('Project Recieve prop', nextProps);
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
@@ -62,7 +61,6 @@ class Projects extends React.Component {
   };
 
   handleFilter = () => {
-    console.log('Handle filter in project', this.state.data);
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
