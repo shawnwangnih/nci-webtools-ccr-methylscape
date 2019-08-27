@@ -360,7 +360,7 @@ class Samples extends React.Component {
         title: 'NGS reports (pdf-files)',
         width: '200',
         render: record => (
-          <a onClick={() => this.downloadFile(record.id, `{record.name}_NGS.pdf`)}>
+          <a onClick={() => this.downloadFile(record.id, record.name + "_NGS.pdf")}>
             link to pdf
           </a>
         )
