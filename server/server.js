@@ -45,7 +45,7 @@ app.post('/getMethylScapeFile', (req, res) => {
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
         const data = req.body
-        const key = path.join('methylscape', S3SamplesKey, data.sampleId, data.fileName)
+        const key = path.join(S3SamplesKey, data.sampleId, data.fileName)
         const params = {
             Bucket: S3BucketName,
             Key: key
