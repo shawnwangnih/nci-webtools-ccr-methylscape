@@ -1,6 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Table, Input, Button, Form } from 'antd';
+import './Projects.css';
 
 class Projects extends React.Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class Projects extends React.Component {
       sortedInfo: null,
       data: [],
       filteredData: [],
-      rawData: props.data
+      rawData: props.data,
+      currRecord: ''
     };
   }
 
@@ -103,6 +105,13 @@ class Projects extends React.Component {
     });
   };
 
+  handleProjectClick = (text, record) => {
+    this.setState({
+      currRecord: record.project
+    });
+    this.props.changeSummeryPorject(record.project);
+  };
+
   render() {
     const columns = [
       {
@@ -112,9 +121,7 @@ class Projects extends React.Component {
         width: '20%',
         sorter: (a, b) => a.key.localeCompare(b.key),
         render: (text, record) => (
-          <a onClick={() => this.props.changeSummeryPorject(record.project)}>
-            {text}
-          </a>
+          <a onClick={() => this.handleProjectClick(text, record)}>{text}</a>
         )
       },
       {
@@ -198,6 +205,15 @@ class Projects extends React.Component {
         </div>
         <br />
         <Table
+          rowClassName={(record, index) => {
+            return this.state.currRecord == ''
+              ? index == 0
+                ? 'testing'
+                : ''
+              : record.project == this.state.currRecord
+              ? 'testing'
+              : '';
+          }}
           {...this.state}
           columns={columns}
           dataSource={this.state.filteredData}

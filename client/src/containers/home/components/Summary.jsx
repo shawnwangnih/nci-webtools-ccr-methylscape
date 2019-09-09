@@ -18,8 +18,8 @@ class Summary extends React.Component {
       return;
     }
     if (nextProps.project === '') {
-      this.setState({ project: nextProps.data[1].project });
-      this.filterData(nextProps.data[1].project, nextProps.data);
+      this.setState({ project: nextProps.data[0].project });
+      this.filterData(nextProps.data[0].project, nextProps.data);
     } else {
       this.setState({ project: nextProps.project });
       this.filterData(nextProps.project, nextProps.data);
@@ -79,7 +79,9 @@ class Summary extends React.Component {
   render() {
     return (
       <div>
-        <h3>Project summery: {this.state.project}</h3>
+        <h3 style={{ 'text-align': 'center' }}>
+          Project summary: {this.state.project}
+        </h3>
         <br />
         <Row type="flex" justify="center" align="middle">
           <Col span={8} order={1}>
