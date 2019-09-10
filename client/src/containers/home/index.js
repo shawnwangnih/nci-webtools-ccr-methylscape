@@ -38,6 +38,7 @@ class Home extends React.Component {
 
   changeSummeryPorject = projectSummery => {
     this.setState({ projectSummery });
+    console.log(this.state.projectSummery);
   };
 
   failedScanSetPage(error) {
@@ -84,6 +85,7 @@ class Home extends React.Component {
               data={this.state.data}
               changeTab={this.changeTab}
               filter={this.state.filter}
+              project={this.state.projectSummery}
               changeSummeryPorject={this.changeSummeryPorject}
             />
             <Summary
@@ -108,6 +110,9 @@ class Home extends React.Component {
               changeTab={this.changeTab}
               filter={this.state.filter}
             />
+          </TabPane>
+          <TabPane tab="Help" key="help" disabled={this.state.scanCheck}>
+            <p>Help Info</p>
           </TabPane>
         </Tabs>
       </div>
