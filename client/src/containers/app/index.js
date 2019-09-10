@@ -38,9 +38,8 @@ class App extends React.Component {
               // position: 'fixed',
               zIndex: 1,
               width: '100%',
-              padding: '0px 50px'
             }}>
-            <div>
+            <div style={{'padding': '0px 50px','max-width':'1400px','width':'100%','margin-right': 'auto','margin-left': 'auto'}}>
               <a href="https://ccr.cancer.gov/">
                 <img
                   className="logo"
@@ -64,14 +63,14 @@ class App extends React.Component {
             }}>
           </Header>
  */}
-
+          {/*
           <Header
             className="header"
             style={{
               height: '40px',
               zIndex: 1,
               width: '100%',
-              padding: '0 50px',
+              padding: '0 0px',
               // position: 'fixed',
 
               background: '#001529'
@@ -86,7 +85,7 @@ class App extends React.Component {
                 height: '40px',
                 lineHeight: '40px'
               }}>
-              {/* Home */}
+              {/* Home 
               <Menu.Item key="home" disabled>
                 <Link to="/methylscape">Home</Link>
               </Menu.Item>
@@ -98,10 +97,17 @@ class App extends React.Component {
               <Menu.Item key="help" disabled>
                 <Link to="/methylscape/help">Help</Link>
               </Menu.Item>
+              
             </Menu>
-          </Header>
-          <Content style={{ padding: '10px 50px', height: '100%' }}>
-            <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
+          </Header>*/}
+          <Content style={{ padding: '40px 50px', height: '100%', 'max-width':'1400px','width':'100%','margin-right': 'auto','margin-left': 'auto',}}>
+            <div
+              style={{
+                background: '#fff',
+                'border-radius': '15px',
+                padding: 24,
+                minHeight: 380
+              }}>
               <Home />
               {/* <Route exact path="/methylscape" component={Home} />
               <Route
@@ -113,9 +119,9 @@ class App extends React.Component {
             </div>
           </Content>
 
-          <Footer style={{ textAlign: 'center' }}>
+          {/* <Footer style={{ textAlign: 'center' }}>
             <FooterContent />
-          </Footer>
+          </Footer> */}
         </Layout>
       </div>
     );
