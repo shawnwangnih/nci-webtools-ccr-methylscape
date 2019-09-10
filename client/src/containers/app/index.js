@@ -38,9 +38,8 @@ class App extends React.Component {
               // position: 'fixed',
               zIndex: 1,
               width: '100%',
-              padding: '0px 50px'
             }}>
-            <div>
+            <div style={{'padding': '0px 50px','max-width':'1400px','width':'100%','margin-right': 'auto','margin-left': 'auto'}}>
               <a href="https://ccr.cancer.gov/">
                 <img
                   className="logo"
@@ -101,7 +100,7 @@ class App extends React.Component {
               
             </Menu>
           </Header>*/}
-          <Content style={{ padding: '40px 50px', height: '100%' }}>
+          <Content style={{ padding: '40px 50px', height: '100%', 'max-width':'1400px','width':'100%','margin-right': 'auto','margin-left': 'auto',}}>
             <div
               style={{
                 background: '#fff',
