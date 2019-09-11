@@ -185,7 +185,17 @@ class Experiments extends React.Component {
       {
         title: 'QC supplementary',
         width: '20%',
-        render: record => <a href="...">show detials</a>
+        render: record => (
+          <a
+            onClick={() =>
+              this.downloadFile(
+                record.experiment,
+                record.experiment + '.supplementary_plots.pdf'
+              )
+            }>
+            link to pdf
+          </a>
+        )
       }
     ];
 
