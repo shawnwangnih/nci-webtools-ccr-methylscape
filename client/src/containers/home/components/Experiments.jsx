@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Input, Button, Form, Select } from 'antd';
+import fileSaver from 'file-saver';
 
 class Experiments extends React.Component {
   constructor(props) {
@@ -169,7 +170,7 @@ class Experiments extends React.Component {
       {
         title: 'QC Sheet',
         width: '20%',
-        render: record => ( 
+        render: record => (
           <a
             onClick={() =>
               this.downloadFile(record.id, record.experiment + '.qcReport.pdf')
