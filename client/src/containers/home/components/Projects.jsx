@@ -1,7 +1,9 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Table, Input, Button, Form } from 'antd';
+import { DatePicker } from 'antd';
 import './Projects.css';
+const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 class Projects extends React.Component {
   constructor(props) {
@@ -19,7 +21,11 @@ class Projects extends React.Component {
       data: [],
       filteredData: [],
       rawData: props.data,
-      currRecord: ''
+      currRecord: '',
+      endDate: '',
+      startDate: '',
+      numSamples: '',
+      numExperiments: ''
     };
   }
 
@@ -62,15 +68,62 @@ class Projects extends React.Component {
     this.setState({ filteredData: Object.values(projectData) });
   };
 
+  rangeFunction(total, range) {
+    return (
+      range[0].toString() +
+      '-' +
+      range[1].toString() +
+      'of ' +
+      total.toString() +
+      ' items'
+    );
+  }
+
+  checkDates(date, s, e) {
+    if (s == '' || e == '') {
+      return true;
+    }
+    let start = s.split('-');
+    let end = e.split('-');
+    let check = date.split('/');
+
+    let startDate = new Date(
+      parseInt(start[0]),
+      parseInt(start[1]),
+      parseInt(start[2])
+    );
+    let endDate = new Date(
+      parseInt(end[0]),
+      parseInt(end[1]),
+      parseInt(end[2])
+    );
+    let toCheck = new Date(
+      parseInt(check[2]),
+      parseInt(check[0]),
+      parseInt(check[1])
+    );
+    console.log(startDate);
+    console.log(endDate);
+    console.log(toCheck);
+
+    return startDate <= toCheck && endDate >= toCheck;
+  }
   handleFilter = () => {
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
+          console.log(row.sampleSize);
           return (
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.investigator
               .toLowerCase()
-              .includes(this.state.filterInvestigator.toLowerCase())
+              .includes(this.state.filterInvestigator.toLowerCase()) &&
+            (row.experiments.size.toString() ==
+              this.state.numExperiments.trim() ||
+              this.state.numExperiments.trim() == '') &&
+            (row.sampleSize == this.state.numSamples.trim() ||
+              this.state.numSamples.trim() == '') &&
+            this.checkDates(row.date, this.state.startDate, this.state.endDate)
           );
         })
       },
@@ -110,6 +163,11 @@ class Projects extends React.Component {
       currRecord: record.project
     });
     this.props.changeSummeryPorject(record.project);
+  };
+
+  handleDateChange = (date, dateString) => {
+    console.log(dateString);
+    this.setState({ startDate: dateString[0], endDate: dateString[1] });
   };
 
   render() {
@@ -168,7 +226,6 @@ class Projects extends React.Component {
         width: '15%'
       }
     ];
-
     return (
       <div>
         <div>
@@ -193,6 +250,30 @@ class Projects extends React.Component {
                 placeholder="Jane Doe"
               />
             </Form.Item>
+            {/*<Form.Item label="# of experiments">
+              <Input
+                value={this.state.numExperiments}
+                onChange={e =>
+                  this.setState({ numExperiments: e.target.value })
+                }
+                onPressEnter={this.handleFilter}
+                placeholder="0"
+              />
+            </Form.Item>
+            <Form.Item label="# of samples">
+              <Input
+                value={this.state.numSamples}
+                onChange={e => this.setState({ numSamples: e.target.value })}
+                onPressEnter={this.handleFilter}
+                placeholder="0"
+              />
+            </Form.Item>
+            <Form.Item label="Date">
+              <RangePicker
+                onChange={this.handleDateChange}
+                onPressEnter={this.handleFilter}
+              />
+              </Form.Item>*/}
             <Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
@@ -215,6 +296,12 @@ class Projects extends React.Component {
               : '';
           }}
           {...this.state}
+          pagination={{
+            position: 'top',
+            size: this.state.pagination.size,
+            showSizeChanger: this.state.pagination.showSizeChanger,
+            showTotal: this.rangeFunction
+          }}
           columns={columns}
           dataSource={this.state.filteredData}
           onChange={this.handleTableChange}
