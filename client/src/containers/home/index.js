@@ -76,7 +76,7 @@ class Home extends React.Component {
           />
         )}
         <Tabs
-          tabPosition="left"
+          tabPosition="top"
           activeKey={this.state.activeTab}
           onChange={this.changeTab}
           defaultActiveKey="project">

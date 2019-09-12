@@ -92,7 +92,11 @@ class Summary extends React.Component {
           <Col span={8} order={2}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
-            <PieChart data={this.getGender()} legend="bottom" />
+            <PieChart
+              data={this.getGender()}
+              legend="bottom"
+              options={{ legend: { boxWidth: '2px' } }}
+            />
           </Col>
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>

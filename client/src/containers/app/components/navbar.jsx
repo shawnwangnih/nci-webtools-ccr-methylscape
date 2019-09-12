@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
+import './navbarPadding.css';
 
 class Navbar extends React.Component {
   state = {
@@ -18,7 +19,8 @@ class Navbar extends React.Component {
         onClick={this.handleClick}
         selectedKeys={[this.state.current]}
         mode="horizontal"
-        theme="light">
+        theme="light"
+        padding="0 50px">
         <Menu.Item key="home">
           <Link to="/">Home</Link>
         </Menu.Item>
