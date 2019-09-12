@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Input, Button, Form, Select } from 'antd';
+import fileSaver from 'file-saver';
 
 class Experiments extends React.Component {
   constructor(props) {
@@ -34,6 +35,28 @@ class Experiments extends React.Component {
       this.handleFilter();
     });
   }
+
+  downloadFile = (experiment, file) => {
+    const root =
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
+
+    fetch(`${root}getMethylScapeQCFile`, {
+      method: 'POST',
+      body: JSON.stringify({
+        experiment: experiment,
+        fileName: file
+      })
+    })
+      .then(res => {
+        return res.blob();
+      })
+      .then(blob => {
+        fileSaver(blob, file);
+      })
+      .catch(error => console.log(error));
+  };
 
   createDataTable = async rawData => {
     var experimentData = {};
@@ -147,12 +170,32 @@ class Experiments extends React.Component {
       {
         title: 'QC Sheet',
         width: '20%',
-        render: record => <a href="...">show detials</a>
+        render: record => (
+          <a
+            onClick={() =>
+              this.downloadFile(
+                record.experiment,
+                record.experiment + '.qcReport.pdf'
+              )
+            }>
+            link to pdf
+          </a>
+        )
       },
       {
         title: 'QC supplementary',
         width: '20%',
-        render: record => <a href="...">show detials</a>
+        render: record => (
+          <a
+            onClick={() =>
+              this.downloadFile(
+                record.experiment,
+                record.experiment + '.supplementary_plots.pdf'
+              )
+            }>
+            link to pdf
+          </a>
+        )
       }
     ];
 

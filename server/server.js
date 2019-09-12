@@ -2,7 +2,7 @@ var cors = require('cors');
 const AWS = require('aws-sdk');
 const path = require('path');
 const logger = require('./utils/loggerUtil').logger;
-const { port, dynamoDBTableName, S3BucketName, S3SamplesKey } = require('./config.json');
+const { port, dynamoDBTableName, S3BucketName, S3SamplesKey, S3QCReportsKey } = require('./config.json');
 const { scanTable } = require('./utils/scanDynamoDB');
 const express = require('express');
 const app = express();
@@ -62,6 +62,31 @@ app.post('/getMethylScapeFile', (req, res) => {
         res.send(e)
     }
 })
+
+app.post('/getMethylScapeQCFile', (req, res) => {
+    logger.log('info', 'Request file download data: %j', req.body)
+    try{
+        const s3 = new AWS.S3();
+        AWS.config.update({ region: 'us-east-1' });
+        const data = req.body
+        const key = path.join(S3QCReportsKey, data.experiment, data.fileName)
+        const params = {
+            Bucket: S3BucketName,
+            Key: key
+        };
+        logger.log('info', 'Request file download params: %j', params)
+        var fileStream = s3.getObject(params).createReadStream().on('error', e => {
+            logger.log('error', 'Request file download failed: %s', e)
+            res.send(e)
+        });;
+        res.attachment(data.fileName);
+        fileStream.pipe(res);
+    }catch (e){
+        logger.log('error', 'File download failed: %s', e)
+        res.send(e)
+    }
+})
+
 
 const appPort = process.env.PORT || port;
 
