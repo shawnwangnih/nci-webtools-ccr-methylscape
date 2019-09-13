@@ -66,9 +66,6 @@ class Home extends React.Component {
       .catch(error => this.failedScanSetPage(error));
   }
   renderPage() {
-    console.log('filter: ' + JSON.stringify(this.state.filter));
-    console.log('data: ' + JSON.stringify(this.state.data));
-    console.log('projectSummery: ' + JSON.stringify(this.state.projectSummery));
     if (this.props.current == 'projects') {
       return (
         <div disabled={this.state.scanCheck}>

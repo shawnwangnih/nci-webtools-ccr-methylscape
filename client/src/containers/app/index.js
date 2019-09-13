@@ -34,12 +34,7 @@ class App extends React.Component {
   };
 
   changeTab = (activeTab, filter = {}) => {
-    if (this.filter !== {}) {
-      this.setState({ filter });
-      if (filter.project) {
-        this.changeSummeryPorject(filter.project);
-      }
-    }
+    console.log(activeTab);
     this.setState({ current: activeTab });
   };
 
