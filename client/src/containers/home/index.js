@@ -13,7 +13,6 @@ const TabPane = Tabs.TabPane;
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    console.log('PROP: ' + props.current);
     this.state = {
       activeTab: props.current,
       data: [],

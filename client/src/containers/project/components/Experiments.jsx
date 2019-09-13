@@ -96,7 +96,12 @@ class Experiments extends React.Component {
     return (
       <div>
         <br />
-        <div>
+        <div
+          style={{
+            'padding-left': '15px',
+            'padding-bottom': '0',
+            'padding-top': '20px'
+          }}>
           <Form layout="inline">
             <Form.Item label="Experiment">
               <Input

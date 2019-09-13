@@ -34,7 +34,6 @@ class App extends React.Component {
   };
 
   changeTab = (activeTab, filter = {}) => {
-    console.log(activeTab);
     this.setState({ current: activeTab });
   };
 
@@ -150,41 +149,60 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
+              'border-bottom': '1px solid #e8e8e8',
               // position: 'fixed',
 
-              background: '#001529'
+              background: 'steelblue'
             }}>
-            <Menu
-              onClick={this.handleClick}
-              selectedKeys={[this.state.current]}
-              theme="light"
-              mode="horizontal"
+            <div
               style={{
+                padding: '0px 50px',
+                'max-width': '1400px',
                 width: '100%',
-                height: '40px',
-                lineHeight: '40px'
+                'margin-right': 'auto',
+                'margin-left': 'auto'
               }}>
-              {/* Home */}
-              <Menu.Item key="projects">
-                <Link to="">Project</Link>
-              </Menu.Item>
+              <Menu
+                onClick={this.handleClick}
+                selectedKeys={[this.state.current]}
+                theme="light"
+                mode="horizontal"
+                style={{
+                  width: '100%',
+                  height: '40px',
+                  lineHeight: '40px',
+                  'background-color': 'steelblue'
+                }}>
+                {/* Home */}
+                <Menu.Item key="projects">
+                  <Link to="" style={{ color: 'white' }}>
+                    Project
+                  </Link>
+                </Menu.Item>
 
-              <Menu.Item key="experiments">
-                <Link to="">Experiments</Link>
-              </Menu.Item>
+                <Menu.Item key="experiments">
+                  <Link to="" style={{ color: 'white' }}>
+                    Experiments
+                  </Link>
+                </Menu.Item>
 
-              <Menu.Item key="samples">
-                <Link to="">Samples</Link>
-              </Menu.Item>
+                <Menu.Item key="samples">
+                  <Link to="" style={{ color: 'white' }}>
+                    Samples
+                  </Link>
+                </Menu.Item>
 
-              <Menu.Item key="help">
-                <Link to="">Help</Link>
-              </Menu.Item>
-            </Menu>
+                <Menu.Item key="help">
+                  <Link to="" style={{ color: 'white' }}>
+                    Help
+                  </Link>
+                </Menu.Item>
+              </Menu>
+            </div>
           </Header>
           <Content
             style={{
-              padding: '40px 50px',
+              padding: '0 50px',
               height: '100%',
               'max-width': '1400px',
               width: '100%',
@@ -194,8 +212,6 @@ class App extends React.Component {
             <div
               style={{
                 background: '#fff',
-                'border-radius': '15px',
-                padding: 24,
                 minHeight: 380
               }}>
               {/*bodyContent*/}

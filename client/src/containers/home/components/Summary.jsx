@@ -83,7 +83,11 @@ class Summary extends React.Component {
           Project summary: {this.state.project}
         </h3>
         <br />
-        <Row type="flex" justify="center" align="middle">
+        <Row
+          type="flex"
+          justify="center"
+          align="middle"
+          style={{ 'padding-bottom': '100px' }}>
           <Col span={8} order={1}>
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
