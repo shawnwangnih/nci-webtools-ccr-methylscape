@@ -37,7 +37,6 @@ class Summary extends React.Component {
       '#651067'
     ];
   }
-  componentDidMount() {}
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.length === 0) {
       return;
@@ -108,8 +107,6 @@ class Summary extends React.Component {
   render() {
     console.log(this.getMethylationClasses());
     console.log(this.getGender());
-    this.graph1 = React.createRef();
-    this.graph2 = React.createRef();
     const graph1 = this.graph1;
     var myChart = new Chart(graph1, {
       type: 'pie',
@@ -133,7 +130,7 @@ class Summary extends React.Component {
       }
     });
     const graph2 = this.graph2;
-    var myChart = new Chart(graph2, {
+    var myChart2 = new Chart(graph2, {
       type: 'pie',
       options: {
         legend: {
@@ -165,32 +162,32 @@ class Summary extends React.Component {
           align="middle"
           style={{ 'padding-bottom': '100px' }}>
           <Col span={8} order={1}>
-            {/*<h4 className="summery-data-title">Methylation Classes</h4>
+             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
               data={this.getMethylationClasses()}
-              legend="bottom"
+              legend={false}
               options={{legend: { boxWidth: '2' }}}
-    />*/}
-            <h4 className="summery-data-title">Methylation Classes</h4>
+    />
+            {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
               style={{ width: '100%', height: '70%' }}
               ref={graph1 => (this.graph1 = graph1)}
               width="100%"
               height="70%"
-            />
+  />*/}
           </Col>
           <Col span={8} order={2}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
-            <canvas
+            {/*<canvas
               style={{ width: '100%', height: '70%' }}
               ref={graph2 => (this.graph2 = graph2)}
               width="100%"
               height="70%"
-            />
-            {/* <PieChart data={this.getGender()} legend="bottom" />*/}
+            />*/}
+            <PieChart data={this.getGender()} legend="bottom" />
           </Col>
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>
