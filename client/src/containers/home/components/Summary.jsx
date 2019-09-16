@@ -71,9 +71,9 @@ class Summary extends React.Component {
     });
     Object.keys(cur).forEach(k => {
       // pieData.push({label:k, value:cur[k]})
-      //pieData.push([k.replace('methylation class ', ''), cur[k]]);
-      pieData[0].push(k.replace('methylation class ', ''));
-      pieData[1].push(cur[k]);
+      pieData.push([k.replace('methylation class ', ''), cur[k]]);
+      //pieData[0].push(k.replace('methylation class ', ''));
+      //pieData[1].push(cur[k]);
     });
     return pieData;
   };
@@ -85,9 +85,9 @@ class Summary extends React.Component {
       cur[row.gender] = cur[row.gender] + 1 || 1;
     });
     Object.keys(cur).forEach(k => {
-      //pieData.push([k, cur[k]]);
-      pieData[0].push(k);
-      pieData[1].push(cur[k]);
+      pieData.push([k, cur[k]]);
+      //pieData[0].push(k);
+      //pieData[1].push(cur[k]);
     });
     return pieData;
   };
