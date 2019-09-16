@@ -113,6 +113,7 @@ class Summary extends React.Component {
       type: 'pie',
       options: {
         legend: {
+          display: this.getMethylationClasses()[0].length <= 10,
           position: 'bottom',
           labels: {
             boxWidth: 10
@@ -172,20 +173,20 @@ class Summary extends React.Component {
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
-              style={{ width: '100%', height: '80%' }}
+              style={{ width: '100%', height: '70%' }}
               ref={graph1 => (this.graph1 = graph1)}
               width="100%"
-              height="80%"
+              height="70%"
             />
           </Col>
           <Col span={8} order={2}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
             <canvas
-              style={{ width: '100%', height: '80%' }}
+              style={{ width: '100%', height: '70%' }}
               ref={graph2 => (this.graph2 = graph2)}
               width="100%"
-              height="80%"
+              height="70%"
             />
             {/* <PieChart data={this.getGender()} legend="bottom" />*/}
           </Col>
