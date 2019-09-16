@@ -108,6 +108,8 @@ class Summary extends React.Component {
   render() {
     console.log(this.getMethylationClasses());
     console.log(this.getGender());
+    this.graph1 = React.createRef();
+    this.graph2 = React.createRef();
     const graph1 = this.graph1;
     var myChart = new Chart(graph1, {
       type: 'pie',
