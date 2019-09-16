@@ -3,6 +3,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import { ColumnChart, PieChart } from 'react-chartkick';
 import 'chart.js';
+import './Summary.css';
 var Chart = require('chart.js');
 
 class Summary extends React.Component {
@@ -61,7 +62,7 @@ class Summary extends React.Component {
 
   getMethylationClasses = () => {
     let cur = {};
-    let pieData = [[], []];
+    let pieData = [];
     this.state.filteredData.map(row => {
       Object.values(row.classifier_prediction).forEach(cp => {
         Object.keys(cp).forEach(key => {
@@ -80,7 +81,7 @@ class Summary extends React.Component {
 
   getGender = () => {
     let cur = {};
-    let pieData = [[], []];
+    let pieData = [];
     this.state.filteredData.map(row => {
       cur[row.gender] = cur[row.gender] + 1 || 1;
     });
@@ -103,9 +104,32 @@ class Summary extends React.Component {
     });
     return pieData;
   };
-
+  renderMethylationLegend() {
+    const list = this.getMethylationClasses().map((item, index) => (
+      <div style={{ 'text-align': 'center' }}>
+        <div
+          className="color-box"
+          style={{ 'background-color': this.backgroundColor[index] }}
+        />
+        {item[0]}
+      </div>
+    ));
+    return list;
+  }
+  renderGenderLegend() {
+    const list = this.getGender().map((item, index) => (
+      <div style={{ 'text-align': 'center' }}>
+        <div
+          className="color-box"
+          style={{ 'background-color': this.backgroundColor[index] }}
+        />
+        {item[0]}
+      </div>
+    ));
+    return list;
+  }
   render() {
-    console.log(this.getMethylationClasses());
+    /*console.log(this.getMethylationClasses());
     console.log(this.getGender());
     const graph1 = this.graph1;
     var myChart = new Chart(graph1, {
@@ -149,7 +173,7 @@ class Summary extends React.Component {
           }
         ]
       }
-    });
+    });*/
     return (
       <div>
         <h3 style={{ 'text-align': 'center' }}>
@@ -162,13 +186,21 @@ class Summary extends React.Component {
           align="middle"
           style={{ 'padding-bottom': '100px' }}>
           <Col span={8} order={1}>
-             <h4 className="summery-data-title">Methylation Classes</h4>
+            <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
+              height="260px"
               data={this.getMethylationClasses()}
               legend={false}
-              options={{legend: { boxWidth: '2' }}}
-    />
+            />
+            <div
+              style={{
+                'overflow-y': 'auto',
+                height: '80px',
+                'padding-top': '20px'
+              }}>
+              {this.renderMethylationLegend()}
+            </div>
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
@@ -187,12 +219,20 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
             />*/}
-            <PieChart data={this.getGender()} legend="bottom" />
+            <PieChart height="260px" data={this.getGender()} legend={false} />
+            <div
+              style={{
+                'overflow-y': 'auto',
+                height: '80px',
+                'padding-top': '20px'
+              }}>
+              {this.renderGenderLegend()}
+            </div>
           </Col>
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
-            <ColumnChart data={this.getAgeDistribution()} />
+            <ColumnChart height="360px" data={this.getAgeDistribution()} />
           </Col>
         </Row>
       </div>
