@@ -13,6 +13,29 @@ class Summary extends React.Component {
       filteredData: []
     };
     this.graph1 = React.createRef();
+    this.graph2 = React.createRef();
+    this.backgroundColor = [
+      '#3366CC',
+      '#DC3912',
+      '#FF9900',
+      '#109618',
+      '#990099',
+      '#3B3EAC',
+      '#0099C6',
+      '#DD4477',
+      '#66AA00',
+      '#B82E2E',
+      '#316395',
+      '#994499',
+      '#22AA99',
+      '#AAAA11',
+      '#6633CC',
+      '#E67300',
+      '#8B0707',
+      '#329262',
+      '#5574A6',
+      '#651067'
+    ];
   }
   componentDidMount() {}
   componentWillReceiveProps(nextProps) {
@@ -58,12 +81,14 @@ class Summary extends React.Component {
 
   getGender = () => {
     let cur = {};
-    let pieData = [];
+    let pieData = [[], []];
     this.state.filteredData.map(row => {
       cur[row.gender] = cur[row.gender] + 1 || 1;
     });
     Object.keys(cur).forEach(k => {
-      pieData.push([k, cur[k]]);
+      //pieData.push([k, cur[k]]);
+      pieData[0].push(k);
+      pieData[1].push(cur[k]);
     });
     return pieData;
   };
@@ -81,8 +106,9 @@ class Summary extends React.Component {
   };
 
   render() {
-    const graph1 = this.graph1;
     console.log(this.getMethylationClasses());
+    console.log(this.getGender());
+    const graph1 = this.graph1;
     var myChart = new Chart(graph1, {
       type: 'pie',
       options: {
@@ -98,28 +124,28 @@ class Summary extends React.Component {
         datasets: [
           {
             data: this.getMethylationClasses()[1],
-            backgroundColor: [
-              '#3366CC',
-              '#DC3912',
-              '#FF9900',
-              '#109618',
-              '#990099',
-              '#3B3EAC',
-              '#0099C6',
-              '#DD4477',
-              '#66AA00',
-              '#B82E2E',
-              '#316395',
-              '#994499',
-              '#22AA99',
-              '#AAAA11',
-              '#6633CC',
-              '#E67300',
-              '#8B0707',
-              '#329262',
-              '#5574A6',
-              '#651067'
-            ]
+            backgroundColor: this.backgroundColor
+          }
+        ]
+      }
+    });
+    const graph2 = this.graph2;
+    var myChart = new Chart(graph2, {
+      type: 'pie',
+      options: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 10
+          }
+        }
+      },
+      data: {
+        labels: this.getGender()[0],
+        datasets: [
+          {
+            data: this.getGender()[1],
+            backgroundColor: this.backgroundColor
           }
         ]
       }
@@ -143,17 +169,25 @@ class Summary extends React.Component {
               legend="bottom"
               options={{legend: { boxWidth: '2' }}}
     />*/}
+            <h4 className="summery-data-title">Methylation Classes</h4>
+            <br />
             <canvas
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '80%' }}
               ref={graph1 => (this.graph1 = graph1)}
               width="100%"
-              height="100%"
+              height="80%"
             />
           </Col>
           <Col span={8} order={2}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
-            <PieChart data={this.getGender()} legend="bottom" />
+            <canvas
+              style={{ width: '100%', height: '80%' }}
+              ref={graph2 => (this.graph2 = graph2)}
+              width="100%"
+              height="80%"
+            />
+            {/* <PieChart data={this.getGender()} legend="bottom" />*/}
           </Col>
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>
