@@ -109,7 +109,7 @@ class Summary extends React.Component {
       <div style={{ 'text-align': 'center' }}>
         <div
           className="color-box"
-          style={{ 'background-color': this.backgroundColor[index] }}
+          style={{ 'background-color': this.backgroundColor[index%this.backgroundColor.length] }}
         />
         {item[0]}
       </div>
@@ -121,7 +121,7 @@ class Summary extends React.Component {
       <div style={{ 'text-align': 'center' }}>
         <div
           className="color-box"
-          style={{ 'background-color': this.backgroundColor[index] }}
+          style={{ 'background-color': this.backgroundColor[index%this.backgroundColor.length] }}
         />
         {item[0]}
       </div>
@@ -196,7 +196,7 @@ class Summary extends React.Component {
             <div
               style={{
                 'overflow-y': 'auto',
-                height: '80px',
+                height: '100px',
                 'padding-top': '20px'
               }}>
               {this.renderMethylationLegend()}
@@ -223,7 +223,7 @@ class Summary extends React.Component {
             <div
               style={{
                 'overflow-y': 'auto',
-                height: '80px',
+                height: '100px',
                 'padding-top': '20px'
               }}>
               {this.renderGenderLegend()}
@@ -232,7 +232,7 @@ class Summary extends React.Component {
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
-            <ColumnChart height="360px" data={this.getAgeDistribution()} />
+            <ColumnChart height="380px" data={this.getAgeDistribution()} />
           </Col>
         </Row>
       </div>
