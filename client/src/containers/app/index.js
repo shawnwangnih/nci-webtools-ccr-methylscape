@@ -175,25 +175,25 @@ class App extends React.Component {
                 }}>
                 {/* Home */}
                 <Menu.Item key="projects">
-                  <Link to="" style={{ color: 'white' }}>
+                  <Link to="/methylscape" style={{ color: 'white' }}>
                     Project
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="experiments">
-                  <Link to="" style={{ color: 'white' }}>
+                  <Link to="/methylscape" style={{ color: 'white' }}>
                     Experiments
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="samples">
-                  <Link to="" style={{ color: 'white' }}>
+                  <Link to="/methylscape" style={{ color: 'white' }}>
                     Samples
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="help">
-                  <Link to="" style={{ color: 'white' }}>
+                  <Link to="/methylscape" style={{ color: 'white' }}>
                     Help
                   </Link>
                 </Menu.Item>
