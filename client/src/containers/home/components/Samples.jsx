@@ -198,7 +198,7 @@ class Samples extends React.Component {
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}getMethylScapeFile`, {
+    fetch(`${root}/getMethylScapeFile`, {
       method: 'POST',
       body: JSON.stringify({
         sampleId: sampleId,
