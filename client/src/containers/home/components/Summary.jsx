@@ -194,10 +194,14 @@ class Summary extends React.Component {
           align="middle"
           style={{ 'padding-bottom': '100px' }}>
           <Col span={8} order={1}>
-            <h4 className="summery-data-title">Methylation Classes</h4>
+            <h4
+              className="summery-data-title"
+              style={{ 'padding-top': '84px' }}>
+              Methylation Classes
+            </h4>
             <br />
             <PieChart
-              height="260px"
+              height="380px"
               data={this.getMethylationClasses()}
               legend={false}
             />
@@ -212,7 +216,11 @@ class Summary extends React.Component {
   />*/}
           </Col>
           <Col span={8} order={2}>
-            <h4 className="summery-data-title">Gender</h4>
+            <h4
+              className="summery-data-title"
+              style={{ 'padding-top': '84px' }}>
+              Gender
+            </h4>
             <br />
             {/*<canvas
               style={{ width: '100%', height: '70%' }}
@@ -220,15 +228,8 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
             />*/}
-            <PieChart height="260px" data={this.getGender()} legend={false} />
-            <div
-              style={{
-                'overflow-y': 'auto',
-                height: '100px',
-                'padding-top': '20px'
-              }}>
-              {this.renderGenderLegend()}
-            </div>
+            <PieChart height="380px" data={this.getGender()} legend={false} />
+            <div className="overflow-box">{this.renderGenderLegend()}</div>
           </Col>
           <Col span={8} order={3}>
             <h4 className="summery-data-title">Age Distribution</h4>
