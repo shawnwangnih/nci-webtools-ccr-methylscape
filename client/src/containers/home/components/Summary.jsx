@@ -109,7 +109,11 @@ class Summary extends React.Component {
       <div style={{ 'text-align': 'center' }}>
         <div
           className="color-box"
-          style={{ 'background-color': this.backgroundColor[index%this.backgroundColor.length] }}
+          style={{
+            'background-color': this.backgroundColor[
+              index % this.backgroundColor.length
+            ]
+          }}
         />
         {item[0]}
       </div>
@@ -121,7 +125,11 @@ class Summary extends React.Component {
       <div style={{ 'text-align': 'center' }}>
         <div
           className="color-box"
-          style={{ 'background-color': this.backgroundColor[index%this.backgroundColor.length] }}
+          style={{
+            'background-color': this.backgroundColor[
+              index % this.backgroundColor.length
+            ]
+          }}
         />
         {item[0]}
       </div>
@@ -193,14 +201,7 @@ class Summary extends React.Component {
               data={this.getMethylationClasses()}
               legend={false}
             />
-            <div
-              style={{
-                'overflow-y': 'auto',
-                height: '100px',
-                'padding-top': '20px'
-              }}>
-              {this.renderMethylationLegend()}
-            </div>
+            <div className="overflow-box">{this.renderMethylationLegend()}</div>
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas

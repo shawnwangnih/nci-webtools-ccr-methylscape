@@ -230,7 +230,7 @@ class Projects extends React.Component {
       <div>
         <div
           style={{
-            'padding-left': '15px',
+            'padding-left': '16px',
             'padding-bottom': '0',
             'padding-top': '20px'
           }}>

@@ -396,7 +396,12 @@ class Samples extends React.Component {
     return (
       <div>
         <br />
-        <div>
+        <div
+          style={{
+            'padding-left': '16px',
+            'padding-bottom': '0',
+            'padding-top': '20px'
+          }}>
           <Form layout="inline">
             <Form.Item label="Project">
               <Input

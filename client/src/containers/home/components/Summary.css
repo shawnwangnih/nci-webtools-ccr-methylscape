@@ -5,3 +5,11 @@
   margin-left: 10px;
   margin-right: 10px;
 }
+.overflow-box {
+  overflow-y: hidden;
+  height: 84px;
+  padding-top: 20px;
+}
+.overflow-box:hover {
+  overflow-y: auto;
+}
