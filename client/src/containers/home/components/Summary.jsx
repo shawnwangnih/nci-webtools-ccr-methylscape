@@ -3,6 +3,8 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import { ColumnChart, PieChart } from 'react-chartkick';
 import 'chart.js';
+import './Summary.css';
+var Chart = require('chart.js');
 
 class Summary extends React.Component {
   constructor(props) {
@@ -11,8 +13,31 @@ class Summary extends React.Component {
       project: '',
       filteredData: []
     };
+    this.graph1 = React.createRef();
+    this.graph2 = React.createRef();
+    this.backgroundColor = [
+      '#3366CC',
+      '#DC3912',
+      '#FF9900',
+      '#109618',
+      '#990099',
+      '#3B3EAC',
+      '#0099C6',
+      '#DD4477',
+      '#66AA00',
+      '#B82E2E',
+      '#316395',
+      '#994499',
+      '#22AA99',
+      '#AAAA11',
+      '#6633CC',
+      '#E67300',
+      '#8B0707',
+      '#329262',
+      '#5574A6',
+      '#651067'
+    ];
   }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.length === 0) {
       return;
@@ -48,6 +73,8 @@ class Summary extends React.Component {
     Object.keys(cur).forEach(k => {
       // pieData.push({label:k, value:cur[k]})
       pieData.push([k.replace('methylation class ', ''), cur[k]]);
+      //pieData[0].push(k.replace('methylation class ', ''));
+      //pieData[1].push(cur[k]);
     });
     return pieData;
   };
@@ -60,6 +87,8 @@ class Summary extends React.Component {
     });
     Object.keys(cur).forEach(k => {
       pieData.push([k, cur[k]]);
+      //pieData[0].push(k);
+      //pieData[1].push(cur[k]);
     });
     return pieData;
   };
@@ -75,29 +104,129 @@ class Summary extends React.Component {
     });
     return pieData;
   };
-
+  renderMethylationLegend() {
+    const list = this.getMethylationClasses().map((item, index) => (
+      <div style={{ 'text-align': 'center' }}>
+        <div
+          className="color-box"
+          style={{
+            'background-color': this.backgroundColor[
+              index % this.backgroundColor.length
+            ]
+          }}
+        />
+        {item[0]}
+      </div>
+    ));
+    return list;
+  }
+  renderGenderLegend() {
+    const list = this.getGender().map((item, index) => (
+      <div style={{ 'text-align': 'center' }}>
+        <div
+          className="color-box"
+          style={{
+            'background-color': this.backgroundColor[
+              index % this.backgroundColor.length
+            ]
+          }}
+        />
+        {item[0]}
+      </div>
+    ));
+    return list;
+  }
   render() {
+    /*console.log(this.getMethylationClasses());
+    console.log(this.getGender());
+    const graph1 = this.graph1;
+    var myChart = new Chart(graph1, {
+      type: 'pie',
+      options: {
+        legend: {
+          display: this.getMethylationClasses()[0].length <= 10,
+          position: 'bottom',
+          labels: {
+            boxWidth: 10
+          }
+        }
+      },
+      data: {
+        labels: this.getMethylationClasses()[0],
+        datasets: [
+          {
+            data: this.getMethylationClasses()[1],
+            backgroundColor: this.backgroundColor
+          }
+        ]
+      }
+    });
+    const graph2 = this.graph2;
+    var myChart2 = new Chart(graph2, {
+      type: 'pie',
+      options: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 10
+          }
+        }
+      },
+      data: {
+        labels: this.getGender()[0],
+        datasets: [
+          {
+            data: this.getGender()[1],
+            backgroundColor: this.backgroundColor
+          }
+        ]
+      }
+    });*/
     return (
       <div>
         <h3 style={{ 'text-align': 'center' }}>
           Project summary: {this.state.project}
         </h3>
         <br />
-        <Row type="flex" justify="center" align="middle">
+        <Row
+          type="flex"
+          justify="center"
+          align="middle"
+          style={{ 'padding-bottom': '100px' }}>
           <Col span={8} order={1}>
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
-            <PieChart data={this.getMethylationClasses()} legend="bottom" />
+            <PieChart
+              height="380px"
+              data={this.getMethylationClasses()}
+              legend={false}
+            />
+            <div className="overflow-box">{this.renderMethylationLegend()}</div>
+            {/*<h4 className="summery-data-title">Methylation Classes</h4>
+            <br />
+            <canvas
+              style={{ width: '100%', height: '70%' }}
+              ref={graph1 => (this.graph1 = graph1)}
+              width="100%"
+              height="70%"
+  />*/}
           </Col>
           <Col span={8} order={2}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
-            <PieChart data={this.getGender()} legend="bottom" />
+            {/*<canvas
+              style={{ width: '100%', height: '70%' }}
+              ref={graph2 => (this.graph2 = graph2)}
+              width="100%"
+              height="70%"
+            />*/}
+            <PieChart height="380px" data={this.getGender()} legend={false} />
+            <div className="overflow-box">{this.renderGenderLegend()}</div>
           </Col>
-          <Col span={8} order={3}>
+          <Col span={8} order={3} style={{ 'margin-bottom': '84px' }}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
-            <ColumnChart data={this.getAgeDistribution()} />
+            <ColumnChart height="380px" data={this.getAgeDistribution()} />
           </Col>
         </Row>
       </div>

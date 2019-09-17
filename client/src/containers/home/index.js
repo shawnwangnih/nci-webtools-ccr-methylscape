@@ -14,7 +14,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 'projects',
+      activeTab: props.current,
       data: [],
       filter: {
         project: '',
@@ -22,7 +22,8 @@ class Home extends React.Component {
       },
       scanCheck: true,
       showErrorAlert: false,
-      projectSummery: ''
+      projectSummery: '',
+      current: props.current
     };
   }
 
@@ -33,6 +34,7 @@ class Home extends React.Component {
         this.changeSummeryPorject(filter.project);
       }
     }
+    this.props.changeTab(activeTab, filter);
     this.setState({ activeTab });
   };
 
@@ -62,8 +64,56 @@ class Home extends React.Component {
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
   }
-
+  renderPage() {
+    if (this.props.current == 'projects') {
+      return (
+        <div disabled={this.state.scanCheck}>
+          <Projects
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+          <Summary
+            data={this.state.data}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+        </div>
+      );
+    }
+    if (this.props.current == 'experiments') {
+      return (
+        <div>
+          <Experiments
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+      );
+    }
+    if (this.props.current == 'samples') {
+      return (
+        <div>
+          <Samples
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>Help Info</p>
+        </div>
+      );
+    }
+  }
   render() {
+    let page = this.renderPage();
     return (
       <div>
         {/* <PageHeader /> */}
@@ -75,11 +125,46 @@ class Home extends React.Component {
             showIcon
           />
         )}
+        {/*this.renderPage()*/}
+        {/*}
+        <div
+          hidden={this.props.current != 'projects'}
+          disabled={this.state.scanCheck}>
+          <Projects
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+          <Summary
+            data={this.state.data}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+        </div>
+        <div hidden={this.props.current != 'experiments'}>
+          <Experiments
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+        <div hidden={this.props.current != 'samples'}>
+          <Samples
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+        <div hidden={this.props.current != 'help'}>
+          <p>Help Info</p>
+        </div>*/}
         <Tabs
-          tabPosition="left"
-          activeKey={this.state.activeTab}
+          tabPosition="top"
+          activeKey={this.props.current}
           onChange={this.changeTab}
-          defaultActiveKey="project">
+          defaultActiveKey="projects">
           <TabPane tab="Project" key="projects" disabled={this.state.scanCheck}>
             <Projects
               data={this.state.data}

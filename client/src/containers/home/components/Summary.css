@@ -1,0 +1,15 @@
+.color-box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.overflow-box {
+  overflow-y: hidden;
+  height: 84px;
+  padding-top: 20px;
+}
+.overflow-box:hover {
+  overflow-y: auto;
+}

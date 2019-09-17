@@ -228,7 +228,12 @@ class Projects extends React.Component {
     ];
     return (
       <div>
-        <div>
+        <div
+          style={{
+            'padding-left': '16px',
+            'padding-bottom': '0',
+            'padding-top': '20px'
+          }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
           <br />
           <Form layout="inline">
@@ -297,7 +302,7 @@ class Projects extends React.Component {
           }}
           {...this.state}
           pagination={{
-            position: 'top',
+            position: 'bottom',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
             showTotal: this.rangeFunction

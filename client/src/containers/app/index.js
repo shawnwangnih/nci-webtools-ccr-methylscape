@@ -4,15 +4,27 @@ import Home from '../home';
 import CNSProfiling from '../cnsprofiling';
 import Help from '../help';
 // import ProjectPage from "../project"
-
+import Summary from '../home/components/Summary';
+import Experiments from '../home/components/Experiments';
+import Samples from '../home/components/Samples';
+import Projects from '../home/components/Projects';
 import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
+import './index.css';
 
 const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
   state = {
-    current: 'home'
+    current: 'projects',
+    data: [],
+    filter: {
+      project: '',
+      experiment: ''
+    },
+    scanCheck: true,
+    showErrorAlert: false,
+    projectSummery: ''
   };
   handleClick = e => {
     console.log('click ', e);
@@ -20,7 +32,66 @@ class App extends React.Component {
       current: e.key
     });
   };
+
+  changeTab = (activeTab, filter = {}) => {
+    this.setState({ current: activeTab });
+  };
+
+  renderContent() {
+    if (this.state.current == 'projects') {
+      return (
+        <div>
+          <Projects
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+          <Summary
+            data={this.state.data}
+            project={this.state.projectSummery}
+            changeSummeryPorject={this.changeSummeryPorject}
+          />
+        </div>
+      );
+    }
+    if (this.state.current == 'experiments') {
+      return (
+        <div>
+          <Experiments
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+      );
+    }
+    if (this.state.current == 'samples') {
+      return (
+        <div>
+          <Samples
+            data={this.state.data}
+            changeTab={this.changeTab}
+            filter={this.state.filter}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>Help Info</p>
+        </div>
+      );
+    }
+  }
+  renderMain() {
+    return <Home current={this.state.current} changeTab={this.changeTab} />;
+  }
   render() {
+    console.log('RERENDERING: ' + this.state.current);
+    let bodyContent = this.renderContent();
+    let mainContent = this.renderMain();
     return (
       <div>
         <Layout
@@ -70,7 +141,7 @@ class App extends React.Component {
             }}>
           </Header>
  */}
-          {/*
+
           <Header
             className="header"
             style={{
@@ -78,38 +149,60 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
+              'border-bottom': '1px solid #e8e8e8',
               // position: 'fixed',
 
-              background: '#001529'
+              background: 'steelblue'
             }}>
-            <Menu
-              onClick={this.handleClick}
-              selectedKeys={[this.state.current]}
-              theme="light"
-              mode="horizontal"
+            <div
               style={{
+                padding: '0px 50px',
+                'max-width': '1400px',
                 width: '100%',
-                height: '40px',
-                lineHeight: '40px'
+                'margin-right': 'auto',
+                'margin-left': 'auto'
               }}>
-              {/* Home 
-              <Menu.Item key="home" disabled>
-                <Link to="/methylscape">Home</Link>
-              </Menu.Item>
+              <Menu
+                onClick={this.handleClick}
+                selectedKeys={[this.state.current]}
+                theme="light"
+                mode="horizontal"
+                style={{
+                  width: '100%',
+                  height: '40px',
+                  lineHeight: '40px',
+                  'background-color': 'steelblue'
+                }}>
+                {/* Home */}
+                <Menu.Item key="projects">
+                  <Link to="" style={{ color: 'white' }}>
+                    Project
+                  </Link>
+                </Menu.Item>
 
-              <Menu.Item key="cns" disabled>
-                <Link to="/methylscape/cns-profiling">CNS Profiling</Link>
-              </Menu.Item>
+                <Menu.Item key="experiments">
+                  <Link to="" style={{ color: 'white' }}>
+                    Experiments
+                  </Link>
+                </Menu.Item>
 
-              <Menu.Item key="help" disabled>
-                <Link to="/methylscape/help">Help</Link>
-              </Menu.Item>
-              
-            </Menu>
-          </Header>*/}
+                <Menu.Item key="samples">
+                  <Link to="" style={{ color: 'white' }}>
+                    Samples
+                  </Link>
+                </Menu.Item>
+
+                <Menu.Item key="help">
+                  <Link to="" style={{ color: 'white' }}>
+                    Help
+                  </Link>
+                </Menu.Item>
+              </Menu>
+            </div>
+          </Header>
           <Content
             style={{
-              padding: '40px 50px',
+              padding: '0 50px',
               height: '100%',
               'max-width': '1400px',
               width: '100%',
@@ -119,11 +212,10 @@ class App extends React.Component {
             <div
               style={{
                 background: '#fff',
-                'border-radius': '15px',
-                padding: 24,
                 minHeight: 380
               }}>
-              <Home />
+              {/*bodyContent*/}
+              {mainContent}
               {/* <Route exact path="/methylscape" component={Home} />
               <Route
                 exact
