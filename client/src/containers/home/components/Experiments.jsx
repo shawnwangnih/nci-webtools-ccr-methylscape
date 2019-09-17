@@ -143,11 +143,11 @@ class Experiments extends React.Component {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
-        width: '10%',
+        width: '15%',
         sorter: (a, b) => a.investigator.localeCompare(b.investigator)
       },
       {
-        title: '# of samples',
+        title: '# of Samples',
         dataIndex: 'sampleSize',
         sorter: true,
         width: '10%',
@@ -162,14 +162,14 @@ class Experiments extends React.Component {
         )
       },
       {
-        title: 'Date created',
+        title: 'Date Created',
         dataIndex: 'date',
         sorter: true,
         width: '10%'
       },
       {
         title: 'QC Sheet',
-        width: '20%',
+        width: '13%',
         render: record => (
           <a
             onClick={() =>
@@ -183,8 +183,8 @@ class Experiments extends React.Component {
         )
       },
       {
-        title: 'QC supplementary',
-        width: '20%',
+        title: 'QC Supplementary',
+        width: '12%',
         render: record => (
           <a
             onClick={() =>

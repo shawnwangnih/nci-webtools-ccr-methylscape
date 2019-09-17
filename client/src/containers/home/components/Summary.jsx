@@ -106,7 +106,7 @@ class Summary extends React.Component {
   };
   renderMethylationLegend() {
     const list = this.getMethylationClasses().map((item, index) => (
-      <div style={{ 'text-align': 'center' }}>
+      <div style={{ 'text-align': 'left' }}>
         <div
           className="color-box"
           style={{
@@ -122,7 +122,7 @@ class Summary extends React.Component {
   }
   renderGenderLegend() {
     const list = this.getGender().map((item, index) => (
-      <div style={{ 'text-align': 'center' }}>
+      <div style={{ 'text-align': 'left' }}>
         <div
           className="color-box"
           style={{
