@@ -192,32 +192,39 @@ class Samples extends React.Component {
     );
   };
 
-  downloadFile = (sampleId, file) => {
+  async downloadFile = (sampleId, file) => {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}/getMethylScapeFile`, {
-      method: 'POST',
-      body: JSON.stringify({
-        sampleId: sampleId,
-        fileName: file
-      })
-    })
+    try {
+      let response = await fetch(`${root}/getMethylScapeFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file
+        })
+      });
+      let url = URL.createObjectURL(await response.blob())
+      window.open(url, '_blank');
+      URL.revokeObjectUrl(url);
+    } catch(e) {
+      console.log(e);
+    }
+/*    }
+
       .then(res => {
         return res.blob();
       })
       .then(function(blob) { // (**)
-        fileSaver(blob, file);
+        // fileSaver(blob, file);
         return URL.createObjectURL(blob);
-      
       })
       .then(url => {
-        window.open(url, '_blank');
-        URL.revokeObjectUrl(url);
       })
       .catch(error => console.log(error));
+      */
   };
 
   render() {
