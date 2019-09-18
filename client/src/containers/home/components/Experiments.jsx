@@ -53,7 +53,17 @@ class Experiments extends React.Component {
         fileName: file
       })
     })
-      .then(res => window.open(URL.createObjectURL(res.blob()), '_blank'))
+      .then(res => res.blob())
+      .then(function(blob) { // (**)
+
+        return URL.createObjectURL(blob);
+      
+      })
+      .then(url => {
+        window.open(url, '_blank');
+        URL.revokeObjectUrl(url);
+      })
+      .then()
       /*
       .then(blob => {
         fileSaver(blob, file);
