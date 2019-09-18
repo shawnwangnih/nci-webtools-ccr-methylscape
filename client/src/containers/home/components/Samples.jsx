@@ -192,7 +192,7 @@ class Samples extends React.Component {
     );
   };
 
-  downloadFile = (experiment, file) => {
+  downloadFile = (sampleId, file) => {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -201,11 +201,13 @@ class Samples extends React.Component {
     fetch(`${root}/getMethylScapeFile`, {
       method: 'POST',
       body: JSON.stringify({
-        experiment: experiment,
+        sampleId: sampleId,
         fileName: file
       })
     })
-      .then(res => res.blob())
+      .then(res => {
+        return res.blob();
+      })
       .then(function(blob) { // (**)
         fileSaver(blob, file);
         return URL.createObjectURL(blob);
@@ -215,11 +217,6 @@ class Samples extends React.Component {
         window.open(url, '_blank');
         URL.revokeObjectUrl(url);
       })
-      .then()
-      /*
-      .then(blob => {
-        fileSaver(blob, file);
-      })*/
       .catch(error => console.log(error));
   };
 
