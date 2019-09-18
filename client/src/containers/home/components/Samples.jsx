@@ -192,7 +192,7 @@ class Samples extends React.Component {
     );
   };
 
-  async downloadFile(sampleId, file) {
+  async downloadFile = (sampleId, file) => {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -206,13 +206,13 @@ class Samples extends React.Component {
           fileName: file
         })
       });
-      let url = URL.createObjectURL(await response.blob());
+      let url = URL.createObjectURL(await response.blob())
       window.open(url, '_blank');
       URL.revokeObjectUrl(url);
-    } catch (e) {
+    } catch(e) {
       console.log(e);
     }
-    /*    }
+/*    }
 
       .then(res => {
         return res.blob();
@@ -225,7 +225,7 @@ class Samples extends React.Component {
       })
       .catch(error => console.log(error));
       */
-  }
+  };
 
   render() {
     const columns = [

@@ -37,29 +37,30 @@ class Header extends React.Component {
             />
           </a>
         </div>
-        <Menu
-          onClick={this.handleClick}
-          selectedKeys={[this.state.current]}
-          theme="light"
-          mode="horizontal"
-          style={{
-            width: '100%',
-            height: '60px',
-            lineHeight: '60px',
-            align: 'right'
-          }}>
-          <Menu.Item key="home">
-            <Link to="/">Home</Link>
-          </Menu.Item>
+        {/* <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    theme="light"
+                    mode="horizontal"
+                    style={{ 
+                        width: "100%",
+                        height: '60px',
+                        lineHeight: '60px',
+                        align: 'right' }}
+                >
 
-          <Menu.Item key="cns">
-            <Link to="/cns-profiling">CNS Profiling</Link>
-          </Menu.Item>
+                    <Menu.Item key="home">
+                    <Link to="/">Home</Link>
+                    </Menu.Item>
 
-          <Menu.Item key="help">
-            <Link to="/help">Help</Link>
-          </Menu.Item>
-        </Menu>
+                    <Menu.Item key="cns">
+                        <Link to="/cns-profiling">CNS Profiling</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="help">
+                        <Link to="/help">Help</Link>
+                    </Menu.Item> */}
+        {/* </Menu> */}
       </Header>
     );
   }

@@ -37,7 +37,7 @@ class Experiments extends React.Component {
   }
 
   showFile(blob) {
-    return;
+   return
   }
 
   downloadFile = (experiment, file) => {
@@ -54,15 +54,16 @@ class Experiments extends React.Component {
       })
     })
       .then(res => res.blob())
-      .then(function(blob) {
-        // (**)
-        //fileSaver(blob, file);
+      .then(function(blob) { // (**)
+        fileSaver(blob, file);
         return URL.createObjectURL(blob);
+      
       })
       .then(url => {
         window.open(url, '_blank');
         URL.revokeObjectUrl(url);
       })
+      .then()
       /*
       .then(blob => {
         fileSaver(blob, file);
