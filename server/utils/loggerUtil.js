@@ -1,7 +1,7 @@
 const winston = require('winston');
 const path = require('path');
 
-const logsDir = path.normalize(path.join(__dirname ,'..','..','..','logs'));
+const logsDir = path.normalize(path.join(__dirname, 'logs'));
 
 const logger = winston.createLogger({
   level: 'info',
