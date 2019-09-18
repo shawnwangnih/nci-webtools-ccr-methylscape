@@ -192,7 +192,7 @@ class Samples extends React.Component {
     );
   };
 
-  async downloadFile = (sampleId, file) => {
+  async downloadFile(sampleId, file) {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
