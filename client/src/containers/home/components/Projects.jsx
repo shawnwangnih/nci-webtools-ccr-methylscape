@@ -33,9 +33,10 @@ class Projects extends React.Component {
     if (nextProps.data.length == 0) {
       return;
     }
+    currRecord: nextProps.project?nextProps.project:''
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project !== undefined) {
-      this.setState({ filterProject: nextProps.filter.project, currRecord: nextProps.project}, () => {
+      this.setState({ filterProject: nextProps.filter.project}, () => {
         this.handleFilter();
       });
     } else {
