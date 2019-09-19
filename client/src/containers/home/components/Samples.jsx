@@ -206,13 +206,13 @@ class Samples extends React.Component {
           fileName: file
         })
       });
-      let url = URL.createObjectURL(await response.blob())
+      let url = URL.createObjectURL(await response.blob());
       window.open(url, '_blank');
       URL.revokeObjectUrl(url);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
-/*    }
+    /*    }
 
       .then(res => {
         return res.blob();
@@ -225,7 +225,7 @@ class Samples extends React.Component {
       })
       .catch(error => console.log(error));
       */
-  };
+  }
 
   render() {
     const columns = [
@@ -365,7 +365,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '.html')
             }>
-            link to pdf
+            view plot
           </a>
         )
       },
@@ -389,7 +389,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '.jpg')
             }>
-            link to image file
+            link to image
           </a>
         )
       },

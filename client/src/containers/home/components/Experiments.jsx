@@ -27,6 +27,7 @@ class Experiments extends React.Component {
         this.handleFilter();
       });
     }
+    console.log(JSON.stringify(nextProps.filter));
   }
 
   async componentDidMount() {
@@ -37,7 +38,7 @@ class Experiments extends React.Component {
   }
 
   showFile(blob) {
-   return
+    return;
   }
 
   downloadFile = (experiment, file) => {
@@ -54,10 +55,10 @@ class Experiments extends React.Component {
       })
     })
       .then(res => res.blob())
-      .then(function(blob) { // (**)
+      .then(function(blob) {
+        // (**)
         fileSaver(blob, file);
         return URL.createObjectURL(blob);
-      
       })
       .then(url => {
         window.open(url, '_blank');
@@ -191,7 +192,7 @@ class Experiments extends React.Component {
                 record.experiment + '.qcReport.pdf'
               )
             }>
-            link to pdf
+            view pdf
           </a>
         )
       },
@@ -206,7 +207,7 @@ class Experiments extends React.Component {
                 record.experiment + '.supplementary_plots.pdf'
               )
             }>
-            link to pdf
+            view pdf
           </a>
         )
       }

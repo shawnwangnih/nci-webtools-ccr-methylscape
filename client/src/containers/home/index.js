@@ -16,17 +16,16 @@ class Home extends React.Component {
     this.state = {
       activeTab: props.current,
       data: [],
-      filter: {
-        project: '',
-        experiment: ''
-      },
+      filter: props.filter,
       scanCheck: true,
       showErrorAlert: false,
       projectSummery: '',
       current: props.current
     };
   }
-
+  /*async componentWillReceiveProps(nextProps) {
+    this.setState({ filter: nextProps.filter });
+  }*/
   changeTab = (activeTab, filter = {}) => {
     if (this.filter !== {}) {
       this.setState({ filter });

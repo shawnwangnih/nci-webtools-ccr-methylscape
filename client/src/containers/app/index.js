@@ -30,17 +30,22 @@ class App extends React.Component {
     console.log('click ', e);
     this.setState({
       current: e.key,
-      filter:{
-        project:'',
-        experiment:''
-      }
+      /*filter: {
+        project: '',
+        experiment: ''
+      }*/
     });
   };
 
   changeTab = (activeTab, filter = {}) => {
-    
     this.setState({ current: activeTab });
-    console.log(this.state.activeTab + ", " + this.state.filter + ", " + this.state.data);
+    console.log(
+      this.state.activeTab +
+        ', ' +
+        JSON.stringify(this.state.filter) +
+        ', ' +
+        JSON.stringify(this.state.data)
+    );
   };
 
   renderContent() {
@@ -92,7 +97,13 @@ class App extends React.Component {
     }
   }
   renderMain() {
-    return <Home current={this.state.current} changeTab={this.changeTab} />;
+    return (
+      <Home
+        current={this.state.current}
+        changeTab={this.changeTab}
+        filter={this.state.filter}
+      />
+    );
   }
   render() {
     console.log('RERENDERING: ' + this.state.current);
