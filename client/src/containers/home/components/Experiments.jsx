@@ -8,6 +8,7 @@ class Experiments extends React.Component {
     super(props);
     this.state = {
       filterProject: props.filter.project,
+      filterExperiment: props.filter.experiment,
       loading: true,
       pagination: {
         position: 'bottom',
@@ -24,6 +25,11 @@ class Experiments extends React.Component {
   async componentWillReceiveProps(nextProps) {
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
+        this.handleFilter();
+      });
+    }
+    if (nextProps.filter.experiment !== undefined) {
+      this.setState({ filterExperiment: nextProps.filter.experiment }, () => {
         this.handleFilter();
       });
     }
@@ -97,11 +103,19 @@ class Experiments extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase().includes(this.getFilterProject());
+        return (
+          row.project.toLowerCase().includes(this.getFilterProject()) &&
+          row.experiment.toLowerCase().includes(this.getFilterExperiment())
+        );
       })
     });
   };
 
+  getFilterExperiment = () => {
+    return this.state.filterExperiment
+      ? this.state.filterExperiment.toLowerCase()
+      : '';
+  };
   getFilterProject = () => {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
@@ -236,7 +250,9 @@ class Experiments extends React.Component {
             <Form.Item label="Experiments">
               <Input
                 value={this.state.filterExperiment}
-                onChange={e => this.setState({ filterProject: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
                 placeholder="MethylScape"
                 onPressEnter={this.handleFilter}
               />

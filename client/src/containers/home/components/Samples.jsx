@@ -244,7 +244,17 @@ class Samples extends React.Component {
         sorter: true,
         width: '300',
         sorter: (a, b) => a.project.localeCompare(b.project),
-        ...this.getColumnSearchProps('project')
+        ...this.getColumnSearchProps('project'),
+        render: (text, record) => (
+          <a
+            // onClick={() =>
+            //   this.props.changeTab('experiments', { project: record.project })
+            onClick={() =>
+              this.props.changeTab('projects', { project: record.project })
+            }>
+            {text}
+          </a>
+        )
       },
       {
         title: 'Experiment',
@@ -258,9 +268,9 @@ class Samples extends React.Component {
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
-              this.setState({ filterSentrixID: record.experiment }, () =>
-                this.handleFilter()
-              )
+              this.props.changeTab('experiments', {
+                experiment: record.experiment
+              })
             }>
             {text}
           </a>

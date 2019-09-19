@@ -27,19 +27,28 @@ class Home extends React.Component {
     this.setState({ filter: nextProps.filter });
   }
   changeTab = (activeTab, filter = {}) => {
-    if (this.filter !== {}) {
-      this.setState({ filter });
-      if (filter.project) {
-        this.changeSummeryPorject(filter.project);
+    if (activeTab == 'projects') {
+      if (this.filter !== {}) {
+        if (filter.project) {
+          this.changeSummeryPorject(filter.project);
+        }
       }
+      this.props.changeTab(activeTab, {});
+      this.setState({ activeTab });
+    } else {
+      if (this.filter !== {}) {
+        this.setState({ filter });
+        if (filter.project) {
+          this.changeSummeryPorject(filter.project);
+        }
+      }
+      this.props.changeTab(activeTab, filter);
+      this.setState({ activeTab });
     }
-    this.props.changeTab(activeTab, filter);
-    this.setState({ activeTab });
   };
 
   changeSummeryPorject = projectSummery => {
     this.setState({ projectSummery });
-    console.log(this.state.projectSummery);
   };
 
   failedScanSetPage(error) {
