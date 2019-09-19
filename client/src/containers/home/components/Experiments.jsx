@@ -8,6 +8,7 @@ class Experiments extends React.Component {
     super(props);
     this.state = {
       filterProject: props.filter.project,
+      filterExperiment: props.filter.experiment,
       loading: true,
       pagination: {
         position: 'bottom',
@@ -22,8 +23,13 @@ class Experiments extends React.Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.filter.project) {
+    if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
+        this.handleFilter();
+      });
+    }
+    if (nextProps.filter.experiment !== undefined) {
+      this.setState({ filterExperiment: nextProps.filter.experiment }, () => {
         this.handleFilter();
       });
     }
@@ -36,25 +42,38 @@ class Experiments extends React.Component {
     });
   }
 
+  showFile(blob) {
+    return;
+  }
+
   downloadFile = (experiment, file) => {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}getMethylScapeQCFile`, {
+    fetch(`${root}/getMethylScapeQCFile`, {
       method: 'POST',
       body: JSON.stringify({
         experiment: experiment,
         fileName: file
       })
     })
-      .then(res => {
-        return res.blob();
+      .then(res => res.blob())
+      .then(function(blob) {
+        // (**)
+        fileSaver(blob, file);
+        return URL.createObjectURL(blob);
       })
+      .then(url => {
+        window.open(url, '_blank');
+        URL.revokeObjectUrl(url);
+      })
+      .then()
+      /*
       .then(blob => {
         fileSaver(blob, file);
-      })
+      })*/
       .catch(error => console.log(error));
   };
 
@@ -84,11 +103,19 @@ class Experiments extends React.Component {
   handleFilter = () => {
     this.setState({
       filteredData: this.state.data.filter(row => {
-        return row.project.toLowerCase().includes(this.getFilterProject());
+        return (
+          row.project.toLowerCase().includes(this.getFilterProject()) &&
+          row.experiment.toLowerCase().includes(this.getFilterExperiment())
+        );
       })
     });
   };
 
+  getFilterExperiment = () => {
+    return this.state.filterExperiment
+      ? this.state.filterExperiment.toLowerCase()
+      : '';
+  };
   getFilterProject = () => {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
@@ -143,11 +170,11 @@ class Experiments extends React.Component {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
-        width: '10%',
+        width: '15%',
         sorter: (a, b) => a.investigator.localeCompare(b.investigator)
       },
       {
-        title: '# of samples',
+        title: '# of Samples',
         dataIndex: 'sampleSize',
         sorter: true,
         width: '10%',
@@ -162,14 +189,14 @@ class Experiments extends React.Component {
         )
       },
       {
-        title: 'Date created',
+        title: 'Date Created',
         dataIndex: 'date',
         sorter: true,
         width: '10%'
       },
       {
         title: 'QC Sheet',
-        width: '20%',
+        width: '13%',
         render: record => (
           <a
             onClick={() =>
@@ -178,13 +205,13 @@ class Experiments extends React.Component {
                 record.experiment + '.qcReport.pdf'
               )
             }>
-            link to pdf
+            view pdf
           </a>
         )
       },
       {
-        title: 'QC supplementary',
-        width: '20%',
+        title: 'QC Supplementary',
+        width: '12%',
         render: record => (
           <a
             onClick={() =>
@@ -193,7 +220,7 @@ class Experiments extends React.Component {
                 record.experiment + '.supplementary_plots.pdf'
               )
             }>
-            link to pdf
+            view pdf
           </a>
         )
       }
@@ -223,7 +250,9 @@ class Experiments extends React.Component {
             <Form.Item label="Experiments">
               <Input
                 value={this.state.filterExperiment}
-                onChange={e => this.setState({ filterProject: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
                 placeholder="MethylScape"
                 onPressEnter={this.handleFilter}
               />

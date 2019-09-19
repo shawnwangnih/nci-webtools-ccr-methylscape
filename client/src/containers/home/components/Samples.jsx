@@ -93,12 +93,12 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.filter.project) {
+    if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();
       });
     }
-    if (nextProps.filter.experiment) {
+    if (nextProps.filter.experiment !== undefined) {
       this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
         this.handleFilter();
       });
@@ -192,27 +192,40 @@ class Samples extends React.Component {
     );
   };
 
-  downloadFile = (sampleId, file) => {
+  async downloadFile(sampleId, file) {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}getMethylScapeFile`, {
-      method: 'POST',
-      body: JSON.stringify({
-        sampleId: sampleId,
-        fileName: file
-      })
-    })
+    try {
+      let response = await fetch(`${root}/getMethylScapeFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file
+        })
+      });
+      let url = URL.createObjectURL(await response.blob());
+      window.open(url, '_blank');
+      URL.revokeObjectUrl(url);
+    } catch (e) {
+      console.log(e);
+    }
+    /*    }
+
       .then(res => {
         return res.blob();
       })
-      .then(blob => {
-        fileSaver(blob, file);
+      .then(function(blob) { // (**)
+        // fileSaver(blob, file);
+        return URL.createObjectURL(blob);
+      })
+      .then(url => {
       })
       .catch(error => console.log(error));
-  };
+      */
+  }
 
   render() {
     const columns = [
@@ -231,7 +244,17 @@ class Samples extends React.Component {
         sorter: true,
         width: '300',
         sorter: (a, b) => a.project.localeCompare(b.project),
-        ...this.getColumnSearchProps('project')
+        ...this.getColumnSearchProps('project'),
+        render: (text, record) => (
+          <a
+            // onClick={() =>
+            //   this.props.changeTab('experiments', { project: record.project })
+            onClick={() =>
+              this.props.changeTab('projects', { project: record.project })
+            }>
+            {text}
+          </a>
+        )
       },
       {
         title: 'Experiment',
@@ -245,9 +268,9 @@ class Samples extends React.Component {
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
-              this.setState({ filterSentrixID: record.experiment }, () =>
-                this.handleFilter()
-              )
+              this.props.changeTab('experiments', {
+                experiment: record.experiment
+              })
             }>
             {text}
           </a>
@@ -352,7 +375,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '.html')
             }>
-            link to pdf
+            view plot
           </a>
         )
       },
@@ -364,7 +387,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '_NGS.pdf')
             }>
-            link to pdf
+            view pdf
           </a>
         )
       },
@@ -376,7 +399,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '.jpg')
             }>
-            link to image file
+            view image
           </a>
         )
       },

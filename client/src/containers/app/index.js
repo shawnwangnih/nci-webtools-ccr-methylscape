@@ -29,12 +29,23 @@ class App extends React.Component {
   handleClick = e => {
     console.log('click ', e);
     this.setState({
-      current: e.key
+      current: e.key,
+      filter: {
+        project: '',
+        experiment: ''
+      }
     });
   };
 
   changeTab = (activeTab, filter = {}) => {
-    this.setState({ current: activeTab });
+    this.setState({ current: activeTab, filter: filter });
+    console.log(
+      this.state.activeTab +
+        ', ' +
+        JSON.stringify(this.state.filter) +
+        ', ' +
+        JSON.stringify(this.state.data)
+    );
   };
 
   renderContent() {
@@ -86,7 +97,13 @@ class App extends React.Component {
     }
   }
   renderMain() {
-    return <Home current={this.state.current} changeTab={this.changeTab} />;
+    return (
+      <Home
+        current={this.state.current}
+        changeTab={this.changeTab}
+        filter={this.state.filter}
+      />
+    );
   }
   render() {
     console.log('RERENDERING: ' + this.state.current);
@@ -175,27 +192,19 @@ class App extends React.Component {
                 }}>
                 {/* Home */}
                 <Menu.Item key="projects">
-                  <Link to="" style={{ color: 'white' }}>
-                    Project
-                  </Link>
+                  <Link style={{ color: 'white' }}>Project</Link>
                 </Menu.Item>
 
                 <Menu.Item key="experiments">
-                  <Link to="" style={{ color: 'white' }}>
-                    Experiments
-                  </Link>
+                  <Link style={{ color: 'white' }}>Experiments</Link>
                 </Menu.Item>
 
                 <Menu.Item key="samples">
-                  <Link to="" style={{ color: 'white' }}>
-                    Samples
-                  </Link>
+                  <Link style={{ color: 'white' }}>Samples</Link>
                 </Menu.Item>
 
                 <Menu.Item key="help">
-                  <Link to="" style={{ color: 'white' }}>
-                    Help
-                  </Link>
+                  <Link style={{ color: 'white' }}>Help</Link>
                 </Menu.Item>
               </Menu>
             </div>
