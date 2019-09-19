@@ -30,15 +30,15 @@ class App extends React.Component {
     console.log('click ', e);
     this.setState({
       current: e.key,
-      /*filter: {
+      filter: {
         project: '',
         experiment: ''
-      }*/
+      }
     });
   };
 
   changeTab = (activeTab, filter = {}) => {
-    this.setState({ current: activeTab });
+    this.setState({ current: activeTab, filter: filter });
     console.log(
       this.state.activeTab +
         ', ' +

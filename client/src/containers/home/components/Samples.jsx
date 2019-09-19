@@ -93,12 +93,12 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.filter.project) {
+    if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();
       });
     }
-    if (nextProps.filter.experiment) {
+    if (nextProps.filter.experiment !== undefined) {
       this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
         this.handleFilter();
       });
@@ -377,7 +377,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '_NGS.pdf')
             }>
-            link to pdf
+            view pdf
           </a>
         )
       },
@@ -389,7 +389,7 @@ class Samples extends React.Component {
             onClick={() =>
               this.downloadFile(record.id, record.sample_name + '.jpg')
             }>
-            link to image
+            view image
           </a>
         )
       },

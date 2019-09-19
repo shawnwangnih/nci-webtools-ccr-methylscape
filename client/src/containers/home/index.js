@@ -23,9 +23,9 @@ class Home extends React.Component {
       current: props.current
     };
   }
-  /*async componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     this.setState({ filter: nextProps.filter });
-  }*/
+  }
   changeTab = (activeTab, filter = {}) => {
     if (this.filter !== {}) {
       this.setState({ filter });

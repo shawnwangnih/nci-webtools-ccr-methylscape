@@ -22,12 +22,11 @@ class Experiments extends React.Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.filter.project) {
+    if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
         this.handleFilter();
       });
     }
-    console.log(JSON.stringify(nextProps.filter));
   }
 
   async componentDidMount() {
