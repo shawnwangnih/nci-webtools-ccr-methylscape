@@ -38,7 +38,9 @@ class App extends React.Component {
   };
 
   changeTab = (activeTab, filter = {}) => {
+    
     this.setState({ current: activeTab });
+    console.log(this.state.activeTab + ", " + this.state.filter + ", " + this.state.data);
   };
 
   renderContent() {
