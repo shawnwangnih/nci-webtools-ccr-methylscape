@@ -9,7 +9,6 @@ class Header extends React.Component {
     current: 'home'
   };
   handleClick = e => {
-    console.log('click ', e);
     this.setState({
       current: e.key
     });
@@ -29,7 +28,7 @@ class Header extends React.Component {
         }}>
         <div>
           {' '}
-          <a href="https://ccr.cancer.gov/">
+          <a href="https://ccr.cancer.gov/" target="_blank">
             <img
               className="logo"
               src="./assets/img/nci-test-logo.png"

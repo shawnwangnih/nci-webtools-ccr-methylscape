@@ -5,6 +5,7 @@ import Summary from './components/Summary';
 import Experiments from './components/Experiments';
 import Samples from './components/Samples';
 import Projects from './components/Projects';
+import Help from './components/Help';
 
 import { connect } from 'react-redux';
 
@@ -115,7 +116,7 @@ class Home extends React.Component {
     } else {
       return (
         <div>
-          <p>Help Info</p>
+          <Help />
         </div>
       );
     }

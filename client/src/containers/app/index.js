@@ -8,6 +8,7 @@ import Summary from '../home/components/Summary';
 import Experiments from '../home/components/Experiments';
 import Samples from '../home/components/Samples';
 import Projects from '../home/components/Projects';
+//import Help from '../home/components/Help'
 import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
 import './index.css';
@@ -91,7 +92,7 @@ class App extends React.Component {
     } else {
       return (
         <div>
-          <p>Help Info</p>
+          <Help />
         </div>
       );
     }
@@ -106,7 +107,6 @@ class App extends React.Component {
     );
   }
   render() {
-    console.log('RERENDERING: ' + this.state.current);
     let bodyContent = this.renderContent();
     let mainContent = this.renderMain();
     return (
@@ -129,13 +129,13 @@ class App extends React.Component {
             }}>
             <div
               style={{
-                padding: '0px 50px',
+                padding: '0 50px',
                 'max-width': '1400px',
                 width: '100%',
                 'margin-right': 'auto',
                 'margin-left': 'auto'
               }}>
-              <a href="https://ccr.cancer.gov/">
+              <a href="https://ccr.cancer.gov/" target="_blank">
                 <img
                   className="logo"
                   src="./assets/img/test-2.svg"
@@ -192,19 +192,27 @@ class App extends React.Component {
                 }}>
                 {/* Home */}
                 <Menu.Item key="projects">
-                  <Link style={{ color: 'white' }}>Project</Link>
+                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                    Project
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="experiments">
-                  <Link style={{ color: 'white' }}>Experiments</Link>
+                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                    Experiments
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="samples">
-                  <Link style={{ color: 'white' }}>Samples</Link>
+                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                    Samples
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="help">
-                  <Link style={{ color: 'white' }}>Help</Link>
+                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                    Help
+                  </Link>
                 </Menu.Item>
               </Menu>
             </div>
