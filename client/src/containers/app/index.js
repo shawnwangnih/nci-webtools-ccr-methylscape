@@ -28,7 +28,6 @@ class App extends React.Component {
     projectSummery: ''
   };
   handleClick = e => {
-    console.log('click ', e);
     this.setState({
       current: e.key,
       filter: {

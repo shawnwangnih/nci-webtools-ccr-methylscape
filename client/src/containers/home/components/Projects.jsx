@@ -105,9 +105,6 @@ class Projects extends React.Component {
       parseInt(check[0]),
       parseInt(check[1])
     );
-    console.log(startDate);
-    console.log(endDate);
-    console.log(toCheck);
 
     return startDate <= toCheck && endDate >= toCheck;
   }
@@ -115,7 +112,6 @@ class Projects extends React.Component {
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
-          console.log(row.sampleSize);
           return (
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.investigator
@@ -169,7 +165,6 @@ class Projects extends React.Component {
   };
 
   handleDateChange = (date, dateString) => {
-    console.log(dateString);
     this.setState({ startDate: dateString[0], endDate: dateString[1] });
   };
 
