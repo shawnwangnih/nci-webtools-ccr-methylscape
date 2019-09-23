@@ -120,12 +120,13 @@ class App extends React.Component {
           <Header
             className="header"
             style={{
-              height: '90px',
+              height: 'auto',
               // theme: 'light',
-              background: 'back',
+              background: 'black',
               // position: 'fixed',
               zIndex: 1,
-              width: '100%'
+              width: '100%',
+              padding: '0'
             }}>
             <div
               style={{
@@ -137,9 +138,11 @@ class App extends React.Component {
               }}>
               <a href="https://ccr.cancer.gov/" target="_blank">
                 <img
+                  height="auto"
                   className="logo"
                   src="./assets/img/test-2.svg"
                   alt="National Cancer Institute"
+                  width="80%"
                 />
               </a>
             </div>
@@ -166,7 +169,7 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
-              'border-bottom': '1px solid #e8e8e8',
+              'border-bottom': '0',
               // position: 'fixed',
 
               background: 'steelblue'
@@ -182,7 +185,7 @@ class App extends React.Component {
               <Menu
                 onClick={this.handleClick}
                 selectedKeys={[this.state.current]}
-                theme="light"
+                theme="dark"
                 mode="horizontal"
                 style={{
                   width: '100%',
