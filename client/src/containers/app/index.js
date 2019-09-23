@@ -48,54 +48,6 @@ class App extends React.Component {
     );
   };
 
-  renderContent() {
-    if (this.state.current == 'projects') {
-      return (
-        <div>
-          <Projects
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-            project={this.state.projectSummery}
-            changeSummeryPorject={this.changeSummeryPorject}
-          />
-          <Summary
-            data={this.state.data}
-            project={this.state.projectSummery}
-            changeSummeryPorject={this.changeSummeryPorject}
-          />
-        </div>
-      );
-    }
-    if (this.state.current == 'experiments') {
-      return (
-        <div>
-          <Experiments
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-          />
-        </div>
-      );
-    }
-    if (this.state.current == 'samples') {
-      return (
-        <div>
-          <Samples
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Help />
-        </div>
-      );
-    }
-  }
   renderMain() {
     return (
       <Home
@@ -106,7 +58,6 @@ class App extends React.Component {
     );
   }
   render() {
-    let bodyContent = this.renderContent();
     let mainContent = this.renderMain();
     return (
       <div>
@@ -233,7 +184,6 @@ class App extends React.Component {
                 background: '#fff',
                 minHeight: 380
               }}>
-              {/*bodyContent*/}
               {mainContent}
               {/* <Route exact path="/methylscape" component={Home} />
               <Route
