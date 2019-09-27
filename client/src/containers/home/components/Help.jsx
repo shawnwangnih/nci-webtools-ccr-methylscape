@@ -6,11 +6,11 @@ class Help extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ padding: '30px' }}>
         <h3>About Methylscape</h3>
         <p>
           Methylscape allows users to see basic information on different
-          experiments/projects so that the user cha easily find the information
+          experiments/projects so that the user can easily find the information
           they are looking for.
         </p>
         <h3>Projects Page</h3>

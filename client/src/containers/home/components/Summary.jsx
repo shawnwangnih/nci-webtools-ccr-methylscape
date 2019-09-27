@@ -184,7 +184,7 @@ class Summary extends React.Component {
     });*/
     return (
       <div>
-        <h3 style={{ 'text-align': 'center' }}>
+        <h3 style={{ 'text-align': 'center', 'font-size': '20px' }}>
           Project summary: {this.state.project}
         </h3>
         <br />

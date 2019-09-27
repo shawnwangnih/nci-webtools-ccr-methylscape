@@ -145,25 +145,45 @@ class App extends React.Component {
                 }}>
                 {/* Home */}
                 <Menu.Item key="projects">
-                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
                     Project
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="experiments">
-                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
                     Experiments
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="samples">
-                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
                     Samples
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="help">
-                  <Link style={{ color: 'white', 'font-size': '16px' }}>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
                     Help
                   </Link>
                 </Menu.Item>
