@@ -1,3 +1,34 @@
 .testing {
+  /* background-color: #e9e9e9; */
+  /* background-color: chartreuse; */
+  background-color: lightblue;
+}
+.grayBack {
   background-color: #e9e9e9;
+}
+.grayBack:hover {
+  background-color: #e9e9e9;
+}
+.whiteBack {
+  background-color: white;
+}
+.whiteBack:hover {
+  background-color: white;
+}
+.ant-table-tbody > tr > td {
+  border-bottom: 0px;
+}
+
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+  background-color: inherit;
+}
+
+.ant-table {
+  line-height: 0.5;
+}
+.testing a:link {
+  color: white;
+}
+.testing a {
+  color: black;
 }

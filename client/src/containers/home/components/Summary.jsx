@@ -194,8 +194,8 @@ class Summary extends React.Component {
           align="middle"
           style={{
             'padding-bottom': '100px',
-            'padding-left': '5px',
-            'padding-right': '5px'
+            'padding-left': '30px',
+            'padding-right': '30px'
           }}>
           <Col
             span={8}
@@ -204,11 +204,13 @@ class Summary extends React.Component {
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
-              height="380px"
+              height="350px"
               data={this.getMethylationClasses()}
               legend={false}
             />
-            <div className="overflow-box">{this.renderMethylationLegend()}</div>
+            <div className="overflow-box" style={{ 'padding-left': '26px' }}>
+              {this.renderMethylationLegend()}
+            </div>
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
@@ -230,8 +232,10 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
             />*/}
-            <PieChart height="380px" data={this.getGender()} legend={false} />
-            <div className="overflow-box">{this.renderGenderLegend()}</div>
+            <PieChart height="350px" data={this.getGender()} legend={false} />
+            <div className="overflow-box" style={{ 'padding-left': '26px' }}>
+              {this.renderGenderLegend()}
+            </div>
           </Col>
           <Col
             span={8}
@@ -243,7 +247,13 @@ class Summary extends React.Component {
             }}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
-            <ColumnChart height="380px" data={this.getAgeDistribution()} />
+            <ColumnChart
+              height="350px"
+              data={this.getAgeDistribution()}
+              library={{
+                scales: { yAxes: [{ gridLines: { display: false } }] }
+              }}
+            />
           </Col>
         </Row>
       </div>
