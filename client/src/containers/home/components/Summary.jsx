@@ -195,7 +195,7 @@ class Summary extends React.Component {
           style={{
             'padding-bottom': '100px',
             'padding-left': '30px',
-            'padding-right': '30px'
+            'padding-right': '81px'
           }}>
           <Col
             span={8}
@@ -204,11 +204,11 @@ class Summary extends React.Component {
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
-              height="350px"
+              height="300px"
               data={this.getMethylationClasses()}
               legend={false}
             />
-            <div className="overflow-box" style={{ 'padding-left': '26px' }}>
+            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderMethylationLegend()}
             </div>
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
@@ -232,8 +232,8 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
             />*/}
-            <PieChart height="350px" data={this.getGender()} legend={false} />
-            <div className="overflow-box" style={{ 'padding-left': '26px' }}>
+            <PieChart height="300px" data={this.getGender()} legend={false} />
+            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderGenderLegend()}
             </div>
           </Col>
@@ -243,12 +243,12 @@ class Summary extends React.Component {
             style={{
               'margin-bottom': '84px',
               'padding-left': '5px',
-              'padding-right': '5px'
+              'padding-right': '56px'
             }}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
             <ColumnChart
-              height="350px"
+              height="300px"
               data={this.getAgeDistribution()}
               library={{
                 scales: { yAxes: [{ gridLines: { display: false } }] }
