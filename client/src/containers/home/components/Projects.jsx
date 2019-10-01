@@ -231,7 +231,7 @@ class Projects extends React.Component {
       }
     ];
     return (
-      <div>
+      <div style={{'padding-left':'30px', 'padding-right':'30px'}}>
         <div
           style={{
             'padding-left': '16px',
@@ -317,7 +317,6 @@ class Projects extends React.Component {
           columns={columns}
           dataSource={this.state.filteredData}
           onChange={this.handleTableChange}
-          style={{'padding-left':'30px', 'padding-right':'30px'}}
         />
       </div>
     );
