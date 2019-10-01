@@ -195,7 +195,7 @@ class Summary extends React.Component {
           style={{
             'padding-bottom': '100px',
             'padding-left': '30px',
-            'padding-right': '81px'
+            'padding-right': '30px'
           }}>
           <Col
             span={8}
