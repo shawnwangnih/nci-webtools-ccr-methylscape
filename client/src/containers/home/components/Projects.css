@@ -18,6 +18,10 @@
 .ant-table-tbody > tr > td {
   border-bottom: 0px;
 }
+.ant-table-thead > tr > th {
+  border-bottom: 0px;
+  background-color:white;
+}
 
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
   background-color: inherit;
