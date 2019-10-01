@@ -77,10 +77,11 @@ class Projects extends React.Component {
 
   rangeFunction(total, range) {
     return (
+      'Showing ' + 
       range[0].toString() +
-      '-' +
+      ' to ' +
       range[1].toString() +
-      'of ' +
+      ' of ' +
       total.toString() +
       ' items'
     );
@@ -234,7 +235,7 @@ class Projects extends React.Component {
       <div style={{'padding-left':'30px', 'padding-right':'30px'}}>
         <div
           style={{
-            'padding-left': '16px',
+            'padding-left': '0px',
             'padding-bottom': '0',
             'padding-top': '20px'
           }}>
@@ -309,7 +310,7 @@ class Projects extends React.Component {
           }}
           {...this.state}
           pagination={{
-            position: 'both',
+            position: 'bottom',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
             showTotal: this.rangeFunction
