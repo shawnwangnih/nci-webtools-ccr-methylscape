@@ -33,17 +33,17 @@
   /*color: chartreuse;*/
 }
 
-.ant-pagination-options{
-  position:absolute;
-  left:0;
-  margin-left:0;
+.ant-pagination-options {
+  position: absolute;
+  left: 0;
+  margin-left: 0;
 }
-.ant-pagination-total-text{
-  position:absolute;
-  left:120px;
+.ant-pagination-total-text {
+  position: absolute;
+  left: 120px;
 }
 
-.ant-pagination-item{
-  position:relative !important;
-  left:0;
+.ant-pagination-item {
+  position: relative !important;
+  left: 0;
 }

@@ -72,7 +72,7 @@ class App extends React.Component {
             style={{
               height: 'auto',
               // theme: 'light',
-              background: 'black',
+              background: '#f0f2f5',
               // position: 'fixed',
               zIndex: 1,
               width: '100%',
@@ -90,9 +90,10 @@ class App extends React.Component {
                 <img
                   height="auto"
                   className="logo"
-                  src="./assets/img/test-2.svg"
+                  src="./assets/img/NIH_NCI_Logo_Grey.svg"
                   alt="National Cancer Institute"
                   width="80%"
+                  style={{'padding-top':'20px', 'padding-bottom':'20px'}}
                 />
               </a>
             </div>

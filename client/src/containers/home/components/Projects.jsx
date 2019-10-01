@@ -77,7 +77,7 @@ class Projects extends React.Component {
 
   rangeFunction(total, range) {
     return (
-      'Showing ' + 
+      'Showing ' +
       range[0].toString() +
       ' to ' +
       range[1].toString() +
@@ -232,7 +232,7 @@ class Projects extends React.Component {
       }
     ];
     return (
-      <div style={{'padding-left':'30px', 'padding-right':'30px'}}>
+      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
             'padding-left': '0px',
