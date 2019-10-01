@@ -4,7 +4,6 @@ import { Table, Input, Button, Form, Select } from 'antd';
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       filterExperiment: '',
       filterDate: '',
@@ -33,7 +32,6 @@ class Experiments extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         this.setState({ experiments: data });
         this.setState({ filteredData: data });
         this.setState({ loading: false });

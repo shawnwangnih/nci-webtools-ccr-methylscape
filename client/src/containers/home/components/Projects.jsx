@@ -15,7 +15,10 @@ class Projects extends React.Component {
       pagination: {
         position: 'bottom',
         size: 5,
-        showSizeChanger: true
+        showSizeChanger: true,
+        style: {
+          'margin-bottom': '0px'
+        }
       },
       sortedInfo: null,
       data: [],
@@ -29,6 +32,7 @@ class Projects extends React.Component {
     };
   }
 
+  //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
     if (nextProps.data.length == 0) {
       return;
@@ -82,6 +86,8 @@ class Projects extends React.Component {
     );
   }
 
+  //Checks the dates from the form and and each date in the table
+  //and sees if the date falls between the two days
   checkDates(date, s, e) {
     if (s == '' || e == '') {
       return true;
@@ -105,9 +111,6 @@ class Projects extends React.Component {
       parseInt(check[0]),
       parseInt(check[1])
     );
-    console.log(startDate);
-    console.log(endDate);
-    console.log(toCheck);
 
     return startDate <= toCheck && endDate >= toCheck;
   }
@@ -115,7 +118,6 @@ class Projects extends React.Component {
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
-          console.log(row.sampleSize);
           return (
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.investigator
@@ -169,7 +171,6 @@ class Projects extends React.Component {
   };
 
   handleDateChange = (date, dateString) => {
-    console.log(dateString);
     this.setState({ startDate: dateString[0], endDate: dateString[1] });
   };
 
@@ -295,13 +296,16 @@ class Projects extends React.Component {
         <br />
         <Table
           rowClassName={(record, index) => {
-            return this.state.currRecord == ''
-              ? index == 0
+            let selected =
+              this.state.currRecord == ''
+                ? index == 0
+                  ? 'testing'
+                  : ''
+                : record.project == this.state.currRecord
                 ? 'testing'
-                : ''
-              : record.project == this.state.currRecord
-              ? 'testing'
-              : '';
+                : '';
+            let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            return selected == '' ? coloring : selected;
           }}
           {...this.state}
           pagination={{
@@ -314,7 +318,6 @@ class Projects extends React.Component {
           dataSource={this.state.filteredData}
           onChange={this.handleTableChange}
         />
-        <br />
       </div>
     );
   }

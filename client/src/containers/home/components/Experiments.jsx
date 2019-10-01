@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Input, Button, Form, Select } from 'antd';
 import fileSaver from 'file-saver';
-
+import './Experiments.css';
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
@@ -155,7 +155,7 @@ class Experiments extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '20%',
+        width: '15%',
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         render: (text, record) => (
           <a
@@ -177,7 +177,7 @@ class Experiments extends React.Component {
         title: '# of Samples',
         dataIndex: 'sampleSize',
         sorter: true,
-        width: '10%',
+        width: '13%',
         sorter: (a, b) => a.sampleSize - b.sampleSize,
         render: (text, record) => (
           <a
@@ -192,11 +192,11 @@ class Experiments extends React.Component {
         title: 'Date Created',
         dataIndex: 'date',
         sorter: true,
-        width: '10%'
+        width: '13%'
       },
       {
         title: 'QC Sheet',
-        width: '13%',
+        width: '9%',
         render: record => (
           <a
             onClick={() =>
@@ -211,7 +211,7 @@ class Experiments extends React.Component {
       },
       {
         title: 'QC Supplementary',
-        width: '12%',
+        width: '15%',
         render: record => (
           <a
             onClick={() =>
@@ -282,6 +282,9 @@ class Experiments extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
+            rowClassName={(record, index) => {
+              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            }}
           />
         </div>
       </div>

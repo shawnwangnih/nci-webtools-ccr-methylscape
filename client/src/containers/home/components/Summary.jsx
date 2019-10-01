@@ -184,7 +184,7 @@ class Summary extends React.Component {
     });*/
     return (
       <div>
-        <h3 style={{ 'text-align': 'center' }}>
+        <h3 style={{ 'text-align': 'center', 'font-size': '20px' }}>
           Project summary: {this.state.project}
         </h3>
         <br />
@@ -192,16 +192,25 @@ class Summary extends React.Component {
           type="flex"
           justify="center"
           align="middle"
-          style={{ 'padding-bottom': '100px' }}>
-          <Col span={8} order={1}>
+          style={{
+            'padding-bottom': '100px',
+            'padding-left': '30px',
+            'padding-right': '30px'
+          }}>
+          <Col
+            span={8}
+            order={1}
+            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
-              height="380px"
+              height="300px"
               data={this.getMethylationClasses()}
               legend={false}
             />
-            <div className="overflow-box">{this.renderMethylationLegend()}</div>
+            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+              {this.renderMethylationLegend()}
+            </div>
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
@@ -211,7 +220,10 @@ class Summary extends React.Component {
               height="70%"
   />*/}
           </Col>
-          <Col span={8} order={2}>
+          <Col
+            span={8}
+            order={2}
+            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
             {/*<canvas
@@ -220,13 +232,28 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
             />*/}
-            <PieChart height="380px" data={this.getGender()} legend={false} />
-            <div className="overflow-box">{this.renderGenderLegend()}</div>
+            <PieChart height="300px" data={this.getGender()} legend={false} />
+            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+              {this.renderGenderLegend()}
+            </div>
           </Col>
-          <Col span={8} order={3} style={{ 'margin-bottom': '84px' }}>
+          <Col
+            span={8}
+            order={3}
+            style={{
+              'margin-bottom': '84px',
+              'padding-left': '5px',
+              'padding-right': '56px'
+            }}>
             <h4 className="summery-data-title">Age Distribution</h4>
             <br />
-            <ColumnChart height="380px" data={this.getAgeDistribution()} />
+            <ColumnChart
+              height="300px"
+              data={this.getAgeDistribution()}
+              library={{
+                scales: { yAxes: [{ gridLines: { display: false } }] }
+              }}
+            />
           </Col>
         </Row>
       </div>

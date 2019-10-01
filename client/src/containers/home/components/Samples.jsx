@@ -77,7 +77,7 @@ class Samples extends React.Component {
         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={text == undefined ? '' : text.toString()}
       />
     )
   });
@@ -193,13 +193,15 @@ class Samples extends React.Component {
   };
 
   async downloadFile(sampleId, file) {
+    console.log('Sample: ' + sampleId);
+    console.log('File: ' + file);
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
     try {
-      let response = await fetch(`${root}/getMethylScapeFile`, {
+      let response = await fetch(`${root}getMethylScapeFile`, {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,
@@ -470,6 +472,9 @@ class Samples extends React.Component {
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
             scroll={{ x: 3800 }}
+            rowClassName={(record, index) => {
+              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            }}
           />
         </div>
       </div>

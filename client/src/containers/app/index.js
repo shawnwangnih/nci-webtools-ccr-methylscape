@@ -8,6 +8,7 @@ import Summary from '../home/components/Summary';
 import Experiments from '../home/components/Experiments';
 import Samples from '../home/components/Samples';
 import Projects from '../home/components/Projects';
+//import Help from '../home/components/Help'
 import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
 import './index.css';
@@ -27,7 +28,6 @@ class App extends React.Component {
     projectSummery: ''
   };
   handleClick = e => {
-    console.log('click ', e);
     this.setState({
       current: e.key,
       filter: {
@@ -48,54 +48,6 @@ class App extends React.Component {
     );
   };
 
-  renderContent() {
-    if (this.state.current == 'projects') {
-      return (
-        <div>
-          <Projects
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-            project={this.state.projectSummery}
-            changeSummeryPorject={this.changeSummeryPorject}
-          />
-          <Summary
-            data={this.state.data}
-            project={this.state.projectSummery}
-            changeSummeryPorject={this.changeSummeryPorject}
-          />
-        </div>
-      );
-    }
-    if (this.state.current == 'experiments') {
-      return (
-        <div>
-          <Experiments
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-          />
-        </div>
-      );
-    }
-    if (this.state.current == 'samples') {
-      return (
-        <div>
-          <Samples
-            data={this.state.data}
-            changeTab={this.changeTab}
-            filter={this.state.filter}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <p>Help Info</p>
-        </div>
-      );
-    }
-  }
   renderMain() {
     return (
       <Home
@@ -106,8 +58,6 @@ class App extends React.Component {
     );
   }
   render() {
-    console.log('RERENDERING: ' + this.state.current);
-    let bodyContent = this.renderContent();
     let mainContent = this.renderMain();
     return (
       <div>
@@ -120,26 +70,29 @@ class App extends React.Component {
           <Header
             className="header"
             style={{
-              height: '90px',
+              height: 'auto',
               // theme: 'light',
-              background: 'back',
+              background: 'black',
               // position: 'fixed',
               zIndex: 1,
-              width: '100%'
+              width: '100%',
+              padding: '0'
             }}>
             <div
               style={{
-                padding: '0px 50px',
+                padding: '0 50px',
                 'max-width': '1400px',
                 width: '100%',
                 'margin-right': 'auto',
                 'margin-left': 'auto'
               }}>
-              <a href="https://ccr.cancer.gov/">
+              <a href="https://ccr.cancer.gov/" target="_blank">
                 <img
+                  height="auto"
                   className="logo"
                   src="./assets/img/test-2.svg"
                   alt="National Cancer Institute"
+                  width="80%"
                 />
               </a>
             </div>
@@ -166,7 +119,7 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
-              'border-bottom': '1px solid #e8e8e8',
+              'border-bottom': '0',
               // position: 'fixed',
 
               background: 'steelblue'
@@ -182,7 +135,7 @@ class App extends React.Component {
               <Menu
                 onClick={this.handleClick}
                 selectedKeys={[this.state.current]}
-                theme="light"
+                theme="dark"
                 mode="horizontal"
                 style={{
                   width: '100%',
@@ -192,19 +145,47 @@ class App extends React.Component {
                 }}>
                 {/* Home */}
                 <Menu.Item key="projects">
-                  <Link style={{ color: 'white' }}>Project</Link>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
+                    Project
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="experiments">
-                  <Link style={{ color: 'white' }}>Experiments</Link>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
+                    Experiments
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="samples">
-                  <Link style={{ color: 'white' }}>Samples</Link>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
+                    Samples
+                  </Link>
                 </Menu.Item>
 
                 <Menu.Item key="help">
-                  <Link style={{ color: 'white' }}>Help</Link>
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
+                    Help
+                  </Link>
                 </Menu.Item>
               </Menu>
             </div>
@@ -223,7 +204,6 @@ class App extends React.Component {
                 background: '#fff',
                 minHeight: 380
               }}>
-              {/*bodyContent*/}
               {mainContent}
               {/* <Route exact path="/methylscape" component={Home} />
               <Route
