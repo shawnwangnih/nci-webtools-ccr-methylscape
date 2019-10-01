@@ -32,3 +32,18 @@
 .testing a {
   /*color: chartreuse;*/
 }
+
+.ant-pagination-options{
+  position:absolute;
+  left:0;
+  margin-left:0;
+}
+.ant-pagination-total-text{
+  position:absolute;
+  left:130px;
+}
+
+.ant-pagination-item{
+  position:relative !important;
+  left:0;
+}
