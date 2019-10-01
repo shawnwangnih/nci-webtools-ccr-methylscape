@@ -309,7 +309,7 @@ class Projects extends React.Component {
           }}
           {...this.state}
           pagination={{
-            position: 'bottom',
+            position: 'both',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
             showTotal: this.rangeFunction
