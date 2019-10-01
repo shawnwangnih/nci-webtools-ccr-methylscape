@@ -241,22 +241,22 @@ class Projects extends React.Component {
           {/* <PageHeader title={"MethylScape Results"} /> */}
           <br />
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Investigator">
+            <Form.Item>
               <Input
                 value={this.state.filterInvestigator}
                 onChange={e =>
                   this.setState({ filterInvestigator: e.target.value })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="Jane Doe"
+                placeholder="Investigator Name"
               />
             </Form.Item>
             {/*<Form.Item label="# of experiments">

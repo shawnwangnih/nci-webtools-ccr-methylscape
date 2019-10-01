@@ -239,21 +239,21 @@ class Experiments extends React.Component {
             'padding-top': '20px'
           }}>
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Experiments">
+            <Form.Item>
               <Input
                 value={this.state.filterExperiment}
                 onChange={e =>
                   this.setState({ filterExperiment: e.target.value })
                 }
-                placeholder="MethylScape"
+                placeholder="Experiment Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
