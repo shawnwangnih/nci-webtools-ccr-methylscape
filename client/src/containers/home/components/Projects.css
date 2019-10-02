@@ -77,6 +77,17 @@
   background-color:#f0f2f5;
 }
 
+.ant-pagination.mini .ant-pagination-item:not(.ant-pagination-item-active):hover {
+  background-color: #f0f2f5;
+}
+
+.ant-pagination-next:not(.ant-pagination-disabled):hover {
+  background-color: #f0f2f5;
+}
+.ant-pagination-prev:not(.ant-pagination-disabled):hover {
+  background-color: #f0f2f5;
+}
+
 .ant-pagination-item:focus {
   border-color: transparent;
 }
