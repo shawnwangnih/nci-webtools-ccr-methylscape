@@ -321,7 +321,8 @@ class Projects extends React.Component {
             position: 'bottom',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
-            showTotal: this.rangeFunction
+            showTotal: this.rangeFunction,
+            itemRender: this.itemRender
           }}
           columns={columns}
           dataSource={this.state.filteredData}
