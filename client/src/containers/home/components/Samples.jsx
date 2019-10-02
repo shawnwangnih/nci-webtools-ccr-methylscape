@@ -16,12 +16,25 @@ class Samples extends React.Component {
         size: 'small',
         // pageSize: 15,
         showSizeChanger: true,
-        itemRender: this.itemRender
+        itemRender: this.itemRender,
+        showTotal: this.rangeFunction,
       },
       rawData: props.data,
       data: [],
       filteredData: []
     };
+  }
+
+  rangeFunction(total, range) {
+    return (
+      'Showing ' +
+      range[0].toString() +
+      ' to ' +
+      range[1].toString() +
+      ' of ' +
+      total.toString() +
+      ' items'
+    );
   }
 
   getColumnSearchProps = dataIndex => ({
