@@ -13,9 +13,10 @@ class Samples extends React.Component {
       loading: true,
       pagination: {
         position: 'bottom',
-        size: 5,
+        size: 'small',
         // pageSize: 15,
-        showSizeChanger: true
+        showSizeChanger: true,
+        itemRender: this.itemRender
       },
       rawData: props.data,
       data: [],
@@ -229,6 +230,16 @@ class Samples extends React.Component {
       */
   }
 
+  itemRender(current,type,originalElement){
+    if (type === 'prev') {
+      return <a>&#60;</a>;
+    }
+    if (type === 'next') {
+      return <a>&#62;</a>;
+    }
+    return <a>{current}</a>
+  }
+
   render() {
     const columns = [
       {
@@ -419,13 +430,12 @@ class Samples extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div>
-        <br />
+      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '16px',
-            'padding-bottom': '0',
-            'padding-top': '20px'
+            'padding-left': '0',
+            'padding-bottom': '5px',
+            'padding-top': '2px'
           }}>
           <Form layout="inline">
             <Form.Item label="Project">
@@ -464,7 +474,6 @@ class Samples extends React.Component {
             </Form.Item>
           </Form>
         </div>
-        <br />
         <div>
           <Table
             {...this.state}
