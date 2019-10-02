@@ -59,3 +59,28 @@
 .ant-table-tbody > tr > td.ant-table-column-sort{
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+.ant-pagination-item-active{
+  border-color:transparent;
+}
+
+.ant-pagination-item-active:hover{
+  border-color:transparent;
+}
+
+.ant-pagination-item-active:focus{
+  border-color:transparent;
+}
+
+.ant-pagination-item:hover{
+  border-color:transparent;
+}
+
+.ant-pagination-item:focus{
+  border-color:transparent;
+}
+
+.ant-pagination-item-active a{
+  color:black;
+  text-decoration:underline;
+}
