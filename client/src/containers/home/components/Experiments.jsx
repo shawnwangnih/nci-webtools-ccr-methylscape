@@ -16,7 +16,7 @@ class Experiments extends React.Component {
         // pageSize: 15,
         showSizeChanger: true,
         itemRender: this.itemRender,
-        showTotal: this.rangeFunction,
+        showTotal: this.rangeFunction
       },
       rawData: props.data,
       data: [],
@@ -148,16 +148,15 @@ class Experiments extends React.Component {
     );
   };
 
-  itemRender(current,type,originalElement){
+  itemRender(current, type, originalElement) {
     if (type === 'prev') {
       return <a>&#60;</a>;
     }
     if (type === 'next') {
       return <a>&#62;</a>;
     }
-    return <a>{current}</a>
+    return <a>{current}</a>;
   }
-
 
   render() {
     const columns = [

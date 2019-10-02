@@ -20,7 +20,7 @@
 }
 .ant-table-thead > tr > th {
   /*border-bottom: 0px;*/
-  background-color:white;
+  background-color: white;
 }
 
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
@@ -52,40 +52,40 @@
   left: 0;
 }
 
-.ant-table-thead > tr > th.ant-table-column-sort{
+.ant-table-thead > tr > th.ant-table-column-sort {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.ant-table-tbody > tr > td.ant-table-column-sort{
+.ant-table-tbody > tr > td.ant-table-column-sort {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.ant-pagination-item-active{
-  border-color:transparent;
+.ant-pagination-item-active {
+  border-color: transparent;
 }
 
-.ant-pagination-item-active:hover{
-  border-color:transparent;
+.ant-pagination-item-active:hover {
+  border-color: transparent;
 }
 
-.ant-pagination-item-active:focus{
-  border-color:transparent;
+.ant-pagination-item-active:focus {
+  border-color: transparent;
 }
 
-.ant-pagination-item:hover{
-  border-color:transparent;
+.ant-pagination-item:hover {
+  border-color: transparent;
 }
 
-.ant-pagination-item:focus{
-  border-color:transparent;
+.ant-pagination-item:focus {
+  border-color: transparent;
 }
 
-.ant-pagination-item-active a{
-  color:black;
-  text-decoration:underline;
+.ant-pagination-item-active a {
+  color: black;
+  text-decoration: underline;
 }
 
-.ant-pagination-item-active:focus a{
-  color:black;
-  text-decoration:underline;
+.ant-pagination-item-active:focus a {
+  color: black;
+  text-decoration: underline;
 }

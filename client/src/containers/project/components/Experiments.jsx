@@ -49,15 +49,15 @@ class Experiments extends React.Component {
     });
   };
 
-  itemRender(current,type,originalElement){
+  itemRender(current, type, originalElement) {
     if (type === 'prev') {
       return <a>&#60;</a>;
     }
     if (type === 'next') {
       return <a>&#62;</a>;
     }
-    return <a>{current}</a>
-  }  
+    return <a>{current}</a>;
+  }
 
   render() {
     const columns = [

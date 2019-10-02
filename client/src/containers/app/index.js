@@ -93,7 +93,7 @@ class App extends React.Component {
                   src="./assets/img/NIH_NCI_Logo_Grey.svg"
                   alt="National Cancer Institute"
                   width="80%"
-                  style={{'padding-top':'20px', 'padding-bottom':'20px'}}
+                  style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
                 />
               </a>
             </div>
