@@ -73,7 +73,9 @@ class Projects extends React.Component {
     });
     this.setState({ data: Object.values(projectData) });
     this.setState({ filteredData: Object.values(projectData) });
-    console.log(JSON.stringify(this.state.filteredData));
+    if (this.state.currRecord == '') {
+      this.setState({ currRecord: Object.values(projectData)[0]['project'] });
+    }
   };
 
   rangeFunction(total, range) {
