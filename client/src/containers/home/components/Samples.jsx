@@ -261,6 +261,7 @@ class Samples extends React.Component {
         sorter: true,
         width: '320',
         fixed: 'left',
+        defaultSortOrder: 'ascend',
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
       },

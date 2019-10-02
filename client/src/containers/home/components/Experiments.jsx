@@ -166,6 +166,7 @@ class Experiments extends React.Component {
         sorter: true,
         width: '20%',
         sorter: (a, b) => a.project.localeCompare(b.project),
+        defaultSortOrder: 'ascend',
         render: (text, record) => (
           <a
             onClick={() =>
