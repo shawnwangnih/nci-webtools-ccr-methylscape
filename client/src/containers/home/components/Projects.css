@@ -51,7 +51,7 @@
   position: relative !important;
   left: 0;
 }
-
+/*
 .ant-table-thead > tr > th.ant-table-column-sort {
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -59,6 +59,7 @@
 .ant-table-tbody > tr > td.ant-table-column-sort {
   background-color: rgba(0, 0, 0, 0.1);
 }
+*/
 
 .ant-pagination-item-active {
   border-color: transparent;
