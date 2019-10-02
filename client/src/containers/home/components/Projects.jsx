@@ -71,10 +71,18 @@ class Projects extends React.Component {
         projectData[curProject].experiments.add(sample.experiment);
       }
     });
+    
     this.setState({ data: Object.values(projectData) });
     this.setState({ filteredData: Object.values(projectData) });
+
     if (this.state.currRecord == '') {
-      this.setState({ currRecord: Object.values(projectData)[0]['project'] });
+      let unsorted = Object.values(projectData);
+      let sorted = [];
+      for(let i = 0; i < unsorted.length; i++){
+        sorted.push(unsorted[i]['project']);
+      }
+      sorted.sort();
+      this.setState({ currRecord: sorted[0]});
     }
   };
 
