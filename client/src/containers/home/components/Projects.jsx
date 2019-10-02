@@ -14,7 +14,7 @@ class Projects extends React.Component {
       loading: true,
       pagination: {
         position: 'bottom',
-        size: 5,
+        size: 'small',
         showSizeChanger: true,
         style: {
           'margin-bottom': '0px'
