@@ -236,8 +236,8 @@ class Projects extends React.Component {
         <div
           style={{
             'padding-left': '0px',
-            'padding-bottom': '0',
-            'padding-top': '20px'
+            'padding-bottom': '5px',
+            'padding-top': '2px'
           }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
           <br />
