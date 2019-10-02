@@ -175,6 +175,16 @@ class Projects extends React.Component {
     this.setState({ startDate: dateString[0], endDate: dateString[1] });
   };
 
+  itemRender(current,type,originalElement){
+    if (type === 'prev') {
+      return <a>&#60;</a>;
+    }
+    if (type === 'next') {
+      return <a>&#62;</a>;
+    }
+    return <a>{current}</a>
+  }
+
   render() {
     const columns = [
       {
