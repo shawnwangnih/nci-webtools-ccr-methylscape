@@ -250,7 +250,6 @@ class Projects extends React.Component {
             'padding-top': '2px'
           }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
-          <br />
           <Form layout="inline">
             <Form.Item>
               <Input
@@ -304,7 +303,6 @@ class Projects extends React.Component {
             </Form.Item>
           </Form>
         </div>
-        <br />
         <Table
           rowClassName={(record, index) => {
             let selected =
