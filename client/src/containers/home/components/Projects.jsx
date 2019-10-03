@@ -343,7 +343,10 @@ class Projects extends React.Component {
           }}
           onRow={(record,rowIndex) =>{
             return {
-              onClick: this.handleRowClick
+              onClick: () => {
+                console.log("RECORD: " + record);
+                console.log("INDEX: " + rowIndex);
+              }
             }
           }}
           columns={columns}
