@@ -71,18 +71,18 @@ class Projects extends React.Component {
         projectData[curProject].experiments.add(sample.experiment);
       }
     });
-    
+
     this.setState({ data: Object.values(projectData) });
     this.setState({ filteredData: Object.values(projectData) });
 
     if (this.state.currRecord == '') {
       let unsorted = Object.values(projectData);
       let sorted = [];
-      for(let i = 0; i < unsorted.length; i++){
+      for (let i = 0; i < unsorted.length; i++) {
         sorted.push(unsorted[i]['project']);
       }
       sorted.sort();
-      this.setState({ currRecord: sorted[0]});
+      this.setState({ currRecord: sorted[0] });
     }
   };
 
@@ -196,7 +196,7 @@ class Projects extends React.Component {
     return <a>{current}</a>;
   }
 
-  handleRowClick(record, rowIndex){
+  handleRowClick(record, rowIndex) {
     console.log('RECORD: ' + record);
     console.log('INDEX: ' + rowIndex);
   }
@@ -341,15 +341,12 @@ class Projects extends React.Component {
             showTotal: this.rangeFunction,
             itemRender: this.itemRender
           }}
-          onRow={(record,rowIndex) =>{
+          onRow={(record, rowIndex) => {
             return {
               onClick: event => {
-                console.log("RECORD: " + record);
-                console.log("INDEX: " + rowIndex);
-              },
-
-
-            }
+                this.handleProjectClick(rowIndex, record);
+              }
+            };
           }}
           columns={columns}
           dataSource={this.state.filteredData}
