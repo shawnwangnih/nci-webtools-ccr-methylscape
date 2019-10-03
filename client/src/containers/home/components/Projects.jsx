@@ -54,7 +54,7 @@ class Projects extends React.Component {
     var projectData = {};
     rawData.map(sample => {
       var curProject = sample.project;
-      if (curProject == null) {
+      if (curProject == null || sample.experiment == null) {
       } else if (curProject in projectData) {
         projectData[curProject].sampleSize =
           projectData[curProject].sampleSize + 1;
@@ -196,6 +196,11 @@ class Projects extends React.Component {
     return <a>{current}</a>;
   }
 
+  handleRowClick(record, rowIndex){
+    console.log('RECORD: ' + record);
+    console.log('INDEX: ' + rowIndex);
+  }
+
   render() {
     const columns = [
       {
@@ -335,6 +340,11 @@ class Projects extends React.Component {
             showSizeChanger: this.state.pagination.showSizeChanger,
             showTotal: this.rangeFunction,
             itemRender: this.itemRender
+          }}
+          onRow={(record,rowIndex) =>{
+            return {
+              onClick: this.handleRowClick
+            }
           }}
           columns={columns}
           dataSource={this.state.filteredData}
