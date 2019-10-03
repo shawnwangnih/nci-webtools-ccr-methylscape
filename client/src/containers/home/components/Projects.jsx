@@ -83,6 +83,7 @@ class Projects extends React.Component {
       }
       sorted.sort();
       this.setState({ currRecord: sorted[0] });
+      this.props.changeSummeryPorject(sorted[0]);
     }
   };
 
