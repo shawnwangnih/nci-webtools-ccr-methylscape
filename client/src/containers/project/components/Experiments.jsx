@@ -10,9 +10,10 @@ class Experiments extends React.Component {
       loading: true,
       pagination: {
         position: 'bottom',
-        size: 5,
+        size: 'small',
         // pageSize: 15,
-        showSizeChanger: true
+        showSizeChanger: true,
+        itemRender: this.itemRender
       },
       data: [],
       filteredData: []
@@ -47,6 +48,16 @@ class Experiments extends React.Component {
       })
     });
   };
+
+  itemRender(current, type, originalElement) {
+    if (type === 'prev') {
+      return <a>&#60;</a>;
+    }
+    if (type === 'next') {
+      return <a>&#62;</a>;
+    }
+    return <a>{current}</a>;
+  }
 
   render() {
     const columns = [
@@ -92,13 +103,12 @@ class Experiments extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div>
-        <br />
+      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
             'padding-left': '16px',
-            'padding-bottom': '0',
-            'padding-top': '20px'
+            'padding-bottom': '5px',
+            'padding-top': '2px'
           }}>
           <Form layout="inline">
             <Form.Item label="Experiment">

@@ -14,7 +14,7 @@ class Projects extends React.Component {
       loading: true,
       pagination: {
         position: 'bottom',
-        size: 5,
+        size: 'small',
         showSizeChanger: true,
         style: {
           'margin-bottom': '0px'
@@ -54,7 +54,7 @@ class Projects extends React.Component {
     var projectData = {};
     rawData.map(sample => {
       var curProject = sample.project;
-      if (curProject == null) {
+      if (curProject == null || sample.experiment == null) {
       } else if (curProject in projectData) {
         projectData[curProject].sampleSize =
           projectData[curProject].sampleSize + 1;
@@ -71,16 +71,29 @@ class Projects extends React.Component {
         projectData[curProject].experiments.add(sample.experiment);
       }
     });
+
     this.setState({ data: Object.values(projectData) });
     this.setState({ filteredData: Object.values(projectData) });
+
+    if (this.state.currRecord == '') {
+      let unsorted = Object.values(projectData);
+      let sorted = [];
+      for (let i = 0; i < unsorted.length; i++) {
+        sorted.push(unsorted[i]['project']);
+      }
+      sorted.sort();
+      this.setState({ currRecord: sorted[0] });
+      this.props.changeSummeryPorject(sorted[0]);
+    }
   };
 
   rangeFunction(total, range) {
     return (
+      'Showing ' +
       range[0].toString() +
-      '-' +
+      ' to ' +
       range[1].toString() +
-      'of ' +
+      ' of ' +
       total.toString() +
       ' items'
     );
@@ -174,6 +187,21 @@ class Projects extends React.Component {
     this.setState({ startDate: dateString[0], endDate: dateString[1] });
   };
 
+  itemRender(current, type, originalElement) {
+    if (type === 'prev') {
+      return <a>&#60;</a>;
+    }
+    if (type === 'next') {
+      return <a>&#62;</a>;
+    }
+    return <a>{current}</a>;
+  }
+
+  handleRowClick(record, rowIndex) {
+    console.log('RECORD: ' + record);
+    console.log('INDEX: ' + rowIndex);
+  }
+
   render() {
     const columns = [
       {
@@ -182,6 +210,7 @@ class Projects extends React.Component {
         sorter: true,
         width: '20%',
         sorter: (a, b) => a.key.localeCompare(b.key),
+        defaultSortOrder: 'ascend',
         render: (text, record) => (
           <a onClick={() => this.handleProjectClick(text, record)}>{text}</a>
         )
@@ -231,32 +260,31 @@ class Projects extends React.Component {
       }
     ];
     return (
-      <div>
+      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '16px',
-            'padding-bottom': '0',
-            'padding-top': '20px'
+            'padding-left': '0px',
+            'padding-bottom': '5px',
+            'padding-top': '2px'
           }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
-          <br />
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Investigator">
+            <Form.Item>
               <Input
                 value={this.state.filterInvestigator}
                 onChange={e =>
                   this.setState({ filterInvestigator: e.target.value })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="Jane Doe"
+                placeholder="Investigator Name"
               />
             </Form.Item>
             {/*<Form.Item label="# of experiments">
@@ -293,7 +321,6 @@ class Projects extends React.Component {
             </Form.Item>
           </Form>
         </div>
-        <br />
         <Table
           rowClassName={(record, index) => {
             let selected =
@@ -312,7 +339,15 @@ class Projects extends React.Component {
             position: 'bottom',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
-            showTotal: this.rangeFunction
+            showTotal: this.rangeFunction,
+            itemRender: this.itemRender
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event => {
+                this.handleProjectClick(rowIndex, record);
+              }
+            };
           }}
           columns={columns}
           dataSource={this.state.filteredData}

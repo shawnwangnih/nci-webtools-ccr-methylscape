@@ -12,14 +12,28 @@ class Experiments extends React.Component {
       loading: true,
       pagination: {
         position: 'bottom',
-        size: 5,
+        size: 'small',
         // pageSize: 15,
-        showSizeChanger: true
+        showSizeChanger: true,
+        itemRender: this.itemRender,
+        showTotal: this.rangeFunction
       },
       rawData: props.data,
       data: [],
       filteredData: []
     };
+  }
+
+  rangeFunction(total, range) {
+    return (
+      'Showing ' +
+      range[0].toString() +
+      ' to ' +
+      range[1].toString() +
+      ' of ' +
+      total.toString() +
+      ' items'
+    );
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -134,6 +148,16 @@ class Experiments extends React.Component {
     );
   };
 
+  itemRender(current, type, originalElement) {
+    if (type === 'prev') {
+      return <a>&#60;</a>;
+    }
+    if (type === 'next') {
+      return <a>&#62;</a>;
+    }
+    return <a>{current}</a>;
+  }
+
   render() {
     const columns = [
       {
@@ -142,6 +166,7 @@ class Experiments extends React.Component {
         sorter: true,
         width: '20%',
         sorter: (a, b) => a.project.localeCompare(b.project),
+        defaultSortOrder: 'ascend',
         render: (text, record) => (
           <a
             onClick={() =>
@@ -230,30 +255,29 @@ class Experiments extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div>
-        <br />
+      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
             'padding-left': '16px',
-            'padding-bottom': '0',
-            'padding-top': '20px'
+            'padding-bottom': '5px',
+            'padding-top': '2px'
           }}>
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item label="Experiments">
+            <Form.Item>
               <Input
                 value={this.state.filterExperiment}
                 onChange={e =>
                   this.setState({ filterExperiment: e.target.value })
                 }
-                placeholder="MethylScape"
+                placeholder="Experiment Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
@@ -275,7 +299,6 @@ class Experiments extends React.Component {
             </Form.Item>
           </Form>
         </div>
-        <br />
         <div>
           <Table
             {...this.state}
