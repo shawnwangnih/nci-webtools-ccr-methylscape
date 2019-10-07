@@ -131,11 +131,21 @@ class Samples extends React.Component {
     sampleData = rawData.map(sample => {
       sample.key = sample.id;
       var cp = sample.classifier_prediction;
-      sample.family = this.getMF(cp);
-      sample.family_score = this.getMFScore(cp);
-      sample.class = this.getMC(cp);
-      sample.class_score = this.getMCScore(cp);
+      if (cp == null) {
+        sample.family = '';
+        sample.family_score = '';
+        sample.class = '';
+        sample.class_score = '';
+      } else {
+        sample.family = this.getMF(cp);
+        sample.family_score = this.getMFScore(cp);
+        sample.class = this.getMC(cp);
+        sample.class_score = this.getMCScore(cp);
+      }
       return sample;
+    });
+    sampleData = sampleData.filter(sample => {
+      return sample.sample_name != null;
     });
     this.setState({ data: sampleData });
     this.setState({ filteredData: sampleData });
@@ -145,6 +155,8 @@ class Samples extends React.Component {
     this.setState({
       filteredData: this.state.data.filter(row => {
         return (
+          row.project != null &&
+          row.experiment != null &&
           row.project.toLowerCase().includes(this.getFilterProject()) &&
           row.experiment.toLowerCase().includes(this.getExperimentFilter())
         );

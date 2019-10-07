@@ -55,7 +55,11 @@ class Summary extends React.Component {
     this.setState({
       filteredData: data.filter((row, i) => {
         row.key = i;
-        return row.project.toLowerCase().includes(filter.toLowerCase());
+        if (row.project != null) {
+          return row.project.toLowerCase().includes(filter.toLowerCase());
+        } else {
+          return false;
+        }
       })
     });
   };
