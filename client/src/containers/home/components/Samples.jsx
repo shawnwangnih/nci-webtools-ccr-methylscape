@@ -177,6 +177,7 @@ class Samples extends React.Component {
   };
 
   getMF = data => {
+    console.log(JSON.stringify(data));
     return Object.keys(data).length > 2 ? Object.keys(data['0']) : '';
   };
 
@@ -464,11 +465,11 @@ class Samples extends React.Component {
             'padding-top': '2px'
           }}>
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
@@ -480,14 +481,14 @@ class Samples extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item> */}
-            <Form.Item label="Sentrix ID">
+            <Form.Item label>
               <Input
                 value={this.state.filterSentrixID}
                 onChange={e =>
                   this.setState({ filterSentrixID: e.target.value })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="ABD123"
+                placeholder="Sentrix ID"
               />
             </Form.Item>
             <Form.Item>
