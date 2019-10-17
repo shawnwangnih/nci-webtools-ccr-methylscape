@@ -178,11 +178,11 @@ class Samples extends React.Component {
 
   getMF = data => {
     console.log(JSON.stringify(data));
-    return Object.keys(data).length > 2 ? Object.keys(data['0']) : '';
+    return Object.keys(data).length >= 1 ? Object.keys(data['0']) : '';
   };
 
   getMFScore = data => {
-    return Object.values(data).length > 2 ? Object.values(data['0']) : '';
+    return Object.values(data).length >= 1 ? Object.values(data['0']) : '';
   };
 
   getMC = data => {
