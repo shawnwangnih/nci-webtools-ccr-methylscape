@@ -178,7 +178,7 @@ class Samples extends React.Component {
 
   getMF = data => {
     console.log(JSON.stringify(data));
-    return Object.keys(data).length >= 2 ? Object.keys(data['0']).substring(25) : '';
+    return Object.keys(data).length >= 2 ? String(Object.keys(data['0'])[0]).substring(25) : '';
   };
 
   getMFScore = data => {
