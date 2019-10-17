@@ -178,19 +178,19 @@ class Samples extends React.Component {
 
   getMF = data => {
     console.log(JSON.stringify(data));
-    return Object.keys(data).length >= 1 ? Object.keys(data['0']) : '';
+    return Object.keys(data).length >= 2 ? Object.keys(data['0']) : '';
   };
 
   getMFScore = data => {
-    return Object.values(data).length >= 1 ? Object.values(data['0']) : '';
+    return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
   };
 
   getMC = data => {
     const size = Object.keys(data).length;
-    if (size > 2) {
-      return Object.keys(data['2'])[0];
-    } else if (size === 2) {
+    if (size >= 2) {
       return Object.keys(data['1'])[0];
+    } else if (size === 1) {
+      return Object.keys(data['0'])[0];
     } else {
       return '';
     }
@@ -198,10 +198,10 @@ class Samples extends React.Component {
 
   getMCScore = data => {
     const size = Object.keys(data).length;
-    if (size > 2) {
-      return Object.values(data['2'])[0];
-    } else if (size === 2) {
+    if (size >= 2) {
       return Object.values(data['1'])[0];
+    } else if (size === 1) {
+      return Object.values(data['0'])[0];
     } else {
       return '';
     }
