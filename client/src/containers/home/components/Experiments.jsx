@@ -258,7 +258,7 @@ class Experiments extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '16px',
+            'padding-left': '0',
             'padding-bottom': '5px',
             'padding-top': '2px'
           }}>
