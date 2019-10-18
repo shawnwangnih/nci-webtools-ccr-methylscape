@@ -263,14 +263,18 @@ class Experiments extends React.Component {
             'padding-top': '2px'
           }}>
           <Form layout="inline">
+            <div width = "20%">
             <Form.Item>
+            
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
+            
             </Form.Item>
+            </div>
+            <div width = "15%">
             <Form.Item>
               <Input
                 value={this.state.filterExperiment}
@@ -281,6 +285,8 @@ class Experiments extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
+            </div>
+            
             {/* <Form.Item label="Date">
               <Input
                 value={this.state.filterDate}
@@ -300,6 +306,7 @@ class Experiments extends React.Component {
           </Form>
         </div>
         <div>
+          
           <Table
             {...this.state}
             columns={columns}
