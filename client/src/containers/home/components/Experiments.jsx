@@ -263,30 +263,79 @@ class Experiments extends React.Component {
             'padding-top': '2px'
           }}>
           <Form layout="inline">
-            <div width = "20%">
-            <Form.Item>
-            
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
                 onPressEnter={this.handleFilter}
               />
-            
             </Form.Item>
-            </div>
-            <div  style={{"width":"45%"}}>
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterExperiment}
                 onChange={e =>
                   this.setState({ filterExperiment: e.target.value })
                 }
-                placeholder="Experiment Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            </div>
-            
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterExperiment}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '13%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterExperiment}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '13%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterExperiment}
+                onChange={e =>
+                  this.setState({ filterExperiment: e.target.value })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
             {/* <Form.Item label="Date">
               <Input
                 value={this.state.filterDate}
@@ -306,7 +355,6 @@ class Experiments extends React.Component {
           </Form>
         </div>
         <div>
-          
           <Table
             {...this.state}
             columns={columns}
