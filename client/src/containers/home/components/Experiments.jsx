@@ -274,7 +274,7 @@ class Experiments extends React.Component {
             
             </Form.Item>
             </div>
-            <div width = "15%">
+            <div  style={{"width":"45%"}}>
             <Form.Item>
               <Input
                 value={this.state.filterExperiment}
