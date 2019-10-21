@@ -148,7 +148,6 @@ class Experiments extends React.Component {
   };
 
   handleFilter = () => {
-    console.log('INVESTIGATOR: ' + this.state.filterInvestigator);
     this.setState({
       filteredData: this.state.data.filter(row => {
         return (
@@ -158,7 +157,10 @@ class Experiments extends React.Component {
             .toLowerCase()
             .includes(this.getFilterInvestigator()) &&
           (this.getFilterNumSamples() == '' ||
-            row.sampleSize == parseInt(this.getFilterNumSamples()))
+            row.sampleSize == parseInt(this.getFilterNumSamples())) &&
+          (this.state.startDate == '' ||
+            this.state.endDate == '' ||
+            this.checkDates(row.date, this.state.startDate, this.state.endDate))
         );
       })
     });
@@ -387,15 +389,17 @@ class Experiments extends React.Component {
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
-              <RangePicker>
-                onChange
-                {(date, dateString) => {
+              <RangePicker
+                onChange={(date, dateString) => {
                   this.setState(
                     { startDate: dateString[0], endDate: dateString[1] },
-                    () => console.log('####DATE####' + this.state.startDate)
+                    () => {
+                      console.log('####DATE####' + this.state.startDate);
+                      this.handleFilter();
+                    }
                   );
                 }}
-              </RangePicker>
+              />
             </Form.Item>
             {/* <Form.Item label="Date">
               <Input
@@ -405,14 +409,14 @@ class Experiments extends React.Component {
                 placeholder="Jane Doe"
               />
             </Form.Item> */}
-            <Form.Item>
+            {/*<Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
               {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 Clear
               </Button> */}
-            </Form.Item>
+            {/*</Form.Item>*/}
           </Form>
         </div>
         <div>
