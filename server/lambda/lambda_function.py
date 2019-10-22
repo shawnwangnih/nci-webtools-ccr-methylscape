@@ -4,9 +4,10 @@ import logging
 import re
 import csv
 import time
+import os
 
 RE_SAMPLE_ID = re.compile(r'ClassifierReports\/(.*?)\/(.*)')
-TABLE_NAME = 'Movies3'
+TABLE_NAME = os.environ['TABLE_NAME']
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
