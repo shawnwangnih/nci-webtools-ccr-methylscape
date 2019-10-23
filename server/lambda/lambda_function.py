@@ -7,7 +7,7 @@ import time
 import os
 
 RE_SAMPLE_ID = re.compile(r'ClassifierReports\/(.*?)\/(.*)')
-TABLE_NAME = os.environ['TABLE_NAME']
+TABLE_NAME = os.environ['DynamoDB-Table']
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
