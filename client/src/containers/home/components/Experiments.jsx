@@ -1,14 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Input, Button, Form, Select } from 'antd';
+import { DatePicker, Table, Input, Button, Form, Select } from 'antd';
 import fileSaver from 'file-saver';
 import './Experiments.css';
+const { RangePicker } = DatePicker;
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       filterProject: props.filter.project,
       filterExperiment: props.filter.experiment,
+      filterInvestigator: '',
+      startDate: '',
+      endDate: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -34,6 +38,35 @@ class Experiments extends React.Component {
       total.toString() +
       ' items'
     );
+  }
+
+  //Checks the dates from the form and and each date in the table
+  //and sees if the date falls between the two days
+  checkDates(date, s, e) {
+    if (s == '' || e == '') {
+      return true;
+    }
+    let start = s.split('-');
+    let end = e.split('-');
+    let check = date.split('/');
+
+    let startDate = new Date(
+      parseInt(start[0]),
+      parseInt(start[1]),
+      parseInt(start[2])
+    );
+    let endDate = new Date(
+      parseInt(end[0]),
+      parseInt(end[1]),
+      parseInt(end[2])
+    );
+    let toCheck = new Date(
+      parseInt(check[2]),
+      parseInt(check[0]),
+      parseInt(check[1])
+    );
+
+    return startDate <= toCheck && endDate >= toCheck;
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -119,7 +152,15 @@ class Experiments extends React.Component {
       filteredData: this.state.data.filter(row => {
         return (
           row.project.toLowerCase().includes(this.getFilterProject()) &&
-          row.experiment.toLowerCase().includes(this.getFilterExperiment())
+          row.experiment.toLowerCase().includes(this.getFilterExperiment()) &&
+          row.investigator
+            .toLowerCase()
+            .includes(this.getFilterInvestigator()) &&
+          (this.getFilterNumSamples() == '' ||
+            row.sampleSize == parseInt(this.getFilterNumSamples())) &&
+          (this.state.startDate == '' ||
+            this.state.endDate == '' ||
+            this.checkDates(row.date, this.state.startDate, this.state.endDate))
         );
       })
     });
@@ -133,6 +174,16 @@ class Experiments extends React.Component {
   getFilterProject = () => {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
+      : '';
+  };
+  getFilterInvestigator = () => {
+    return this.state.filterInvestigator
+      ? this.state.filterInvestigator.toLowerCase()
+      : '';
+  };
+  getFilterNumSamples = () => {
+    return this.state.filterNumSamples
+      ? this.state.filterNumSamples.toLowerCase()
       : '';
   };
 
@@ -258,27 +309,96 @@ class Experiments extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '16px',
-            'padding-bottom': '5px',
-            'padding-top': '2px'
+            'padding-left': '0',
+            'padding-bottom': '0px',
+            'padding-top': '15px'
           }}>
           <Form layout="inline">
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterProject}
-                onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="Project Name"
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterExperiment}
                 onChange={e =>
-                  this.setState({ filterExperiment: e.target.value })
+                  this.setState({ filterExperiment: e.target.value }, () => {
+                    this.handleFilter();
+                  })
                 }
-                placeholder="Experiment Name"
                 onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterInvestigator}
+                onChange={e =>
+                  this.setState({ filterInvestigator: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '13%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterNumSamples}
+                onChange={e =>
+                  this.setState({ filterNumSamples: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '13%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+              <RangePicker
+                onChange={(date, dateString) => {
+                  this.setState(
+                    { startDate: dateString[0], endDate: dateString[1] },
+                    () => {
+                      console.log('####DATE####' + this.state.startDate);
+                      this.handleFilter();
+                    }
+                  );
+                }}
               />
             </Form.Item>
             {/* <Form.Item label="Date">
@@ -289,14 +409,14 @@ class Experiments extends React.Component {
                 placeholder="Jane Doe"
               />
             </Form.Item> */}
-            <Form.Item>
+            {/*<Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
               {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 Clear
               </Button> */}
-            </Form.Item>
+            {/*</Form.Item>*/}
           </Form>
         </div>
         <div>

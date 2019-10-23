@@ -131,11 +131,21 @@ class Samples extends React.Component {
     sampleData = rawData.map(sample => {
       sample.key = sample.id;
       var cp = sample.classifier_prediction;
-      sample.family = this.getMF(cp);
-      sample.family_score = this.getMFScore(cp);
-      sample.class = this.getMC(cp);
-      sample.class_score = this.getMCScore(cp);
+      if (cp == null) {
+        sample.family = '';
+        sample.family_score = '';
+        sample.class = '';
+        sample.class_score = '';
+      } else {
+        sample.family = this.getMF(cp);
+        sample.family_score = this.getMFScore(cp);
+        sample.class = this.getMC(cp);
+        sample.class_score = this.getMCScore(cp);
+      }
       return sample;
+    });
+    sampleData = sampleData.filter(sample => {
+      return sample.sample_name != null;
     });
     this.setState({ data: sampleData });
     this.setState({ filteredData: sampleData });
@@ -145,6 +155,8 @@ class Samples extends React.Component {
     this.setState({
       filteredData: this.state.data.filter(row => {
         return (
+          row.project != null &&
+          row.experiment != null &&
           row.project.toLowerCase().includes(this.getFilterProject()) &&
           row.experiment.toLowerCase().includes(this.getExperimentFilter())
         );
@@ -165,19 +177,22 @@ class Samples extends React.Component {
   };
 
   getMF = data => {
-    return Object.keys(data).length > 2 ? Object.keys(data['0']) : '';
+    console.log(JSON.stringify(data));
+    return Object.keys(data).length >= 2
+      ? String(Object.keys(data['0'])[0]).substring(25)
+      : '';
   };
 
   getMFScore = data => {
-    return Object.values(data).length > 2 ? Object.values(data['0']) : '';
+    return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
   };
 
   getMC = data => {
     const size = Object.keys(data).length;
-    if (size > 2) {
-      return Object.keys(data['2'])[0];
-    } else if (size === 2) {
+    if (size >= 2) {
       return Object.keys(data['1'])[0];
+    } else if (size === 1) {
+      return Object.keys(data['0'])[0];
     } else {
       return '';
     }
@@ -185,10 +200,10 @@ class Samples extends React.Component {
 
   getMCScore = data => {
     const size = Object.keys(data).length;
-    if (size > 2) {
-      return Object.values(data['2'])[0];
-    } else if (size === 2) {
+    if (size >= 2) {
       return Object.values(data['1'])[0];
+    } else if (size === 1) {
+      return Object.values(data['0'])[0];
     } else {
       return '';
     }
@@ -452,11 +467,11 @@ class Samples extends React.Component {
             'padding-top': '2px'
           }}>
           <Form layout="inline">
-            <Form.Item label="Project">
+            <Form.Item>
               <Input
                 value={this.state.filterProject}
                 onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="MethylScape"
+                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
@@ -468,14 +483,14 @@ class Samples extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item> */}
-            <Form.Item label="Sentrix ID">
+            <Form.Item label>
               <Input
                 value={this.state.filterSentrixID}
                 onChange={e =>
                   this.setState({ filterSentrixID: e.target.value })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="ABD123"
+                placeholder="Sentrix ID"
               />
             </Form.Item>
             <Form.Item>

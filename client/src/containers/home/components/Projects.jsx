@@ -27,6 +27,8 @@ class Projects extends React.Component {
       currRecord: '',
       endDate: '',
       startDate: '',
+      filterNumSamples: '',
+      filterNumExperiments: '',
       numSamples: '',
       numExperiments: ''
     };
@@ -137,10 +139,10 @@ class Projects extends React.Component {
               .toLowerCase()
               .includes(this.state.filterInvestigator.toLowerCase()) &&
             (row.experiments.size.toString() ==
-              this.state.numExperiments.trim() ||
-              this.state.numExperiments.trim() == '') &&
-            (row.sampleSize == this.state.numSamples.trim() ||
-              this.state.numSamples.trim() == '') &&
+              this.state.filterNumExperiments.trim() ||
+              this.state.filterNumExperiments.trim() == '') &&
+            (row.sampleSize == this.state.filterNumSamples.trim() ||
+              this.state.filterNumSamples.trim() == '') &&
             this.checkDates(row.date, this.state.startDate, this.state.endDate)
           );
         })
@@ -256,7 +258,7 @@ class Projects extends React.Component {
         title: 'Project Date',
         dataIndex: 'date',
         sorter: true,
-        width: '15%'
+        width: '20%'
       }
     ];
     return (
@@ -269,55 +271,96 @@ class Projects extends React.Component {
           }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
           <Form layout="inline">
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterProject}
-                onChange={e => this.setState({ filterProject: e.target.value })}
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterInvestigator}
                 onChange={e =>
-                  this.setState({ filterInvestigator: e.target.value })
+                  this.setState({ filterInvestigator: e.target.value }, () => {
+                    this.handleFilter();
+                  })
                 }
                 onPressEnter={this.handleFilter}
                 placeholder="Investigator Name"
               />
             </Form.Item>
-            {/*<Form.Item label="# of experiments">
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.numExperiments}
+                value={this.state.filterNumExperiments}
                 onChange={e =>
-                  this.setState({ numExperiments: e.target.value })
+                  this.setState(
+                    { filterNumExperiments: e.target.value },
+                    () => {
+                      this.handleFilter();
+                    }
+                  )
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="0"
               />
             </Form.Item>
-            <Form.Item label="# of samples">
+            <Form.Item
+              style={{
+                width: '20%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.numSamples}
-                onChange={e => this.setState({ numSamples: e.target.value })}
+                value={this.state.filterNumSamples}
+                onChange={e =>
+                  this.setState({ filterNumSamples: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
-                placeholder="0"
               />
             </Form.Item>
-            <Form.Item label="Date">
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
               <RangePicker
-                onChange={this.handleDateChange}
-                onPressEnter={this.handleFilter}
+                onChange={(date, dateString) => {
+                  this.setState(
+                    { startDate: dateString[0], endDate: dateString[1] },
+                    () => {
+                      this.handleFilter();
+                    }
+                  );
+                }}
               />
-              </Form.Item>*/}
-            <Form.Item>
-              <Button icon="search" type="primary" onClick={this.handleFilter}>
-                Search
-              </Button>
-              {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                Clear
-              </Button> */}
             </Form.Item>
           </Form>
         </div>
