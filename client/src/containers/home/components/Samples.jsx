@@ -317,7 +317,6 @@ class Samples extends React.Component {
           width:'50%',
           // sorter: true,
           render:text=>{
-            console.log('TEXT:' + text)
             if(text =='View plot'){
               return <a style={{'padding-left':'20%'}}
                 onClick={() =>
@@ -458,16 +457,9 @@ class Samples extends React.Component {
             dataSource={extraData}
             onChange={this.handleTableChange}
             size='small'
-            scroll={{ y: 1000 }}
             rowClassName={(record, index) => {
               //return index % 2 == 0 ? 'whiteBack' : 'grayBack';
               return 'whiteBack'
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: event => {
-                }
-              };
             }}
           />
         </div>
@@ -484,8 +476,7 @@ class Samples extends React.Component {
         title: 'Sample Name',
         dataIndex: 'sample_name',
         sorter: true,
-        width: '320',
-        fixed: 'left',
+        width: '12%',
         defaultSortOrder: 'ascend',
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
@@ -494,7 +485,7 @@ class Samples extends React.Component {
         title: 'Project',
         dataIndex: 'project',
         sorter: true,
-        width: '300',
+        width: '15%',
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
@@ -512,7 +503,7 @@ class Samples extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '350',
+        width: '12%',
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
@@ -533,7 +524,7 @@ class Samples extends React.Component {
         dataIndex: 'date',
         // sorter: true,
         ...this.getColumnSearchProps('date'),
-        width: '200'
+        width: '8%'
       },
       {
         title: 'Surgical Case',
@@ -541,7 +532,7 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Gender',
@@ -549,7 +540,7 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Age',
@@ -557,7 +548,7 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
         ...this.getColumnSearchProps('age'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Diagnosis',
@@ -565,104 +556,9 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '200'
+        width: '30%'
       },
-      {
-        title: 'Methylation Family (MF)',
-        dataIndex: 'family',
-        sorter: true,
-        sorter: (a, b) => a.family.localeCompare(b.family),
-        ...this.getColumnSearchProps('family'),
-        width: '200'
-      },
-      {
-        title: 'MF Calibrated Scores',
-        dataIndex: 'family_score',
-        sorter: true,
-        sorter: (a, b) => a.family_score.localeCompare(b.family_score),
-        ...this.getColumnSearchProps('family_score'),
-        width: '200'
-      },
-      {
-        title: 'Methylation Class (MC)',
-        dataIndex: 'class',
-        sorter: true,
-        sorter: (a, b) => a.class.localeCompare(b.class),
-        ...this.getColumnSearchProps('class'),
-        width: '200'
-      },
-      {
-        title: 'MC Calibrated Scores',
-        dataIndex: 'class_score',
-        sorter: true,
-        sorter: (a, b) => a.class_score.localeCompare(b.class_score),
-        ...this.getColumnSearchProps('class_score'),
-        width: '200'
-      },
-      {
-        title: 'MGMT status',
-        dataIndex: 'mgmt_prediction.Status',
-        sorter: true,
-        sorter: (a, b) =>
-          a.mgmt_prediction.Status.localeCompare(b.mgmt_prediction.Status),
-        ...this.getColumnSearchProps('mgmt_prediction.Status'),
-        width: '200'
-      },
-      {
-        title: 'MGMT score',
-        dataIndex: 'mgmt_prediction.Estimated',
-        sorter: true,
-        sorter: (a, b) =>
-          a.mgmt_prediction.Estimated.localeCompare(
-            b.mgmt_prediction.Estimated
-          ),
-        ...this.getColumnSearchProps('mgmt_prediction.Estimated'),
-        width: '200'
-      },
-      {
-        title: 't-SNE plot',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '.html')
-            }>
-            view plot
-          </a>
-        )
-      },
-      {
-        title: 'NGS reports (pdf-files)',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '_NGS.pdf')
-            }>
-            view pdf
-          </a>
-        )
-      },
-      {
-        title: 'Slide Image',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '.jpg')
-            }>
-            view image
-          </a>
-        )
-      },
-      {
-        title: 'Notes',
-        dataIndex: 'notes',
-        sorter: true,
-        ...this.getColumnSearchProps('notes'),
-        sorter: (a, b) => a.notes.localeCompare(b.notes),
-        width: '200'
-      }
+ 
     ];
 
     const Option = Select.Option;
@@ -719,10 +615,10 @@ class Samples extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            scroll={{ x: 3800 }}
             rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}
+            size="small"
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
