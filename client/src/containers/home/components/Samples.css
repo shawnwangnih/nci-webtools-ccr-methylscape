@@ -1,0 +1,9 @@
+.ant-table-body{
+    max-height:none !important;
+    overflow-y:hidden !important;
+}
+
+.borderless-table{
+    border:0px !important;
+    
+}

@@ -6,6 +6,7 @@
 }
 .whiteBack {
   background-color: white;
+  border-bottom: 0px;
 }
 .whiteBack:hover {
   background-color: white;
