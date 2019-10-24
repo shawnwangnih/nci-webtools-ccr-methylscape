@@ -2,7 +2,7 @@ import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
 import fileSaver from 'file-saver';
-import './Samples.css' 
+import './Samples.css';
 class Samples extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ class Samples extends React.Component {
       rawData: props.data,
       data: [],
       filteredData: [],
-      currSample: '',
+      currSample: ''
     };
   }
 
@@ -270,8 +270,8 @@ class Samples extends React.Component {
   }
 
   renderSummary(key) {
-    if(key == ''){
-      return <div></div>
+    if (key == '') {
+      return <div />;
     }
     var found = [];
     let row = this.state.filteredData.filter(sample => {
@@ -284,7 +284,7 @@ class Samples extends React.Component {
       }
       return sample.key == key;
     });
-/*
+    /*
     console.log(currRow);
     console.log(JSON.stringify(row));
     //console.log(row[0]);
@@ -297,51 +297,67 @@ class Samples extends React.Component {
     console.log([{ Hello: 'World', testing: 'test' }][0].Hello);
     //let currRow = row;
 */
-    if(found.length != 0){
-      var currRow = found[0]
-      console.log("Prediction: " + JSON.stringify(currRow));
+    if (found.length != 0) {
+      var currRow = found[0];
+      console.log('Prediction: ' + JSON.stringify(currRow));
       let columns = [
-        { 
+        {
           title: 'Header name',
           dataIndex: 'header_name',
           sorter: true,
-          width:'50%',
-          render:text=>{
-            return <p style={{'padding-left':'70%', 'font-weight':'bold'}}>{text}:</p>
+          width: '50%',
+          render: text => {
+            return (
+              <p style={{ 'padding-left': '70%', 'font-weight': 'bold' }}>
+                {text}:
+              </p>
+            );
           }
           //defaultSortOrder: 'ascend',
         },
         {
           title: 'Value',
           dataIndex: 'value',
-          width:'50%',
+          width: '50%',
           // sorter: true,
-          render:text=>{
-            if(text =='View plot'){
-              return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
-              }>
-                {text}
-              </a> 
+          render: text => {
+            if (text == 'View plot') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                  }>
+                  {text}
+                </a>
+              );
             }
-            if( text == 'Download pdf'){
-               return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '_NGS.pdf')
-                }>
-                {text}
-              </a>
-            } 
-            if(text == 'Download image'){
-              return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                }>
-                {text}
-              </a>
+            if (text == 'Download pdf') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(
+                      currRow.id,
+                      currRow.sample_name + '_NGS.pdf'
+                    )
+                  }>
+                  {text}
+                </a>
+              );
             }
-            return <p style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}>{text}</p>
+            if (text == 'Download image') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            return <p style={{ 'padding-left': '20%' }}>{text}</p>;
           }
         }
       ];
@@ -409,7 +425,10 @@ class Samples extends React.Component {
         {
           key: 'mgmt_prediction.Estimated',
           header_name: 'MGMT score',
-          value: currRow.mgmt_prediction==null?'':currRow.mgmt_prediction.Estimated.toString()
+          value:
+            currRow.mgmt_prediction == null
+              ? ''
+              : currRow.mgmt_prediction.Estimated.toString()
         },
         {
           key: 't_SNE_plot',
@@ -448,25 +467,24 @@ class Samples extends React.Component {
       //{...this.state}
       return (
         <div>
-          <h2 style={{'text-align':'center'}}>Sample Information</h2>
-          <br/>
+          <h2 style={{ 'text-align': 'center' }}>Sample Information</h2>
+          <br />
           <Table
             showHeader={false}
-            pagination = {false}
+            pagination={false}
             columns={columns}
             dataSource={extraData}
             onChange={this.handleTableChange}
-            size='small'
+            size="small"
             rowClassName={(record, index) => {
               //return index % 2 == 0 ? 'whiteBack' : 'grayBack';
-              return 'whiteBack'
+              return 'whiteBack';
             }}
           />
         </div>
       );
-    }
-    else{
-      return <div></div>
+    } else {
+      return <div />;
     }
   }
 
@@ -478,11 +496,7 @@ class Samples extends React.Component {
         sorter: true,
         width: '12%',
         defaultSortOrder: 'ascend',
-        render:text=>{
-          return <p style={{ 'text-overflow':'ellipsis'}}>
-            {text}
-          </p> 
-        },
+        ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
       },
@@ -491,11 +505,11 @@ class Samples extends React.Component {
         dataIndex: 'project',
         sorter: true,
         width: '15%',
+        ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
           <a
-            style={{ 'text-overflow':'ellipsis'}}
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
@@ -510,6 +524,7 @@ class Samples extends React.Component {
         dataIndex: 'experiment',
         sorter: true,
         width: '12%',
+        ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
@@ -528,6 +543,7 @@ class Samples extends React.Component {
       {
         title: 'Date',
         dataIndex: 'date',
+        ellipsis: true,
         // sorter: true,
         ...this.getColumnSearchProps('date'),
         width: '8%'
@@ -536,55 +552,39 @@ class Samples extends React.Component {
         title: 'Surgical Case',
         dataIndex: 'surgical_case',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
-        width: '10%',
-        render:text=>{
-          return <p style={{ 'text-overflow':'ellipsis'}}>
-            {text}
-          </p> 
-        }
+        width: '10%'
       },
       {
         title: 'Gender',
         dataIndex: 'gender',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
-        width: '10%',
-        render:text=>{
-          return <p style={{ 'text-overflow':'ellipsis'}}>
-            {text}
-          </p> 
-        },
+        width: '10%'
       },
       {
         title: 'Age',
         dataIndex: 'age',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
         ...this.getColumnSearchProps('age'),
-        width: '10%',
-        render:text=>{
-          return <p style={{ 'text-overflow':'ellipsis'}}>
-            {text}
-          </p> 
-        },
+        width: '10%'
       },
       {
         title: 'Diagnosis',
         dataIndex: 'diagnosis',
         sorter: true,
+        ellipsis: 'true',
+        height: '20px',
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '30%',
-        render:text=>{
-          return <p style={{ 'text-overflow':'ellipsis'}}>
-            {text}
-          </p> 
-        },
-      },
- 
+        width: '30%'
+      }
     ];
 
     const Option = Select.Option;
@@ -637,21 +637,20 @@ class Samples extends React.Component {
         </div>
         <div>
           <Table
-            style={{ whiteSpace: 'pre'}}
             {...this.state}
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
+            size="small"
             rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}
-            size="small"
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
                   this.setState({
-                    currSample:record.key
-                  })
+                    currSample: record.key
+                  });
                   console.log(record.key);
                 }
               };
@@ -659,6 +658,8 @@ class Samples extends React.Component {
           />
         </div>
         {this.renderSummary(this.state.currSample)}
+        <br/>
+        <br/>
       </div>
     );
   }
