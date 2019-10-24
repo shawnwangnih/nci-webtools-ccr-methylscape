@@ -318,7 +318,7 @@ class Samples extends React.Component {
           // sorter: true,
           render:text=>{
             if(text =='View plot'){
-              return <a style={{'padding-left':'20%'}}
+              return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.html')
               }>
@@ -326,7 +326,7 @@ class Samples extends React.Component {
               </a> 
             }
             if( text == 'Download pdf'){
-               return <a style={{'padding-left':'20%'}}
+               return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '_NGS.pdf')
                 }>
@@ -334,14 +334,14 @@ class Samples extends React.Component {
               </a>
             } 
             if(text == 'Download image'){
-              return <a style={{'padding-left':'20%'}}
+              return <a style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                 }>
                 {text}
               </a>
             }
-            return <p style={{'padding-left':'20%'}}>{text}</p>
+            return <p style={{'padding-left':'20%', 'text-overflow':'ellipsis'}}>{text}</p>
           }
         }
       ];
@@ -478,6 +478,11 @@ class Samples extends React.Component {
         sorter: true,
         width: '12%',
         defaultSortOrder: 'ascend',
+        render:text=>{
+          return <p style={{ 'text-overflow':'ellipsis'}}>
+            {text}
+          </p> 
+        },
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
       },
@@ -490,6 +495,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
           <a
+            style={{ 'text-overflow':'ellipsis'}}
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
@@ -532,7 +538,12 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
-        width: '10%'
+        width: '10%',
+        render:text=>{
+          return <p style={{ 'text-overflow':'ellipsis'}}>
+            {text}
+          </p> 
+        }
       },
       {
         title: 'Gender',
@@ -540,7 +551,12 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
-        width: '10%'
+        width: '10%',
+        render:text=>{
+          return <p style={{ 'text-overflow':'ellipsis'}}>
+            {text}
+          </p> 
+        },
       },
       {
         title: 'Age',
@@ -548,7 +564,12 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
         ...this.getColumnSearchProps('age'),
-        width: '10%'
+        width: '10%',
+        render:text=>{
+          return <p style={{ 'text-overflow':'ellipsis'}}>
+            {text}
+          </p> 
+        },
       },
       {
         title: 'Diagnosis',
@@ -556,7 +577,12 @@ class Samples extends React.Component {
         sorter: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '30%'
+        width: '30%',
+        render:text=>{
+          return <p style={{ 'text-overflow':'ellipsis'}}>
+            {text}
+          </p> 
+        },
       },
  
     ];
@@ -611,6 +637,7 @@ class Samples extends React.Component {
         </div>
         <div>
           <Table
+            style={{ whiteSpace: 'pre'}}
             {...this.state}
             columns={columns}
             dataSource={this.state.filteredData}
