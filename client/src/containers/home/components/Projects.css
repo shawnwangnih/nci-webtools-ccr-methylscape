@@ -23,9 +23,8 @@
   /*border-bottom: 0px;*/
   background-color: white;
 }
-.ant-table-small{
-  border:0px !important;
-
+.ant-table-small {
+  border: 0px !important;
 }
 
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
@@ -33,7 +32,6 @@
 }
 
 .ant-table {
-  line-height: 0.5;
 }
 .testing a:link {
   color: white;
