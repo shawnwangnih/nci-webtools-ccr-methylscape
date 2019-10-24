@@ -2,7 +2,7 @@ import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
 import fileSaver from 'file-saver';
-
+import './Samples.css';
 class Samples extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,8 @@ class Samples extends React.Component {
       },
       rawData: props.data,
       data: [],
-      filteredData: []
+      filteredData: [],
+      currSample: ''
     };
   }
 
@@ -177,7 +178,7 @@ class Samples extends React.Component {
   };
 
   getMF = data => {
-    console.log(JSON.stringify(data));
+    //console.log(JSON.stringify(data));
     return Object.keys(data).length >= 2
       ? String(Object.keys(data['0'])[0]).substring(25)
       : '';
@@ -268,15 +269,234 @@ class Samples extends React.Component {
     return <a>{current}</a>;
   }
 
+  renderSummary(key) {
+    if (key == '') {
+      return <div />;
+    }
+    var found = [];
+    let row = this.state.filteredData.filter(sample => {
+      //console.log(sample.key);
+      //console.log(key);
+      //console.log(sample.key == key);
+      //console.log(sample.project);
+      if (sample.key == key) {
+        found.push(sample);
+      }
+      return sample.key == key;
+    });
+    /*
+    console.log(currRow);
+    console.log(JSON.stringify(row));
+    //console.log(row[0]);
+    var c = row[0];
+    console.log('filtered row', currRow.project);
+    console.log(JSON.stringify(c));
+    //console.log(c.project);
+    console.log(JSON.stringify([{ Hello: 'World', testing: 'test' }]));
+    console.log([{ Hello: 'World', testing: 'test' }][0]);
+    console.log([{ Hello: 'World', testing: 'test' }][0].Hello);
+    //let currRow = row;
+*/
+    if (found.length != 0) {
+      var currRow = found[0];
+      console.log('Prediction: ' + JSON.stringify(currRow));
+      let columns = [
+        {
+          title: 'Header name',
+          dataIndex: 'header_name',
+          sorter: true,
+          width: '50%',
+          render: text => {
+            return (
+              <p style={{ 'padding-left': '70%', 'font-weight': 'bold' }}>
+                {text}:
+              </p>
+            );
+          }
+          //defaultSortOrder: 'ascend',
+        },
+        {
+          title: 'Value',
+          dataIndex: 'value',
+          width: '50%',
+          // sorter: true,
+          render: text => {
+            if (text == 'View plot') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download pdf') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(
+                      currRow.id,
+                      currRow.sample_name + '_NGS.pdf'
+                    )
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download image') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            return <p style={{ 'padding-left': '20%' }}>{text}</p>;
+          }
+        }
+      ];
+      let extraData = [
+        {
+          key: 'sample_name',
+          header_name: 'Sample Name',
+          value: currRow.sample_name
+        },
+        {
+          key: 'project',
+          header_name: 'Project',
+          value: currRow.project
+        },
+        {
+          key: 'experiment',
+          header_name: 'Experiment',
+          value: currRow.experiment
+        },
+        {
+          key: 'date',
+          header_name: 'Date',
+          value: currRow.date
+        },
+        {
+          key: 'surgical_case',
+          header_name: 'Surgical Case',
+          value: currRow.surgical_case
+        },
+        {
+          key: 'gender',
+          header_name: 'Gender',
+          value: currRow.gender
+        },
+        {
+          key: 'age',
+          header_name: 'Age',
+          value: currRow.age
+        },
+        {
+          key: 'diagnosis',
+          header_name: 'Diagnosis',
+          value: currRow.diagnosis
+        },
+        {
+          key: 'family',
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family
+        },
+        {
+          key: 'family_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score
+        },
+        {
+          key: 'class',
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class
+        },
+        {
+          key: 'class_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.class_score
+        },
+        {
+          key: 'mgmt_prediction.Estimated',
+          header_name: 'MGMT score',
+          value:
+            currRow.mgmt_prediction == null
+              ? ''
+              : currRow.mgmt_prediction.Estimated.toString()
+        },
+        {
+          key: 't_SNE_plot',
+          header_name: 't-SNE plot',
+          value: 'View plot'
+        },
+        {
+          key: 'NGS_reports',
+          header_name: 'NGS reports (pdf-files)',
+          value: 'Download pdf'
+        },
+        {
+          key: 'slide_image',
+          header_name: 'Slide Image',
+          value: 'Download image'
+        },
+        {
+          key: 'notes',
+          header_name: 'Notes',
+          value: currRow.notes
+        }
+      ];
+      let tableSettings = {
+        loading: true,
+        pagination: {
+          position: 'bottom',
+          size: 'small',
+          // pageSize: 15,
+          showSizeChanger: true,
+          itemRender: this.itemRender,
+          showTotal: this.rangeFunction
+        },
+        data: [],
+        filteredData: []
+      };
+      //{...this.state}
+      return (
+        <div>
+          <h2 style={{ 'text-align': 'center' }}>Sample Information</h2>
+          <br />
+          <Table
+            showHeader={false}
+            pagination={false}
+            columns={columns}
+            dataSource={extraData}
+            onChange={this.handleTableChange}
+            size="small"
+            rowClassName={(record, index) => {
+              //return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              return 'whiteBack';
+            }}
+          />
+        </div>
+      );
+    } else {
+      return <div />;
+    }
+  }
+
   render() {
     const columns = [
       {
         title: 'Sample Name',
         dataIndex: 'sample_name',
         sorter: true,
-        width: '320',
-        fixed: 'left',
+        width: '12%',
         defaultSortOrder: 'ascend',
+        ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
         ...this.getColumnSearchProps('sample_name')
       },
@@ -284,7 +504,8 @@ class Samples extends React.Component {
         title: 'Project',
         dataIndex: 'project',
         sorter: true,
-        width: '300',
+        width: '15%',
+        ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
@@ -302,7 +523,8 @@ class Samples extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '350',
+        width: '12%',
+        ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
@@ -321,137 +543,47 @@ class Samples extends React.Component {
       {
         title: 'Date',
         dataIndex: 'date',
+        ellipsis: true,
         // sorter: true,
         ...this.getColumnSearchProps('date'),
-        width: '200'
+        width: '8%'
       },
       {
         title: 'Surgical Case',
         dataIndex: 'surgical_case',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Gender',
         dataIndex: 'gender',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Age',
         dataIndex: 'age',
         sorter: true,
+        ellipsis: true,
         sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
         ...this.getColumnSearchProps('age'),
-        width: '200'
+        width: '10%'
       },
       {
         title: 'Diagnosis',
         dataIndex: 'diagnosis',
         sorter: true,
+        ellipsis: 'true',
+        height: '20px',
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '200'
-      },
-      {
-        title: 'Methylation Family (MF)',
-        dataIndex: 'family',
-        sorter: true,
-        sorter: (a, b) => a.family.localeCompare(b.family),
-        ...this.getColumnSearchProps('family'),
-        width: '200'
-      },
-      {
-        title: 'MF Calibrated Scores',
-        dataIndex: 'family_score',
-        sorter: true,
-        sorter: (a, b) => a.family_score.localeCompare(b.family_score),
-        ...this.getColumnSearchProps('family_score'),
-        width: '200'
-      },
-      {
-        title: 'Methylation Class (MC)',
-        dataIndex: 'class',
-        sorter: true,
-        sorter: (a, b) => a.class.localeCompare(b.class),
-        ...this.getColumnSearchProps('class'),
-        width: '200'
-      },
-      {
-        title: 'MC Calibrated Scores',
-        dataIndex: 'class_score',
-        sorter: true,
-        sorter: (a, b) => a.class_score.localeCompare(b.class_score),
-        ...this.getColumnSearchProps('class_score'),
-        width: '200'
-      },
-      {
-        title: 'MGMT status',
-        dataIndex: 'mgmt_prediction.Status',
-        sorter: true,
-        sorter: (a, b) =>
-          a.mgmt_prediction.Status.localeCompare(b.mgmt_prediction.Status),
-        ...this.getColumnSearchProps('mgmt_prediction.Status'),
-        width: '200'
-      },
-      {
-        title: 'MGMT score',
-        dataIndex: 'mgmt_prediction.Estimated',
-        sorter: true,
-        sorter: (a, b) =>
-          a.mgmt_prediction.Estimated.localeCompare(
-            b.mgmt_prediction.Estimated
-          ),
-        ...this.getColumnSearchProps('mgmt_prediction.Estimated'),
-        width: '200'
-      },
-      {
-        title: 't-SNE plot',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '.html')
-            }>
-            view plot
-          </a>
-        )
-      },
-      {
-        title: 'NGS reports (pdf-files)',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '_NGS.pdf')
-            }>
-            view pdf
-          </a>
-        )
-      },
-      {
-        title: 'Slide Image',
-        width: '200',
-        render: record => (
-          <a
-            onClick={() =>
-              this.downloadFile(record.id, record.sample_name + '.jpg')
-            }>
-            view image
-          </a>
-        )
-      },
-      {
-        title: 'Notes',
-        dataIndex: 'notes',
-        sorter: true,
-        ...this.getColumnSearchProps('notes'),
-        sorter: (a, b) => a.notes.localeCompare(b.notes),
-        width: '200'
+        width: '30%'
       }
     ];
 
@@ -509,12 +641,25 @@ class Samples extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            scroll={{ x: 3800 }}
+            size="small"
             rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: event => {
+                  this.setState({
+                    currSample: record.key
+                  });
+                  console.log(record.key);
+                }
+              };
+            }}
           />
         </div>
+        {this.renderSummary(this.state.currSample)}
+        <br/>
+        <br/>
       </div>
     );
   }

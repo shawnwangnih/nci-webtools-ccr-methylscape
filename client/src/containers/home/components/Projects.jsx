@@ -266,8 +266,8 @@ class Projects extends React.Component {
         <div
           style={{
             'padding-left': '0px',
-            'padding-bottom': '5px',
-            'padding-top': '2px'
+            'padding-bottom': '0px',
+            'padding-top': '15px'
           }}>
           {/* <PageHeader title={"MethylScape Results"} /> */}
           <Form layout="inline">
