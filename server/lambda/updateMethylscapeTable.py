@@ -6,11 +6,12 @@ import csv
 import time
 import os
 
+
 RE_SAMPLE_ID = re.compile(r'ClassifierReports\/(.*?)\/(.*)')
-TABLE_NAME = os.environ['DynamoDBSampleTable']
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+TABLE_NAME = os.environ['TABLE_NAME']
 
 def lambda_handler(event, context):
     logger.info(event)
@@ -33,6 +34,8 @@ def lambda_handler(event, context):
             parse_classifier_prediction(sample_id, bucket, file_key)
         elif 'mgmt_prediction' in file_name.lower() and file_name.lower().endswith('.tsv'):
             parse_mgmt_prediction(sample_id, bucket, file_key)
+        elif 'report' in file_name.lower():
+            updateTable(sample_id, {'report_file_name':file_name})
         else:
             return {
                 'statusCode': 200,
@@ -47,6 +50,8 @@ def lambda_handler(event, context):
             delete_mgmt_prediction(sample_id)
         elif re.search('ClassifierReports/' + sample_id + '/$', file_key):
             delete_row(sample_id)
+        elif 'report' in file_name.lower():
+            delete_file_name(sample_id, file_name)
         else:
             return {
                 'statusCode': 200,
@@ -104,6 +109,7 @@ def updateTable(sample_id, data):
         
     logger.info('$$$$EXPRESSION: ' + expression)
     logger.info('$$$$VALUES: ' + json.dumps(values))
+    logger.info('$$$$NAMES:' + json.dumps(names))
     table.update_item(Key={'id':sample_id}, UpdateExpression=expression, ExpressionAttributeValues = values, ExpressionAttributeNames = names)
     
 #Only deletes column info - website will filter the rest out by itself
@@ -148,6 +154,27 @@ def delete_classifier_prediction(sample_id):
         
     table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
     #table.delete_item(Key={'id':sample_id})
+    
+def delete_file_name(sample_id):
+    logger.info("#### DELETING report file name data from item: " + sample_id)
+    dbd = boto3.resource('dynamodb')
+    table = dbd.Table(TABLE_NAME)
+    keyList = ['report_file_name']
+    attributes = {}
+    expression = 'remove '
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    count = 0
+    
+    for key in keyList:
+        if count != 0:
+            expression += ','
+        expression += '#' + alphabet[count]
+        attributes['#' + alphabet[count]] = key
+        count += 1
+        
+    table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
+    #table.delete_item(Key={'id':sample_id})
+    
     
 #option 1 -> just delete entire item
 def delete_mgmt_prediction(sample_id):
