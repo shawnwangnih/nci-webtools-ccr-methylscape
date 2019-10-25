@@ -320,7 +320,7 @@ class Samples extends React.Component {
           dataIndex: 'value',
           width: '50%',
           // sorter: true,
-          render: text => {
+          render: (text,row,index) => {
             if (text == 'View plot') {
               return (
                 <a
@@ -352,6 +352,17 @@ class Samples extends React.Component {
                   style={{ 'padding-left': '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download report') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '_Report_' + currRow.experiment + '.pdf')
                   }>
                   {text}
                 </a>
@@ -436,6 +447,11 @@ class Samples extends React.Component {
           value: 'View plot'
         },
         {
+          key: 'General_report',
+          header_name: 'Report',
+          value: 'Download report'
+        },
+        {
           key: 'NGS_reports',
           header_name: 'NGS reports (pdf-files)',
           value: 'Download pdf'
@@ -487,6 +503,7 @@ class Samples extends React.Component {
       return <div />;
     }
   }
+
 
   render() {
     const columns = [
@@ -642,6 +659,7 @@ class Samples extends React.Component {
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
             size="small"
+            ellipsis="true"
             rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}
@@ -658,8 +676,9 @@ class Samples extends React.Component {
           />
         </div>
         {this.renderSummary(this.state.currSample)}
-        <br/>
-        <br/>
+
+        <br />
+        <br />
       </div>
     );
   }
