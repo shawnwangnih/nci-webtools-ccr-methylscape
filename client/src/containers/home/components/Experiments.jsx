@@ -10,6 +10,7 @@ class Experiments extends React.Component {
     this.state = {
       filterProject: props.filter.project,
       filterExperiment: props.filter.experiment,
+      filterNumSamples: '',
       filterInvestigator: '',
       startDate: '',
       endDate: '',
@@ -394,7 +395,6 @@ class Experiments extends React.Component {
                   this.setState(
                     { startDate: dateString[0], endDate: dateString[1] },
                     () => {
-                      console.log('####DATE####' + this.state.startDate);
                       this.handleFilter();
                     }
                   );

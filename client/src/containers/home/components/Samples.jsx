@@ -1,15 +1,23 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
+import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
+const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterSample: '',
+      filterSampleName: '',
       filterProject: props.filter.project,
       filterSentrixID: props.filter.experiment,
+      filterSurgicalCase: '',
+      filterGender: '',
+      filterAge: '',
+      filterDiagnosis: '',
+      startDate: '',
+      endDate: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -152,17 +160,63 @@ class Samples extends React.Component {
     this.setState({ filteredData: sampleData });
   };
 
+  //Checks the dates from the form and and each date in the table
+  //and sees if the date falls between the two days
+  checkDates(date, s, e) {
+    if (s == '' || e == '') {
+      return true;
+    }
+    let start = s.split('-');
+    let end = e.split('-');
+    let check = date.split('/');
+
+    let startDate = new Date(
+      parseInt(start[0]),
+      parseInt(start[1]),
+      parseInt(start[2])
+    );
+    let endDate = new Date(
+      parseInt(end[0]),
+      parseInt(end[1]),
+      parseInt(end[2])
+    );
+    let toCheck = new Date(
+      parseInt(check[2]),
+      parseInt(check[0]),
+      parseInt(check[1])
+    );
+
+    return startDate <= toCheck && endDate >= toCheck;
+  }
   handleFilter = () => {
-    this.setState({
-      filteredData: this.state.data.filter(row => {
-        return (
-          row.project != null &&
-          row.experiment != null &&
-          row.project.toLowerCase().includes(this.getFilterProject()) &&
-          row.experiment.toLowerCase().includes(this.getExperimentFilter())
-        );
-      })
-    });
+    this.setState(
+      {
+        filteredData: this.state.data.filter(row => {
+          return (
+            row.project != null &&
+            row.experiment != null &&
+            row.sample_name
+              .toLowerCase()
+              .includes(this.state.filterSampleName.toLowerCase()) &&
+            row.experiment.toLowerCase().includes(this.getExperimentFilter()) &&
+            row.surgical_case
+              .toLowerCase()
+              .includes(this.state.filterSurgicalCase.toLowerCase()) &&
+            row.gender
+              .toLowerCase()
+              .includes(this.state.filterGender.toLowerCase()) &&
+            (row.age == this.state.filterAge.trim() ||
+              this.state.filterAge.trim() == '' ||
+              'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
+            row.diagnosis
+              .toLowerCase()
+              .includes(this.state.filterDiagnosis.toLowerCase()) &&
+            this.checkDates(row.date, this.state.startDate, this.state.endDate)
+          );
+        })
+      },
+      this.setState({ loading: false })
+    );
   };
 
   getExperimentFilter = () => {
@@ -320,7 +374,7 @@ class Samples extends React.Component {
           dataIndex: 'value',
           width: '50%',
           // sorter: true,
-          render: (text,row,index) => {
+          render: (text, row, index) => {
             if (text == 'View plot') {
               return (
                 <a
@@ -504,7 +558,6 @@ class Samples extends React.Component {
     }
   }
 
-
   render() {
     const columns = [
       {
@@ -597,10 +650,9 @@ class Samples extends React.Component {
         dataIndex: 'diagnosis',
         sorter: true,
         ellipsis: 'true',
-        height: '20px',
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '30%'
+        width: '23%'
       }
     ];
 
@@ -612,43 +664,146 @@ class Samples extends React.Component {
         <div
           style={{
             'padding-left': '0',
-            'padding-bottom': '5px',
-            'padding-top': '2px'
+            'padding-bottom': '0px',
+            'padding-top': '15px'
           }}>
           <Form layout="inline">
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '12%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.filterProject}
-                onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="Project Name"
+                value={this.state.filterSampleName}
+                onChange={e =>
+                  this.setState({ filterSampleName: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            {/* <Form.Item label="Sample">
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.filterSample}
-                onChange={e => this.setState({ filterSample: e.target.value })}
-                placeholder="Sample"
+                value={this.state.filterProject}
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
               />
-            </Form.Item> */}
-            <Form.Item label>
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '12%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterSentrixID}
                 onChange={e =>
-                  this.setState({ filterSentrixID: e.target.value })
+                  this.setState({ filterSentrixID: e.target.value }, () => {
+                    this.handleFilter();
+                  })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="Sentrix ID"
               />
             </Form.Item>
-            <Form.Item>
-              <Button icon="search" type="primary" onClick={this.handleFilter}>
-                Search
-              </Button>
-              {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                Clear
-              </Button> */}
+            <Form.Item
+              style={{
+                width: '8%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <RangePicker
+                onChange={(date, dateString) => {
+                  this.setState(
+                    { startDate: dateString[0], endDate: dateString[1] },
+                    () => {
+                      this.handleFilter();
+                    }
+                  );
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterSurgicalCase}
+                onChange={e =>
+                  this.setState({ filterSurgicalCase: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterGender}
+                onChange={e =>
+                  this.setState({ filterGender: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterAge}
+                onChange={e =>
+                  this.setState({ filterAge: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '23%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterDiagnosis}
+                onChange={e =>
+                  this.setState({ filterDiagnosis: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
             </Form.Item>
           </Form>
         </div>

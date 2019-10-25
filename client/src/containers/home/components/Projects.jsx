@@ -285,7 +285,6 @@ class Projects extends React.Component {
                     this.handleFilter();
                   })
                 }
-                placeholder="Project Name"
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
@@ -304,7 +303,6 @@ class Projects extends React.Component {
                   })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="Investigator Name"
               />
             </Form.Item>
             <Form.Item
