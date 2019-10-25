@@ -362,7 +362,7 @@ class Samples extends React.Component {
                 <a
                   style={{ 'padding-left': '20%' }}
                   onClick={() =>
-                    this.downloadFile(currRow.id, currRow.sample_name + '_Report_' + currRow.experiment + '.pdf')
+                    this.downloadFile(currRow.id, currRow.report_file_name)
                   }>
                   {text}
                 </a>
