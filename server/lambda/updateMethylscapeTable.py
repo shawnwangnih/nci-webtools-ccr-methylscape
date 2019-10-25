@@ -34,7 +34,7 @@ def lambda_handler(event, context):
             parse_classifier_prediction(sample_id, bucket, file_key)
         elif 'mgmt_prediction' in file_name.lower() and file_name.lower().endswith('.tsv'):
             parse_mgmt_prediction(sample_id, bucket, file_key)
-        elif 'report' in file_name.lower():
+        elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
             updateTable(sample_id, {'report_file_name':file_name})
         else:
             return {
@@ -50,7 +50,7 @@ def lambda_handler(event, context):
             delete_mgmt_prediction(sample_id)
         elif re.search('ClassifierReports/' + sample_id + '/$', file_key):
             delete_row(sample_id)
-        elif 'report' in file_name.lower():
+        elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
             delete_file_name(sample_id, file_name)
         else:
             return {
