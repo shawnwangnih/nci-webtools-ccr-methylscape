@@ -11,7 +11,7 @@ RE_SAMPLE_ID = re.compile(r'ClassifierReports\/(.*?)\/(.*)')
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-TABLE_NAME = os.environ['TABLE_NAME']
+TABLE_NAME = os.environ['DynamoDBSampleTable']
 
 def lambda_handler(event, context):
     logger.info(event)
