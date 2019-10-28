@@ -468,6 +468,11 @@ class Samples extends React.Component {
           value: currRow.diagnosis
         },
         {
+          key: 'tumor_data',
+          header_name: 'Tumor Data',
+          value: currRow.tumor_data
+        },
+        {
           key: 'family',
           header_name: 'Methylation Family (MF)',
           value: currRow.family
