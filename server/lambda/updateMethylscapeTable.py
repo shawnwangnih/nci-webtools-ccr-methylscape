@@ -214,7 +214,7 @@ def parse_sample_file(sample_id, bucket, file_key):
         'sample_well' : data[8][1], 'sample_plate' : data[8][2], 'sample_group' : data[8][3],
         'pool_id' : data[8][4], 'sentrix_id' : data[8][5], 'sentrix_position' : data[8][6],
         'material_type' : data[8][7], 'gender' : data[8][8], 'surgical_case' : data[8][9],
-        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data' data[8][13]
+        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data' : data[8][13]
     }
     sample_dict = dict(map(lambda kv: (str(kv[0]), str(kv[1])), sample_dict.items()))
     updateTable(sample_id, sample_dict)
