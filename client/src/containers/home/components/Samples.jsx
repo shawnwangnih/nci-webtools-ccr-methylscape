@@ -426,6 +426,7 @@ class Samples extends React.Component {
           }
         }
       ];
+      console.log('$$$EXPERIMENT$$$' + currRow.experiment);
       let extraData = [
         {
           key: 'sample_name',
