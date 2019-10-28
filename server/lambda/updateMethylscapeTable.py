@@ -210,9 +210,9 @@ def parse_sample_file(sample_id, bucket, file_key):
     obj_body = obj["Body"].read().decode('utf-8').splitlines(True)
     data = list(csv.reader(obj_body))
     sample_dict = { 'investigator': data[1][1], 'project': data[2][1],
-        'experiment': data[3][1], 'date': data[4][1], 'sample_name' : data[8][0],
+        'experiment': str(int(float(data[3][1]))), 'date': data[4][1], 'sample_name' : data[8][0],
         'sample_well' : data[8][1], 'sample_plate' : data[8][2], 'sample_group' : data[8][3],
-        'pool_id' : data[8][4], 'sentrix_id' : data[8][5], 'sentrix_position' : data[8][6],
+        'pool_id' : data[8][4], 'sentrix_id' : str(int(float(data[8][5]))), 'sentrix_position' : data[8][6],
         'material_type' : data[8][7], 'gender' : data[8][8], 'surgical_case' : data[8][9],
         'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data' : data[8][13]
     }
