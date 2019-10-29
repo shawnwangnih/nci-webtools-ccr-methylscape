@@ -193,8 +193,6 @@ def delete_mgmt_prediction(sample_id):
         expression += '#' + alphabet[count]
         attributes['#' + alphabet[count]] = key
         count += 1
-    logger.info('####Expression#### ' + expression)
-    logger.info('####Attributes#### ' + attributes)
     table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
     #table.delete_item(Key={'id':sample_id})
 
@@ -211,13 +209,12 @@ def parse_sample_file(sample_id, bucket, file_key):
     obj_body = obj["Body"].read().decode('utf-8').splitlines(True)
     data = list(csv.reader(obj_body))
 
-    logger.info('STRINGIFIED VALUE: ' + str(int(float(data[3][1]))))
     sample_dict = { 'investigator': data[1][1], 'project': data[2][1],
         'experiment': str(int(float(data[3][1]))), 'date': data[4][1], 'sample_name' : data[8][0],
         'sample_well' : data[8][1], 'sample_plate' : data[8][2], 'sample_group' : data[8][3],
         'pool_id' : data[8][4], 'sentrix_id' : str(int(float(data[8][5]))), 'sentrix_position' : data[8][6],
         'material_type' : data[8][7], 'gender' : data[8][8], 'surgical_case' : data[8][9],
-        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data' : data[8][13]
+        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data': data[8][13] if len(data[8]) > 13 else ''
     }
     sample_dict = dict(map(lambda kv: (str(kv[0]), str(kv[1])), sample_dict.items()))
     updateTable(sample_id, sample_dict)
