@@ -833,16 +833,12 @@ class Samples extends React.Component {
               let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
               return selected == '' ? coloring : selected;
             }}
-            rowClassName={(record, index) => {
-              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
-            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
                   this.setState({
                     currSample: record.key
                   });
-                  console.log(record.key);
                 }
               };
             }}
