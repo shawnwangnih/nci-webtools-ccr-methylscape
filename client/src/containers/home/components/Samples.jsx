@@ -824,9 +824,7 @@ class Samples extends React.Component {
             rowClassName={(record, index) => {
               let selected =
                 this.state.currSample == ''
-                  ? index == 0
-                    ? 'testing'
-                    : ''
+                  ? ''
                   : record.key == this.state.currSample
                   ? 'testing'
                   : '';
