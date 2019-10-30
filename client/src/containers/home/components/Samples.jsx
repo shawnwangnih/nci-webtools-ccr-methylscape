@@ -658,7 +658,12 @@ class Samples extends React.Component {
         ellipsis: 'true',
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '23%'
+        width: '23%',
+        render: (text, record) => (
+          <div>
+            {text}
+          </div>
+        )
       }
     ];
 
