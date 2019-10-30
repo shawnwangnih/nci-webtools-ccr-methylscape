@@ -3,16 +3,21 @@
   /* background-color: chartreuse; */
   background-color: #ffffe0;
 }
+.testing:hover{
+  background-color: #1890ff;
+}
 .grayBack {
   background-color: #f0f2f5;
 }
 .grayBack:hover {
+  background-color: #1890ff;
 }
 .whiteBack {
   background-color: white;
   border-bottom: 0px;
 }
 .whiteBack:hover {
+  background-color: #1890ff;
 }
 .ant-table-tbody > tr > td {
   border-bottom: 0px !important;
