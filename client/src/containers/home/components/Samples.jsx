@@ -822,6 +822,18 @@ class Samples extends React.Component {
             size="small"
             ellipsis="true"
             rowClassName={(record, index) => {
+              let selected =
+                this.state.currSample == ''
+                  ? index == 0
+                    ? 'testing'
+                    : ''
+                  : record.key == this.state.currSample
+                  ? 'testing'
+                  : '';
+              let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              return selected == '' ? coloring : selected;
+            }}
+            rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}
             onRow={(record, rowIndex) => {
