@@ -7,14 +7,12 @@
   background-color: #f0f2f5;
 }
 .grayBack:hover {
-  background-color: #f0f2f5;
 }
 .whiteBack {
   background-color: white;
   border-bottom: 0px;
 }
 .whiteBack:hover {
-  background-color: white;
 }
 .ant-table-tbody > tr > td {
   border-bottom: 0px !important;
