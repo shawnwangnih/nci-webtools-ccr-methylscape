@@ -2,14 +2,14 @@
   background-color: #f0f2f5;
 }
 .grayBack:hover {
-  background-color: #f0f2f5;
+  background-color: #e6f7ff;
 }
 .whiteBack {
   background-color: white;
   border-bottom: 0px;
 }
 .whiteBack:hover {
-  background-color: white;
+  background-color: #e6f7ff;
 }
 .ant-table-tbody > tr > td {
   border-bottom: 0px;

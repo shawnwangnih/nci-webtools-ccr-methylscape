@@ -1,15 +1,23 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Input, Button, Form, Select, Icon } from 'antd';
+import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
+const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterSample: '',
+      filterSampleName: '',
       filterProject: props.filter.project,
       filterSentrixID: props.filter.experiment,
+      filterSurgicalCase: '',
+      filterGender: '',
+      filterAge: '',
+      filterDiagnosis: '',
+      startDate: '',
+      endDate: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -26,6 +34,7 @@ class Samples extends React.Component {
     };
   }
 
+  //For pagination
   rangeFunction(total, range) {
     return (
       'Showing ' +
@@ -127,6 +136,7 @@ class Samples extends React.Component {
     this.handleFilter();
   }
 
+  //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
     sampleData = rawData.map(sample => {
@@ -152,31 +162,82 @@ class Samples extends React.Component {
     this.setState({ filteredData: sampleData });
   };
 
+  //Checks the dates from the form and and each date in the table
+  //and sees if the date falls between the two days
+  checkDates(date, s, e) {
+    if (s == '' || e == '') {
+      return true;
+    }
+    let start = s.split('-');
+    let end = e.split('-');
+    let check = date.split('/');
+
+    let startDate = new Date(
+      parseInt(start[0]),
+      parseInt(start[1]),
+      parseInt(start[2])
+    );
+    let endDate = new Date(
+      parseInt(end[0]),
+      parseInt(end[1]),
+      parseInt(end[2])
+    );
+    let toCheck = new Date(
+      parseInt(check[2]),
+      parseInt(check[0]),
+      parseInt(check[1])
+    );
+
+    return startDate <= toCheck && endDate >= toCheck;
+  }
+
+  //As each search bar is updated, the handlefilter function is called
+  //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
-    this.setState({
-      filteredData: this.state.data.filter(row => {
-        return (
-          row.project != null &&
-          row.experiment != null &&
-          row.project.toLowerCase().includes(this.getFilterProject()) &&
-          row.experiment.toLowerCase().includes(this.getExperimentFilter())
-        );
-      })
-    });
+    this.setState(
+      {
+        filteredData: this.state.data.filter(row => {
+          return (
+            row.project != null &&
+            row.experiment != null &&
+            row.sample_name
+              .toLowerCase()
+              .includes(this.state.filterSampleName.toLowerCase()) &&
+            row.experiment.toLowerCase().includes(this.getExperimentFilter()) &&
+            row.surgical_case
+              .toLowerCase()
+              .includes(this.state.filterSurgicalCase.toLowerCase()) &&
+            row.gender
+              .toLowerCase()
+              .includes(this.state.filterGender.toLowerCase()) &&
+            (row.age == this.state.filterAge.trim() ||
+              this.state.filterAge.trim() == '' ||
+              'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
+            row.diagnosis
+              .toLowerCase()
+              .includes(this.state.filterDiagnosis.toLowerCase()) &&
+            this.checkDates(row.date, this.state.startDate, this.state.endDate)
+          );
+        })
+      },
+      this.setState({ loading: false })
+    );
   };
 
+  //Checks if the filterSentrixID exists, and returns the lowercase version
   getExperimentFilter = () => {
     return this.state.filterSentrixID
       ? this.state.filterSentrixID.toLowerCase()
       : '';
   };
-
+  //Checks if the filterProject exists and returns the lowercase version
   getFilterProject = () => {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
       : '';
   };
 
+  //returns the methylation family if it exists
   getMF = data => {
     //console.log(JSON.stringify(data));
     return Object.keys(data).length >= 2
@@ -184,10 +245,12 @@ class Samples extends React.Component {
       : '';
   };
 
+  //returns the methylation family score if it exists
   getMFScore = data => {
     return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
   };
 
+  //returns the methylation class
   getMC = data => {
     const size = Object.keys(data).length;
     if (size >= 2) {
@@ -199,6 +262,7 @@ class Samples extends React.Component {
     }
   };
 
+  //returns the methylation class score
   getMCScore = data => {
     const size = Object.keys(data).length;
     if (size >= 2) {
@@ -222,6 +286,7 @@ class Samples extends React.Component {
     );
   };
 
+  //Helper to download files from the s3 bucket
   async downloadFile(sampleId, file) {
     console.log('Sample: ' + sampleId);
     console.log('File: ' + file);
@@ -244,21 +309,9 @@ class Samples extends React.Component {
     } catch (e) {
       console.log(e);
     }
-    /*    }
-
-      .then(res => {
-        return res.blob();
-      })
-      .then(function(blob) { // (**)
-        // fileSaver(blob, file);
-        return URL.createObjectURL(blob);
-      })
-      .then(url => {
-      })
-      .catch(error => console.log(error));
-      */
   }
 
+  //renders the items in the pagination
   itemRender(current, type, originalElement) {
     if (type === 'prev') {
       return <a>&#60;</a>;
@@ -269,37 +322,24 @@ class Samples extends React.Component {
     return <a>{current}</a>;
   }
 
+  //renders the summary for a sample when the sample is selected
   renderSummary(key) {
     if (key == '') {
       return <div />;
     }
-    var found = [];
+    var found = []; //Stores variable row that was selected
+
     let row = this.state.filteredData.filter(sample => {
-      //console.log(sample.key);
-      //console.log(key);
-      //console.log(sample.key == key);
-      //console.log(sample.project);
       if (sample.key == key) {
         found.push(sample);
       }
       return sample.key == key;
     });
-    /*
-    console.log(currRow);
-    console.log(JSON.stringify(row));
-    //console.log(row[0]);
-    var c = row[0];
-    console.log('filtered row', currRow.project);
-    console.log(JSON.stringify(c));
-    //console.log(c.project);
-    console.log(JSON.stringify([{ Hello: 'World', testing: 'test' }]));
-    console.log([{ Hello: 'World', testing: 'test' }][0]);
-    console.log([{ Hello: 'World', testing: 'test' }][0].Hello);
-    //let currRow = row;
-*/
+
     if (found.length != 0) {
       var currRow = found[0];
       console.log('Prediction: ' + JSON.stringify(currRow));
+      //2 columns, one for the key and one for the value
       let columns = [
         {
           title: 'Header name',
@@ -320,7 +360,10 @@ class Samples extends React.Component {
           dataIndex: 'value',
           width: '50%',
           // sorter: true,
-          render: text => {
+          
+          //Gives functionality to the rows with download links
+          render: (text, row, index) => {
+            //Should probably make these into indices in the future
             if (text == 'View plot') {
               return (
                 <a
@@ -357,10 +400,22 @@ class Samples extends React.Component {
                 </a>
               );
             }
+            if (text == 'Download report') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.report_file_name)
+                  }>
+                  {text}
+                </a>
+              );
+            }
             return <p style={{ 'padding-left': '20%' }}>{text}</p>;
           }
         }
       ];
+      //Defines the rows for the summary
       let extraData = [
         {
           key: 'sample_name',
@@ -403,6 +458,11 @@ class Samples extends React.Component {
           value: currRow.diagnosis
         },
         {
+          key: 'tumor_data',
+          header_name: 'Tumor Data',
+          value: currRow.tumor_data
+        },
+        {
           key: 'family',
           header_name: 'Methylation Family (MF)',
           value: currRow.family
@@ -436,6 +496,11 @@ class Samples extends React.Component {
           value: 'View plot'
         },
         {
+          key: 'General_report',
+          header_name: 'Report',
+          value: 'Download report'
+        },
+        {
           key: 'NGS_reports',
           header_name: 'NGS reports (pdf-files)',
           value: 'Download pdf'
@@ -451,6 +516,7 @@ class Samples extends React.Component {
           value: currRow.notes
         }
       ];
+
       let tableSettings = {
         loading: true,
         pagination: {
@@ -464,7 +530,6 @@ class Samples extends React.Component {
         data: [],
         filteredData: []
       };
-      //{...this.state}
       return (
         <div>
           <h2 style={{ 'text-align': 'center' }}>Sample Information</h2>
@@ -580,10 +645,14 @@ class Samples extends React.Component {
         dataIndex: 'diagnosis',
         sorter: true,
         ellipsis: 'true',
-        height: '20px',
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '30%'
+        width: '23%',
+        render: (text, record) => (
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"322px"}}>
+            {text}
+          </div>
+        )
       }
     ];
 
@@ -595,43 +664,146 @@ class Samples extends React.Component {
         <div
           style={{
             'padding-left': '0',
-            'padding-bottom': '5px',
-            'padding-top': '2px'
+            'padding-bottom': '0px',
+            'padding-top': '15px'
           }}>
           <Form layout="inline">
-            <Form.Item>
+            <Form.Item
+              style={{
+                width: '12%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.filterProject}
-                onChange={e => this.setState({ filterProject: e.target.value })}
-                placeholder="Project Name"
+                value={this.state.filterSampleName}
+                onChange={e =>
+                  this.setState({ filterSampleName: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            {/* <Form.Item label="Sample">
+            <Form.Item
+              style={{
+                width: '15%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
-                value={this.state.filterSample}
-                onChange={e => this.setState({ filterSample: e.target.value })}
-                placeholder="Sample"
+                value={this.state.filterProject}
+                onChange={e =>
+                  this.setState({ filterProject: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
                 onPressEnter={this.handleFilter}
               />
-            </Form.Item> */}
-            <Form.Item label>
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '12%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
               <Input
                 value={this.state.filterSentrixID}
                 onChange={e =>
-                  this.setState({ filterSentrixID: e.target.value })
+                  this.setState({ filterSentrixID: e.target.value }, () => {
+                    this.handleFilter();
+                  })
                 }
                 onPressEnter={this.handleFilter}
-                placeholder="Sentrix ID"
               />
             </Form.Item>
-            <Form.Item>
-              <Button icon="search" type="primary" onClick={this.handleFilter}>
-                Search
-              </Button>
-              {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                Clear
-              </Button> */}
+            <Form.Item
+              style={{
+                width: '8%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <RangePicker
+                onChange={(date, dateString) => {
+                  this.setState(
+                    { startDate: dateString[0], endDate: dateString[1] },
+                    () => {
+                      this.handleFilter();
+                    }
+                  );
+                }}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterSurgicalCase}
+                onChange={e =>
+                  this.setState({ filterSurgicalCase: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterGender}
+                onChange={e =>
+                  this.setState({ filterGender: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '10%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterAge}
+                onChange={e =>
+                  this.setState({ filterAge: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                width: '23%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+              <Input
+                value={this.state.filterDiagnosis}
+                onChange={e =>
+                  this.setState({ filterDiagnosis: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                onPressEnter={this.handleFilter}
+              />
             </Form.Item>
           </Form>
         </div>
@@ -642,8 +814,16 @@ class Samples extends React.Component {
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
             size="small"
+            ellipsis="true"
             rowClassName={(record, index) => {
-              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              let selected =
+                this.state.currSample == ''
+                  ? ''
+                  : record.key == this.state.currSample
+                  ? 'testing'
+                  : '';
+              let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              return selected == '' ? coloring : selected;
             }}
             onRow={(record, rowIndex) => {
               return {
@@ -651,15 +831,16 @@ class Samples extends React.Component {
                   this.setState({
                     currSample: record.key
                   });
-                  console.log(record.key);
                 }
               };
             }}
           />
         </div>
+        {/*Returns summaryif something has been selected */} 
         {this.renderSummary(this.state.currSample)}
-        <br/>
-        <br/>
+
+        <br />
+        <br />
       </div>
     );
   }

@@ -6,11 +6,12 @@ import csv
 import time
 import os
 
+
 RE_SAMPLE_ID = re.compile(r'ClassifierReports\/(.*?)\/(.*)')
-TABLE_NAME = os.environ['DynamoDBSampleTable']
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+TABLE_NAME = os.environ['DynamoDBSampleTable']
 
 def lambda_handler(event, context):
     logger.info(event)
@@ -33,6 +34,8 @@ def lambda_handler(event, context):
             parse_classifier_prediction(sample_id, bucket, file_key)
         elif 'mgmt_prediction' in file_name.lower() and file_name.lower().endswith('.tsv'):
             parse_mgmt_prediction(sample_id, bucket, file_key)
+        elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
+            updateTable(sample_id, {'report_file_name':file_name})
         else:
             return {
                 'statusCode': 200,
@@ -47,6 +50,8 @@ def lambda_handler(event, context):
             delete_mgmt_prediction(sample_id)
         elif re.search('ClassifierReports/' + sample_id + '/$', file_key):
             delete_row(sample_id)
+        elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
+            delete_file_name(sample_id, file_name)
         else:
             return {
                 'statusCode': 200,
@@ -88,7 +93,7 @@ def updateTable(sample_id, data):
     counter = 0
     values = {}
     names = {}
-    keyList = ['investigator','project','experiment','date','sample_name','sample_well','sample_plate','sample_group','pool_id','sentrix_id','sentrix_position','material_type','gender','surgical_case','diagnosis','age','notes']
+    keyList = ['investigator','project','experiment','date','sample_name','sample_well','sample_plate','sample_group','pool_id','sentrix_id','sentrix_position','material_type','gender','surgical_case','diagnosis','age','notes','tumor_data']
 
     for key, value in data.items():
         if counter != 0 and key != 'id':
@@ -104,6 +109,7 @@ def updateTable(sample_id, data):
         
     logger.info('$$$$EXPRESSION: ' + expression)
     logger.info('$$$$VALUES: ' + json.dumps(values))
+    logger.info('$$$$NAMES:' + json.dumps(names))
     table.update_item(Key={'id':sample_id}, UpdateExpression=expression, ExpressionAttributeValues = values, ExpressionAttributeNames = names)
     
 #Only deletes column info - website will filter the rest out by itself
@@ -111,7 +117,7 @@ def delete_sample_file(sample_id):
     logger.info("#### DELETING sample data from item: " + sample_id)
     dbd = boto3.resource('dynamodb')
     table = dbd.Table(TABLE_NAME)
-    keyList = ['investigator','project','experiment','date','sample_name','sample_well','sample_plate','sample_group','pool_id','sentrix_id','sentrix_position','material_type','gender','surgical_case','diagnosis','age','notes']
+    keyList = ['investigator','project','experiment','date','sample_name','sample_well','sample_plate','sample_group','pool_id','sentrix_id','sentrix_position','material_type','gender','surgical_case','diagnosis','age','notes','tumor_data']
     attributes = {}
     expression = 'remove '
     alphabet = 'abcdefghijklmnopqrstuvwxyz'
@@ -149,6 +155,27 @@ def delete_classifier_prediction(sample_id):
     table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
     #table.delete_item(Key={'id':sample_id})
     
+def delete_file_name(sample_id):
+    logger.info("#### DELETING report file name data from item: " + sample_id)
+    dbd = boto3.resource('dynamodb')
+    table = dbd.Table(TABLE_NAME)
+    keyList = ['report_file_name']
+    attributes = {}
+    expression = 'remove '
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    count = 0
+    
+    for key in keyList:
+        if count != 0:
+            expression += ','
+        expression += '#' + alphabet[count]
+        attributes['#' + alphabet[count]] = key
+        count += 1
+        
+    table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
+    #table.delete_item(Key={'id':sample_id})
+    
+    
 #option 1 -> just delete entire item
 def delete_mgmt_prediction(sample_id):
     logger.info("#### DELETING mgmt_prediction data from item: " + sample_id)
@@ -166,7 +193,6 @@ def delete_mgmt_prediction(sample_id):
         expression += '#' + alphabet[count]
         attributes['#' + alphabet[count]] = key
         count += 1
-        
     table.update_item(Key = {'id':sample_id}, UpdateExpression = expression, ExpressionAttributeNames = attributes)
     #table.delete_item(Key={'id':sample_id})
 
@@ -182,12 +208,13 @@ def parse_sample_file(sample_id, bucket, file_key):
     obj = s3.get_object(Bucket=bucket, Key=file_key)
     obj_body = obj["Body"].read().decode('utf-8').splitlines(True)
     data = list(csv.reader(obj_body))
+
     sample_dict = { 'investigator': data[1][1], 'project': data[2][1],
-        'experiment': data[3][1], 'date': data[4][1], 'sample_name' : data[8][0],
+        'experiment': str(int(float(data[3][1]))), 'date': data[4][1], 'sample_name' : data[8][0],
         'sample_well' : data[8][1], 'sample_plate' : data[8][2], 'sample_group' : data[8][3],
-        'pool_id' : data[8][4], 'sentrix_id' : data[8][5], 'sentrix_position' : data[8][6],
+        'pool_id' : data[8][4], 'sentrix_id' : str(int(float(data[8][5]))), 'sentrix_position' : data[8][6],
         'material_type' : data[8][7], 'gender' : data[8][8], 'surgical_case' : data[8][9],
-        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12],
+        'diagnosis' : data[8][10], 'age' : data[8][11], 'notes' : data[8][12], 'tumor_data': data[8][13] if len(data[8]) > 13 else ''
     }
     sample_dict = dict(map(lambda kv: (str(kv[0]), str(kv[1])), sample_dict.items()))
     updateTable(sample_id, sample_dict)
