@@ -34,6 +34,7 @@ class Samples extends React.Component {
     };
   }
 
+  //For pagination
   rangeFunction(total, range) {
     return (
       'Showing ' +
@@ -135,6 +136,7 @@ class Samples extends React.Component {
     this.handleFilter();
   }
 
+  //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
     sampleData = rawData.map(sample => {
@@ -188,6 +190,9 @@ class Samples extends React.Component {
 
     return startDate <= toCheck && endDate >= toCheck;
   }
+
+  //As each search bar is updated, the handlefilter function is called
+  //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
     this.setState(
       {
@@ -219,18 +224,20 @@ class Samples extends React.Component {
     );
   };
 
+  //Checks if the filterSentrixID exists, and returns the lowercase version
   getExperimentFilter = () => {
     return this.state.filterSentrixID
       ? this.state.filterSentrixID.toLowerCase()
       : '';
   };
-
+  //Checks if the filterProject exists and returns the lowercase version
   getFilterProject = () => {
     return this.state.filterProject
       ? this.state.filterProject.toLowerCase()
       : '';
   };
 
+  //returns the methylation family if it exists
   getMF = data => {
     //console.log(JSON.stringify(data));
     return Object.keys(data).length >= 2
@@ -238,10 +245,12 @@ class Samples extends React.Component {
       : '';
   };
 
+  //returns the methylation family score if it exists
   getMFScore = data => {
     return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
   };
 
+  //returns the methylation class
   getMC = data => {
     const size = Object.keys(data).length;
     if (size >= 2) {
@@ -253,6 +262,7 @@ class Samples extends React.Component {
     }
   };
 
+  //returns the methylation class score
   getMCScore = data => {
     const size = Object.keys(data).length;
     if (size >= 2) {
@@ -276,6 +286,7 @@ class Samples extends React.Component {
     );
   };
 
+  //Helper to download files from the s3 bucket
   async downloadFile(sampleId, file) {
     console.log('Sample: ' + sampleId);
     console.log('File: ' + file);
@@ -298,21 +309,9 @@ class Samples extends React.Component {
     } catch (e) {
       console.log(e);
     }
-    /*    }
-
-      .then(res => {
-        return res.blob();
-      })
-      .then(function(blob) { // (**)
-        // fileSaver(blob, file);
-        return URL.createObjectURL(blob);
-      })
-      .then(url => {
-      })
-      .catch(error => console.log(error));
-      */
   }
 
+  //renders the items in the pagination
   itemRender(current, type, originalElement) {
     if (type === 'prev') {
       return <a>&#60;</a>;
@@ -323,37 +322,24 @@ class Samples extends React.Component {
     return <a>{current}</a>;
   }
 
+  //renders the summary for a sample when the sample is selected
   renderSummary(key) {
     if (key == '') {
       return <div />;
     }
-    var found = [];
+    var found = []; //Stores variable row that was selected
+
     let row = this.state.filteredData.filter(sample => {
-      //console.log(sample.key);
-      //console.log(key);
-      //console.log(sample.key == key);
-      //console.log(sample.project);
       if (sample.key == key) {
         found.push(sample);
       }
       return sample.key == key;
     });
-    /*
-    console.log(currRow);
-    console.log(JSON.stringify(row));
-    //console.log(row[0]);
-    var c = row[0];
-    console.log('filtered row', currRow.project);
-    console.log(JSON.stringify(c));
-    //console.log(c.project);
-    console.log(JSON.stringify([{ Hello: 'World', testing: 'test' }]));
-    console.log([{ Hello: 'World', testing: 'test' }][0]);
-    console.log([{ Hello: 'World', testing: 'test' }][0].Hello);
-    //let currRow = row;
-*/
+
     if (found.length != 0) {
       var currRow = found[0];
       console.log('Prediction: ' + JSON.stringify(currRow));
+      //2 columns, one for the key and one for the value
       let columns = [
         {
           title: 'Header name',
@@ -374,7 +360,10 @@ class Samples extends React.Component {
           dataIndex: 'value',
           width: '50%',
           // sorter: true,
+          
+          //Gives functionality to the rows with download links
           render: (text, row, index) => {
+            //Should probably make these into indices in the future
             if (text == 'View plot') {
               return (
                 <a
@@ -426,7 +415,7 @@ class Samples extends React.Component {
           }
         }
       ];
-      console.log('$$$EXPERIMENT$$$' + currRow.experiment);
+      //Defines the rows for the summary
       let extraData = [
         {
           key: 'sample_name',
@@ -527,6 +516,7 @@ class Samples extends React.Component {
           value: currRow.notes
         }
       ];
+
       let tableSettings = {
         loading: true,
         pagination: {
@@ -540,7 +530,6 @@ class Samples extends React.Component {
         data: [],
         filteredData: []
       };
-      //{...this.state}
       return (
         <div>
           <h2 style={{ 'text-align': 'center' }}>Sample Information</h2>
@@ -847,6 +836,7 @@ class Samples extends React.Component {
             }}
           />
         </div>
+        {/*Returns summaryif something has been selected */} 
         {this.renderSummary(this.state.currSample)}
 
         <br />
