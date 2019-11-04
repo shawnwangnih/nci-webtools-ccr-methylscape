@@ -735,6 +735,7 @@ class Samples extends React.Component {
                     }
                   );
                 }}
+                placeholder=''
               />
             </Form.Item>
             <Form.Item
