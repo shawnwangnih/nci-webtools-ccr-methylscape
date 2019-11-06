@@ -593,6 +593,8 @@ class Samples extends React.Component {
 
   onTableRowExpand(expanded, record){
     var keys = [];
+    console.log(expanded)
+    console.log(JSON.stringify(record))
     if(expanded){
         keys.push(record.key); // I have set my record.id as row key. Check the documentation for more details.
     }
