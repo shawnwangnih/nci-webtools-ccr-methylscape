@@ -4,6 +4,7 @@ import { Table, Input, Button, Form, Select, Icon } from 'antd';
 import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
+import moment from 'moment';
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
   constructor(props) {
@@ -127,6 +128,15 @@ class Samples extends React.Component {
         this.handleFilter();
       });
     }
+    this.setState({
+      filterSampleName: '',
+      filterSurgicalCase: '',
+      filterGender: '',
+      filterAge: '',
+      filterDiagnosis: '',
+      startDate: '',
+      endDate: '',
+    })
   }
 
   async componentDidMount() {
@@ -199,6 +209,7 @@ class Samples extends React.Component {
         filteredData: this.state.data.filter(row => {
           return (
             row.project != null &&
+            row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.experiment != null &&
             row.sample_name
               .toLowerCase()
@@ -278,7 +289,14 @@ class Samples extends React.Component {
     this.setState(
       {
         filterProject: '',
-        filterSentrixID: ''
+        filterSentrixID: '',
+        filterSampleName: '',
+        filterSurgicalCase: '',
+        filterGender: '',
+        filterAge: '',
+        filterDiagnosis: '',
+        startDate: '',
+        endDate: '',
       },
       () => {
         this.handleFilter();
@@ -288,8 +306,6 @@ class Samples extends React.Component {
 
   //Helper to download files from the s3 bucket
   async downloadFile(sampleId, file) {
-    console.log('Sample: ' + sampleId);
-    console.log('File: ' + file);
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -338,7 +354,6 @@ class Samples extends React.Component {
 
     if (found.length != 0) {
       var currRow = found[0];
-      console.log('Prediction: ' + JSON.stringify(currRow));
       //2 columns, one for the key and one for the value
       let columns = [
         {
@@ -611,7 +626,7 @@ class Samples extends React.Component {
         ellipsis: true,
         // sorter: true,
         ...this.getColumnSearchProps('date'),
-        width: '8%'
+        width: '13%'
       },
       {
         title: 'Surgical Case',
@@ -644,12 +659,12 @@ class Samples extends React.Component {
         title: 'Diagnosis',
         dataIndex: 'diagnosis',
         sorter: true,
-        ellipsis: 'true',
+        ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '23%',
+        width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"260px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"220px"}}>
             {text}
           </div>
         )
@@ -721,7 +736,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '8%',
+                width: '13%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -735,6 +750,8 @@ class Samples extends React.Component {
                     }
                   );
                 }}
+                format = "MM-DD-YYYY"
+                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
                 placeholder=''
               />
             </Form.Item>
@@ -791,7 +808,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '23%',
+                width: '18%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
