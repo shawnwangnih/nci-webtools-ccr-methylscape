@@ -94,9 +94,9 @@ class Experiments extends React.Component {
     if(datea.includes('-')){
       let date1 = datea.split('-');
       converted1 = new Date(
+        2019,
         this.getMonth(date1[0]),
-        parseInt(date1[1]),
-        2019
+        parseInt(date1[1])
       );
     }
     else{
@@ -110,9 +110,9 @@ class Experiments extends React.Component {
     if(dateb.includes('-')){
       let date2 = dateb.split('-')
       converted2 = new Date(
+        2019,
         this.getMonth(date2[0]),
-        parseInt(date2[1]),
-        2019
+        parseInt(date2[1])
       )
     }
     else{
