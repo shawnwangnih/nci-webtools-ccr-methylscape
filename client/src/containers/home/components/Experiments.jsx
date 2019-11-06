@@ -83,9 +83,13 @@ class Experiments extends React.Component {
   }
 
   compareDates(a,b){
+    console.log(a)
+    console.log(typeof a)
+    console.log(b)
+    console.log(typeof b)
     let converted1 = new Date();
     let converted2 = new Date();
-    if(a.includes('-')){
+    /*if(a.includes('-')){
       let date1 = a.split('-');
       converted1 = new Date(
         this.getMonth(date1[0]),
@@ -116,7 +120,7 @@ class Experiments extends React.Component {
         parseInt(date2[0]),
         parseInt(date2[1])
       )
-    }
+    }*/
     return converted1 > converted2
   }
 
