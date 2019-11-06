@@ -31,7 +31,8 @@ class Samples extends React.Component {
       rawData: props.data,
       data: [],
       filteredData: [],
-      currSample: ''
+      currSample: '',
+      expandedRowKeys: [],
     };
   }
 
@@ -590,7 +591,14 @@ class Samples extends React.Component {
     return <div></div>
   };
 
+  onTableRowExpand(expanded, record){
+    var keys = [];
+    if(expanded){
+        keys.push(record.id); // I have set my record.id as row key. Check the documentation for more details.
+    }
 
+    this.setState({expandedRowKeys: keys});
+}
 
   //renders the summary for a sample when the sample is selected
   renderSummary(key) {
@@ -1099,6 +1107,8 @@ class Samples extends React.Component {
             }}
             expandedRowRender={this.expandedRowRender}
             expandRowByClick = {true}
+            expandedRowKeys={this.state.expandedRowKeys}
+            onExpand={this.onTableRowExpand}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
