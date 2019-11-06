@@ -3,6 +3,7 @@ import React from 'react';
 import { Table, Input, Button, Form } from 'antd';
 import { DatePicker } from 'antd';
 import './Projects.css';
+import moment from 'moment';
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 class Projects extends React.Component {
@@ -10,7 +11,6 @@ class Projects extends React.Component {
     super(props);
     this.state = {
       filterProject: this.props.filter.project,
-      filterInvestigator: '',
       loading: true,
       pagination: {
         position: 'bottom',
@@ -25,6 +25,7 @@ class Projects extends React.Component {
       filteredData: [],
       rawData: props.data,
       currRecord: '',
+      filterInvestigator: '',
       endDate: '',
       startDate: '',
       filterNumSamples: '',
@@ -42,6 +43,15 @@ class Projects extends React.Component {
     this.setState({
       currRecord: nextProps.project !== undefined ? nextProps.project : ''
     });
+    this.setState({
+      filterInvestigator: '',
+      endDate: '',
+      startDate: '',
+      filterNumSamples: '',
+      filterNumExperiments: '',
+    }, () => {
+      this.handleFilter();
+    })
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
@@ -54,6 +64,7 @@ class Projects extends React.Component {
 
   createDataTable = async rawData => {
     var projectData = {};
+    if(rawData!==undefined){
     rawData.map(sample => {
       var curProject = sample.project;
       if (curProject == null || sample.experiment == null) {
@@ -87,6 +98,7 @@ class Projects extends React.Component {
       this.setState({ currRecord: sorted[0] });
       this.props.changeSummeryPorject(sorted[0]);
     }
+  }
   };
 
   rangeFunction(total, range) {
@@ -112,14 +124,14 @@ class Projects extends React.Component {
     let check = date.split('/');
 
     let startDate = new Date(
+      parseInt(start[2]),
       parseInt(start[0]),
-      parseInt(start[1]),
-      parseInt(start[2])
+      parseInt(start[1])
     );
     let endDate = new Date(
+      parseInt(end[2]),
       parseInt(end[0]),
-      parseInt(end[1]),
-      parseInt(end[2])
+      parseInt(end[1])
     );
     let toCheck = new Date(
       parseInt(check[2]),
@@ -358,6 +370,9 @@ class Projects extends React.Component {
                     }
                   );
                 }}
+                format = "MM-DD-YYYY"
+                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                placeholder=''
               />
             </Form.Item>
           </Form>

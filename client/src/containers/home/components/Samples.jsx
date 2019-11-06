@@ -136,6 +136,8 @@ class Samples extends React.Component {
       filterDiagnosis: '',
       startDate: '',
       endDate: '',
+    }, () => {
+      this.handleFilter();
     })
   }
 
@@ -183,14 +185,14 @@ class Samples extends React.Component {
     let check = date.split('/');
 
     let startDate = new Date(
+      parseInt(start[2]),
       parseInt(start[0]),
-      parseInt(start[1]),
-      parseInt(start[2])
+      parseInt(start[1])
     );
     let endDate = new Date(
+      parseInt(end[2]),
       parseInt(end[0]),
-      parseInt(end[1]),
-      parseInt(end[2])
+      parseInt(end[1])
     );
     let toCheck = new Date(
       parseInt(check[2]),

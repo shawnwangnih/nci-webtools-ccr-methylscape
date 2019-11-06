@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { DatePicker, Table, Input, Button, Form, Select } from 'antd';
 import fileSaver from 'file-saver';
 import './Experiments.css';
+import moment from 'moment';
 const { RangePicker } = DatePicker;
+
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
@@ -52,14 +54,14 @@ class Experiments extends React.Component {
     let check = date.split('/');
 
     let startDate = new Date(
+      parseInt(start[2]),
       parseInt(start[0]),
-      parseInt(start[1]),
-      parseInt(start[2])
+      parseInt(start[1])
     );
     let endDate = new Date(
+      parseInt(end[2]),
       parseInt(end[0]),
-      parseInt(end[1]),
-      parseInt(end[2])
+      parseInt(end[1])
     );
     let toCheck = new Date(
       parseInt(check[2]),
@@ -81,6 +83,14 @@ class Experiments extends React.Component {
         this.handleFilter();
       });
     }
+    this.setState({
+      filterNumSamples: '',
+      filterInvestigator: '',
+      startDate: '',
+      endDate: ''
+    }, () => {
+      this.handleFilter();
+    })
   }
 
   async componentDidMount() {
@@ -399,6 +409,9 @@ class Experiments extends React.Component {
                     }
                   );
                 }}
+                format = "MM-DD-YYYY"
+                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                placeholder = ''
               />
             </Form.Item>
             {/* <Form.Item label="Date">
