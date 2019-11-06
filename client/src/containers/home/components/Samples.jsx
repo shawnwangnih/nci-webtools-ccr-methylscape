@@ -395,14 +395,14 @@ class Samples extends React.Component {
     return <a>{current}</a>;
   }
 
-  expandedRowRender = () => {
+  expandedRowRender = (record, index, indent, expanded) => {
     var found = []; //Stores variable row that was selected
 
     let row = this.state.filteredData.filter(sample => {
-      if (sample.key == this.state.currSample) {
+      if (sample.key == record.key) {
         found.push(sample);
       }
-      return sample.key == this.state.currSample;
+      return sample.key == record.key;
     });
     if(found.length > 0){
     var currRow = found[0]
