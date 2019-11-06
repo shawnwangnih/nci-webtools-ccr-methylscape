@@ -87,10 +87,12 @@ class Experiments extends React.Component {
     console.log(typeof a)
     console.log(b)
     console.log(typeof b)
+    let datea = a.date
+    let dateb = b.date
     let converted1 = new Date();
     let converted2 = new Date();
-    /*if(a.includes('-')){
-      let date1 = a.split('-');
+    if(datea.includes('-')){
+      let date1 = datea.split('-');
       converted1 = new Date(
         this.getMonth(date1[0]),
         parseInt(date1[1]),
@@ -98,15 +100,15 @@ class Experiments extends React.Component {
       );
     }
     else{
-      let date1 = a.split('/')
+      let date1 = datea.split('/')
       converted2 = new Date(
         parseInt(date1[2]),
         parseInt(date1[0]),
         parseInt(date1[1])
       )
     }
-    if(b.includes('-')){
-      let date2 = b.split('-')
+    if(dateb.includes('-')){
+      let date2 = dateb.split('-')
       converted2 = new Date(
         this.getMonth(date2[0]),
         parseInt(date2[1]),
@@ -114,13 +116,13 @@ class Experiments extends React.Component {
       )
     }
     else{
-      let date2 = b.split('/')
+      let date2 = dateb.split('/')
       converted2 = new Date(
         parseInt(date2[2]),
         parseInt(date2[0]),
         parseInt(date2[1])
       )
-    }*/
+    }
     return converted1 > converted2
   }
 
