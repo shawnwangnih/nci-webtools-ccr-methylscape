@@ -1123,7 +1123,7 @@ class Samples extends React.Component {
           />
         </div>
         {/*Returns summaryif something has been selected */} 
-        {this.renderSummary(this.state.currSample)}
+        {/*this.renderSummary(this.state.currSample)*/}
 
         <br />
         <br />
