@@ -72,6 +72,54 @@ class Experiments extends React.Component {
     return startDate <= toCheck && endDate >= toCheck;
   }
 
+  getMonth(element){
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    for(let i = 0; i < months.length; i++){
+      if(months[i] == element){
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  compareDates(a,b){
+    let converted1 = new Date();
+    let converted2 = new Date();
+    if(a.includes('-')){
+      let date1 = a.split('-');
+      converted1 = new Date(
+        this.getMonth(date1[0]),
+        parseInt(date1[1]),
+        2019
+      );
+    }
+    else{
+      let date1 = a.split('/')
+      converted2 = new Date(
+        parseInt(date1[2]),
+        parseInt(date1[0]),
+        parseInt(date1[1])
+      )
+    }
+    if(b.includes('-')){
+      let date2 = b.split('-')
+      converted2 = new Date(
+        this.getMonth(date2[0]),
+        parseInt(date2[1]),
+        2019
+      )
+    }
+    else{
+      let date2 = b.split('/')
+      converted2 = new Date(
+        parseInt(date2[2]),
+        parseInt(date2[0]),
+        parseInt(date2[1])
+      )
+    }
+    return converted1 > converted2
+  }
+
   async componentWillReceiveProps(nextProps) {
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
@@ -278,7 +326,7 @@ class Experiments extends React.Component {
       {
         title: 'Date Created',
         dataIndex: 'date',
-        sorter: true,
+        sorter: (a,b) => this.compareDates(a,b),
         width: '13%'
       },
       {
