@@ -48,6 +48,60 @@ class Samples extends React.Component {
     );
   }
 
+  getMonth(element){
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    for(let i = 0; i < months.length; i++){
+      if(months[i] == element){
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  compareDates(a,b){
+    console.log(a)
+    console.log(typeof a)
+    console.log(b)
+    console.log(typeof b)
+    let datea = a.date
+    let dateb = b.date
+    let converted1 = new Date();
+    let converted2 = new Date();
+    if(datea.includes('-')){
+      let date1 = datea.split('-');
+      converted1 = new Date(
+        2019,
+        this.getMonth(date1[1]),
+        parseInt(date1[0])
+      );
+    }
+    else{
+      let date1 = datea.split('/')
+      converted2 = new Date(
+        parseInt(date1[2]),
+        parseInt(date1[0]),
+        parseInt(date1[1])
+      )
+    }
+    if(dateb.includes('-')){
+      let date2 = dateb.split('-')
+      converted2 = new Date(
+        2019,
+        this.getMonth(date2[1]),
+        parseInt(date2[0])
+      )
+    }
+    else{
+      let date2 = dateb.split('/')
+      converted2 = new Date(
+        parseInt(date2[2]),
+        parseInt(date2[0]),
+        parseInt(date2[1])
+      )
+    }
+    return converted1 > converted2
+  }
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -136,6 +190,7 @@ class Samples extends React.Component {
       filterDiagnosis: '',
       startDate: '',
       endDate: '',
+      currSample:'',
     }, () => {
       this.handleFilter();
     })
@@ -626,7 +681,7 @@ class Samples extends React.Component {
         title: 'Date',
         dataIndex: 'date',
         ellipsis: true,
-        // sorter: true,
+        sorter: (a,b) => this.compareDates(a,b),
         ...this.getColumnSearchProps('date'),
         width: '13%'
       },
@@ -666,7 +721,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('diagnosis'),
         width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"204px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"200px"}}>
             {text}
           </div>
         )
