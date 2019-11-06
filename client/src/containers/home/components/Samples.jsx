@@ -591,7 +591,7 @@ class Samples extends React.Component {
     return <div></div>
   };
 
-  onTableRowExpand(expanded, record){
+  onTableRowExpand = (expanded, record) => {
     var keys = [];
     console.log(expanded)
     console.log(JSON.stringify(record))
@@ -600,7 +600,7 @@ class Samples extends React.Component {
     }
 
     this.setState({expandedRowKeys: keys});
-}
+  }
 
   //renders the summary for a sample when the sample is selected
   renderSummary(key) {
