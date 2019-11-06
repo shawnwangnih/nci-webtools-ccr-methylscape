@@ -584,7 +584,8 @@ class Samples extends React.Component {
           value: currRow.notes
         }
       ];
-    return <Table columns={columns} dataSource={extraData} pagination={false} />;
+    return <Table columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
+    />;
     }
     return <div></div>
   };
@@ -1097,6 +1098,7 @@ class Samples extends React.Component {
               return selected == '' ? coloring : selected;
             }}
             expandedRowRender={this.expandedRowRender}
+            expandRowByClick = {true}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
