@@ -666,7 +666,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('diagnosis'),
         width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"220px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"204px"}}>
             {text}
           </div>
         )
