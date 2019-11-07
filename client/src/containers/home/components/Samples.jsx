@@ -1061,7 +1061,7 @@ class Samples extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '0',
+            'padding-left': '50px',
             'padding-bottom': '0px',
             'padding-top': '15px'
           }}>
