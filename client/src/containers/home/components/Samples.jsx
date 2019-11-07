@@ -666,7 +666,7 @@ class Samples extends React.Component {
           value2:
             currRow.mgmt_prediction == null
               ? ''
-              : currRow.mgmt_prediction.Estimated.toFixed(3)
+              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3)
         },
         {
           key: 'tumor_data',
