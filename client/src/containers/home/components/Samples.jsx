@@ -4,6 +4,7 @@ import { Table, Input, Button, Form, Select, Icon } from 'antd';
 import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
+import moment from 'moment';
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
   constructor(props) {
@@ -30,7 +31,8 @@ class Samples extends React.Component {
       rawData: props.data,
       data: [],
       filteredData: [],
-      currSample: ''
+      currSample: '',
+      expandedRowKeys: [],
     };
   }
 
@@ -45,6 +47,60 @@ class Samples extends React.Component {
       total.toString() +
       ' items'
     );
+  }
+
+  getMonth(element){
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    for(let i = 0; i < months.length; i++){
+      if(months[i] == element){
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  compareDates(a,b){
+    console.log(a)
+    console.log(typeof a)
+    console.log(b)
+    console.log(typeof b)
+    let datea = a.date
+    let dateb = b.date
+    let converted1 = new Date();
+    let converted2 = new Date();
+    if(datea.includes('-')){
+      let date1 = datea.split('-');
+      converted1 = new Date(
+        2019,
+        this.getMonth(date1[1]),
+        parseInt(date1[0])
+      );
+    }
+    else{
+      let date1 = datea.split('/')
+      converted2 = new Date(
+        parseInt(date1[2]),
+        parseInt(date1[0]),
+        parseInt(date1[1])
+      )
+    }
+    if(dateb.includes('-')){
+      let date2 = dateb.split('-')
+      converted2 = new Date(
+        2019,
+        this.getMonth(date2[1]),
+        parseInt(date2[0])
+      )
+    }
+    else{
+      let date2 = dateb.split('/')
+      converted2 = new Date(
+        parseInt(date2[2]),
+        parseInt(date2[0]),
+        parseInt(date2[1])
+      )
+    }
+    return converted1 > converted2
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -127,6 +183,18 @@ class Samples extends React.Component {
         this.handleFilter();
       });
     }
+    this.setState({
+      filterSampleName: '',
+      filterSurgicalCase: '',
+      filterGender: '',
+      filterAge: '',
+      filterDiagnosis: '',
+      startDate: '',
+      endDate: '',
+      currSample:'',
+    }, () => {
+      this.handleFilter();
+    })
   }
 
   async componentDidMount() {
@@ -173,14 +241,14 @@ class Samples extends React.Component {
     let check = date.split('/');
 
     let startDate = new Date(
+      parseInt(start[2]),
       parseInt(start[0]),
-      parseInt(start[1]),
-      parseInt(start[2])
+      parseInt(start[1])
     );
     let endDate = new Date(
+      parseInt(end[2]),
       parseInt(end[0]),
-      parseInt(end[1]),
-      parseInt(end[2])
+      parseInt(end[1])
     );
     let toCheck = new Date(
       parseInt(check[2]),
@@ -199,6 +267,7 @@ class Samples extends React.Component {
         filteredData: this.state.data.filter(row => {
           return (
             row.project != null &&
+            row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.experiment != null &&
             row.sample_name
               .toLowerCase()
@@ -278,7 +347,14 @@ class Samples extends React.Component {
     this.setState(
       {
         filterProject: '',
-        filterSentrixID: ''
+        filterSentrixID: '',
+        filterSampleName: '',
+        filterSurgicalCase: '',
+        filterGender: '',
+        filterAge: '',
+        filterDiagnosis: '',
+        startDate: '',
+        endDate: '',
       },
       () => {
         this.handleFilter();
@@ -288,8 +364,6 @@ class Samples extends React.Component {
 
   //Helper to download files from the s3 bucket
   async downloadFile(sampleId, file) {
-    console.log('Sample: ' + sampleId);
-    console.log('File: ' + file);
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -322,6 +396,331 @@ class Samples extends React.Component {
     return <a>{current}</a>;
   }
 
+  expandedRowRender = (record, index, indent, expanded) => {
+    var found = []; //Stores variable row that was selected
+
+    let row = this.state.filteredData.filter(sample => {
+      if (sample.key == record.key) {
+        found.push(sample);
+      }
+      return sample.key == record.key;
+    });
+    if(found.length > 0){
+    var currRow = found[0]
+
+    let columns = [
+      {
+        title: 'Header name',
+        dataIndex: 'header_name',
+        sorter: true,
+        width: '20%',
+        render: text => {
+          return (
+            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
+              {text}:
+            </p>
+          );
+        }
+        //defaultSortOrder: 'ascend',
+      },
+      {
+        title: 'Value',
+        dataIndex: 'value',
+        width: '30%',
+        // sorter: true,
+        
+        //Gives functionality to the rows with download links
+        render: (text, row, index) => {
+          //Should probably make these into indices in the future
+          if (text == 'View plot') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px'}}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download pdf') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(
+                    currRow.id,
+                    currRow.sample_name + '_NGS.pdf'
+                  )
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download image') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download report') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.report_file_name)
+                }>
+                {text}
+              </a>
+            );
+          }
+          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}>{text}</p>;
+        }
+      },
+      {
+        title: 'Header name',
+        dataIndex: 'header_name2',
+        sorter: true,
+        width: '20%',
+        render: text => {
+          return (
+            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
+              {text}:
+            </p>
+          );
+        }
+        //defaultSortOrder: 'ascend',
+      },
+      {
+        title: 'Value',
+        dataIndex: 'value2',
+        width: '30%',
+        // sorter: true,
+        
+        //Gives functionality to the rows with download links
+        render: (text, row, index) => {
+          //Should probably make these into indices in the future
+          if (text == 'View plot') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download pdf') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
+                onClick={() =>
+                  this.downloadFile(
+                    currRow.id,
+                    currRow.sample_name + '_NGS.pdf'
+                  )
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download image') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download report') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.report_file_name)
+                }>
+                {text}
+              </a>
+            );
+          }
+          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}>{text}</p>;
+        }
+      }
+    ];
+/*
+{
+          key: 'sample_name',
+          header_name: 'Sample Name',
+          value: currRow.sample_name
+        },
+        {
+          key: 'project',
+          header_name: 'Project',
+          value: currRow.project
+        },
+        {
+          key: 'experiment',
+          header_name: 'Experiment',
+          value: currRow.experiment
+        },
+        {
+          key: 'date',
+          header_name: 'Date',
+          value: currRow.date
+        },
+        {
+          key: 'surgical_case',
+          header_name: 'Surgical Case',
+          value: currRow.surgical_case
+        },
+        {
+          key: 'gender',
+          header_name: 'Gender',
+          value: currRow.gender
+        },
+        {
+          key: 'age',
+          header_name: 'Age',
+          value: currRow.age
+        },
+        {
+          key: 'diagnosis',
+          header_name: 'Diagnosis',
+          value: currRow.diagnosis
+        },
+        {
+          key: 'tumor_data',
+          header_name: 'Tumor Data',
+          value: currRow.tumor_data
+        },
+        {
+          key: 'family',
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family
+        },
+        {
+          key: 'family_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score
+        },
+        {
+          key: 'class',
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class
+        },
+        {
+          key: 'class_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.class_score
+        },
+        {
+          key: 'mgmt_prediction.Estimated',
+          header_name: 'MGMT score',
+          value:
+            currRow.mgmt_prediction == null
+              ? ''
+              : currRow.mgmt_prediction.Estimated.toString()
+        },
+        {
+          key: 't_SNE_plot',
+          header_name: 't-SNE plot',
+          value: 'View plot'
+        },
+        {
+          key: 'General_report',
+          header_name: 'Report',
+          value: 'Download report'
+        },
+        {
+          key: 'NGS_reports',
+          header_name: 'NGS reports (pdf-files)',
+          value: 'Download pdf'
+        },
+        {
+          key: 'slide_image',
+          header_name: 'Slide Image',
+          value: 'Download image'
+        },
+        {
+          key: 'notes',
+          header_name: 'Notes',
+          value: currRow.notes
+        }*/
+    //Defines the rows for the summary
+    console.log(typeof currRow.mgmt_prediction.Estimated)
+      let extraData = [
+        {
+          key: 'diagnosis',
+          header_name: 'Diagnosis',
+          value: currRow.diagnosis,
+          header_name2: 'MGMT score',
+          value2:
+            currRow.mgmt_prediction == null
+              ? ''
+              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3)
+        },
+        {
+          key: 'tumor_data',
+          header_name: 'Tumor Site',
+          value: currRow.tumor_data,
+          header_name2: 't-SNE plot',
+          value2: 'View plot'
+        },
+        {
+          key: 'family',
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family,
+          header_name2: 'Report',
+          value2: 'Download report'
+        },
+        {
+          key: 'family_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score,
+          header_name2: 'NGS reports (pdf-files)',
+          value2: 'Download pdf'
+        },
+        {
+          key: 'class',
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class,
+          header_name2: 'Slide Image',
+          value2: 'Download image'
+        },
+        {
+          key: 'class_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.class_score,
+          header_name2: 'Notes',
+          value2: currRow.notes
+        }
+      ];
+    return <Table columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
+    />;
+    }
+    return <div></div>
+  };
+
+  onTableRowExpand = (expanded, record) => {
+    var keys = [];
+    console.log(expanded)
+    console.log(JSON.stringify(record))
+    if(expanded){
+        keys.push(record.key); // I have set my record.id as row key. Check the documentation for more details.
+    }
+
+    this.setState({expandedRowKeys: keys});
+  }
+
   //renders the summary for a sample when the sample is selected
   renderSummary(key) {
     if (key == '') {
@@ -338,7 +737,6 @@ class Samples extends React.Component {
 
     if (found.length != 0) {
       var currRow = found[0];
-      console.log('Prediction: ' + JSON.stringify(currRow));
       //2 columns, one for the key and one for the value
       let columns = [
         {
@@ -488,7 +886,7 @@ class Samples extends React.Component {
           value:
             currRow.mgmt_prediction == null
               ? ''
-              : currRow.mgmt_prediction.Estimated.toString()
+              : currRow.mgmt_prediction.Estimated.toFixed(3)
         },
         {
           key: 't_SNE_plot',
@@ -609,9 +1007,9 @@ class Samples extends React.Component {
         title: 'Date',
         dataIndex: 'date',
         ellipsis: true,
-        // sorter: true,
+        sorter: (a,b) => this.compareDates(a,b),
         ...this.getColumnSearchProps('date'),
-        width: '8%'
+        width: '13%'
       },
       {
         title: 'Surgical Case',
@@ -644,12 +1042,12 @@ class Samples extends React.Component {
         title: 'Diagnosis',
         dataIndex: 'diagnosis',
         sorter: true,
-        ellipsis: 'true',
+        ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         ...this.getColumnSearchProps('diagnosis'),
-        width: '23%',
+        width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"322px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"200px"}}>
             {text}
           </div>
         )
@@ -721,7 +1119,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '8%',
+                width: '13%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -735,6 +1133,9 @@ class Samples extends React.Component {
                     }
                   );
                 }}
+                format = "MM-DD-YYYY"
+                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                placeholder=''
               />
             </Form.Item>
             <Form.Item
@@ -790,7 +1191,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '23%',
+                width: '18%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -825,6 +1226,10 @@ class Samples extends React.Component {
               let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
               return selected == '' ? coloring : selected;
             }}
+            expandedRowRender={this.expandedRowRender}
+            expandRowByClick = {true}
+            expandedRowKeys={this.state.expandedRowKeys}
+            onExpand={this.onTableRowExpand}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
@@ -837,7 +1242,7 @@ class Samples extends React.Component {
           />
         </div>
         {/*Returns summaryif something has been selected */} 
-        {this.renderSummary(this.state.currSample)}
+        {/*this.renderSummary(this.state.currSample)*/}
 
         <br />
         <br />

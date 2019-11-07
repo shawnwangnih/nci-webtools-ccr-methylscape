@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { DatePicker, Table, Input, Button, Form, Select } from 'antd';
 import fileSaver from 'file-saver';
 import './Experiments.css';
+import moment from 'moment';
 const { RangePicker } = DatePicker;
+
 class Experiments extends React.Component {
   constructor(props) {
     super(props);
@@ -52,14 +54,14 @@ class Experiments extends React.Component {
     let check = date.split('/');
 
     let startDate = new Date(
+      parseInt(start[2]),
       parseInt(start[0]),
-      parseInt(start[1]),
-      parseInt(start[2])
+      parseInt(start[1])
     );
     let endDate = new Date(
+      parseInt(end[2]),
       parseInt(end[0]),
-      parseInt(end[1]),
-      parseInt(end[2])
+      parseInt(end[1])
     );
     let toCheck = new Date(
       parseInt(check[2]),
@@ -68,6 +70,60 @@ class Experiments extends React.Component {
     );
 
     return startDate <= toCheck && endDate >= toCheck;
+  }
+
+  getMonth(element){
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    for(let i = 0; i < months.length; i++){
+      if(months[i] == element){
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  compareDates(a,b){
+    console.log(a)
+    console.log(typeof a)
+    console.log(b)
+    console.log(typeof b)
+    let datea = a.date
+    let dateb = b.date
+    let converted1 = new Date();
+    let converted2 = new Date();
+    if(datea.includes('-')){
+      let date1 = datea.split('-');
+      converted1 = new Date(
+        2019,
+        this.getMonth(date1[1]),
+        parseInt(date1[0])
+      );
+    }
+    else{
+      let date1 = datea.split('/')
+      converted2 = new Date(
+        parseInt(date1[2]),
+        parseInt(date1[0]),
+        parseInt(date1[1])
+      )
+    }
+    if(dateb.includes('-')){
+      let date2 = dateb.split('-')
+      converted2 = new Date(
+        2019,
+        this.getMonth(date2[1]),
+        parseInt(date2[0])
+      )
+    }
+    else{
+      let date2 = dateb.split('/')
+      converted2 = new Date(
+        parseInt(date2[2]),
+        parseInt(date2[0]),
+        parseInt(date2[1])
+      )
+    }
+    return converted1 > converted2
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -81,6 +137,14 @@ class Experiments extends React.Component {
         this.handleFilter();
       });
     }
+    this.setState({
+      filterNumSamples: '',
+      filterInvestigator: '',
+      startDate: '',
+      endDate: ''
+    }, () => {
+      this.handleFilter();
+    })
   }
 
   async componentDidMount() {
@@ -268,7 +332,7 @@ class Experiments extends React.Component {
       {
         title: 'Date Created',
         dataIndex: 'date',
-        sorter: true,
+        sorter: (a,b) => this.compareDates(a,b),
         width: '13%'
       },
       {
@@ -399,6 +463,9 @@ class Experiments extends React.Component {
                     }
                   );
                 }}
+                format = "MM-DD-YYYY"
+                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                placeholder = ''
               />
             </Form.Item>
             {/* <Form.Item label="Date">
