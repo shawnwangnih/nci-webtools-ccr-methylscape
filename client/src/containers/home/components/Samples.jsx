@@ -669,7 +669,7 @@ class Samples extends React.Component {
         },
         {
           key: 'tumor_data',
-          header_name: 'Tumor Data',
+          header_name: 'Tumor Site',
           value: currRow.tumor_data,
           header_name2: 't-SNE plot',
           value2: 'View plot'
@@ -885,7 +885,7 @@ class Samples extends React.Component {
           value:
             currRow.mgmt_prediction == null
               ? ''
-              : currRow.mgmt_prediction.Estimated.toString()
+              : currRow.mgmt_prediction.Estimated.toFixed(3)
         },
         {
           key: 't_SNE_plot',
