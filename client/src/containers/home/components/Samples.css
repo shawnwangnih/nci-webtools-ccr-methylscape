@@ -9,4 +9,5 @@
 .ant-table-expand-icon-th, .ant-table-row-expand-icon-cell {
   width:0px;
   min-width:0px;
+  padding:0px !important;
 }
