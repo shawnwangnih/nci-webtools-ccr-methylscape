@@ -661,44 +661,44 @@ class Samples extends React.Component {
           key: 'diagnosis',
           header_name: 'Diagnosis',
           value: currRow.diagnosis,
-          header_name2: 'Tumor Data',
-          value2: currRow.tumor_data
+          header_name2: 'MGMT score',
+          value2:
+            currRow.mgmt_prediction == null
+              ? ''
+              : currRow.mgmt_prediction.Estimated.toString()
+        },
+        {
+          key: 'tumor_data',
+          header_name: 'Tumor Data',
+          value: currRow.tumor_data,
+          header_name2: 't-SNE plot',
+          value2: 'View plot'
         },
         {
           key: 'family',
           header_name: 'Methylation Family (MF)',
           value: currRow.family,
-          header_name2: 'MF Calibrated Scores',
-          value2: currRow.family_score
+          header_name2: 'Report',
+          value2: 'Download report'
+        },
+        {
+          key: 'family_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score,
+          header_name2: 'NGS reports (pdf-files)',
+          value2: 'Download pdf'
         },
         {
           key: 'class',
           header_name: 'Methylation Class (MC)',
           value: currRow.class,
-          header_name2: 'MF Calibrated Scores',
-          value2: currRow.class_score
+          header_name2: 'Slide Image',
+          value2: 'Download image'
         },
         {
-          key: 'mgmt_prediction.Estimated',
-          header_name: 'MGMT score',
-          value:
-            currRow.mgmt_prediction == null
-              ? ''
-              : currRow.mgmt_prediction.Estimated.toString(),
-          header_name2: 't-SNE plot',
-          value2: 'View plot'
-        },
-        {
-          key: 'General_report',
-          header_name: 'Report',
-          value: 'Download report',
-          header_name2: 'NGS reports (pdf-files)',
-          value2: 'Download pdf'
-        },
-        {
-          key: 'slide_image',
-          header_name: 'Slide Image',
-          value: 'Download image',
+          key: 'class_score',
+          header_name: 'MF Calibrated Scores',
+          value: currRow.class_score,
           header_name2: 'Notes',
           value2: currRow.notes
         }
