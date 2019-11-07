@@ -413,10 +413,10 @@ class Samples extends React.Component {
         title: 'Header name',
         dataIndex: 'header_name',
         sorter: true,
-        width: '50%',
+        width: '20%',
         render: text => {
           return (
-            <p style={{ 'padding-left': '70%', 'font-weight': 'bold' }}>
+            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
               {text}:
             </p>
           );
@@ -426,7 +426,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '50%',
+        width: '80%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -435,7 +435,7 @@ class Samples extends React.Component {
           if (text == 'View plot') {
             return (
               <a
-                style={{ 'padding-left': '20%' }}
+                style={{'margin-bottom':'0px'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.html')
                 }>
