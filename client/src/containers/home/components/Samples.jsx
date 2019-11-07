@@ -1234,6 +1234,7 @@ class Samples extends React.Component {
             expandRowByClick = {true}
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
+            expandIcon={(props) => this.customExpandIcon(props)}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
