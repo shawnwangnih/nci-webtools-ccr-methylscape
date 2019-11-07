@@ -508,7 +508,7 @@ class Samples extends React.Component {
           if (text == 'View plot') {
             return (
               <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px'}}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.html')
                 }>
@@ -519,7 +519,7 @@ class Samples extends React.Component {
           if (text == 'Download pdf') {
             return (
               <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
                 onClick={() =>
                   this.downloadFile(
                     currRow.id,
@@ -533,7 +533,7 @@ class Samples extends React.Component {
           if (text == 'Download image') {
             return (
               <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                 }>
@@ -544,7 +544,7 @@ class Samples extends React.Component {
           if (text == 'Download report') {
             return (
               <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.report_file_name)
                 }>
@@ -552,7 +552,7 @@ class Samples extends React.Component {
               </a>
             );
           }
-          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}>{text}</p>;
+          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}>{text}</p>;
         }
       }
     ];
