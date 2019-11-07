@@ -426,7 +426,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '80%',
+        width: '30%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -435,7 +435,7 @@ class Samples extends React.Component {
           if (text == 'View plot') {
             return (
               <a
-                style={{ 'padding-left': '20%', 'margin-bottom':'0px'}}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.html')
                 }>
@@ -446,7 +446,7 @@ class Samples extends React.Component {
           if (text == 'Download pdf') {
             return (
               <a
-                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(
                     currRow.id,
@@ -460,7 +460,7 @@ class Samples extends React.Component {
           if (text == 'Download image') {
             return (
               <a
-                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                 }>
@@ -471,7 +471,7 @@ class Samples extends React.Component {
           if (text == 'Download report') {
             return (
               <a
-                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.report_file_name)
                 }>
@@ -479,7 +479,80 @@ class Samples extends React.Component {
               </a>
             );
           }
-          return <p style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}>{text}</p>;
+          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}>{text}</p>;
+        }
+      },
+      {
+        title: 'Header name',
+        dataIndex: 'header_name2',
+        sorter: true,
+        width: '20%',
+        render: text => {
+          return (
+            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
+              {text}:
+            </p>
+          );
+        }
+        //defaultSortOrder: 'ascend',
+      },
+      {
+        title: 'Value',
+        dataIndex: 'value2',
+        width: '30%',
+        // sorter: true,
+        
+        //Gives functionality to the rows with download links
+        render: (text, row, index) => {
+          //Should probably make these into indices in the future
+          if (text == 'View plot') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px'}}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download pdf') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(
+                    currRow.id,
+                    currRow.sample_name + '_NGS.pdf'
+                  )
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download image') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                }>
+                {text}
+              </a>
+            );
+          }
+          if (text == 'Download report') {
+            return (
+              <a
+                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
+                onClick={() =>
+                  this.downloadFile(currRow.id, currRow.report_file_name)
+                }>
+                {text}
+              </a>
+            );
+          }
+          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}>{text}</p>;
         }
       }
     ];
@@ -518,9 +591,7 @@ class Samples extends React.Component {
           key: 'age',
           header_name: 'Age',
           value: currRow.age
-        },*/
-    //Defines the rows for the summary
-      let extraData = [
+        },
         {
           key: 'diagnosis',
           header_name: 'Diagnosis',
@@ -583,6 +654,53 @@ class Samples extends React.Component {
           key: 'notes',
           header_name: 'Notes',
           value: currRow.notes
+        }*/
+    //Defines the rows for the summary
+      let extraData = [
+        {
+          key: 'diagnosis',
+          header_name: 'Diagnosis',
+          value: currRow.diagnosis,
+          header_name2: 'Tumor Data',
+          value2: currRow.tumor_data
+        },
+        {
+          key: 'family',
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family,
+          header_name2: 'MF Calibrated Scores',
+          value2: currRow.family_score
+        },
+        {
+          key: 'class',
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class,
+          header_name2: 'MF Calibrated Scores',
+          value2: currRow.class_score
+        },
+        {
+          key: 'mgmt_prediction.Estimated',
+          header_name: 'MGMT score',
+          value:
+            currRow.mgmt_prediction == null
+              ? ''
+              : currRow.mgmt_prediction.Estimated.toString(),
+          header_name2: 't-SNE plot',
+          value2: 'View plot'
+        },
+        {
+          key: 'General_report',
+          header_name: 'Report',
+          value: 'Download report',
+          header_name2: 'NGS reports (pdf-files)',
+          value2: 'Download pdf'
+        },
+        {
+          key: 'slide_image',
+          header_name: 'Slide Image',
+          value: 'Download image',
+          header_name2: 'Notes',
+          value2: currRow.notes
         }
       ];
     return <Table columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
