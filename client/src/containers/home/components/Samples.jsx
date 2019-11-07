@@ -435,7 +435,7 @@ class Samples extends React.Component {
           if (text == 'View plot') {
             return (
               <a
-                style={{'margin-bottom':'0px'}}
+                style={{ 'padding-left': '20%', 'margin-bottom':'0px'}}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.html')
                 }>
@@ -446,7 +446,7 @@ class Samples extends React.Component {
           if (text == 'Download pdf') {
             return (
               <a
-                style={{ 'padding-left': '20%' }}
+                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(
                     currRow.id,
@@ -460,7 +460,7 @@ class Samples extends React.Component {
           if (text == 'Download image') {
             return (
               <a
-                style={{ 'padding-left': '20%' }}
+                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                 }>
@@ -471,7 +471,7 @@ class Samples extends React.Component {
           if (text == 'Download report') {
             return (
               <a
-                style={{ 'padding-left': '20%' }}
+                style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}
                 onClick={() =>
                   this.downloadFile(currRow.id, currRow.report_file_name)
                 }>
@@ -479,14 +479,12 @@ class Samples extends React.Component {
               </a>
             );
           }
-          return <p style={{ 'padding-left': '20%' }}>{text}</p>;
+          return <p style={{ 'padding-left': '20%', 'margin-bottom':'0px' }}>{text}</p>;
         }
       }
     ];
-
-    //Defines the rows for the summary
-      let extraData = [
-        {
+/*
+{
           key: 'sample_name',
           header_name: 'Sample Name',
           value: currRow.sample_name
@@ -520,7 +518,9 @@ class Samples extends React.Component {
           key: 'age',
           header_name: 'Age',
           value: currRow.age
-        },
+        },*/
+    //Defines the rows for the summary
+      let extraData = [
         {
           key: 'diagnosis',
           header_name: 'Diagnosis',
