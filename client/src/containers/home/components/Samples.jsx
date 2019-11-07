@@ -656,6 +656,7 @@ class Samples extends React.Component {
           value: currRow.notes
         }*/
     //Defines the rows for the summary
+    console.log(typeof currRow.mgmt_prediction.Estimated)
       let extraData = [
         {
           key: 'diagnosis',
