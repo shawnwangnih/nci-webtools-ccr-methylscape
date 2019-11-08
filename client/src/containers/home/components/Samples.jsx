@@ -1163,7 +1163,7 @@ class Samples extends React.Component {
               style={{
                 width: '10%',
                 'padding-left': '8px',
-                'padding-right': '30px',
+                'padding-right': '0px',
                 'margin-right': '0px'
               }}>
               {/*<Input
@@ -1193,7 +1193,7 @@ class Samples extends React.Component {
               style={{
                 width: '10%',
                 'padding-left': '8px',
-                'padding-right': '5px',
+                'padding-right': '30px',
                 'margin-right': '0px'
               }}>
               <Input
