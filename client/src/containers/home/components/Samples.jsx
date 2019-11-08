@@ -1167,7 +1167,7 @@ class Samples extends React.Component {
                 'padding-right': '30px',
                 'margin-right': '0px'
               }}>
-              <Input
+              {/*<Input
                 value={this.state.filterGender}
                 onChange={e =>
                   this.setState({ filterGender: e.target.value }, () => {
@@ -1175,7 +1175,16 @@ class Samples extends React.Component {
                   })
                 }
                 onPressEnter={this.handleFilter}
-              />
+              />*/}
+              <Select defaultValue="lucy" style={{ width: 120 }} onChange={e =>
+                  this.setState({ filterGender: e.target.value }, () => {
+                    this.handleFilter();
+                  })
+                } value={this.state.filterGender}>
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+                <Option value="Unknown">Unknown</Option>
+              </Select>
             </Form.Item>
             <Form.Item
               style={{
