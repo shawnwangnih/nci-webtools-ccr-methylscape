@@ -277,8 +277,7 @@ class Samples extends React.Component {
               .toLowerCase()
               .includes(this.state.filterSurgicalCase.toLowerCase()) &&
             row.gender
-              .toLowerCase()
-              .includes(this.state.filterGender.toLowerCase()) &&
+              .toLowerCase() == (this.state.filterGender.toLowerCase()) &&
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
@@ -1176,10 +1175,13 @@ class Samples extends React.Component {
                 }
                 onPressEnter={this.handleFilter}
               />*/}
-              <Select defaultValue="lucy" style={{ width: 120 }} onChange={e =>
+              <Select style={{ width: 120 }} onChange={e =>
+                {
+                  console.log(e.target.value)
                   this.setState({ filterGender: e.target.value }, () => {
                     this.handleFilter();
                   })
+                }
                 } value={this.state.filterGender}>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
