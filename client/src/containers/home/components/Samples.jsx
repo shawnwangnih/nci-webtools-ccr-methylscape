@@ -710,6 +710,10 @@ class Samples extends React.Component {
     return <div></div>
   };
 
+  customExpandIcon(props) {
+    return <div></div>
+  }
+
   onTableRowExpand = (expanded, record) => {
     var keys = [];
     console.log(expanded)
@@ -1047,7 +1051,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('diagnosis'),
         width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"200px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"190px"}}>
             {text}
           </div>
         )
@@ -1061,9 +1065,10 @@ class Samples extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '0',
+            'padding-left': '8px',
             'padding-bottom': '0px',
-            'padding-top': '15px'
+            'padding-top': '15px',
+            'padding-right':'8px'
           }}>
           <Form layout="inline">
             <Form.Item
@@ -1230,6 +1235,7 @@ class Samples extends React.Component {
             expandRowByClick = {true}
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
+            expandIcon={(props) => this.customExpandIcon(props)}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
