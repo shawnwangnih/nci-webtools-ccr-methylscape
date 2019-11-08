@@ -1183,7 +1183,7 @@ class Samples extends React.Component {
                   })
                 }
                 } value={this.state.filterGender}>
-                <Option value=""></Option>
+                <Option value="">&nbsp;</Option>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
                 <Option value="Unknown">Unknown</Option>
