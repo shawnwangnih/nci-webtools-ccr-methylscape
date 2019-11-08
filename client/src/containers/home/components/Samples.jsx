@@ -1175,7 +1175,7 @@ class Samples extends React.Component {
                 }
                 onPressEnter={this.handleFilter}
               />*/}
-              <Select style={{ width: 120 }} onChange={(value) =>
+              <Select onChange={(value) =>
                 {
                   console.log(value)
                   this.setState({ filterGender: value }, () => {
