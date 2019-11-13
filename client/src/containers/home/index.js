@@ -92,7 +92,7 @@ class Home extends React.Component {
           onChange={this.changeTab}
           defaultActiveKey="projects">
           <TabPane tab="Project" key="projects" disabled={this.state.scanCheck}>
-            <Projects
+            {/*<Projects
               data={this.state.data}
               changeTab={this.changeTab}
               filter={this.state.filter}
@@ -103,26 +103,26 @@ class Home extends React.Component {
               data={this.state.data}
               project={this.state.projectSummery}
               changeSummeryPorject={this.changeSummeryPorject}
-            />
+            />*/}
           </TabPane>
           <TabPane
             tab="Experiments"
             key="experiments"
             disabled={this.state.scanCheck}>
-            <Experiments
+            {/*<Experiments
               data={this.state.data}
               changeTab={this.changeTab}
               filter={this.state.filter}
-            />
+            />*/}
           </TabPane>
           <TabPane tab="Samples" key="samples" disabled={this.state.scanCheck}>
-            <Samples
+            {/*<Samples
               data={this.state.data}
               changeTab={this.changeTab}
               filter={this.state.filter}
-            />
+            />*/}
           </TabPane>
-          <TabPane tab="Help" key="help" disabled={this.state.scanCheck}>
+          <TabPane tab={<div><p>Help!!!</p></div>} key="help" disabled={this.state.scanCheck}>
             <Help />
           </TabPane>
         </Tabs>

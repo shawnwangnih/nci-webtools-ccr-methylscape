@@ -12,7 +12,8 @@ import Projects from '../home/components/Projects';
 import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
 import './index.css';
-
+import { faChartPie, faClipboard,  faVials, faUserFriends} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
@@ -57,7 +58,19 @@ class App extends React.Component {
       />
     );
   }
+
+  get_num_projects(){
+    console.log(this.state.data);
+  }
+
   render() {
+    console.log(
+      this.state.activeTab +
+        ', ' +
+        JSON.stringify(this.state.filter) +
+        ', ' +
+        JSON.stringify(this.state.data)
+    );
     let mainContent = this.renderMain();
     return (
       <div>
@@ -145,36 +158,38 @@ class App extends React.Component {
                   'background-color': 'steelblue'
                 }}>
                 {/* Home */}
-                <Menu.Item key="projects">
+                <Menu.Item key="projects" className = "testMenu">
+                  <div>
                   <Link
                     style={{
                       color: 'white',
                       'font-size': '16px',
                       'font-weight': '600'
                     }}>
-                    Project
+                    Projects
+                  </Link>
+                  </div>
+                </Menu.Item>
+
+                <Menu.Item className = "testMenu" key="experiments">
+                  <Link
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600'
+                    }}>
+                      Experiments
                   </Link>
                 </Menu.Item>
 
-                <Menu.Item key="experiments">
+                <Menu.Item key="samples" className = "testMenu">
                   <Link
                     style={{
                       color: 'white',
                       'font-size': '16px',
                       'font-weight': '600'
                     }}>
-                    Experiments
-                  </Link>
-                </Menu.Item>
-
-                <Menu.Item key="samples">
-                  <Link
-                    style={{
-                      color: 'white',
-                      'font-size': '16px',
-                      'font-weight': '600'
-                    }}>
-                    Samples
+                      Samples
                   </Link>
                 </Menu.Item>
 
@@ -191,6 +206,37 @@ class App extends React.Component {
               </Menu>
             </div>
           </Header>
+          <div>
+          <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'30px', 'padding-bottom':'30px'}}>
+            <Link style={{'padding-left':'20px'}}>
+                <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+                <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                  'font-size': '32px',
+                  'font-weight': '200', 'display':'inline'}}>2 </h3>
+                <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                  'font-size': '32px',
+                  'font-weight': '200', 'display':'inline'}}>Projects</h3>
+            </Link>
+            <Link style={{'padding-left':'50px'}}>
+              <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>4 </h3>
+              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>Experiments</h3>
+            </Link>
+            <Link style={{'padding-left':'50px'}}>
+              <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>20 </h3>
+              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>Samples</h3>
+            </Link>
+          </div>
+          </div>
           <Content
             style={{
               padding: '0 50px',
