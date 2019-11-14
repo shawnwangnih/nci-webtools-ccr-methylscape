@@ -86,10 +86,33 @@ class Home extends React.Component {
     return projects.length
   }
 
+  getNumExperiments(){
+    let experiments = [];
+    this.state.data.forEach(element =>{
+      if(!experiments.includes(element.sentrix_id)){
+        experiments.push(element.sentrix_id)
+      }      
+    })
+    return experiments.length
+  }
+
+  getNumSamples(){
+    let samples = [];
+    this.state.data.forEach(element =>{
+      if(!samples.includes(element.sample_name)){
+        samples.push(element.sample_name)
+      }      
+    })
+    return samples.length
+  }
+
   render() {
     console.log(this.state.data);
     let numProjects = this.getNumProjects();
     console.log(numProjects)
+    let numExperiments = this.getNumExperiments();
+    let numSamples = this.getNumSamples();
+    
     return (
       <div>
         {/* <PageHeader /> */}
@@ -100,7 +123,7 @@ class Home extends React.Component {
                 <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
                 <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                   'font-size': '32px',
-                  'font-weight': '200', 'display':'inline'}}>2 </h3>
+                  'font-weight': '200', 'display':'inline'}}>{numProjects} </h3>
                 <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                   'font-size': '32px',
                   'font-weight': '200', 'display':'inline'}}>Projects</h3>
@@ -109,7 +132,7 @@ class Home extends React.Component {
               <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
               <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>4 </h3>
+                'font-weight': '200', 'display':'inline'}}>{numExperiments} </h3>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                 'font-size': '32px',
                 'font-weight': '200', 'display':'inline'}}>Experiments</h3>
@@ -118,7 +141,7 @@ class Home extends React.Component {
               <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
               <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>20 </h3>
+                'font-weight': '200', 'display':'inline'}}>{numSamples} </h3>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                 'font-size': '32px',
                 'font-weight': '200', 'display':'inline'}}>Samples</h3>
