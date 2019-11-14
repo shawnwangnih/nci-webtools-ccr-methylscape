@@ -206,7 +206,37 @@ class App extends React.Component {
               </Menu>
             </div>
           </Header>
-          
+          <div>
+          <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'30px', 'padding-bottom':'30px'}}>
+            <Link style={{'padding-left':'20px'}}>
+                <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+                <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                  'font-size': '32px',
+                  'font-weight': '200', 'display':'inline'}}>2 </h3>
+                <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                  'font-size': '32px',
+                  'font-weight': '200', 'display':'inline'}}>Projects</h3>
+            </Link>
+            <Link style={{'padding-left':'50px'}}>
+              <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>4 </h3>
+              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>Experiments</h3>
+            </Link>
+            <Link style={{'padding-left':'50px'}}>
+              <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>20 </h3>
+              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                'font-size': '32px',
+                'font-weight': '200', 'display':'inline'}}>Samples</h3>
+            </Link>
+          </div>
+          </div>
           <Content
             style={{
               padding: '0 50px',

@@ -76,8 +76,19 @@ class Home extends React.Component {
       .catch(error => this.failedScanSetPage(error));
   }
 
+  getNumProjects(){
+    let projects = [];
+    this.state.data.forEach(element =>{
+      if(!projects.includes(element.project)){
+        project.push(element.project)
+      }      
+    })
+    return projects.length
+  }
+
   render() {
     console.log(this.state.data);
+    let numProjects = this.getNumProjects();
     return (
       <div>
         {/* <PageHeader /> */}
