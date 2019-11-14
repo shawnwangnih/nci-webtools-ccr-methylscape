@@ -236,7 +236,27 @@ class Projects extends React.Component {
         
       },
       {
-        title: <div><p>Proj</p></div>,
+        title: <div><p style = {{'padding-bottom':'0px'}}>Proj</p>
+        <Form>
+        <Form.Item
+          style={{
+            width: '100%',
+            'padding-left': '16px',
+            'padding-right': '16px',
+            'margin-right': '0px'
+          }}>
+          <Input
+            value={this.state.filterProject}
+            onChange={e =>
+              this.setState({ filterProject: e.target.value }, () => {
+                this.handleFilter();
+              })
+            }
+            onPressEnter={this.handleFilter}
+          />
+        </Form.Item>
+        </Form>
+        </div>,
         dataIndex: 'key',
         sorter: true,
         width: '20%',
