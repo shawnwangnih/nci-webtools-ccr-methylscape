@@ -236,7 +236,7 @@ class Projects extends React.Component {
         
       },
       {
-        title: 'Project',
+        title: <div><p>Proj</p></div>,
         dataIndex: 'key',
         sorter: true,
         width: '20%',
