@@ -89,6 +89,7 @@ class Home extends React.Component {
   render() {
     console.log(this.state.data);
     let numProjects = this.getNumProjects();
+    console.log(numProjects)
     return (
       <div>
         {/* <PageHeader /> */}
