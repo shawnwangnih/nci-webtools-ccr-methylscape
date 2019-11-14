@@ -80,7 +80,7 @@ class Home extends React.Component {
     let projects = [];
     this.state.data.forEach(element =>{
       if(!projects.includes(element.project)){
-        project.push(element.project)
+        projects.push(element.project)
       }      
     })
     return projects.length
