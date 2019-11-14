@@ -221,10 +221,9 @@ class Projects extends React.Component {
       {
         title: '',
         dataIndex: 'selected',
-        sorter: true,
+        sorter: false,
         width: '5%',
         sorter: (a, b) => a.key.localeCompare(b.key),
-        defaultSortOrder: 'ascend',
         render: (text, record) =>
           {
             if(record.project == this.state.currRecord){

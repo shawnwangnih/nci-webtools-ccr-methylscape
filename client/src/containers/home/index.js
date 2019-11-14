@@ -10,6 +10,7 @@ import { Route, Link } from 'react-router-dom';
 import { faChartPie, faClipboard,  faVials, faUserFriends} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
+import CountUp from 'react-countup';
 
 const TabPane = Tabs.TabPane;
 
@@ -116,35 +117,34 @@ class Home extends React.Component {
     return (
       <div>
         {/* <PageHeader /> */}
-
         <div style = {{'background-color' : '#f0f2f5'}}>
           <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'30px', 'padding-bottom':'30px'}}>
             <Link style={{'padding-left':'20px'}}>
                 <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
-                <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+                <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                   'font-size': '32px',
-                  'font-weight': '200', 'display':'inline'}}>{numProjects} </h3>
+                  'font-weight': '200', 'display':'inline'}} end = {numProjects}></CountUp>
                 <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                   'font-size': '32px',
-                  'font-weight': '200', 'display':'inline'}}>Projects</h3>
+                  'font-weight': '200', 'display':'inline'}}> Projects</h3>
             </Link>
             <Link style={{'padding-left':'50px'}}>
               <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
-              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+              <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>{numExperiments} </h3>
+                'font-weight': '200', 'display':'inline'}} end = {numExperiments}>{numExperiments} </CountUp>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>Experiments</h3>
+                'font-weight': '200', 'display':'inline'}}> Experiments</h3>
             </Link>
             <Link style={{'padding-left':'50px'}}>
               <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
-              <h3 style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+              <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>{numSamples} </h3>
+                'font-weight': '200', 'display':'inline'}} end = {numSamples}></CountUp>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
                 'font-size': '32px',
-                'font-weight': '200', 'display':'inline'}}>Samples</h3>
+                'font-weight': '200', 'display':'inline'}}> Samples</h3>
             </Link>
           </div>
         </div>
