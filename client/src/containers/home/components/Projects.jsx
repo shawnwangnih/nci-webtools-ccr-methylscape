@@ -236,14 +236,13 @@ class Projects extends React.Component {
         
       },
       {
-        title: <div><p style = {{'padding-bottom':'0px'}}>Proj</p>
+        title: <div style = {{'margin-top':'12px'}}><p style = {{'margin-bottom':'0px'}}>Proj</p>
         <Form>
         <Form.Item
           style={{
             width: '100%',
-            'padding-left': '16px',
-            'padding-right': '16px',
-            'margin-right': '0px'
+            'margin-right': '0px',
+            'margin-bottom':'0px'
           }}>
           <Input
             value={this.state.filterProject}
