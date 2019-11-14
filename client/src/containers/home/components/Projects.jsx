@@ -223,7 +223,6 @@ class Projects extends React.Component {
         dataIndex: 'selected',
         sorter: false,
         width: '5%',
-        sorter: (a, b) => a.key.localeCompare(b.key),
         render: (text, record) =>
           {
             if(record.project == this.state.currRecord){

@@ -14,6 +14,7 @@ import CountUp from 'react-countup';
 
 const TabPane = Tabs.TabPane;
 
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -119,7 +120,9 @@ class Home extends React.Component {
         {/* <PageHeader /> */}
         <div style = {{'background-color' : '#f0f2f5'}}>
           <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'30px', 'padding-bottom':'30px'}}>
-            <Link style={{'padding-left':'20px'}}>
+            <Link style={{'padding-left':'20px'}} onClick = {() => {
+              this.changeTab('projects')
+            }}>
                 <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
                 <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                   'font-size': '32px',
@@ -128,7 +131,9 @@ class Home extends React.Component {
                   'font-size': '32px',
                   'font-weight': '200', 'display':'inline'}}> Projects</h3>
             </Link>
-            <Link style={{'padding-left':'50px'}}>
+            <Link style={{'padding-left':'50px'}} onClick = {() => {
+              this.changeTab('experiments')
+            }}>
               <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
@@ -137,7 +142,9 @@ class Home extends React.Component {
                 'font-size': '32px',
                 'font-weight': '200', 'display':'inline'}}> Experiments</h3>
             </Link>
-            <Link style={{'padding-left':'50px'}}>
+            <Link style={{'padding-left':'50px'}} onClick = {() => {
+              this.changeTab('samples')
+            }}>
               <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
                 'font-size': '32px',
