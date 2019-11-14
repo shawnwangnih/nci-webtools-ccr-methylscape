@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import { Table, Input, Button, Form } from 'antd';
+import { Table, Input, Button, Form, Radio } from 'antd';
 import { DatePicker } from 'antd';
 import './Projects.css';
 import moment from 'moment';
@@ -219,6 +219,25 @@ class Projects extends React.Component {
   render() {
     const columns = [
       {
+        title: '',
+        dataIndex: 'selected',
+        sorter: true,
+        width: '5%',
+        sorter: (a, b) => a.key.localeCompare(b.key),
+        defaultSortOrder: 'ascend',
+        render: (text, record) =>
+          {
+            if(record.project == this.state.currRecord){
+              return <Radio checked = {true} 
+              onClick={()=>
+                {this.handleProjectClick(text, record);}}></Radio>
+            }
+            return <Radio checked = {false} onClick={()=>
+              {this.handleProjectClick(text, record);}}></Radio>
+          }
+        
+      },
+      {
         title: 'Project',
         dataIndex: 'key',
         sorter: true,
@@ -270,7 +289,7 @@ class Projects extends React.Component {
         title: 'Project Date',
         dataIndex: 'date',
         sorter: true,
-        width: '20%'
+        width: '15%'
       }
     ];
     return (
