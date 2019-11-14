@@ -304,6 +304,14 @@ class Projects extends React.Component {
           <Form layout="inline">
             <Form.Item
               style={{
+                width: '5%',
+                'padding-left': '16px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+            </Form.Item>
+            <Form.Item
+              style={{
                 width: '20%',
                 'padding-left': '16px',
                 'padding-right': '16px',
