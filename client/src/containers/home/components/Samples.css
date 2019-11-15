@@ -13,9 +13,15 @@
 }
 
 .ant-table-row-expand-icon-cell{
-  display:none;
+  width:0px;
+  min-width:0px;
+  max-width:0px;
+
 }
 
 .ant-table-expand-icon-th{
-  display:none;
+  width:0px;
+  min-width:0px;
+  max-width:0px;
+  
 }
