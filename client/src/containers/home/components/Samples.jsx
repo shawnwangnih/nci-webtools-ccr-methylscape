@@ -1045,7 +1045,7 @@ class Samples extends React.Component {
           if(b.age != 'unknown'){
             bNew = parseInt(b.age);
           }
-          aNew > bNew
+          return aNew - bNew
         },
         ...this.getColumnSearchProps('age'),
         width: '10%'
