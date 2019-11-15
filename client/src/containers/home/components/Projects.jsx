@@ -252,6 +252,7 @@ class Projects extends React.Component {
               })
             }
             onPressEnter={this.handleFilter}
+            onClick={() =>{}}
           />
         </Form.Item>
         </Form>
