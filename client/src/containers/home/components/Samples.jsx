@@ -1037,15 +1037,15 @@ class Samples extends React.Component {
         dataIndex: 'age',
         ellipsis: true,
         sorter: (a, b) => {
-          let aNew = 0;
-          let bNew = 0;
+          let aNew = 20000;
+          let bNew = 20000;
           if (a.age != 'unknown'){
             aNew = parseInt(a.age);
           }
           if(b.age != 'unknown'){
             bNew = parseInt(b.age);
           }
-          return bNew - aNew
+          return aNew - bNew
         },
         ...this.getColumnSearchProps('age'),
         width: '10%'
