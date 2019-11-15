@@ -15,3 +15,7 @@
 .ant-table-row-expand-icon-cell{
   display:none;
 }
+
+.ant-table-expand-icon-th{
+  display:none;
+}
