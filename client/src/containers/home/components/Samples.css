@@ -11,3 +11,7 @@
   min-width:0px;
   padding:0px !important;
 }
+
+.ant-table-row-expand-icon-cell{
+  display:none;
+}
