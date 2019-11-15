@@ -957,6 +957,17 @@ class Samples extends React.Component {
   render() {
     const columns = [
       {
+        title: '',
+        dataIndex: 'expandBoxes',
+        width:'4%',
+        render: (text, record) => {
+          if(record.sample_name == this.state.currSample){
+            return <Button size = 'small'>-</Button>
+          }
+          return <Button size = 'small'>+</Button>
+        }
+      },
+      {
         title: 'Sample Name',
         dataIndex: 'sample_name',
         sorter: true,
@@ -1059,7 +1070,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('diagnosis'),
         width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"190px"}}>
+          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"140px"}}>
             {text}
           </div>
         )
