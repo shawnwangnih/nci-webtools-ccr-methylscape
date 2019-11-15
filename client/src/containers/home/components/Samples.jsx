@@ -710,7 +710,7 @@ class Samples extends React.Component {
   };
 
   customExpandIcon(props) {
-    return <div></div>
+    return <div style={{'width':'0px'}}></div>
   }
 
   onTableRowExpand = (expanded, record) => {
