@@ -197,7 +197,7 @@ class Summary extends React.Component {
             color: 'steelblue',
             'font-weight': '600'
           }}>
-          Project summary: {this.state.project}
+          Project summary: {this.state.project} Project
         </h3>
         <br />
         <Row

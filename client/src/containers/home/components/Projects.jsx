@@ -236,8 +236,8 @@ class Projects extends React.Component {
         
       },
       {
-        title: <div style = {{'margin-top':'12px'}}><p style = {{'margin-bottom':'0px'}}>Proj</p>
-        <Form>
+        title: <div style = {{'margin-top':'0px'}}><p style = {{'margin-bottom':'0px'}}>Project</p>
+        {/*<Form>
         <Form.Item
           style={{
             width: '100%',
@@ -255,7 +255,7 @@ class Projects extends React.Component {
             onClick={() =>{}}
           />
         </Form.Item>
-        </Form>
+          </Form>*/}
         </div>,
         dataIndex: 'key',
         sorter: true,
