@@ -1037,7 +1037,17 @@ class Samples extends React.Component {
         dataIndex: 'age',
         sorter: true,
         ellipsis: true,
-        sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
+        sorter: (a, b) => {
+          let aNew = 0;
+          let bNew = 0;
+          if (a.age != 'unknown'){
+            aNew = parseInt(a.age);
+          }
+          if(b.age != 'unknown'){
+            bNew = parseInt(b.age);
+          }
+          return aNew > bNew
+        },
         ...this.getColumnSearchProps('age'),
         width: '10%'
       },
