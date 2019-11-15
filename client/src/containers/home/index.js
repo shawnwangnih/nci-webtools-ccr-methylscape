@@ -123,34 +123,34 @@ class Home extends React.Component {
             <Link style={{'padding-left':'20px'}} onClick = {() => {
               this.changeTab('projects')
             }}>
-                <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+                <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
                 <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
-                  'font-size': '32px',
+                  'font-size': '24px',
                   'font-weight': '200', 'display':'inline'}} end = {numProjects}></CountUp>
                 <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
-                  'font-size': '32px',
+                  'font-size': '24px',
                   'font-weight': '200', 'display':'inline'}}> Projects</h3>
             </Link>
             <Link style={{'padding-left':'50px'}} onClick = {() => {
               this.changeTab('experiments')
             }}>
-              <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
-                'font-size': '32px',
+                'font-size': '24px',
                 'font-weight': '200', 'display':'inline'}} end = {numExperiments}>{numExperiments} </CountUp>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
-                'font-size': '32px',
+                'font-size': '24px',
                 'font-weight': '200', 'display':'inline'}}> Experiments</h3>
             </Link>
             <Link style={{'padding-left':'50px'}} onClick = {() => {
               this.changeTab('samples')
             }}>
-              <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'32px', 'display':'inline'}}/>
+              <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
-                'font-size': '32px',
+                'font-size': '24px',
                 'font-weight': '200', 'display':'inline'}} end = {numSamples}></CountUp>
               <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
-                'font-size': '32px',
+                'font-size': '24px',
                 'font-weight': '200', 'display':'inline'}}> Samples</h3>
             </Link>
           </div>

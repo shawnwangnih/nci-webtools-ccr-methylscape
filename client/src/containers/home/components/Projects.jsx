@@ -37,6 +37,7 @@ class Projects extends React.Component {
 
   //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
+    console.log('PROPS RECEIVED')
     if (nextProps.data.length == 0) {
       return;
     }
