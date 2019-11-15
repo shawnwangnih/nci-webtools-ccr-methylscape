@@ -961,6 +961,8 @@ class Samples extends React.Component {
         dataIndex: 'expandBoxes',
         width:'4%',
         render: (text, record) => {
+          console.log(record.sample_name)
+          console.log(this.state.currSample)
           if(record.sample_name == this.state.currSample){
             return <Button size = 'small'>-</Button>
           }
