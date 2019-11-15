@@ -1278,9 +1278,17 @@ class Samples extends React.Component {
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
-                  this.setState({
-                    currSample: record.key
-                  });
+                  if(this.state.currSample == record.key){
+                    this.setState({
+                      currSample: ''
+                    });
+                  }
+                  else{
+                    this.setState({
+                      currSample: record.key
+                    });
+                  }
+                  
                 }
               };
             }}
