@@ -10,18 +10,5 @@
   width:0px;
   min-width:0px;
   padding:0px !important;
-}
-
-.ant-table-row-expand-icon-cell{
-  width:0px;
-  min-width:0px;
-  max-width:0px;
-
-}
-
-.ant-table-expand-icon-th{
-  width:0px;
-  min-width:0px;
-  max-width:0px;
-  
+  max-width:0px
 }
