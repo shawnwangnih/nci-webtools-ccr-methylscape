@@ -1092,6 +1092,14 @@ class Samples extends React.Component {
           <Form layout="inline">
             <Form.Item
               style={{
+                width: '4%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+            </Form.Item>
+            <Form.Item
+              style={{
                 width: '12%',
                 'padding-left': '8px',
                 'padding-right': '30px',
@@ -1229,7 +1237,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '18%',
+                width: '14%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
