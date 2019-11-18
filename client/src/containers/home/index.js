@@ -119,7 +119,7 @@ class Home extends React.Component {
       <div>
         {/* <PageHeader /> */}
         <div style = {{'background-color' : '#f0f2f5'}}>
-          <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'30px', 'padding-bottom':'30px'}}>
+          <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'15px', 'padding-bottom':'15px'}}>
             <Link style={{'padding-left':'20px'}} onClick = {() => {
               this.changeTab('projects')
             }}>
