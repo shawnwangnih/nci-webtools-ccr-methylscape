@@ -411,6 +411,13 @@ class Samples extends React.Component {
 
     let columns = [
       {
+        title: '',
+        dataIndex: 'emptySpace',
+        sorter: true,
+        width: '16%%',
+        //defaultSortOrder: 'ascend',
+      },
+      {
         title: 'Header name',
         dataIndex: 'header_name',
         sorter: true,
@@ -427,7 +434,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '30%',
+        width: '22%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -500,7 +507,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value2',
-        width: '30%',
+        width: '22%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
