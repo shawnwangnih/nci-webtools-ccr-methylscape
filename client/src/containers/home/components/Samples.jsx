@@ -5,6 +5,7 @@ import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
 import moment from 'moment';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
   constructor(props) {
@@ -960,9 +961,10 @@ class Samples extends React.Component {
         width:'4%',
         render: (text, record) => {
           if(record.key == this.state.currSample){
-            return <Button size = 'small'>-</Button>
+            return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
+            </Button>
           }
-          return <Button size = 'small'>+</Button>
+          return <Button size = 'small'><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></Button>
         }
       },
       {
