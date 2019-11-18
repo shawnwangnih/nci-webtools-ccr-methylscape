@@ -1,7 +1,7 @@
 .ant-table-body {
   overflow-y: hidden !important;
-  margin-left: 0px;
-  margin-right: 0px;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
 }
 
 .borderless-table {
