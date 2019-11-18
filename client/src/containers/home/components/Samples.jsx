@@ -703,7 +703,7 @@ class Samples extends React.Component {
           value2: currRow.notes
         }
       ];
-    return <Table className="paddingClass" columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
+    return <Table style = {{'margin-left':'0px', 'margin-right':'0px'}} columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
     />;
     }
     return <div></div>
