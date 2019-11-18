@@ -5,6 +5,7 @@ import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 class Samples extends React.Component {
