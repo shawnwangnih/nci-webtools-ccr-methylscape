@@ -14,3 +14,8 @@
   padding:0px !important;
   max-width:0px
 }
+
+.ant-table-expanded-row-level-1 > td{
+  padding-left: 0px;
+  padding-right: 0px;
+}
