@@ -1304,6 +1304,9 @@ class Samples extends React.Component {
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
             expandIcon={(props) => this.customExpandIcon(props)}
+            rowClassName={(record, index) => {
+              return this.state.currSample == '' ? '' : record.key == this.state.currSample ? 'testing' : '';
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
