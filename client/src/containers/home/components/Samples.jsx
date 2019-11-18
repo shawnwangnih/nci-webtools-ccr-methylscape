@@ -414,7 +414,7 @@ class Samples extends React.Component {
         title: '',
         dataIndex: 'emptySpace',
         sorter: true,
-        width: '16%%',
+        width: '4%',
         //defaultSortOrder: 'ascend',
       },
       {
@@ -434,7 +434,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '22%',
+        width: '28%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -507,7 +507,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value2',
-        width: '22%',
+        width: '28%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
