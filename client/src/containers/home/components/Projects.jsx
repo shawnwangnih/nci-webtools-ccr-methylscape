@@ -423,8 +423,7 @@ class Projects extends React.Component {
             </Form.Item>
           </Form>
         </div>
-        <Table
-          rowClassName={(record, index) => {
+        {/*rowClassName={(record, index) => {
             let selected =
               this.state.currRecord == ''
                 ? index == 0
@@ -435,7 +434,8 @@ class Projects extends React.Component {
                 : '';
             let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
             return selected == '' ? coloring : selected;
-          }}
+          }}*/}
+        <Table
           {...this.state}
           pagination={{
             position: 'bottom',

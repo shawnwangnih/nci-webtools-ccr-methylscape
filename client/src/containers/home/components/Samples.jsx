@@ -1282,14 +1282,7 @@ class Samples extends React.Component {
           </Form>
         </div>
         <div>
-          <Table
-            {...this.state}
-            columns={columns}
-            dataSource={this.state.filteredData}
-            onChange={this.handleTableChange}
-            size="small"
-            ellipsis="true"
-            rowClassName={(record, index) => {
+          {/*rowClassName={(record, index) => {
               let selected =
                 this.state.currSample == ''
                   ? ''
@@ -1298,7 +1291,14 @@ class Samples extends React.Component {
                   : '';
               let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
               return selected == '' ? coloring : selected;
-            }}
+            }}*/}
+          <Table
+            {...this.state}
+            columns={columns}
+            dataSource={this.state.filteredData}
+            onChange={this.handleTableChange}
+            size="small"
+            ellipsis="true"
             expandedRowRender={this.expandedRowRender}
             expandRowByClick = {true}
             expandedRowKeys={this.state.expandedRowKeys}

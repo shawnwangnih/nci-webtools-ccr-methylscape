@@ -486,15 +486,15 @@ class Experiments extends React.Component {
             {/*</Form.Item>*/}
           </Form>
         </div>
+        {/*rowClassName={(record, index) => {
+              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            }}*/}
         <div>
           <Table
             {...this.state}
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            rowClassName={(record, index) => {
-              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
-            }}
           />
         </div>
       </div>
