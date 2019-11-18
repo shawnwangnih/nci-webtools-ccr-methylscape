@@ -992,7 +992,7 @@ class Samples extends React.Component {
         title: 'Project',
         dataIndex: 'project',
         sorter: true,
-        width: '10%',
+        width: '15%',
         ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
@@ -1006,7 +1006,7 @@ class Samples extends React.Component {
               }>
               {text}
             <ReactTooltip id={'sampleProjectsToolTip' + record.key} type='dark' place='bottom'>
-              <span>{text}</span>z
+              <span>{text}</span>
             </ReactTooltip>
             </a>
         )
@@ -1027,8 +1027,12 @@ class Samples extends React.Component {
               this.props.changeTab('experiments', {
                 experiment: record.experiment
               })
-            }>
+            }
+            data-tip data-for={'sampleExperimentsToolTip' + record.key}>
             {text}
+            <ReactTooltip id={'sampleExperimentsToolTip' + record.key} type='dark' place='bottom'>
+              <span>{text}</span>
+            </ReactTooltip>
           </a>
         )
       },
@@ -1085,9 +1089,9 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('diagnosis'),
         width: '18%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"140px"}}>
+          <span>
             {text}
-          </div>
+          </span>
         )
       }
     ];
