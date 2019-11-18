@@ -992,14 +992,14 @@ class Samples extends React.Component {
         title: 'Project',
         dataIndex: 'project',
         sorter: true,
-        width: '15%',
+        width: '10%',
         ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
           <div>
             <a
-              data-tip data-for={'projectsToolTip' + record.key}
+              data-tip data-for={'sampleProjectsToolTip' + record.key}
               // onClick={() =>
               //   this.props.changeTab('experiments', { project: record.project })
               onClick={() =>
@@ -1007,8 +1007,8 @@ class Samples extends React.Component {
               }>
               {text}
             </a>
-            <ReactTooltip id={'projectsToolTip' + record.key} type='dark'>
-              <span>{text}</span>
+            <ReactTooltip id={'sampleProjectsToolTip' + record.key} type='dark' place='bottom'>
+              <span>{text}</span>z
             </ReactTooltip>
           </div>
         )
