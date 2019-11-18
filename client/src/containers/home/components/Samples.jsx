@@ -999,7 +999,7 @@ class Samples extends React.Component {
         render: (text, record) => (
           <div>
             <a
-              data-tip data-for='projectsToolTip'
+              data-tip data-for={'projectsToolTip' + record.key}
               // onClick={() =>
               //   this.props.changeTab('experiments', { project: record.project })
               onClick={() =>
@@ -1007,7 +1007,7 @@ class Samples extends React.Component {
               }>
               {text}
             </a>
-            <ReactTooltip id='projectsToolTip' type='dark'>
+            <ReactTooltip id={'projectsToolTip' + record.key} type='dark'>
               <span>{text}</span>
             </ReactTooltip>
           </div>
