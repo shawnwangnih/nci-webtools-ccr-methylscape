@@ -1111,10 +1111,10 @@ class Samples extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '8px',
+            'padding-left': '0px',
             'padding-bottom': '0px',
             'padding-top': '15px',
-            'padding-right':'8px'
+            'padding-right':'0px'
           }}>
           <Form layout="inline">
             <Form.Item
