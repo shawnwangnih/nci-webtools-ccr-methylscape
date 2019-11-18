@@ -1042,7 +1042,15 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
         ...this.getColumnSearchProps('date'),
-        width: '13%'
+        width: '13%',
+        render: (text,record) => (
+          <span data-tip data-for={'sampleDateToolTip' + record.key}>
+            {text}
+            <ReactTooltip id={'sampleDateToolTip' + record.key} type='dark' place='bottom'>
+              <span>{text}</span>
+            </ReactTooltip>
+          </span>
+        )
       },
       {
         title: 'Surgical Case',
