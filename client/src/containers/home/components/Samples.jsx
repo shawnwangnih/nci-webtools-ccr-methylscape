@@ -7,7 +7,10 @@ import './Samples.css';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import ReactTooltip from 'react-tooltip';
+
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
+
 class Samples extends React.Component {
   constructor(props) {
     super(props);
@@ -994,14 +997,20 @@ class Samples extends React.Component {
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
-          <a
-            // onClick={() =>
-            //   this.props.changeTab('experiments', { project: record.project })
-            onClick={() =>
-              this.props.changeTab('projects', { project: record.project })
-            }>
-            {text}
-          </a>
+          <div>
+            <a
+              data-tip data-for='happyFace'
+              // onClick={() =>
+              //   this.props.changeTab('experiments', { project: record.project })
+              onClick={() =>
+                this.props.changeTab('projects', { project: record.project })
+              }>
+              {text}
+            </a>
+            <ReactTooltip id='happyFace' type='error'>
+              <span>Show happy face</span>
+            </ReactTooltip>
+          </div>
         )
       },
       {
