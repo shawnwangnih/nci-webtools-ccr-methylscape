@@ -237,12 +237,12 @@ class Samples extends React.Component {
 
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
-  checkDates(date, s, e) {
-    if (s == '' || e == '') {
+  checkDates(date, s) {
+    if (s == '') {
       return true;
     }
     let start = s.split('-');
-    let end = e.split('-');
+    //let end = e.split('-');
     let check = date.split('/');
 
     let startDate = new Date(
@@ -250,18 +250,18 @@ class Samples extends React.Component {
       parseInt(start[0]),
       parseInt(start[1])
     );
-    let endDate = new Date(
+    /*let endDate = new Date(
       parseInt(end[2]),
       parseInt(end[0]),
       parseInt(end[1])
-    );
+    );*/
     let toCheck = new Date(
       parseInt(check[2]),
       parseInt(check[0]),
       parseInt(check[1])
     );
 
-    return startDate <= toCheck && endDate >= toCheck;
+    return startDate == toCheck;
   }
 
   //As each search bar is updated, the handlefilter function is called
@@ -289,7 +289,7 @@ class Samples extends React.Component {
             row.diagnosis
               .toLowerCase()
               .includes(this.state.filterDiagnosis.toLowerCase()) &&
-            this.checkDates(row.date, this.state.startDate, this.state.endDate)
+            this.checkDates(row.date, this.state.startDate)
           );
         })
       },
@@ -1194,17 +1194,17 @@ class Samples extends React.Component {
                 'padding-right': '30px',
                 'margin-right': '0px'
               }}>
-              <RangePicker
+              <DatePicker
                 onChange={(date, dateString) => {
                   this.setState(
-                    { startDate: dateString[0], endDate: dateString[1] },
+                    { startDate: dateString },
                     () => {
                       this.handleFilter();
                     }
                   );
                 }}
                 format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
                 placeholder=''
               />
             </Form.Item>
