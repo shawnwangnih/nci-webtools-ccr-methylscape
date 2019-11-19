@@ -989,7 +989,6 @@ class Samples extends React.Component {
         defaultSortOrder: 'ascend',
         ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
-        ...this.getColumnSearchProps('sample_name'),
         render: (text, record) => (
           <span>
             {text}
@@ -1003,7 +1002,6 @@ class Samples extends React.Component {
         width: '15%',
         ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
-        ...this.getColumnSearchProps('project'),
         render: (text, record) => (
             <span
               className = "linkSpan"
@@ -1023,7 +1021,6 @@ class Samples extends React.Component {
         width: '12%',
         ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
-        ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
           <span
             className = "linkSpan"
@@ -1043,7 +1040,6 @@ class Samples extends React.Component {
         dataIndex: 'date',
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
-        ...this.getColumnSearchProps('date'),
         width: '13%',
         render: (text,record) => (
           <span>
@@ -1057,7 +1053,6 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
-        ...this.getColumnSearchProps('surgical_case'),
         width: '10%',
         render: (text, record) => (
           <span>
@@ -1071,7 +1066,6 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        ...this.getColumnSearchProps('gender'),
         width: '10%',
         render: (text, record) => (
           <span>
@@ -1094,7 +1088,6 @@ class Samples extends React.Component {
           }
           return aNew - bNew
         },
-        ...this.getColumnSearchProps('age'),
         width: '10%',
         render: (text, record) => (
           <span>
@@ -1108,7 +1101,6 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        ...this.getColumnSearchProps('diagnosis'),
         width: '14%',
         render: (text, record) => (
           <span>
