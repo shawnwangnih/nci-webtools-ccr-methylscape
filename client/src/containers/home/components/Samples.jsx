@@ -999,16 +999,12 @@ class Samples extends React.Component {
         render: (text, record) => (
             <span
               className = "linkSpan"
-              data-tip data-for={'sampleProjectsToolTip123' + record.key}
               // onClick={() =>
               //   this.props.changeTab('experiments', { project: record.project })
               onClick={() =>
                 this.props.changeTab('projects', { project: record.project })
               }>
               {text}LONG12345
-              <ReactTooltip id={'sampleProjectsToolTip' + record.key} type='dark' place='bottom'>
-                <span>{text}</span>
-              </ReactTooltip>
             </span>
         )
       },
@@ -1021,20 +1017,16 @@ class Samples extends React.Component {
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
-          <a
+          <span
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
               this.props.changeTab('experiments', {
                 experiment: record.experiment
               })
-            }
-            data-tip data-for={'sampleExperimentsToolTip123' + record.key}>
-            {text}
-            <ReactTooltip id={'sampleExperimentsToolTip' + record.key} type='dark' place='bottom'>
-              <span>{text}</span>
-            </ReactTooltip>
-          </a>
+            }>
+            {text}125125125125
+          </span>
         )
       },
       {
