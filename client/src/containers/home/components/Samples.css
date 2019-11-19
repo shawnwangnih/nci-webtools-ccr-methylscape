@@ -19,3 +19,10 @@
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+
+.linkSpan { 
+  color: #1890ff;
+}
+.linkSpan:hover{
+  cursor:pointer;
+}
