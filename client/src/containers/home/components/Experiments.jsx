@@ -227,7 +227,6 @@ class Experiments extends React.Component {
           (this.getFilterNumSamples() == '' ||
             row.sampleSize == parseInt(this.getFilterNumSamples())) &&
           (this.state.startDate == '' ||
-            this.state.endDate == '' ||
             this.checkDates(row.date, this.state.startDate))
         );
       })
