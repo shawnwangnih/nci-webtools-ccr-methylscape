@@ -1012,7 +1012,7 @@ class Samples extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '12%',
+        width: '5%',
         ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
@@ -1035,10 +1035,10 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
         ...this.getColumnSearchProps('date'),
-        width: '13%',
+        width: '20%',
         render: (text,record) => (
           <span>
-            {text}abc wkjegt skjd wkkjsvdv kwe kj skd 
+            {text}
           </span>
         )
       },
@@ -1088,7 +1088,7 @@ class Samples extends React.Component {
         width: '14%',
         render: (text, record) => (
           <span>
-            {text}
+            {text} abc abc
           </span>
         )
       }
