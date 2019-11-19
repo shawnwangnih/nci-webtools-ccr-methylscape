@@ -986,7 +986,12 @@ class Samples extends React.Component {
         defaultSortOrder: 'ascend',
         ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
-        ...this.getColumnSearchProps('sample_name')
+        ...this.getColumnSearchProps('sample_name'),
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Project',
@@ -1004,7 +1009,7 @@ class Samples extends React.Component {
               onClick={() =>
                 this.props.changeTab('projects', { project: record.project })
               }>
-              {text}LONG12345
+              {text}
             </span>
         )
       },
@@ -1012,12 +1017,13 @@ class Samples extends React.Component {
         title: 'Experiment',
         dataIndex: 'experiment',
         sorter: true,
-        width: '5%',
+        width: '12%',
         ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
           <span
+            className = "linkSpan"
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
@@ -1025,7 +1031,7 @@ class Samples extends React.Component {
                 experiment: record.experiment
               })
             }>
-            {text}125125125125 weknvb wehv wjehv wdjv smdnv 
+            {text}
           </span>
         )
       },
@@ -1035,7 +1041,7 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
         ...this.getColumnSearchProps('date'),
-        width: '20%',
+        width: '13%',
         render: (text,record) => (
           <span>
             {text}
@@ -1049,7 +1055,12 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         ...this.getColumnSearchProps('surgical_case'),
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Gender',
@@ -1058,7 +1069,12 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         ...this.getColumnSearchProps('gender'),
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Age',
@@ -1076,7 +1092,12 @@ class Samples extends React.Component {
           return aNew - bNew
         },
         ...this.getColumnSearchProps('age'),
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Diagnosis',
@@ -1088,7 +1109,7 @@ class Samples extends React.Component {
         width: '14%',
         render: (text, record) => (
           <span>
-            {text} abc abc
+            {text}
           </span>
         )
       }
