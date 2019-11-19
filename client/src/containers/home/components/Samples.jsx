@@ -1025,7 +1025,7 @@ class Samples extends React.Component {
                 experiment: record.experiment
               })
             }>
-            {text}125125125125
+            {text}125125125125 weknvb wehv wjehv wdjv smdnv 
           </span>
         )
       },
@@ -1037,11 +1037,8 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('date'),
         width: '13%',
         render: (text,record) => (
-          <span data-tip data-for={'sampleDateToolTip123' + record.key}>
-            {text}
-            <ReactTooltip id={'sampleDateToolTip' + record.key} type='dark' place='bottom'>
-              <span>{text}</span>
-            </ReactTooltip>
+          <span>
+            {text}abc wkjegt skjd wkkjsvdv kwe kj skd 
           </span>
         )
       },
