@@ -998,7 +998,7 @@ class Samples extends React.Component {
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
           <span>
-            <a
+            <span
               data-tip data-for={'sampleProjectsToolTip123' + record.key}
               // onClick={() =>
               //   this.props.changeTab('experiments', { project: record.project })
@@ -1009,7 +1009,7 @@ class Samples extends React.Component {
             <ReactTooltip id={'sampleProjectsToolTip' + record.key} type='dark' place='bottom'>
               <span>{text}</span>
             </ReactTooltip>
-            </a>
+            </span>
             </span>
         )
       },
