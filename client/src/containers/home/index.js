@@ -72,10 +72,7 @@ class Home extends React.Component {
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
-      fetch(
-        `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
-        { method: 'POST' }
-      )
+    fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
