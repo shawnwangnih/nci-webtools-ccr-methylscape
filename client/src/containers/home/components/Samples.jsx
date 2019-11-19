@@ -244,10 +244,11 @@ class Samples extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-
+    console.log(start)
+    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
-      parseInt(start[0]),
+      parseInt(start[0]) - 1,
       parseInt(start[1])
     );
     /*let endDate = new Date(
@@ -257,11 +258,13 @@ class Samples extends React.Component {
     );*/
     let toCheck = new Date(
       parseInt(check[2]),
-      parseInt(check[0]),
+      parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-
-    return startDate == toCheck;
+    console.log('toCheck: ' + toCheck)
+    console.log('startDate: ' + startDate)
+    console.log(startDate == toCheck)
+    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 
   //As each search bar is updated, the handlefilter function is called
