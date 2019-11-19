@@ -997,6 +997,7 @@ class Samples extends React.Component {
         sorter: (a, b) => a.project.localeCompare(b.project),
         ...this.getColumnSearchProps('project'),
         render: (text, record) => (
+          <span>
             <a
               data-tip data-for={'sampleProjectsToolTip123' + record.key}
               // onClick={() =>
@@ -1009,6 +1010,7 @@ class Samples extends React.Component {
               <span>{text}</span>
             </ReactTooltip>
             </a>
+            </span>
         )
       },
       {
