@@ -1004,7 +1004,7 @@ class Samples extends React.Component {
               onClick={() =>
                 this.props.changeTab('projects', { project: record.project })
               }>
-              {text}
+              {text}LONG12345
             <ReactTooltip id={'sampleProjectsToolTip' + record.key} type='dark' place='bottom'>
               <span>{text}</span>
             </ReactTooltip>
