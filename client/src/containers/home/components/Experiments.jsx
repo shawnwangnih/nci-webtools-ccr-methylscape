@@ -494,6 +494,7 @@ class Experiments extends React.Component {
         <div>
           <Table
             {...this.state}
+            size='small'
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}

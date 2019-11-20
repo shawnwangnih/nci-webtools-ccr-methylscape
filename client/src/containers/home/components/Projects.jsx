@@ -441,6 +441,7 @@ class Projects extends React.Component {
           }}*/}
         <Table
           {...this.state}
+          size='small'
           pagination={{
             position: 'bottom',
             size: this.state.pagination.size,
