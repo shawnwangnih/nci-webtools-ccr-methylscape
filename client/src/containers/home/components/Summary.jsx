@@ -69,11 +69,24 @@ class Summary extends React.Component {
     let pieData = [];
     this.state.filteredData.map(row => {
       if (row.classifier_prediction != null) {
-        Object.values(row.classifier_prediction).forEach(cp => {
-          Object.keys(cp).forEach(key => {
-            cur[key] = cur[key] + 1 || 1;
+        console.log(JSON.stringify(row.classifier_prediction))
+        if(Object.keys(row.classifier_prediction).length>=2){
+          Object.keys(row.classifier_prediction).forEach(key => {
+            if(key != '0'){
+              Object.keys(row.classifier_prediction[key]).forEach(key1 => {
+                cur[key1] = cur[key1] + 1 || 1;
+              });
+            }
+            
           });
-        });
+        }
+        else{
+          Object.values(row.classifier_prediction).forEach(cp => {
+            Object.keys(cp).forEach(key => {
+              cur[key] = cur[key] + 1 || 1;
+            });
+          });
+        }
       }
     });
     Object.keys(cur).forEach(k => {
@@ -197,7 +210,7 @@ class Summary extends React.Component {
             color: 'steelblue',
             'font-weight': '600'
           }}>
-          Project summary: {this.state.project}
+          Project summary: {this.state.project} Project
         </h3>
         <br />
         <Row

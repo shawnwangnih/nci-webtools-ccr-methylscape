@@ -1,13 +1,28 @@
 .ant-table-body {
   overflow-y: hidden !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
 }
 
 .borderless-table {
-  border: 0px !important;
+  /*border: 0px !important;*/
 }
 
 .ant-table-expand-icon-th, .ant-table-row-expand-icon-cell {
   width:0px;
   min-width:0px;
   padding:0px !important;
+  max-width:0px
+}
+
+.ant-table-expanded-row-level-1 > td{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.linkSpan { 
+  color: #1890ff;
+}
+.linkSpan:hover{
+  cursor:pointer;
 }

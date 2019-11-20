@@ -5,7 +5,12 @@ import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import ReactTooltip from 'react-tooltip';
+
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
+
 class Samples extends React.Component {
   constructor(props) {
     super(props);
@@ -232,31 +237,34 @@ class Samples extends React.Component {
 
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
-  checkDates(date, s, e) {
-    if (s == '' || e == '') {
+  checkDates(date, s) {
+    if (s == '') {
       return true;
     }
     let start = s.split('-');
-    let end = e.split('-');
+    //let end = e.split('-');
     let check = date.split('/');
-
+    console.log(start)
+    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
-      parseInt(start[0]),
+      parseInt(start[0]) - 1,
       parseInt(start[1])
     );
-    let endDate = new Date(
+    /*let endDate = new Date(
       parseInt(end[2]),
       parseInt(end[0]),
       parseInt(end[1])
-    );
+    );*/
     let toCheck = new Date(
       parseInt(check[2]),
-      parseInt(check[0]),
+      parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-
-    return startDate <= toCheck && endDate >= toCheck;
+    console.log('toCheck: ' + toCheck)
+    console.log('startDate: ' + startDate)
+    console.log(startDate == toCheck)
+    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 
   //As each search bar is updated, the handlefilter function is called
@@ -276,16 +284,15 @@ class Samples extends React.Component {
             row.surgical_case
               .toLowerCase()
               .includes(this.state.filterSurgicalCase.toLowerCase()) &&
-            row.gender
-              .toLowerCase()
-              .includes(this.state.filterGender.toLowerCase()) &&
+            (row.gender
+              .toLowerCase() == (this.state.filterGender.toLowerCase()) || this.state.filterGender == '') &&
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
             row.diagnosis
               .toLowerCase()
               .includes(this.state.filterDiagnosis.toLowerCase()) &&
-            this.checkDates(row.date, this.state.startDate, this.state.endDate)
+            this.checkDates(row.date, this.state.startDate)
           );
         })
       },
@@ -410,6 +417,13 @@ class Samples extends React.Component {
 
     let columns = [
       {
+        title: '',
+        dataIndex: 'emptySpace',
+        sorter: true,
+        width: '4%',
+        //defaultSortOrder: 'ascend',
+      },
+      {
         title: 'Header name',
         dataIndex: 'header_name',
         sorter: true,
@@ -426,7 +440,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '30%',
+        width: '28%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -499,7 +513,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value2',
-        width: '30%',
+        width: '28%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -704,25 +718,23 @@ class Samples extends React.Component {
           value2: currRow.notes
         }
       ];
-    return <Table columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
+    return <Table style = {{'margin-left':'0px', 'margin-right':'0px'}} columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
     />;
     }
     return <div></div>
   };
 
   customExpandIcon(props) {
-    return <div></div>
+    return <div style={{'width':'0px'}}></div>
   }
 
   onTableRowExpand = (expanded, record) => {
     var keys = [];
-    console.log(expanded)
-    console.log(JSON.stringify(record))
     if(expanded){
-        keys.push(record.key); // I have set my record.id as row key. Check the documentation for more details.
+        keys.push(record.key);
     }
 
-    this.setState({expandedRowKeys: keys});
+    this.setState({expandedRowKeys: keys, currSample: expanded ? record.key : ''});
   }
 
   //renders the summary for a sample when the sample is selected
@@ -958,6 +970,18 @@ class Samples extends React.Component {
   render() {
     const columns = [
       {
+        title: '',
+        dataIndex: 'expandBoxes',
+        width:'4%',
+        render: (text, record) => {
+          if(record.key == this.state.currSample){
+            return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
+            </Button>
+          }
+          return <Button size = 'small'><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></Button>
+        }
+      },
+      {
         title: 'Sample Name',
         dataIndex: 'sample_name',
         sorter: true,
@@ -965,7 +989,11 @@ class Samples extends React.Component {
         defaultSortOrder: 'ascend',
         ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
-        ...this.getColumnSearchProps('sample_name')
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Project',
@@ -974,16 +1002,16 @@ class Samples extends React.Component {
         width: '15%',
         ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
-        ...this.getColumnSearchProps('project'),
         render: (text, record) => (
-          <a
-            // onClick={() =>
-            //   this.props.changeTab('experiments', { project: record.project })
-            onClick={() =>
-              this.props.changeTab('projects', { project: record.project })
-            }>
-            {text}
-          </a>
+            <span
+              className = "linkSpan"
+              // onClick={() =>
+              //   this.props.changeTab('experiments', { project: record.project })
+              onClick={() =>
+                this.props.changeTab('projects', { project: record.project })
+              }>
+              {text}
+            </span>
         )
       },
       {
@@ -993,9 +1021,9 @@ class Samples extends React.Component {
         width: '12%',
         ellipsis: true,
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
-        ...this.getColumnSearchProps('experiment'),
         render: (text, record) => (
-          <a
+          <span
+            className = "linkSpan"
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
@@ -1004,7 +1032,7 @@ class Samples extends React.Component {
               })
             }>
             {text}
-          </a>
+          </span>
         )
       },
       {
@@ -1012,8 +1040,12 @@ class Samples extends React.Component {
         dataIndex: 'date',
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
-        ...this.getColumnSearchProps('date'),
-        width: '13%'
+        width: '13%',
+        render: (text,record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Surgical Case',
@@ -1021,8 +1053,12 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
-        ...this.getColumnSearchProps('surgical_case'),
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Gender',
@@ -1030,17 +1066,34 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        ...this.getColumnSearchProps('gender'),
-        width: '10%'
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Age',
         dataIndex: 'age',
-        sorter: true,
         ellipsis: true,
-        sorter: (a, b) => parseInt(a.age) > parseInt(b.age),
-        ...this.getColumnSearchProps('age'),
-        width: '10%'
+        sorter: (a, b) => {
+          let aNew = 20000;
+          let bNew = 20000;
+          if (a.age != 'unknown'){
+            aNew = parseInt(a.age);
+          }
+          if(b.age != 'unknown'){
+            bNew = parseInt(b.age);
+          }
+          return aNew - bNew
+        },
+        width: '10%',
+        render: (text, record) => (
+          <span>
+            {text}
+          </span>
+        )
       },
       {
         title: 'Diagnosis',
@@ -1048,12 +1101,11 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        ...this.getColumnSearchProps('diagnosis'),
-        width: '18%',
+        width: '14%',
         render: (text, record) => (
-          <div style = {{'overflow':'hidden','text-overflow':'ellipsis','height':'20px', "whiteSpace":"nowrap", "max-width":"190px"}}>
+          <span>
             {text}
-          </div>
+          </span>
         )
       }
     ];
@@ -1065,12 +1117,20 @@ class Samples extends React.Component {
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         <div
           style={{
-            'padding-left': '8px',
+            'padding-left': '0px',
             'padding-bottom': '0px',
             'padding-top': '15px',
-            'padding-right':'8px'
+            'padding-right':'0px'
           }}>
           <Form layout="inline">
+            <Form.Item
+              style={{
+                width: '4%',
+                'padding-left': '8px',
+                'padding-right': '30px',
+                'margin-right': '0px'
+              }}>
+            </Form.Item>
             <Form.Item
               style={{
                 width: '12%',
@@ -1129,17 +1189,17 @@ class Samples extends React.Component {
                 'padding-right': '30px',
                 'margin-right': '0px'
               }}>
-              <RangePicker
+              <DatePicker
                 onChange={(date, dateString) => {
                   this.setState(
-                    { startDate: dateString[0], endDate: dateString[1] },
+                    { startDate: dateString },
                     () => {
                       this.handleFilter();
                     }
                   );
                 }}
                 format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
                 placeholder=''
               />
             </Form.Item>
@@ -1164,10 +1224,10 @@ class Samples extends React.Component {
               style={{
                 width: '10%',
                 'padding-left': '8px',
-                'padding-right': '30px',
+                'padding-right': '0px',
                 'margin-right': '0px'
               }}>
-              <Input
+              {/*<Input
                 value={this.state.filterGender}
                 onChange={e =>
                   this.setState({ filterGender: e.target.value }, () => {
@@ -1175,7 +1235,21 @@ class Samples extends React.Component {
                   })
                 }
                 onPressEnter={this.handleFilter}
-              />
+              />*/}
+              <Select onChange={(value) =>
+                {
+                  console.log(value)
+                  this.setState({ filterGender: value }, () => {
+                    this.handleFilter();
+                  })
+                }
+                } value={this.state.filterGender}
+                style={{'width':'100px'}}>
+                <Option value="">&nbsp;</Option>
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+                <Option value="Unknown">Unknown</Option>
+              </Select>
             </Form.Item>
             <Form.Item
               style={{
@@ -1196,7 +1270,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '18%',
+                width: '14%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1214,14 +1288,7 @@ class Samples extends React.Component {
           </Form>
         </div>
         <div>
-          <Table
-            {...this.state}
-            columns={columns}
-            dataSource={this.state.filteredData}
-            onChange={this.handleTableChange}
-            size="small"
-            ellipsis="true"
-            rowClassName={(record, index) => {
+          {/*rowClassName={(record, index) => {
               let selected =
                 this.state.currSample == ''
                   ? ''
@@ -1230,24 +1297,42 @@ class Samples extends React.Component {
                   : '';
               let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
               return selected == '' ? coloring : selected;
-            }}
+            }}*/}
+          <Table
+            {...this.state}
+            columns={columns}
+            dataSource={this.state.filteredData}
+            onChange={this.handleTableChange}
+            size="small"
+            ellipsis="true"
             expandedRowRender={this.expandedRowRender}
             expandRowByClick = {true}
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
             expandIcon={(props) => this.customExpandIcon(props)}
+            rowClassName={(record, index) => {
+              return this.state.currSample == '' ? '' : record.key == this.state.currSample ? 'testing' : '';
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
-                  this.setState({
-                    currSample: record.key
-                  });
+                  if(this.state.currSample == record.key){
+                    this.setState({
+                      currSample: ''
+                    });
+                  }
+                  else{
+                    this.setState({
+                      currSample: record.key
+                    });
+                  }
+                  
                 }
               };
             }}
           />
         </div>
-        {/*Returns summaryif something has been selected */} 
+        {/*Returns summary if something has been selected */} 
         {/*this.renderSummary(this.state.currSample)*/}
 
         <br />

@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import { Table, Input, Button, Form } from 'antd';
+import { Table, Input, Button, Form, Radio } from 'antd';
 import { DatePicker } from 'antd';
 import './Projects.css';
 import moment from 'moment';
@@ -37,6 +37,7 @@ class Projects extends React.Component {
 
   //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
+    console.log('PROPS RECEIVED')
     if (nextProps.data.length == 0) {
       return;
     }
@@ -115,32 +116,36 @@ class Projects extends React.Component {
 
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
-  checkDates(date, s, e) {
-    if (s == '' || e == '') {
+  checkDates(date, s) {
+    if (s == '') {
       return true;
     }
     let start = s.split('-');
-    let end = e.split('-');
+    //let end = e.split('-');
     let check = date.split('/');
-
+    console.log(start)
+    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
-      parseInt(start[0]),
+      parseInt(start[0]) - 1,
       parseInt(start[1])
     );
-    let endDate = new Date(
+    /*let endDate = new Date(
       parseInt(end[2]),
       parseInt(end[0]),
       parseInt(end[1])
-    );
+    );*/
     let toCheck = new Date(
       parseInt(check[2]),
-      parseInt(check[0]),
+      parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-
-    return startDate <= toCheck && endDate >= toCheck;
+    console.log('toCheck: ' + toCheck)
+    console.log('startDate: ' + startDate)
+    console.log(startDate == toCheck)
+    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
+
   handleFilter = () => {
     this.setState(
       {
@@ -155,7 +160,7 @@ class Projects extends React.Component {
               this.state.filterNumExperiments.trim() == '') &&
             (row.sampleSize == this.state.filterNumSamples.trim() ||
               this.state.filterNumSamples.trim() == '') &&
-            this.checkDates(row.date, this.state.startDate, this.state.endDate)
+            this.checkDates(row.date, this.state.startDate)
           );
         })
       },
@@ -219,7 +224,44 @@ class Projects extends React.Component {
   render() {
     const columns = [
       {
-        title: 'Project',
+        title: '',
+        dataIndex: 'selected',
+        sorter: false,
+        width: '5%',
+        render: (text, record) =>
+          {
+            if(record.project == this.state.currRecord){
+              return <Radio checked = {true} 
+              onClick={()=>
+                {this.handleProjectClick(text, record);}}></Radio>
+            }
+            return <Radio checked = {false} onClick={()=>
+              {this.handleProjectClick(text, record);}}></Radio>
+          }
+        
+      },
+      {
+        title: <div style = {{'margin-top':'0px'}}><p style = {{'margin-bottom':'0px'}}>Project</p>
+        {/*<Form>
+        <Form.Item
+          style={{
+            width: '100%',
+            'margin-right': '0px',
+            'margin-bottom':'0px'
+          }}>
+          <Input
+            value={this.state.filterProject}
+            onChange={e =>
+              this.setState({ filterProject: e.target.value }, () => {
+                this.handleFilter();
+              })
+            }
+            onPressEnter={this.handleFilter}
+            onClick={() =>{}}
+          />
+        </Form.Item>
+          </Form>*/}
+        </div>,
         dataIndex: 'key',
         sorter: true,
         width: '20%',
@@ -270,7 +312,7 @@ class Projects extends React.Component {
         title: 'Project Date',
         dataIndex: 'date',
         sorter: true,
-        width: '20%'
+        width: '15%'
       }
     ];
     return (
@@ -285,8 +327,16 @@ class Projects extends React.Component {
           <Form layout="inline">
             <Form.Item
               style={{
+                width: '5%',
+                'padding-left': '8px',
+                'padding-right': '16px',
+                'margin-right': '0px'
+              }}>
+            </Form.Item>
+            <Form.Item
+              style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -303,7 +353,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -320,7 +370,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -340,7 +390,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -357,28 +407,27 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '15%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
-              <RangePicker
+              <DatePicker
                 onChange={(date, dateString) => {
                   this.setState(
-                    { startDate: dateString[0], endDate: dateString[1] },
+                    { startDate: dateString },
                     () => {
                       this.handleFilter();
                     }
                   );
                 }}
                 format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
                 placeholder=''
               />
             </Form.Item>
           </Form>
         </div>
-        <Table
-          rowClassName={(record, index) => {
+        {/*rowClassName={(record, index) => {
             let selected =
               this.state.currRecord == ''
                 ? index == 0
@@ -389,14 +438,19 @@ class Projects extends React.Component {
                 : '';
             let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
             return selected == '' ? coloring : selected;
-          }}
+          }}*/}
+        <Table
           {...this.state}
+          size='small'
           pagination={{
             position: 'bottom',
             size: this.state.pagination.size,
             showSizeChanger: this.state.pagination.showSizeChanger,
             showTotal: this.rangeFunction,
             itemRender: this.itemRender
+          }}
+          rowClassName={(record, index) => {
+            return this.state.currRecord == '' ? index == 0 ? 'testing' : '' : record.project==this.state.currRecord ? 'testing' : '';
           }}
           onRow={(record, rowIndex) => {
             return {

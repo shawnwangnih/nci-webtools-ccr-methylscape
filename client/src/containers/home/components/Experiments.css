@@ -12,7 +12,7 @@
   background-color: #e6f7ff;
 }
 .ant-table-tbody > tr > td {
-  border-bottom: 0px;
+  /*border-bottom: 0px;*/
 }
 
 .ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {

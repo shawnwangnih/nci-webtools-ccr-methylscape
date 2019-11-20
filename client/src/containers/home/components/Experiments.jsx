@@ -45,31 +45,34 @@ class Experiments extends React.Component {
 
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
-  checkDates(date, s, e) {
-    if (s == '' || e == '') {
+  checkDates(date, s) {
+    if (s == '') {
       return true;
     }
     let start = s.split('-');
-    let end = e.split('-');
+    //let end = e.split('-');
     let check = date.split('/');
-
+    console.log(start)
+    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
-      parseInt(start[0]),
+      parseInt(start[0]) - 1,
       parseInt(start[1])
     );
-    let endDate = new Date(
+    /*let endDate = new Date(
       parseInt(end[2]),
       parseInt(end[0]),
       parseInt(end[1])
-    );
+    );*/
     let toCheck = new Date(
       parseInt(check[2]),
-      parseInt(check[0]),
+      parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-
-    return startDate <= toCheck && endDate >= toCheck;
+    console.log('toCheck: ' + toCheck)
+    console.log('startDate: ' + startDate)
+    console.log(startDate == toCheck)
+    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 
   getMonth(element){
@@ -224,8 +227,7 @@ class Experiments extends React.Component {
           (this.getFilterNumSamples() == '' ||
             row.sampleSize == parseInt(this.getFilterNumSamples())) &&
           (this.state.startDate == '' ||
-            this.state.endDate == '' ||
-            this.checkDates(row.date, this.state.startDate, this.state.endDate))
+            this.checkDates(row.date, this.state.startDate))
         );
       })
     });
@@ -382,7 +384,7 @@ class Experiments extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -399,7 +401,7 @@ class Experiments extends React.Component {
             <Form.Item
               style={{
                 width: '15%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -416,7 +418,7 @@ class Experiments extends React.Component {
             <Form.Item
               style={{
                 width: '15%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -433,7 +435,7 @@ class Experiments extends React.Component {
             <Form.Item
               style={{
                 width: '13%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -450,21 +452,21 @@ class Experiments extends React.Component {
             <Form.Item
               style={{
                 width: '13%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
-              <RangePicker
+              <DatePicker
                 onChange={(date, dateString) => {
                   this.setState(
-                    { startDate: dateString[0], endDate: dateString[1] },
+                    { startDate: dateString},
                     () => {
                       this.handleFilter();
                     }
                   );
                 }}
                 format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? []:[moment(this.state.startDate, 'MM-DD-YYYY'), moment(this.state.endDate, 'MM-DD-YYYY')]}
+                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
                 placeholder = ''
               />
             </Form.Item>
@@ -486,15 +488,16 @@ class Experiments extends React.Component {
             {/*</Form.Item>*/}
           </Form>
         </div>
+        {/*rowClassName={(record, index) => {
+              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            }}*/}
         <div>
           <Table
             {...this.state}
+            size='small'
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
-            rowClassName={(record, index) => {
-              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
-            }}
           />
         </div>
       </div>
