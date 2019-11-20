@@ -449,6 +449,9 @@ class Projects extends React.Component {
             showTotal: this.rangeFunction,
             itemRender: this.itemRender
           }}
+          rowClassName={(record, index) => {
+            return this.state.currRecord == '' ? index == 0 ? 'testing' : '' : record.project==this.state.currRecord ? 'testing' : '';
+          }}
           onRow={(record, rowIndex) => {
             return {
               onClick: event => {
