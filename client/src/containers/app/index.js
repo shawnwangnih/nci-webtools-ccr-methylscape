@@ -133,7 +133,7 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
-              'border-bottom': '0',
+              //'border-bottom': '0',
               // position: 'fixed',
 
               background: 'steelblue'

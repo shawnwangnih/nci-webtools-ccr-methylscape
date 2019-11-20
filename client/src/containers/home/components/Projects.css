@@ -14,13 +14,13 @@
 }
 .whiteBack {
   background-color: white;
-  border-bottom: 0px;
+  /*border-bottom: 0px;*/
 }
 .whiteBack:hover {
   background-color: #e6f7ff;
 }
 .ant-table-tbody > tr > td {
-  border-bottom: 0px !important;
+  /*border-bottom: 0px !important;*/
 }
 .ant-table-thead > tr > th {
   /*border-bottom: 0px;*/
@@ -107,4 +107,11 @@
 .ant-pagination-item-active:focus a {
   color: black;
   text-decoration: underline;
+}
+.ant-table-expanded-row > td > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td {
+  border-bottom:0px !important;
+}
+
+.ant-table-expanded-row > td > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table-small {
+  border: 0px !important;
 }
