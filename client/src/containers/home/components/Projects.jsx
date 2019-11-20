@@ -328,7 +328,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '5%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -336,7 +336,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -353,7 +353,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -370,7 +370,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -390,7 +390,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '20%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
@@ -407,7 +407,7 @@ class Projects extends React.Component {
             <Form.Item
               style={{
                 width: '15%',
-                'padding-left': '16px',
+                'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
               }}>
