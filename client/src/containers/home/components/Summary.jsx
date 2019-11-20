@@ -69,6 +69,16 @@ class Summary extends React.Component {
     let pieData = [];
     this.state.filteredData.map(row => {
       if (row.classifier_prediction != null) {
+        if(Object.keys(row.classifier_prediction).length>=2){
+          Object.keys(row.classifier_prediction).forEach(key => {
+            if(key != '0'){
+              Object.keys(row.classifier_prediction[key]).forEach(key1 => {
+                cur[key1] = cur[key1] + 1 || 1;
+              });
+            }
+            
+          });
+        }
         Object.values(row.classifier_prediction).forEach(cp => {
           Object.keys(cp).forEach(key => {
             cur[key] = cur[key] + 1 || 1;
