@@ -42,3 +42,6 @@ yarn.lock
 
 server/config.json
 server/config.json
+
+/client/src/containers/home/index.js
+/server/lambda/updateMethylscapeTable.py
