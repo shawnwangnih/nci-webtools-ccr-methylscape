@@ -29,6 +29,8 @@ class Samples extends React.Component {
         position: 'bottom',
         size: 'small',
         // pageSize: 15,
+        defaultPageSize: 25,
+        pageSizeOptions: [10,25,50,100],
         showSizeChanger: true,
         itemRender: this.itemRender,
         showTotal: this.rangeFunction
@@ -937,6 +939,8 @@ class Samples extends React.Component {
           position: 'bottom',
           size: 'small',
           // pageSize: 15,
+          defaultPageSize: 25,
+          pageSizeOptions: [10,25,50,100],
           showSizeChanger: true,
           itemRender: this.itemRender,
           showTotal: this.rangeFunction
