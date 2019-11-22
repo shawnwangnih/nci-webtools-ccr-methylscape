@@ -500,6 +500,9 @@ class Experiments extends React.Component {
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}
+            rowClassName={(record, index) => {
+              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+            }}
           />
         </div>
       </div>

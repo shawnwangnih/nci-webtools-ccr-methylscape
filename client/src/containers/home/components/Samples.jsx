@@ -1293,14 +1293,7 @@ class Samples extends React.Component {
         </div>
         <div>
           {/*rowClassName={(record, index) => {
-              let selected =
-                this.state.currSample == ''
-                  ? ''
-                  : record.key == this.state.currSample
-                  ? 'testing'
-                  : '';
-              let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
-              return selected == '' ? coloring : selected;
+              return this.state.currSample == '' ? '' : record.key == this.state.currSample ? 'testing' : '';
             }}*/}
           <Table
             {...this.state}
@@ -1314,8 +1307,16 @@ class Samples extends React.Component {
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
             expandIcon={(props) => this.customExpandIcon(props)}
+            
             rowClassName={(record, index) => {
-              return this.state.currSample == '' ? '' : record.key == this.state.currSample ? 'testing' : '';
+              let selected =
+                this.state.currSample == ''
+                  ? ''
+                  : record.key == this.state.currSample
+                  ? 'testing'
+                  : '';
+              let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              return selected == '' ? coloring : selected;
             }}
             onRow={(record, rowIndex) => {
               return {
