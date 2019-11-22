@@ -108,7 +108,7 @@
   color: black;
   text-decoration: underline;
 }
-.ant-table-expanded-row > td > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td {
+.ant-table-expanded-row > td > div > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td {
   border-bottom:0px !important;
 }
 
