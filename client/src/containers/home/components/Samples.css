@@ -26,3 +26,8 @@
 .linkSpan:hover{
   cursor:pointer;
 }
+
+.ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td{
+  padding-top: 4px;
+  padding-bottom: 4px
+}
