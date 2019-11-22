@@ -1309,14 +1309,15 @@ class Samples extends React.Component {
             expandIcon={(props) => this.customExpandIcon(props)}
             
             rowClassName={(record, index) => {
-              let selected =
+              /*let selected =
                 this.state.currSample == ''
                   ? ''
                   : record.key == this.state.currSample
                   ? 'testing'
-                  : '';
+                  : '';*/
               let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
-              return selected == '' ? coloring : selected;
+              //return selected == '' ? coloring : selected;
+              return coloring;
             }}
             onRow={(record, rowIndex) => {
               return {
