@@ -714,14 +714,16 @@ class Samples extends React.Component {
         },
         {
           key: 'class_score',
-          header_name: 'MF Calibrated Scores',
+          header_name: 'MC Calibrated Scores',
           value: currRow.class_score,
           header_name2: 'Notes',
           value2: currRow.notes
         }
       ];
-    return <Table style = {{'margin-left':'0px', 'margin-right':'0px'}} columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"
-    />;
+    return <div style = {{'padding-bottom':'4px'}}>
+      <Table style = {{'margin-left':'0px', 'margin-right':'0px'}} columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"/>
+      
+    </div>;
     }
     return <div></div>
   };
