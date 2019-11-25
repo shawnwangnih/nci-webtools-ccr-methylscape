@@ -141,8 +141,9 @@ class Summary extends React.Component {
     return list;
   }
   renderGenderLegend() {
+
     const list = this.getGender().map((item, index) => (
-      <div style={{ 'text-align': 'left' }}>
+      <div style={{ 'text-align': 'left'}}>
         <div
           className="color-box"
           style={{
@@ -154,7 +155,21 @@ class Summary extends React.Component {
         {item[0]}
       </div>
     ));
-    return list;
+    if(this.getMethylationClasses().length > 3){
+      if(this.state.moreClasses == true){
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
+      }
+      else{
+        let methylationHeight = document.getElementById('no-overflow-legend').height;
+        console.log(methylationHeight);
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
+
+      }
+    }
+    else{
+      return <div className="overflow-box" style={{ 'padding-left': '51px' }}>{list}</div>;
+    }
+    
   }
   showMore(){
     this.setState({moreClasses: true});
@@ -179,7 +194,7 @@ class Summary extends React.Component {
       </div>
     }
     else{
-      return <div className="non-overflow-box" style={{ 'padding-left': '51px' }}>
+      return <div id = "no-overflow-legend" className="non-overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
     }  
