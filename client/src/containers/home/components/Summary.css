@@ -14,8 +14,6 @@
   overflow-y: auto;
 }
 .non-overflow-box{
-  overflow-y: hidden;
-  height: 168px;
   padding-top: 20px;
 }
 .non-overflow-box:hover {
