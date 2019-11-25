@@ -14,9 +14,14 @@
   overflow-y: auto;
 }
 .non-overflow-box{
-  height: 84px;
+  overflow-y: hidden;
+  height: 168px;
   padding-top: 20px;
 }
+.non-overflow-box:hover {
+  overflow-y: auto;
+}
+
 .ant-table-fixed-columns-in-body {
   width: 150px;
 }

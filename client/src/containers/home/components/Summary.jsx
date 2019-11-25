@@ -162,33 +162,27 @@ class Summary extends React.Component {
   showLess(){
     this.setState({moreClasses: false});
   }
-  renderMore(){/*
-    console.log('Gender Info');
-    console.log(this.getGender().length)
-    console.log(JSON.stringify(this.getGender()))
+  renderMore(){
     if(this.getMethylationClasses().length > 3 && this.state.moreClasses == false){
-      return <div style={{'margin':'auto'}}><a onClick = {this.showMore()}>show more</a></div>
+      return <div style={{'margin':'auto'}}><a>show more</a></div>
     }
     if(this.state.moreClasses == true){
-      return <div style={{'margin':'auto'}}><a onClick = {this.showLess()}>show less</a></div>
-    }*/
+      return <div style={{'margin':'auto'}}><a>show less</a></div>
+    }
     return <div></div>
   }
 
   methylationLegend(){
-    return <div className="non-overflow-box" style={{ 'padding-left': '51px' }}>
-        {this.renderMethylationLegend()}
-      </div>
-    /*if(this.state.moreClasses == false){
+    if(this.state.moreClasses == false){
       return <div className="overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
     }
     else{
-      return <div className="" style={{ 'padding-left': '51px' }}>
+      return <div className="non-overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
-    }*/  
+    }  
 
   }
   render() {
