@@ -11,7 +11,8 @@ class Summary extends React.Component {
     super(props);
     this.state = {
       project: '',
-      filteredData: []
+      filteredData: [],
+      moreClasses: false
     };
     this.graph1 = React.createRef();
     this.graph2 = React.createRef();
@@ -155,13 +156,36 @@ class Summary extends React.Component {
     ));
     return list;
   }
+  showMore(){
+    this.setState({moreClasses: true});
+  }
+  showLess(){
+    this.setState({moreClasses: false});
+  }
   renderMore(){
     console.log('Gender Info');
     console.log(this.getGender().length)
     console.log(JSON.stringify(this.getGender()))
-    if(this.getMethylationClasses().length > 3){
-      return <a style={{'margin':'auto'}}>show more</a>
+    if(this.getMethylationClasses().length > 3 && this.state.moreClasses == false){
+      return <div style={{'margin':'auto'}}><a onClick = {this.showMore()}>show more</a></div>
     }
+    if(this.state.moreClasses == true){
+      return <div style={{'margin':'auto'}}><a onClick = {this.showLess()}>show less</a></div>
+    }
+  }
+
+  methylationLegend(){
+    if(this.state.moreClasses == false){
+      return <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+        {this.renderMethylationLegend()}
+      </div>
+    }
+    else{
+      return <div className="" style={{ 'padding-left': '51px' }}>
+        {this.renderMethylationLegend()}
+      </div>
+    }
+
   }
   render() {
     /*console.log(this.getMethylationClasses());
@@ -241,9 +265,12 @@ class Summary extends React.Component {
               data={this.getMethylationClasses()}
               legend={false}
             />
+
+            {this.methylationLegend()}
+            {/*
             <div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderMethylationLegend()}
-            </div>
+            </div>*/}
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
