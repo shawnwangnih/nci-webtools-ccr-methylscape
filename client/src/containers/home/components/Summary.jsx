@@ -164,10 +164,10 @@ class Summary extends React.Component {
   }
   renderMore(){
     if(this.getMethylationClasses().length > 3 && this.state.moreClasses == false){
-      return <div style={{'margin':'auto'}}><a>show more</a></div>
+      return <div style={{'margin':'auto'}}><a onClick={() => this.showMore()}>show more</a></div>
     }
     if(this.state.moreClasses == true){
-      return <div style={{'margin':'auto'}}><a>show less</a></div>
+      return <div style={{'margin':'auto'}}><a onClick={() => this.showLess()}>show less</a></div>
     }
     return <div></div>
   }
