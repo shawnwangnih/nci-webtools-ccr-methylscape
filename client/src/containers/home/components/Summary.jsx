@@ -159,8 +159,8 @@ class Summary extends React.Component {
     console.log('Gender Info');
     console.log(this.getGender().length)
     console.log(JSON.stringify(this.getGender()))
-    if(this.getGender().length > 3){
-      return <a>show more</a>
+    if(this.getMethylationClasses().length > 3){
+      return <a style={{'margin':'auto'}}>show more</a>
     }
   }
   render() {
@@ -252,6 +252,7 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
   />*/}
+            {this.renderMore()}
           </Col>
           <Col
             span={8}
@@ -269,8 +270,7 @@ class Summary extends React.Component {
             <div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderGenderLegend()}
             </div>
-            {this.renderMore()}
-            <a>show more</a>
+
            
           </Col>
           <Col
