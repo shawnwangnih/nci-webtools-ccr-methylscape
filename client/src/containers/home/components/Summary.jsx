@@ -156,6 +156,9 @@ class Summary extends React.Component {
     return list;
   }
   renderMore(){
+    console.log('Gender Info');
+    console.log(this.getGender().length)
+    console.log(JSON.stringify(this.getGender()))
     if(this.getGender().length > 3){
       return <a>show more</a>
     }
@@ -267,6 +270,7 @@ class Summary extends React.Component {
               {this.renderGenderLegend()}
             </div>
             {this.renderMore()}
+            <a>show more</a>
            
           </Col>
           <Col
