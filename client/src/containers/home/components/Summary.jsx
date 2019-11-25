@@ -160,7 +160,7 @@ class Summary extends React.Component {
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
       }
       else{
-        let methylationHeight = document.getElementById('no-overflow-legend').clientHeight;
+        let methylationHeight = document.getElementById('methylationlegend').clientHeight;
         console.log(methylationHeight);
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
 
@@ -189,12 +189,12 @@ class Summary extends React.Component {
 
   methylationLegend(){
     if(this.state.moreClasses == false){
-      return <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+      return <div id = "methylationLegend" className="overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
     }
     else{
-      return <div id = "no-overflow-legend" className="non-overflow-box" style={{ 'padding-left': '51px' }}>
+      return <div id = "methylationLegend" className="non-overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
     }  
