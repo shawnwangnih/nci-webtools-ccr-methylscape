@@ -172,6 +172,7 @@ class Summary extends React.Component {
     if(this.state.moreClasses == true){
       return <div style={{'margin':'auto'}}><a onClick = {this.showLess()}>show less</a></div>
     }
+    return <div></div>
   }
 
   methylationLegend(){
