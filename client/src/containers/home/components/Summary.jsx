@@ -176,7 +176,7 @@ class Summary extends React.Component {
   }
 
   methylationLegend(){
-    return <div className="" style={{ 'padding-left': '51px' }}>
+    return <div className="non-overflow-box" style={{ 'padding-left': '51px' }}>
         {this.renderMethylationLegend()}
       </div>
     /*if(this.state.moreClasses == false){

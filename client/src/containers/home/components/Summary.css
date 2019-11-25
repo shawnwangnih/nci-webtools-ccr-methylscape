@@ -13,6 +13,10 @@
 .overflow-box:hover {
   overflow-y: auto;
 }
+.non-overflow-box{
+  height: 84px;
+  padding-top: 20px;
+}
 .ant-table-fixed-columns-in-body {
   width: 150px;
 }
