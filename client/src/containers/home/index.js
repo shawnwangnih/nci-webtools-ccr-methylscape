@@ -72,7 +72,11 @@ class Home extends React.Component {
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
-    fetch(`${root}scanMethylScapeTable`)
+        /*fetch(
+          `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
+          { method: 'POST' }
+        )*/
+        fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
@@ -121,7 +125,10 @@ class Home extends React.Component {
         <div style = {{'background-color' : '#f0f2f5'}}>
           <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'15px', 'padding-bottom':'15px'}}>
             <Link style={{'padding-left':'20px'}} onClick = {() => {
-              this.changeTab('projects')
+              this.changeTab('projects', {
+                project: '',
+                experiment: ''
+              })
             }}>
                 <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
                 <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
@@ -132,7 +139,10 @@ class Home extends React.Component {
                   'font-weight': '200', 'display':'inline'}}> Projects</h3>
             </Link>
             <Link style={{'padding-left':'50px'}} onClick = {() => {
-              this.changeTab('experiments')
+              this.changeTab('experiments', {
+                project: '',
+                experiment: ''
+              })
             }}>
               <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
@@ -143,7 +153,10 @@ class Home extends React.Component {
                 'font-weight': '200', 'display':'inline'}}> Experiments</h3>
             </Link>
             <Link style={{'padding-left':'50px'}} onClick = {() => {
-              this.changeTab('samples')
+              this.changeTab('samples',{
+                project: '',
+                experiment: ''
+              })
             }}>
               <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
               <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
