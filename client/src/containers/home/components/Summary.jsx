@@ -160,7 +160,7 @@ class Summary extends React.Component {
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
       }
       else{
-        let methylationHeight = document.getElementById('methylationlegend').clientHeight;
+        let methylationHeight = document.getElementById('methylationLegend').clientHeight;
         console.log(methylationHeight);
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
 
