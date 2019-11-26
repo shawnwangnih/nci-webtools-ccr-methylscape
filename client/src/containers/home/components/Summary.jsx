@@ -308,10 +308,10 @@ class Summary extends React.Component {
               height="70%"
             />*/}
             <PieChart height="300px" data={this.getGender()} legend={false} />
-            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {/*<div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderGenderLegend()}
-            </div>
-
+          </div>*/}
+          {this.renderGenderLegend()}
            
           </Col>
           <Col
