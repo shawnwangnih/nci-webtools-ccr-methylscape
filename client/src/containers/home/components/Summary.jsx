@@ -156,12 +156,14 @@ class Summary extends React.Component {
     ));
     if(this.getMethylationClasses().length > 3){
       if(this.state.moreClasses == true){
-        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
-      }
-      else{
         let methylationHeight = document.getElementById('methylationLegend').clientHeight + 21;
         console.log(methylationHeight);
-        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':methylationHeight.toString() + 'px'}}>{list}</div>
+
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':methylationHeight.toString()+'px' }}>{list}</div>
+      }
+      else{
+        
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px'}}>{list}</div>
 
       }
     }
