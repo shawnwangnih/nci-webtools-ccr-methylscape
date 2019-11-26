@@ -422,14 +422,14 @@ class Samples extends React.Component {
         title: '',
         dataIndex: 'emptySpace',
         sorter: true,
-        width: '4%',
+        width: '3%',
         //defaultSortOrder: 'ascend',
       },
       {
         title: 'Header name',
         dataIndex: 'header_name',
         sorter: true,
-        width: '20%',
+        width: '16%',
         render: text => {
           return (
             <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
@@ -442,7 +442,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value',
-        width: '28%',
+        width: '31%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -502,7 +502,7 @@ class Samples extends React.Component {
         title: 'Header name',
         dataIndex: 'header_name2',
         sorter: true,
-        width: '20%',
+        width: '16%',
         render: text => {
           return (
             <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
@@ -515,7 +515,7 @@ class Samples extends React.Component {
       {
         title: 'Value',
         dataIndex: 'value2',
-        width: '28%',
+        width: '32%',
         // sorter: true,
         
         //Gives functionality to the rows with download links
@@ -1047,7 +1047,7 @@ class Samples extends React.Component {
         dataIndex: 'date',
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
-        width: '10%',
+        width: '8%',
         render: (text,record) => (
           <span>
             {text}
@@ -1073,7 +1073,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        width: '8%',
+        width: '7%',
         render: (text, record) => (
           <span>
             {text}
@@ -1095,7 +1095,7 @@ class Samples extends React.Component {
           }
           return aNew - bNew
         },
-        width: '10%',
+        width: '7%',
         render: (text, record) => (
           <span>
             {text}
@@ -1108,7 +1108,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        width: '20%',
+        width: '26%',
         render: (text, record) => (
           <span>
             {text}
