@@ -70,7 +70,6 @@ class Summary extends React.Component {
     let pieData = [];
     this.state.filteredData.map(row => {
       if (row.classifier_prediction != null) {
-        console.log(JSON.stringify(row.classifier_prediction))
         if(Object.keys(row.classifier_prediction).length>=2){
           Object.keys(row.classifier_prediction).forEach(key => {
             if(key != '0'){
@@ -160,9 +159,9 @@ class Summary extends React.Component {
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
       }
       else{
-        let methylationHeight = document.getElementById('methylationLegend').clientHeight;
+        let methylationHeight = document.getElementById('methylationLegend').clientHeight + 21;
         console.log(methylationHeight);
-        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':'21px' }}>{list}</div>
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':methylationHeight.toString() + 'px'}}>{list}</div>
 
       }
     }
