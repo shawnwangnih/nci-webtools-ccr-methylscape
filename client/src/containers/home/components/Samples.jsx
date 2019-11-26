@@ -678,44 +678,45 @@ class Samples extends React.Component {
           key: 'diagnosis',
           header_name: 'Diagnosis',
           value: currRow.diagnosis,
-          header_name2: 'MGMT score',
-          value2:
-            currRow.mgmt_prediction == null
-              ? ''
-              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3)
+          header_name2: 'Tumor Site',
+          value2: currRow.tumor_data,
+          
         },
         {
           key: 'tumor_data',
-          header_name: 'Tumor Site',
-          value: currRow.tumor_data,
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family,
           header_name2: 't-SNE plot',
           value2: 'View plot'
         },
         {
           key: 'family',
-          header_name: 'Methylation Family (MF)',
-          value: currRow.family,
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score,
           header_name2: 'Report',
           value2: 'Download report'
         },
         {
           key: 'family_score',
-          header_name: 'MF Calibrated Scores',
-          value: currRow.family_score,
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class,
           header_name2: 'NGS reports (pdf-files)',
           value2: 'Download pdf'
         },
         {
           key: 'class',
-          header_name: 'Methylation Class (MC)',
-          value: currRow.class,
+          header_name: 'MC Calibrated Scores',
+          value: currRow.class_score,
           header_name2: 'Slide Image',
           value2: 'Download image'
         },
         {
           key: 'class_score',
-          header_name: 'MC Calibrated Scores',
-          value: currRow.class_score,
+          header_name2: 'MGMT score',
+          value2:
+            currRow.mgmt_prediction == null
+              ? ''
+              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
           header_name2: 'Notes',
           value2: currRow.notes
         }
@@ -978,7 +979,7 @@ class Samples extends React.Component {
       {
         title: '',
         dataIndex: 'expandBoxes',
-        width:'4%',
+        width:'3%',
         render: (text, record) => {
           if(record.key == this.state.currSample){
             return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
@@ -1046,7 +1047,7 @@ class Samples extends React.Component {
         dataIndex: 'date',
         ellipsis: true,
         sorter: (a,b) => this.compareDates(a,b),
-        width: '13%',
+        width: '10%',
         render: (text,record) => (
           <span>
             {text}
@@ -1072,7 +1073,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        width: '10%',
+        width: '8%',
         render: (text, record) => (
           <span>
             {text}
@@ -1107,7 +1108,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        width: '14%',
+        width: '20%',
         render: (text, record) => (
           <span>
             {text}
