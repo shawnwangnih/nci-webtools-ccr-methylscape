@@ -14,6 +14,8 @@ class Summary extends React.Component {
       filteredData: [],
       moreClasses: false
     };
+    this.methylationHeight = 0;
+    this.lastMethylationHeight = 0;
     this.graph1 = React.createRef();
     this.graph2 = React.createRef();
     this.backgroundColor = [
@@ -40,6 +42,7 @@ class Summary extends React.Component {
     ];
   }
   componentWillReceiveProps(nextProps) {
+    this.setState({moreClasses: false})
     if (nextProps.data.length === 0) {
       return;
     }
@@ -50,6 +53,17 @@ class Summary extends React.Component {
       this.setState({ project: nextProps.project });
       this.filterData(nextProps.project, nextProps.data);
     }
+  }
+
+  async componentDidUpdate(){
+    this.methylationHeight = document.getElementById('methylationLegend').clientHeight + 21 - 84;
+    
+    if(this.methylationHeight > this.lastMethylationHeight){
+      this.lastMethylationHeight = this.methylationHeight;
+      this.setState({});
+    }
+    this.lastMethylationHeight = this.methylationHeight;
+    console.log('updated')
   }
 
   filterData = (filter, data) => {
@@ -140,7 +154,6 @@ class Summary extends React.Component {
     return list;
   }
   renderGenderLegend() {
-
     const list = this.getGender().map((item, index) => (
       <div style={{ 'text-align': 'left'}}>
         <div
@@ -156,10 +169,9 @@ class Summary extends React.Component {
     ));
     if(this.getMethylationClasses().length > 3){
       if(this.state.moreClasses == true){
-        let methylationHeight = document.getElementById('methylationLegend').clientHeight + 21;
-        console.log(methylationHeight);
+        console.log(this.methylationHeight);
 
-        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':methylationHeight.toString()+'px' }}>{list}</div>
+        return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':this.methylationHeight.toString()+'px' }}>{list}</div>
       }
       else{
         
@@ -180,10 +192,10 @@ class Summary extends React.Component {
   }
   renderMore(){
     if(this.getMethylationClasses().length > 3 && this.state.moreClasses == false){
-      return <div style={{'margin':'auto'}}><a onClick={() => this.showMore()}>show more</a></div>
+      return <div style={{'margin':'auto', 'text-align':'center'}}><a onClick={() => this.showMore()} style ={{}}>show more</a></div>
     }
     if(this.state.moreClasses == true){
-      return <div style={{'margin':'auto'}}><a onClick={() => this.showLess()}>show less</a></div>
+      return <div style={{'margin':'auto', 'text-align':'center'}}><a onClick={() => this.showLess()}>show less</a></div>
     }
     return <div></div>
   }
@@ -201,7 +213,48 @@ class Summary extends React.Component {
     }  
 
   }
+  renderColumnChart(){
+    if(this.state.moreClasses == true){
+      return <Col
+      span={8}
+      order={3}
+      style={{
+        'margin-bottom': (this.methylationHeight +  63).toString() + 'px',
+        'padding-left': '5px',
+        'padding-right': '56px'
+      }}>
+      <h4 className="summery-data-title">Age Distribution</h4>
+      <br />
+      <ColumnChart
+        height="300px"
+        data={this.getAgeDistribution()}
+        library={{
+          scales: { yAxes: [{ gridLines: { display: false } }] }
+        }}
+      />
+    </Col>
+    }
+    return <Col
+            span={8}
+            order={3}
+            style={{
+              'margin-bottom': '84px',
+              'padding-left': '5px',
+              'padding-right': '56px'
+            }}>
+            <h4 className="summery-data-title">Age Distribution</h4>
+            <br />
+            <ColumnChart
+              height="300px"
+              data={this.getAgeDistribution()}
+              library={{
+                scales: { yAxes: [{ gridLines: { display: false } }] }
+              }}
+            />
+          </Col>
+  }
   render() {
+
     /*console.log(this.getMethylationClasses());
     console.log(this.getGender());
     const graph1 = this.graph1;
@@ -314,24 +367,8 @@ class Summary extends React.Component {
           {this.renderGenderLegend()}
            
           </Col>
-          <Col
-            span={8}
-            order={3}
-            style={{
-              'margin-bottom': '84px',
-              'padding-left': '5px',
-              'padding-right': '56px'
-            }}>
-            <h4 className="summery-data-title">Age Distribution</h4>
-            <br />
-            <ColumnChart
-              height="300px"
-              data={this.getAgeDistribution()}
-              library={{
-                scales: { yAxes: [{ gridLines: { display: false } }] }
-              }}
-            />
-          </Col>
+          {this.renderColumnChart()}
+          
         </Row>
       </div>
     );
