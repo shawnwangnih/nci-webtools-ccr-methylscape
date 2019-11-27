@@ -1276,7 +1276,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '21%',
+                width: '20%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
