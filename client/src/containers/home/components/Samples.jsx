@@ -1073,7 +1073,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        width: '7%',
+        width: '8%',
         render: (text, record) => (
           <span>
             {text}
@@ -1095,7 +1095,7 @@ class Samples extends React.Component {
           }
           return aNew - bNew
         },
-        width: '8%',
+        width: '7%',
         render: (text, record) => (
           <span>
             {text}
