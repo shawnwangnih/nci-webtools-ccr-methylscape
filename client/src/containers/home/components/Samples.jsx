@@ -1095,7 +1095,7 @@ class Samples extends React.Component {
           }
           return aNew - bNew
         },
-        width: '7%',
+        width: '8%',
         render: (text, record) => (
           <span>
             {text}
@@ -1108,7 +1108,7 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        width: '26%',
+        width: '25%',
         render: (text, record) => (
           <span>
             {text}
@@ -1250,7 +1250,7 @@ class Samples extends React.Component {
                   })
                 }
                 } value={this.state.filterGender}
-                style={{'width':'100px'}}>
+                style={{'width':'85px'}}>
                 <Option value="">&nbsp;</Option>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
@@ -1259,7 +1259,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '7%',
+                width: '8%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1276,7 +1276,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '26%',
+                width: '25%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
