@@ -982,10 +982,10 @@ class Samples extends React.Component {
         width:'3%',
         render: (text, record) => {
           if(record.id == this.state.currSample){
-            return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
-            </Button>
+            return <button className = "buttonHoverClass" style = {{'padding-left':'2px', 'padding-right':'2px'}} ><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
+            </button>
           }
-          return <Button size = 'small'><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></Button>
+          return <button className = "buttonHoverClass" style = {{'padding-left':'2px', 'padding-right':'2px'}} ><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></button>
         }
       },
       {
