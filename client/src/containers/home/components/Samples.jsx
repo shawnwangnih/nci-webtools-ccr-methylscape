@@ -30,7 +30,7 @@ class Samples extends React.Component {
         size: 'small',
         // pageSize: 15,
         defaultPageSize: 25,
-        pageSizeOptions: [10,25,50,100],
+        pageSizeOptions: ['10','25','50','100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
         showTotal: this.rangeFunction
@@ -67,10 +67,6 @@ class Samples extends React.Component {
   }
 
   compareDates(a,b){
-    console.log(a)
-    console.log(typeof a)
-    console.log(b)
-    console.log(typeof b)
     let datea = a.date
     let dateb = b.date
     let converted1 = new Date();
@@ -180,28 +176,33 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
+    console.log(JSON.stringify('SAMPLE: ' +  this.state.currSample))
     if (nextProps.filter.project !== undefined) {
-      this.setState({ filterProject: nextProps.filter.project }, () => {
-        this.handleFilter();
-      });
-    }
-    if (nextProps.filter.experiment !== undefined) {
-      this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
-        this.handleFilter();
-      });
-    }
-    this.setState({
-      filterSampleName: '',
+      this.setState({ filterProject: nextProps.filter.project, filterSampleName: '',
       filterSurgicalCase: '',
       filterGender: '',
       filterAge: '',
       filterDiagnosis: '',
       startDate: '',
       endDate: '',
-      currSample:'',
-    }, () => {
-      this.handleFilter();
-    })
+      currSample:'', 
+      expandedRowKeys: []}, () => {
+        this.handleFilter();
+      });
+    }
+    if (nextProps.filter.experiment !== undefined) {
+      this.setState({ filterSentrixID: nextProps.filter.experiment, filterSampleName: '',
+      filterSurgicalCase: '',
+      filterGender: '',
+      filterAge: '',
+      filterDiagnosis: '',
+      startDate: '',
+      endDate: '',
+      currSample:'', 
+      expandedRowKeys: []}, () => {
+        this.handleFilter();
+      });
+    }
   }
 
   async componentDidMount() {
@@ -246,8 +247,6 @@ class Samples extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-    console.log(start)
-    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
       parseInt(start[0]) - 1,
@@ -263,9 +262,6 @@ class Samples extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log('toCheck: ' + toCheck)
-    console.log('startDate: ' + startDate)
-    console.log(startDate == toCheck)
     return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 
@@ -672,7 +668,6 @@ class Samples extends React.Component {
           value: currRow.notes
         }*/
     //Defines the rows for the summary
-    console.log(typeof currRow.mgmt_prediction.Estimated)
       let extraData = [
         {
           key: 'diagnosis',
@@ -712,8 +707,8 @@ class Samples extends React.Component {
         },
         {
           key: 'class_score',
-          header_name2: 'MGMT score',
-          value2:
+          header_name: 'MGMT score',
+          value:
             currRow.mgmt_prediction == null
               ? ''
               : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
@@ -739,22 +734,27 @@ class Samples extends React.Component {
         keys.push(record.key);
     }
 
-    this.setState({expandedRowKeys: keys, currSample: expanded ? record.key : ''});
+    this.setState({expandedRowKeys: keys, currSample: expanded ? record.id : ''});
   }
 
   //renders the summary for a sample when the sample is selected
-  renderSummary(key) {
-    if (key == '') {
+  renderSummary(id) {
+    if (id == '') {
       return <div />;
     }
     var found = []; //Stores variable row that was selected
-
+    this.state.filteredData.forEach((sample) => {
+      if (sample.id == id) {
+        found.push(sample);
+      }
+    })
+    /*
     let row = this.state.filteredData.filter(sample => {
       if (sample.key == key) {
         found.push(sample);
       }
       return sample.key == key;
-    });
+    });*/
 
     if (found.length != 0) {
       var currRow = found[0];
@@ -943,7 +943,7 @@ class Samples extends React.Component {
           size: 'small',
           // pageSize: 15,
           defaultPageSize: 25,
-          pageSizeOptions: [10,25,50,100],
+          pageSizeOptions: ['10','25','50','100'],
           showSizeChanger: true,
           itemRender: this.itemRender,
           showTotal: this.rangeFunction
@@ -981,7 +981,7 @@ class Samples extends React.Component {
         dataIndex: 'expandBoxes',
         width:'3%',
         render: (text, record) => {
-          if(record.key == this.state.currSample){
+          if(record.id == this.state.currSample){
             return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
             </Button>
           }
@@ -1245,7 +1245,6 @@ class Samples extends React.Component {
               />*/}
               <Select onChange={(value) =>
                 {
-                  console.log(value)
                   this.setState({ filterGender: value }, () => {
                     this.handleFilter();
                   })
@@ -1325,14 +1324,14 @@ class Samples extends React.Component {
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
-                  if(this.state.currSample == record.key){
+                  if(this.state.currSample == record.id){
                     this.setState({
                       currSample: ''
                     });
                   }
                   else{
                     this.setState({
-                      currSample: record.key
+                      currSample: record.id
                     });
                   }
                   
@@ -1346,6 +1345,7 @@ class Samples extends React.Component {
 
         <br />
         <br />
+        <p>{JSON.stringify(this.state.data)}</p>
       </div>
     );
   }

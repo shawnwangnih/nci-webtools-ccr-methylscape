@@ -63,7 +63,6 @@ class Summary extends React.Component {
       this.setState({});
     }
     this.lastMethylationHeight = this.methylationHeight;
-    console.log('updated')
   }
 
   filterData = (filter, data) => {
@@ -169,8 +168,6 @@ class Summary extends React.Component {
     ));
     if(this.getMethylationClasses().length > 3){
       if(this.state.moreClasses == true){
-        console.log(this.methylationHeight);
-
         return <div className="overflow-box" style={{ 'padding-left': '51px', 'margin-bottom':this.methylationHeight.toString()+'px' }}>{list}</div>
       }
       else{

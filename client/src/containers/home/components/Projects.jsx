@@ -37,7 +37,6 @@ class Projects extends React.Component {
 
   //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
-    console.log('PROPS RECEIVED')
     if (nextProps.data.length == 0) {
       return;
     }
@@ -123,8 +122,6 @@ class Projects extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-    console.log(start)
-    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
       parseInt(start[0]) - 1,
@@ -140,9 +137,6 @@ class Projects extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log('toCheck: ' + toCheck)
-    console.log('startDate: ' + startDate)
-    console.log(startDate == toCheck)
     return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 

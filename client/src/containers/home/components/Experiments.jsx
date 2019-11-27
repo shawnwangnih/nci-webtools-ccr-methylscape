@@ -22,7 +22,7 @@ class Experiments extends React.Component {
         size: 'small',
         // pageSize: 15,
         defaultPageSize: 25,
-        pageSizeOptions: [10,25,50,100],
+        pageSizeOptions: ['10','25','50','100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
         showTotal: this.rangeFunction
@@ -54,8 +54,6 @@ class Experiments extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-    console.log(start)
-    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
       parseInt(start[0]) - 1,
@@ -71,9 +69,6 @@ class Experiments extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log('toCheck: ' + toCheck)
-    console.log('startDate: ' + startDate)
-    console.log(startDate == toCheck)
     return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
   }
 
@@ -88,10 +83,6 @@ class Experiments extends React.Component {
   }
 
   compareDates(a,b){
-    console.log(a)
-    console.log(typeof a)
-    console.log(b)
-    console.log(typeof b)
     let datea = a.date
     let dateb = b.date
     let converted1 = new Date();
