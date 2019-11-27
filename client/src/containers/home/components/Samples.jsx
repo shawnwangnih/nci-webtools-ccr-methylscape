@@ -982,10 +982,10 @@ class Samples extends React.Component {
         width:'3%',
         render: (text, record) => {
           if(record.id == this.state.currSample){
-            return <button className = "buttonHoverClass" style = {{'padding-left':'2px', 'padding-right':'2px'}} ><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
+            return <button className = "buttonHoverClass" style = {{'padding-left':'4px', 'padding-right':'4px'}} ><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
             </button>
           }
-          return <button className = "buttonHoverClass" style = {{'padding-left':'2px', 'padding-right':'2px'}} ><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></button>
+          return <button className = "buttonHoverClass" style = {{'padding-left':'4px', 'padding-right':'4px'}} ><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></button>
         }
       },
       {
@@ -1229,7 +1229,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '7%',
+                width: '12%',
                 'padding-left': '8px',
                 'padding-right': '0px',
                 'margin-right': '0px'
@@ -1259,7 +1259,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '8%',
+                width: '7%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1276,7 +1276,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '25%',
+                width: '21%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
