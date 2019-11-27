@@ -1132,7 +1132,7 @@ class Samples extends React.Component {
           <Form layout="inline">
             <Form.Item
               style={{
-                width: '4%',
+                width: '3%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1191,7 +1191,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '13%',
+                width: '8%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1229,7 +1229,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '10%',
+                width: '7%',
                 'padding-left': '8px',
                 'padding-right': '0px',
                 'margin-right': '0px'
@@ -1259,7 +1259,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '10%',
+                width: '7%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1276,7 +1276,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '14%',
+                width: '26%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1345,7 +1345,7 @@ class Samples extends React.Component {
 
         <br />
         <br />
-        <p>{JSON.stringify(this.state.data)}</p>
+        {/*<p>{JSON.stringify(this.state.data)}</p>*/}
       </div>
     );
   }
