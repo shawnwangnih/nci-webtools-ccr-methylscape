@@ -22,7 +22,7 @@ class Experiments extends React.Component {
         size: 'small',
         // pageSize: 15,
         defaultPageSize: 25,
-        pageSizeOptions: ['10','25','50','100'],
+        pageSizeOptions: ['10', '25', '50', '100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
         showTotal: this.rangeFunction
@@ -69,57 +69,64 @@ class Experiments extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
+    return (
+      parseInt(start[2]) == parseInt(check[2]) &&
+      parseInt(start[1]) == parseInt(check[1]) &&
+      parseInt(start[0]) == parseInt(check[0])
+    );
   }
 
-  getMonth(element){
-    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    for(let i = 0; i < months.length; i++){
-      if(months[i] == element){
+  getMonth(element) {
+    let months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    for (let i = 0; i < months.length; i++) {
+      if (months[i] == element) {
         return i;
       }
     }
     return 0;
   }
 
-  compareDates(a,b){
-    let datea = a.date
-    let dateb = b.date
+  compareDates(a, b) {
+    let datea = a.date;
+    let dateb = b.date;
     let converted1 = new Date();
     let converted2 = new Date();
-    if(datea.includes('-')){
+    if (datea.includes('-')) {
       let date1 = datea.split('-');
-      converted1 = new Date(
-        2019,
-        this.getMonth(date1[1]),
-        parseInt(date1[0])
-      );
-    }
-    else{
-      let date1 = datea.split('/')
+      converted1 = new Date(2019, this.getMonth(date1[1]), parseInt(date1[0]));
+    } else {
+      let date1 = datea.split('/');
       converted2 = new Date(
         parseInt(date1[2]),
         parseInt(date1[0]),
         parseInt(date1[1])
-      )
+      );
     }
-    if(dateb.includes('-')){
-      let date2 = dateb.split('-')
-      converted2 = new Date(
-        2019,
-        this.getMonth(date2[1]),
-        parseInt(date2[0])
-      )
-    }
-    else{
-      let date2 = dateb.split('/')
+    if (dateb.includes('-')) {
+      let date2 = dateb.split('-');
+      converted2 = new Date(2019, this.getMonth(date2[1]), parseInt(date2[0]));
+    } else {
+      let date2 = dateb.split('/');
       converted2 = new Date(
         parseInt(date2[2]),
         parseInt(date2[0]),
         parseInt(date2[1])
-      )
+      );
     }
-    return converted1 > converted2
+    return converted1 > converted2;
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -133,14 +140,17 @@ class Experiments extends React.Component {
         this.handleFilter();
       });
     }
-    this.setState({
-      filterNumSamples: '',
-      filterInvestigator: '',
-      startDate: '',
-      endDate: ''
-    }, () => {
-      this.handleFilter();
-    })
+    this.setState(
+      {
+        filterNumSamples: '',
+        filterInvestigator: '',
+        startDate: '',
+        endDate: ''
+      },
+      () => {
+        this.handleFilter();
+      }
+    );
   }
 
   async componentDidMount() {
@@ -327,7 +337,7 @@ class Experiments extends React.Component {
       {
         title: 'Date Created',
         dataIndex: 'date',
-        sorter: (a,b) => this.compareDates(a,b),
+        sorter: (a, b) => this.compareDates(a, b),
         width: '13%'
       },
       {
@@ -451,16 +461,17 @@ class Experiments extends React.Component {
               }}>
               <DatePicker
                 onChange={(date, dateString) => {
-                  this.setState(
-                    { startDate: dateString},
-                    () => {
-                      this.handleFilter();
-                    }
-                  );
+                  this.setState({ startDate: dateString }, () => {
+                    this.handleFilter();
+                  });
                 }}
-                format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
-                placeholder = ''
+                format="MM-DD-YYYY"
+                value={
+                  this.state.startDate == ''
+                    ? ''
+                    : moment(this.state.startDate, 'MM-DD-YYYY')
+                }
+                placeholder=""
               />
             </Form.Item>
             {/* <Form.Item label="Date">
@@ -487,7 +498,7 @@ class Experiments extends React.Component {
         <div>
           <Table
             {...this.state}
-            size='small'
+            size="small"
             columns={columns}
             dataSource={this.state.filteredData}
             onChange={this.handleTableChange}

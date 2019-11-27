@@ -13,7 +13,7 @@
 .overflow-box:hover {
   overflow-y: auto;
 }
-.non-overflow-box{
+.non-overflow-box {
   padding-top: 20px;
 }
 .non-overflow-box:hover {

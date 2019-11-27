@@ -12,8 +12,13 @@ import Projects from '../home/components/Projects';
 import { Layout, Menu, PageHeader } from 'antd';
 import FooterContent from './components/footer';
 import './index.css';
-import { faChartPie, faClipboard,  faVials, faUserFriends} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faChartPie,
+  faClipboard,
+  faVials,
+  faUserFriends
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
@@ -59,7 +64,7 @@ class App extends React.Component {
     );
   }
 
-  get_num_projects(){
+  get_num_projects() {
     console.log(this.state.data);
   }
 
@@ -158,38 +163,38 @@ class App extends React.Component {
                   'background-color': 'steelblue'
                 }}>
                 {/* Home */}
-                <Menu.Item key="projects" className = "testMenu">
+                <Menu.Item key="projects" className="testMenu">
                   <div>
-                  <Link
-                    style={{
-                      color: 'white',
-                      'font-size': '16px',
-                      'font-weight': '600'
-                    }}>
-                    Projects
-                  </Link>
+                    <Link
+                      style={{
+                        color: 'white',
+                        'font-size': '16px',
+                        'font-weight': '600'
+                      }}>
+                      Projects
+                    </Link>
                   </div>
                 </Menu.Item>
 
-                <Menu.Item className = "testMenu" key="experiments">
+                <Menu.Item className="testMenu" key="experiments">
                   <Link
                     style={{
                       color: 'white',
                       'font-size': '16px',
                       'font-weight': '600'
                     }}>
-                      Experiments
+                    Experiments
                   </Link>
                 </Menu.Item>
 
-                <Menu.Item key="samples" className = "testMenu">
+                <Menu.Item key="samples" className="testMenu">
                   <Link
                     style={{
                       color: 'white',
                       'font-size': '16px',
                       'font-weight': '600'
                     }}>
-                      Samples
+                    Samples
                   </Link>
                 </Menu.Item>
 
@@ -206,7 +211,7 @@ class App extends React.Component {
               </Menu>
             </div>
           </Header>
-          
+
           <Content
             style={{
               padding: '0 50px',
