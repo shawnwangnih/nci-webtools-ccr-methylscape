@@ -8,26 +8,37 @@
   /*border: 0px !important;*/
 }
 
-.ant-table-expand-icon-th, .ant-table-row-expand-icon-cell {
-  width:0px;
-  min-width:0px;
-  padding:0px !important;
-  max-width:0px
+.ant-table-expand-icon-th,
+.ant-table-row-expand-icon-cell {
+  width: 0px;
+  min-width: 0px;
+  padding: 0px !important;
+  max-width: 0px;
 }
 
-.ant-table-expanded-row-level-1 > td{
+.ant-table-expanded-row-level-1 > td {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
 
-.linkSpan { 
+.linkSpan {
   color: #1890ff;
 }
-.linkSpan:hover{
-  cursor:pointer;
+.linkSpan:hover {
+  cursor: pointer;
 }
 
-.ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td{
+.ant-table-small
+  > .ant-table-content
+  > .ant-table-body
+  > table
+  > .ant-table-tbody
+  > tr
+  > td {
   padding-top: 4px;
-  padding-bottom: 4px
+  padding-bottom: 4px;
+}
+
+.buttonHoverClass {
+  cursor: pointer;
 }

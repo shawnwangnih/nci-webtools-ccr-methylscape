@@ -37,22 +37,29 @@ class Projects extends React.Component {
 
   //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
-    console.log('PROPS RECEIVED')
     if (nextProps.data.length == 0) {
+      this.setState({
+        filterInvestigator: '',
+        endDate: '',
+        startDate: '',
+        filterNumSamples: '',
+        filterNumExperiments: '',
+        filterProject:'',
+      });
       return;
     }
     this.setState({
-      currRecord: nextProps.project !== undefined ? nextProps.project : ''
-    });
-    this.setState({
+      currRecord: nextProps.project !== undefined ? nextProps.project : '',
       filterInvestigator: '',
       endDate: '',
       startDate: '',
       filterNumSamples: '',
       filterNumExperiments: '',
-    }, () => {
+      filterProject:'',
+    },() => {
       this.handleFilter();
-    })
+    });
+    
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
@@ -65,41 +72,41 @@ class Projects extends React.Component {
 
   createDataTable = async rawData => {
     var projectData = {};
-    if(rawData!==undefined){
-    rawData.map(sample => {
-      var curProject = sample.project;
-      if (curProject == null || sample.experiment == null) {
-      } else if (curProject in projectData) {
-        projectData[curProject].sampleSize =
-          projectData[curProject].sampleSize + 1;
-        projectData[curProject].experiments.add(sample.experiment);
-      } else {
-        projectData[curProject] = {
-          key: curProject,
-          project: curProject,
-          sampleSize: 1,
-          date: sample.date,
-          investigator: sample.investigator,
-          experiments: new Set([])
-        };
-        projectData[curProject].experiments.add(sample.experiment);
-      }
-    });
+    if (rawData !== undefined) {
+      rawData.map(sample => {
+        var curProject = sample.project;
+        if (curProject == null || sample.experiment == null) {
+        } else if (curProject in projectData) {
+          projectData[curProject].sampleSize =
+            projectData[curProject].sampleSize + 1;
+          projectData[curProject].experiments.add(sample.experiment);
+        } else {
+          projectData[curProject] = {
+            key: curProject,
+            project: curProject,
+            sampleSize: 1,
+            date: sample.date,
+            investigator: sample.investigator,
+            experiments: new Set([])
+          };
+          projectData[curProject].experiments.add(sample.experiment);
+        }
+      });
 
-    this.setState({ data: Object.values(projectData) });
-    this.setState({ filteredData: Object.values(projectData) });
+      this.setState({ data: Object.values(projectData) });
+      this.setState({ filteredData: Object.values(projectData) });
 
-    if (this.state.currRecord == '') {
-      let unsorted = Object.values(projectData);
-      let sorted = [];
-      for (let i = 0; i < unsorted.length; i++) {
-        sorted.push(unsorted[i]['project']);
+      if (this.state.currRecord == '') {
+        let unsorted = Object.values(projectData);
+        let sorted = [];
+        for (let i = 0; i < unsorted.length; i++) {
+          sorted.push(unsorted[i]['project']);
+        }
+        sorted.sort();
+        this.setState({ currRecord: sorted[0] });
+        this.props.changeSummeryPorject(sorted[0]);
       }
-      sorted.sort();
-      this.setState({ currRecord: sorted[0] });
-      this.props.changeSummeryPorject(sorted[0]);
     }
-  }
   };
 
   rangeFunction(total, range) {
@@ -123,8 +130,6 @@ class Projects extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-    console.log(start)
-    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
       parseInt(start[0]) - 1,
@@ -140,10 +145,11 @@ class Projects extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log('toCheck: ' + toCheck)
-    console.log('startDate: ' + startDate)
-    console.log(startDate == toCheck)
-    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
+    return (
+      parseInt(start[2]) == parseInt(check[2]) &&
+      parseInt(start[1]) == parseInt(check[1]) &&
+      parseInt(start[0]) == parseInt(check[0])
+    );
   }
 
   handleFilter = () => {
@@ -228,21 +234,32 @@ class Projects extends React.Component {
         dataIndex: 'selected',
         sorter: false,
         width: '5%',
-        render: (text, record) =>
-          {
-            if(record.project == this.state.currRecord){
-              return <Radio checked = {true} 
-              onClick={()=>
-                {this.handleProjectClick(text, record);}}></Radio>
-            }
-            return <Radio checked = {false} onClick={()=>
-              {this.handleProjectClick(text, record);}}></Radio>
+        render: (text, record) => {
+          if (record.project == this.state.currRecord) {
+            return (
+              <Radio
+                checked={true}
+                onClick={() => {
+                  this.handleProjectClick(text, record);
+                }}
+              />
+            );
           }
-        
+          return (
+            <Radio
+              checked={false}
+              onClick={() => {
+                this.handleProjectClick(text, record);
+              }}
+            />
+          );
+        }
       },
       {
-        title: <div style = {{'margin-top':'0px'}}><p style = {{'margin-bottom':'0px'}}>Project</p>
-        {/*<Form>
+        title: (
+          <div style={{ 'margin-top': '0px' }}>
+            <p style={{ 'margin-bottom': '0px' }}>Project</p>
+            {/*<Form>
         <Form.Item
           style={{
             width: '100%',
@@ -261,7 +278,8 @@ class Projects extends React.Component {
           />
         </Form.Item>
           </Form>*/}
-        </div>,
+          </div>
+        ),
         dataIndex: 'key',
         sorter: true,
         width: '20%',
@@ -331,8 +349,8 @@ class Projects extends React.Component {
                 'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
-              }}>
-            </Form.Item>
+              }}
+            />
             <Form.Item
               style={{
                 width: '20%',
@@ -413,16 +431,17 @@ class Projects extends React.Component {
               }}>
               <DatePicker
                 onChange={(date, dateString) => {
-                  this.setState(
-                    { startDate: dateString },
-                    () => {
-                      this.handleFilter();
-                    }
-                  );
+                  this.setState({ startDate: dateString }, () => {
+                    this.handleFilter();
+                  });
                 }}
-                format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
-                placeholder=''
+                format="MM-DD-YYYY"
+                value={
+                  this.state.startDate == ''
+                    ? ''
+                    : moment(this.state.startDate, 'MM-DD-YYYY')
+                }
+                placeholder=""
               />
             </Form.Item>
           </Form>
@@ -441,7 +460,7 @@ class Projects extends React.Component {
           }}*/}
         <Table
           {...this.state}
-          size='small'
+          size="small"
           pagination={{
             position: 'bottom',
             size: this.state.pagination.size,
@@ -450,7 +469,13 @@ class Projects extends React.Component {
             itemRender: this.itemRender
           }}
           rowClassName={(record, index) => {
-            return this.state.currRecord == '' ? index == 0 ? 'testing' : '' : record.project==this.state.currRecord ? 'testing' : '';
+            return this.state.currRecord == ''
+              ? index == 0
+                ? 'testing'
+                : ''
+              : record.project == this.state.currRecord
+              ? 'testing'
+              : '';
           }}
           onRow={(record, rowIndex) => {
             return {

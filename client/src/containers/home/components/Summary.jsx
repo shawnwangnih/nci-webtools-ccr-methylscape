@@ -11,8 +11,11 @@ class Summary extends React.Component {
     super(props);
     this.state = {
       project: '',
-      filteredData: []
+      filteredData: [],
+      moreClasses: false
     };
+    this.methylationHeight = 0;
+    this.lastMethylationHeight = 0;
     this.graph1 = React.createRef();
     this.graph2 = React.createRef();
     this.backgroundColor = [
@@ -39,6 +42,7 @@ class Summary extends React.Component {
     ];
   }
   componentWillReceiveProps(nextProps) {
+    this.setState({ moreClasses: false });
     if (nextProps.data.length === 0) {
       return;
     }
@@ -49,6 +53,17 @@ class Summary extends React.Component {
       this.setState({ project: nextProps.project });
       this.filterData(nextProps.project, nextProps.data);
     }
+  }
+
+  async componentDidUpdate() {
+    this.methylationHeight =
+      document.getElementById('methylationLegend').clientHeight + 21 - 84;
+
+    if (this.methylationHeight > this.lastMethylationHeight) {
+      this.lastMethylationHeight = this.methylationHeight;
+      this.setState({});
+    }
+    this.lastMethylationHeight = this.methylationHeight;
   }
 
   filterData = (filter, data) => {
@@ -69,18 +84,15 @@ class Summary extends React.Component {
     let pieData = [];
     this.state.filteredData.map(row => {
       if (row.classifier_prediction != null) {
-        console.log(JSON.stringify(row.classifier_prediction))
-        if(Object.keys(row.classifier_prediction).length>=2){
+        if (Object.keys(row.classifier_prediction).length >= 2) {
           Object.keys(row.classifier_prediction).forEach(key => {
-            if(key != '0'){
+            if (key != '0') {
               Object.keys(row.classifier_prediction[key]).forEach(key1 => {
                 cur[key1] = cur[key1] + 1 || 1;
               });
             }
-            
           });
-        }
-        else{
+        } else {
           Object.values(row.classifier_prediction).forEach(cp => {
             Object.keys(cp).forEach(key => {
               cur[key] = cur[key] + 1 || 1;
@@ -153,7 +165,128 @@ class Summary extends React.Component {
         {item[0]}
       </div>
     ));
-    return list;
+    if (this.getMethylationClasses().length > 3) {
+      if (this.state.moreClasses == true) {
+        return (
+          <div
+            className="overflow-box"
+            style={{
+              'padding-left': '51px',
+              'margin-bottom': this.methylationHeight.toString() + 'px'
+            }}>
+            {list}
+          </div>
+        );
+      } else {
+        return (
+          <div
+            className="overflow-box"
+            style={{ 'padding-left': '51px', 'margin-bottom': '21px' }}>
+            {list}
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+          {list}
+        </div>
+      );
+    }
+  }
+  showMore() {
+    this.setState({ moreClasses: true });
+  }
+  showLess() {
+    this.setState({ moreClasses: false });
+  }
+  renderMore() {
+    if (
+      this.getMethylationClasses().length > 3 &&
+      this.state.moreClasses == false
+    ) {
+      return (
+        <div style={{ margin: 'auto', 'text-align': 'center' }}>
+          <a onClick={() => this.showMore()} style={{}}>
+            show more
+          </a>
+        </div>
+      );
+    }
+    if (this.state.moreClasses == true) {
+      return (
+        <div style={{ margin: 'auto', 'text-align': 'center' }}>
+          <a onClick={() => this.showLess()}>show less</a>
+        </div>
+      );
+    }
+    return <div />;
+  }
+
+  methylationLegend() {
+    if (this.state.moreClasses == false) {
+      return (
+        <div
+          id="methylationLegend"
+          className="overflow-box"
+          style={{ 'padding-left': '51px' }}>
+          {this.renderMethylationLegend()}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          id="methylationLegend"
+          className="non-overflow-box"
+          style={{ 'padding-left': '51px' }}>
+          {this.renderMethylationLegend()}
+        </div>
+      );
+    }
+  }
+  renderColumnChart() {
+    if (this.state.moreClasses == true) {
+      return (
+        <Col
+          span={8}
+          order={3}
+          style={{
+            'margin-bottom': (this.methylationHeight + 63).toString() + 'px',
+            'padding-left': '5px',
+            'padding-right': '56px'
+          }}>
+          <h4 className="summery-data-title">Age Distribution</h4>
+          <br />
+          <ColumnChart
+            height="300px"
+            data={this.getAgeDistribution()}
+            library={{
+              scales: { yAxes: [{ gridLines: { display: false } }] }
+            }}
+          />
+        </Col>
+      );
+    }
+    return (
+      <Col
+        span={8}
+        order={3}
+        style={{
+          'margin-bottom': '84px',
+          'padding-left': '5px',
+          'padding-right': '56px'
+        }}>
+        <h4 className="summery-data-title">Age Distribution</h4>
+        <br />
+        <ColumnChart
+          height="300px"
+          data={this.getAgeDistribution()}
+          library={{
+            scales: { yAxes: [{ gridLines: { display: false } }] }
+          }}
+        />
+      </Col>
+    );
   }
   render() {
     /*console.log(this.getMethylationClasses());
@@ -233,9 +366,12 @@ class Summary extends React.Component {
               data={this.getMethylationClasses()}
               legend={false}
             />
+
+            {this.methylationLegend()}
+            {/*
             <div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderMethylationLegend()}
-            </div>
+            </div>*/}
             {/*<h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <canvas
@@ -244,6 +380,7 @@ class Summary extends React.Component {
               width="100%"
               height="70%"
   />*/}
+            {this.renderMore()}
           </Col>
           <Col
             span={8}
@@ -258,28 +395,12 @@ class Summary extends React.Component {
               height="70%"
             />*/}
             <PieChart height="300px" data={this.getGender()} legend={false} />
-            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {/*<div className="overflow-box" style={{ 'padding-left': '51px' }}>
               {this.renderGenderLegend()}
-            </div>
+          </div>*/}
+            {this.renderGenderLegend()}
           </Col>
-          <Col
-            span={8}
-            order={3}
-            style={{
-              'margin-bottom': '84px',
-              'padding-left': '5px',
-              'padding-right': '56px'
-            }}>
-            <h4 className="summery-data-title">Age Distribution</h4>
-            <br />
-            <ColumnChart
-              height="300px"
-              data={this.getAgeDistribution()}
-              library={{
-                scales: { yAxes: [{ gridLines: { display: false } }] }
-              }}
-            />
-          </Col>
+          {this.renderColumnChart()}
         </Row>
       </div>
     );

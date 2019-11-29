@@ -8,7 +8,6 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import ReactTooltip from 'react-tooltip';
-
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 class Samples extends React.Component {
@@ -30,7 +29,7 @@ class Samples extends React.Component {
         size: 'small',
         // pageSize: 15,
         defaultPageSize: 25,
-        pageSizeOptions: [10,25,50,100],
+        pageSizeOptions: ['10', '25', '50', '100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
         showTotal: this.rangeFunction
@@ -39,7 +38,7 @@ class Samples extends React.Component {
       data: [],
       filteredData: [],
       currSample: '',
-      expandedRowKeys: [],
+      expandedRowKeys: []
     };
   }
 
@@ -56,58 +55,57 @@ class Samples extends React.Component {
     );
   }
 
-  getMonth(element){
-    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    for(let i = 0; i < months.length; i++){
-      if(months[i] == element){
+  getMonth(element) {
+    let months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    for (let i = 0; i < months.length; i++) {
+      if (months[i] == element) {
         return i;
       }
     }
     return 0;
   }
 
-  compareDates(a,b){
-    console.log(a)
-    console.log(typeof a)
-    console.log(b)
-    console.log(typeof b)
-    let datea = a.date
-    let dateb = b.date
+  compareDates(a, b) {
+    let datea = a.date;
+    let dateb = b.date;
     let converted1 = new Date();
     let converted2 = new Date();
-    if(datea.includes('-')){
+    if (datea.includes('-')) {
       let date1 = datea.split('-');
-      converted1 = new Date(
-        2019,
-        this.getMonth(date1[1]),
-        parseInt(date1[0])
-      );
-    }
-    else{
-      let date1 = datea.split('/')
+      converted1 = new Date(2019, this.getMonth(date1[1]), parseInt(date1[0]));
+    } else {
+      let date1 = datea.split('/');
       converted2 = new Date(
         parseInt(date1[2]),
         parseInt(date1[0]),
         parseInt(date1[1])
-      )
+      );
     }
-    if(dateb.includes('-')){
-      let date2 = dateb.split('-')
-      converted2 = new Date(
-        2019,
-        this.getMonth(date2[1]),
-        parseInt(date2[0])
-      )
-    }
-    else{
-      let date2 = dateb.split('/')
+    if (dateb.includes('-')) {
+      let date2 = dateb.split('-');
+      converted2 = new Date(2019, this.getMonth(date2[1]), parseInt(date2[0]));
+    } else {
+      let date2 = dateb.split('/');
       converted2 = new Date(
         parseInt(date2[2]),
         parseInt(date2[0]),
         parseInt(date2[1])
-      )
+      );
     }
-    return converted1 > converted2
+    return converted1 > converted2;
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -180,28 +178,45 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
+    console.log(JSON.stringify('SAMPLE: ' + this.state.currSample));
     if (nextProps.filter.project !== undefined) {
-      this.setState({ filterProject: nextProps.filter.project }, () => {
-        this.handleFilter();
-      });
+      this.setState(
+        {
+          filterProject: nextProps.filter.project,
+          filterSampleName: '',
+          filterSurgicalCase: '',
+          filterGender: '',
+          filterAge: '',
+          filterDiagnosis: '',
+          startDate: '',
+          endDate: '',
+          currSample: '',
+          expandedRowKeys: []
+        },
+        () => {
+          this.handleFilter();
+        }
+      );
     }
     if (nextProps.filter.experiment !== undefined) {
-      this.setState({ filterSentrixID: nextProps.filter.experiment }, () => {
-        this.handleFilter();
-      });
+      this.setState(
+        {
+          filterSentrixID: nextProps.filter.experiment,
+          filterSampleName: '',
+          filterSurgicalCase: '',
+          filterGender: '',
+          filterAge: '',
+          filterDiagnosis: '',
+          startDate: '',
+          endDate: '',
+          currSample: '',
+          expandedRowKeys: []
+        },
+        () => {
+          this.handleFilter();
+        }
+      );
     }
-    this.setState({
-      filterSampleName: '',
-      filterSurgicalCase: '',
-      filterGender: '',
-      filterAge: '',
-      filterDiagnosis: '',
-      startDate: '',
-      endDate: '',
-      currSample:'',
-    }, () => {
-      this.handleFilter();
-    })
   }
 
   async componentDidMount() {
@@ -246,8 +261,6 @@ class Samples extends React.Component {
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
-    console.log(start)
-    console.log(check)
     let startDate = new Date(
       parseInt(start[2]),
       parseInt(start[0]) - 1,
@@ -263,10 +276,11 @@ class Samples extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log('toCheck: ' + toCheck)
-    console.log('startDate: ' + startDate)
-    console.log(startDate == toCheck)
-    return parseInt(start[2]) == parseInt(check[2]) && parseInt(start[1]) == parseInt(check[1]) && parseInt(start[0]) == parseInt(check[0]);
+    return (
+      parseInt(start[2]) == parseInt(check[2]) &&
+      parseInt(start[1]) == parseInt(check[1]) &&
+      parseInt(start[0]) == parseInt(check[0])
+    );
   }
 
   //As each search bar is updated, the handlefilter function is called
@@ -286,8 +300,9 @@ class Samples extends React.Component {
             row.surgical_case
               .toLowerCase()
               .includes(this.state.filterSurgicalCase.toLowerCase()) &&
-            (row.gender
-              .toLowerCase() == (this.state.filterGender.toLowerCase()) || this.state.filterGender == '') &&
+            (row.gender.toLowerCase() ==
+              this.state.filterGender.toLowerCase() ||
+              this.state.filterGender == '') &&
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
@@ -363,7 +378,7 @@ class Samples extends React.Component {
         filterAge: '',
         filterDiagnosis: '',
         startDate: '',
-        endDate: '',
+        endDate: ''
       },
       () => {
         this.handleFilter();
@@ -414,165 +429,194 @@ class Samples extends React.Component {
       }
       return sample.key == record.key;
     });
-    if(found.length > 0){
-    var currRow = found[0]
+    if (found.length > 0) {
+      var currRow = found[0];
 
-    let columns = [
-      {
-        title: '',
-        dataIndex: 'emptySpace',
-        sorter: true,
-        width: '4%',
-        //defaultSortOrder: 'ascend',
-      },
-      {
-        title: 'Header name',
-        dataIndex: 'header_name',
-        sorter: true,
-        width: '20%',
-        render: text => {
-          return (
-            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
-              {text}:
-            </p>
-          );
+      let columns = [
+        {
+          title: '',
+          dataIndex: 'emptySpace',
+          sorter: true,
+          width: '3%'
+          //defaultSortOrder: 'ascend',
+        },
+        {
+          title: 'Header name',
+          dataIndex: 'header_name',
+          sorter: true,
+          width: '16%',
+          render: text => {
+            return (
+              <p style={{ 'font-weight': 'bold', 'margin-bottom': '0px' }}>
+                {text}:
+              </p>
+            );
+          }
+          //defaultSortOrder: 'ascend',
+        },
+        {
+          title: 'Value',
+          dataIndex: 'value',
+          width: '31%',
+          // sorter: true,
+
+          //Gives functionality to the rows with download links
+          render: (text, row, index) => {
+            //Should probably make these into indices in the future
+            if (text == 'View plot') {
+              return (
+                <a
+                  style={{ 'padding-left': '5%', 'margin-bottom': '0px' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download pdf') {
+              return (
+                <a
+                  style={{ 'padding-left': '5%', 'margin-bottom': '0px' }}
+                  onClick={() =>
+                    this.downloadFile(
+                      currRow.id,
+                      currRow.sample_name + '_NGS.pdf'
+                    )
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download image') {
+              return (
+                <a
+                  style={{ 'padding-left': '5%', 'margin-bottom': '0px' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download report') {
+              return (
+                <a
+                  style={{ 'padding-left': '5%', 'margin-bottom': '0px' }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.report_file_name)
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            return (
+              <p style={{ 'padding-left': '5%', 'margin-bottom': '0px' }}>
+                {text}
+              </p>
+            );
+          }
+        },
+        {
+          title: 'Header name',
+          dataIndex: 'header_name2',
+          sorter: true,
+          width: '16%',
+          render: text => {
+            return (
+              <p style={{ 'font-weight': 'bold', 'margin-bottom': '0px' }}>
+                {text}:
+              </p>
+            );
+          }
+          //defaultSortOrder: 'ascend',
+        },
+        {
+          title: 'Value',
+          dataIndex: 'value2',
+          width: '32%',
+          // sorter: true,
+
+          //Gives functionality to the rows with download links
+          render: (text, row, index) => {
+            //Should probably make these into indices in the future
+            if (text == 'View plot') {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.html')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download pdf') {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadFile(
+                      currRow.id,
+                      currRow.sample_name + '_NGS.pdf'
+                    )
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download image') {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'Download report') {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.report_file_name)
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            return (
+              <p
+                style={{
+                  'padding-left': '5%',
+                  'margin-bottom': '0px',
+                  'padding-right': '1%'
+                }}>
+                {text}
+              </p>
+            );
+          }
         }
-        //defaultSortOrder: 'ascend',
-      },
-      {
-        title: 'Value',
-        dataIndex: 'value',
-        width: '28%',
-        // sorter: true,
-        
-        //Gives functionality to the rows with download links
-        render: (text, row, index) => {
-          //Should probably make these into indices in the future
-          if (text == 'View plot') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px'}}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download pdf') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
-                onClick={() =>
-                  this.downloadFile(
-                    currRow.id,
-                    currRow.sample_name + '_NGS.pdf'
-                  )
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download image') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download report') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.report_file_name)
-                }>
-                {text}
-              </a>
-            );
-          }
-          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px' }}>{text}</p>;
-        }
-      },
-      {
-        title: 'Header name',
-        dataIndex: 'header_name2',
-        sorter: true,
-        width: '20%',
-        render: text => {
-          return (
-            <p style={{'font-weight': 'bold', 'margin-bottom':'0px'}}>
-              {text}:
-            </p>
-          );
-        }
-        //defaultSortOrder: 'ascend',
-      },
-      {
-        title: 'Value',
-        dataIndex: 'value2',
-        width: '28%',
-        // sorter: true,
-        
-        //Gives functionality to the rows with download links
-        render: (text, row, index) => {
-          //Should probably make these into indices in the future
-          if (text == 'View plot') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.html')
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download pdf') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
-                onClick={() =>
-                  this.downloadFile(
-                    currRow.id,
-                    currRow.sample_name + '_NGS.pdf'
-                  )
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download image') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                }>
-                {text}
-              </a>
-            );
-          }
-          if (text == 'Download report') {
-            return (
-              <a
-                style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}
-                onClick={() =>
-                  this.downloadFile(currRow.id, currRow.report_file_name)
-                }>
-                {text}
-              </a>
-            );
-          }
-          return <p style={{ 'padding-left': '5%', 'margin-bottom':'0px', 'padding-right':'1%' }}>{text}</p>;
-        }
-      }
-    ];
-/*
+      ];
+      /*
 {
           key: 'sample_name',
           header_name: 'Sample Name',
@@ -671,89 +715,104 @@ class Samples extends React.Component {
           header_name: 'Notes',
           value: currRow.notes
         }*/
-    //Defines the rows for the summary
-    console.log(typeof currRow.mgmt_prediction.Estimated)
+      //Defines the rows for the summary
       let extraData = [
         {
           key: 'diagnosis',
           header_name: 'Diagnosis',
           value: currRow.diagnosis,
-          header_name2: 'MGMT score',
-          value2:
-            currRow.mgmt_prediction == null
-              ? ''
-              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3)
+          header_name2: 'Tumor Site',
+          value2: currRow.tumor_data
         },
         {
           key: 'tumor_data',
-          header_name: 'Tumor Site',
-          value: currRow.tumor_data,
+          header_name: 'Methylation Family (MF)',
+          value: currRow.family,
           header_name2: 't-SNE plot',
           value2: 'View plot'
         },
         {
           key: 'family',
-          header_name: 'Methylation Family (MF)',
-          value: currRow.family,
+          header_name: 'MF Calibrated Scores',
+          value: currRow.family_score,
           header_name2: 'Report',
           value2: 'Download report'
         },
         {
           key: 'family_score',
-          header_name: 'MF Calibrated Scores',
-          value: currRow.family_score,
+          header_name: 'Methylation Class (MC)',
+          value: currRow.class,
           header_name2: 'NGS reports (pdf-files)',
           value2: 'Download pdf'
         },
         {
           key: 'class',
-          header_name: 'Methylation Class (MC)',
-          value: currRow.class,
+          header_name: 'MC Calibrated Scores',
+          value: currRow.class_score,
           header_name2: 'Slide Image',
           value2: 'Download image'
         },
         {
           key: 'class_score',
-          header_name: 'MC Calibrated Scores',
-          value: currRow.class_score,
+          header_name: 'MGMT score',
+          value:
+            currRow.mgmt_prediction == null
+              ? ''
+              : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
           header_name2: 'Notes',
           value2: currRow.notes
         }
       ];
-    return <div style = {{'padding-bottom':'4px'}}>
-      <Table style = {{'margin-left':'0px', 'margin-right':'0px'}} columns={columns} dataSource={extraData} pagination={false} showHeader={false} size="small"/>
-      
-    </div>;
+      return (
+        <div style={{ 'padding-bottom': '4px' }}>
+          <Table
+            style={{ 'margin-left': '0px', 'margin-right': '0px' }}
+            columns={columns}
+            dataSource={extraData}
+            pagination={false}
+            showHeader={false}
+            size="small"
+          />
+        </div>
+      );
     }
-    return <div></div>
+    return <div />;
   };
 
   customExpandIcon(props) {
-    return <div style={{'width':'0px'}}></div>
+    return <div style={{ width: '0px' }} />;
   }
 
   onTableRowExpand = (expanded, record) => {
     var keys = [];
-    if(expanded){
-        keys.push(record.key);
+    if (expanded) {
+      keys.push(record.key);
     }
 
-    this.setState({expandedRowKeys: keys, currSample: expanded ? record.key : ''});
-  }
+    this.setState({
+      expandedRowKeys: keys,
+      currSample: expanded ? record.id : ''
+    });
+  };
 
   //renders the summary for a sample when the sample is selected
-  renderSummary(key) {
-    if (key == '') {
+  renderSummary(id) {
+    if (id == '') {
       return <div />;
     }
     var found = []; //Stores variable row that was selected
-
+    this.state.filteredData.forEach(sample => {
+      if (sample.id == id) {
+        found.push(sample);
+      }
+    });
+    /*
     let row = this.state.filteredData.filter(sample => {
       if (sample.key == key) {
         found.push(sample);
       }
       return sample.key == key;
-    });
+    });*/
 
     if (found.length != 0) {
       var currRow = found[0];
@@ -778,7 +837,7 @@ class Samples extends React.Component {
           dataIndex: 'value',
           width: '50%',
           // sorter: true,
-          
+
           //Gives functionality to the rows with download links
           render: (text, row, index) => {
             //Should probably make these into indices in the future
@@ -942,7 +1001,7 @@ class Samples extends React.Component {
           size: 'small',
           // pageSize: 15,
           defaultPageSize: 25,
-          pageSizeOptions: [10,25,50,100],
+          pageSizeOptions: ['10', '25', '50', '100'],
           showSizeChanger: true,
           itemRender: this.itemRender,
           showTotal: this.rangeFunction
@@ -978,13 +1037,32 @@ class Samples extends React.Component {
       {
         title: '',
         dataIndex: 'expandBoxes',
-        width:'4%',
+        width: '3%',
         render: (text, record) => {
-          if(record.key == this.state.currSample){
-            return <Button size = 'small'><FontAwesomeIcon icon={faChevronUp} style = {{color:'black', 'font-size':'8px'}}/>
-            </Button>
+          if (record.id == this.state.currSample) {
+            return (
+              <Button
+                size="small"
+                className="buttonHoverClass"
+                style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+                <FontAwesomeIcon
+                  icon={faChevronUp}
+                  style={{ color: 'black', 'font-size': '8px' }}
+                />
+              </Button>
+            );
           }
-          return <Button size = 'small'><FontAwesomeIcon icon={faChevronDown} style = {{color:'black', 'font-size':'8px'}}/></Button>
+          return (
+            <Button
+              size = "small"
+              className="buttonHoverClass"
+              style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                style={{ color: 'black', 'font-size': '8px' }}
+              />
+            </Button>
+          );
         }
       },
       {
@@ -995,11 +1073,7 @@ class Samples extends React.Component {
         defaultSortOrder: 'ascend',
         ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
-        render: (text, record) => (
-          <span>
-            {text}
-          </span>
-        )
+        render: (text, record) => <span>{text}</span>
       },
       {
         title: 'Project',
@@ -1009,15 +1083,15 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.project.localeCompare(b.project),
         render: (text, record) => (
-            <span
-              className = "linkSpan"
-              // onClick={() =>
-              //   this.props.changeTab('experiments', { project: record.project })
-              onClick={() =>
-                this.props.changeTab('projects', { project: record.project })
-              }>
-              {text}
-            </span>
+          <span
+            className="linkSpan"
+            // onClick={() =>
+            //   this.props.changeTab('experiments', { project: record.project })
+            onClick={() =>
+              this.props.changeTab('projects', { project: record.project })
+            }>
+            {text}
+          </span>
         )
       },
       {
@@ -1029,7 +1103,7 @@ class Samples extends React.Component {
         sorter: (a, b) => a.experiment.localeCompare(b.experiment),
         render: (text, record) => (
           <span
-            className = "linkSpan"
+            className="linkSpan"
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
@@ -1045,13 +1119,9 @@ class Samples extends React.Component {
         title: 'Date',
         dataIndex: 'date',
         ellipsis: true,
-        sorter: (a,b) => this.compareDates(a,b),
-        width: '13%',
-        render: (text,record) => (
-          <span>
-            {text}
-          </span>
-        )
+        sorter: (a, b) => this.compareDates(a, b),
+        width: '8%',
+        render: (text, record) => <span>{text}</span>
       },
       {
         title: 'Surgical Case',
@@ -1060,11 +1130,7 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         width: '10%',
-        render: (text, record) => (
-          <span>
-            {text}
-          </span>
-        )
+        render: (text, record) => <span>{text}</span>
       },
       {
         title: 'Gender',
@@ -1072,12 +1138,8 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
-        width: '10%',
-        render: (text, record) => (
-          <span>
-            {text}
-          </span>
-        )
+        width: '9%',
+        render: (text, record) => <span>{text}</span>
       },
       {
         title: 'Age',
@@ -1086,20 +1148,16 @@ class Samples extends React.Component {
         sorter: (a, b) => {
           let aNew = 20000;
           let bNew = 20000;
-          if (a.age != 'unknown'){
+          if (a.age != 'unknown') {
             aNew = parseInt(a.age);
           }
-          if(b.age != 'unknown'){
+          if (b.age != 'unknown') {
             bNew = parseInt(b.age);
           }
-          return aNew - bNew
+          return aNew - bNew;
         },
-        width: '10%',
-        render: (text, record) => (
-          <span>
-            {text}
-          </span>
-        )
+        width: '7%',
+        render: (text, record) => <span>{text}</span>
       },
       {
         title: 'Diagnosis',
@@ -1107,12 +1165,8 @@ class Samples extends React.Component {
         sorter: true,
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
-        width: '14%',
-        render: (text, record) => (
-          <span>
-            {text}
-          </span>
-        )
+        width: '24%',
+        render: (text, record) => <span>{text}</span>
       }
     ];
 
@@ -1126,17 +1180,17 @@ class Samples extends React.Component {
             'padding-left': '0px',
             'padding-bottom': '0px',
             'padding-top': '15px',
-            'padding-right':'0px'
+            'padding-right': '0px'
           }}>
           <Form layout="inline">
             <Form.Item
               style={{
-                width: '4%',
+                width: '3%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
-              }}>
-            </Form.Item>
+              }}
+            />
             <Form.Item
               style={{
                 width: '12%',
@@ -1190,23 +1244,24 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '13%',
+                width: '8%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
               }}>
               <DatePicker
                 onChange={(date, dateString) => {
-                  this.setState(
-                    { startDate: dateString },
-                    () => {
-                      this.handleFilter();
-                    }
-                  );
+                  this.setState({ startDate: dateString }, () => {
+                    this.handleFilter();
+                  });
                 }}
-                format = "MM-DD-YYYY"
-                value = {this.state.startDate == '' ? '':moment(this.state.startDate, 'MM-DD-YYYY')}
-                placeholder=''
+                format="MM-DD-YYYY"
+                value={
+                  this.state.startDate == ''
+                    ? ''
+                    : moment(this.state.startDate, 'MM-DD-YYYY')
+                }
+                placeholder=""
               />
             </Form.Item>
             <Form.Item
@@ -1228,7 +1283,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '10%',
+                width: '9%',
                 'padding-left': '8px',
                 'padding-right': '0px',
                 'margin-right': '0px'
@@ -1242,15 +1297,14 @@ class Samples extends React.Component {
                 }
                 onPressEnter={this.handleFilter}
               />*/}
-              <Select onChange={(value) =>
-                {
-                  console.log(value)
+              <Select
+                onChange={value => {
                   this.setState({ filterGender: value }, () => {
                     this.handleFilter();
-                  })
-                }
-                } value={this.state.filterGender}
-                style={{'width':'100px'}}>
+                  });
+                }}
+                value={this.state.filterGender}
+                style={{ width: '85px' }}>
                 <Option value="">&nbsp;</Option>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>
@@ -1259,7 +1313,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '10%',
+                width: '7%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1276,7 +1330,7 @@ class Samples extends React.Component {
             </Form.Item>
             <Form.Item
               style={{
-                width: '14%',
+                width: '23%',
                 'padding-left': '8px',
                 'padding-right': '30px',
                 'margin-right': '0px'
@@ -1305,11 +1359,10 @@ class Samples extends React.Component {
             size="small"
             ellipsis="true"
             expandedRowRender={this.expandedRowRender}
-            expandRowByClick = {true}
+            expandRowByClick={true}
             expandedRowKeys={this.state.expandedRowKeys}
             onExpand={this.onTableRowExpand}
-            expandIcon={(props) => this.customExpandIcon(props)}
-            
+            expandIcon={props => this.customExpandIcon(props)}
             rowClassName={(record, index) => {
               /*let selected =
                 this.state.currSample == ''
@@ -1324,27 +1377,26 @@ class Samples extends React.Component {
             onRow={(record, rowIndex) => {
               return {
                 onClick: event => {
-                  if(this.state.currSample == record.key){
+                  if (this.state.currSample == record.id) {
                     this.setState({
                       currSample: ''
                     });
-                  }
-                  else{
+                  } else {
                     this.setState({
-                      currSample: record.key
+                      currSample: record.id
                     });
                   }
-                  
                 }
               };
             }}
           />
         </div>
-        {/*Returns summary if something has been selected */} 
+        {/*Returns summary if something has been selected */}
         {/*this.renderSummary(this.state.currSample)*/}
 
         <br />
         <br />
+        {/*<p>{JSON.stringify(this.state.data)}</p>*/}
       </div>
     );
   }
