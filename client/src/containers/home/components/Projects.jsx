@@ -38,23 +38,28 @@ class Projects extends React.Component {
   //updates when the filters are updated and when the tabs are changed
   async componentWillReceiveProps(nextProps) {
     if (nextProps.data.length == 0) {
-      return;
-    }
-    this.setState({
-      currRecord: nextProps.project !== undefined ? nextProps.project : ''
-    });
-    this.setState(
-      {
+      this.setState({
         filterInvestigator: '',
         endDate: '',
         startDate: '',
         filterNumSamples: '',
-        filterNumExperiments: ''
-      },
-      () => {
-        this.handleFilter();
-      }
-    );
+        filterNumExperiments: '',
+        filterProject:'',
+      });
+      return;
+    }
+    this.setState({
+      currRecord: nextProps.project !== undefined ? nextProps.project : '',
+      filterInvestigator: '',
+      endDate: '',
+      startDate: '',
+      filterNumSamples: '',
+      filterNumExperiments: '',
+      filterProject:'',
+    },() => {
+      this.handleFilter();
+    });
+    
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {

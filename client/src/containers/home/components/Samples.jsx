@@ -1056,7 +1056,7 @@ class Samples extends React.Component {
             <Button
               size = "small"
               className="buttonHoverClass"
-              style={{ 'margin-top':'2px', 'margin-bottom':'2px' }}>
+              style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'4px', 'margin-top':'4px' }}>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 style={{ color: 'black', 'font-size': '8px' }}
