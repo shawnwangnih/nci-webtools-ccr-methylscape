@@ -178,7 +178,6 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
-    console.log(JSON.stringify('SAMPLE: ' + this.state.currSample));
     if (nextProps.filter.project !== undefined) {
       this.setState(
         {
