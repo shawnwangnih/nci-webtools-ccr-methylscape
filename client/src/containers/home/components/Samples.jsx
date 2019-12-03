@@ -1043,10 +1043,10 @@ class Samples extends React.Component {
               <Button
                 size="small"
                 className="buttonHoverClass"
-                style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+                style={{ 'margin-bottom':'0px', 'margin-top':'0px', 'width':'15px', 'height':'15px' }}>
                 <FontAwesomeIcon
                   icon={faChevronUp}
-                  style={{ color: 'black', 'font-size': '8px' }}
+                  style={{ color: 'black', 'font-size': '8px', 'display':'flex', 'align-items':'center', 'justifyContent':'center' }}
                 />
               </Button>
             );
@@ -1055,7 +1055,7 @@ class Samples extends React.Component {
             <Button
               size = "small"
               className="buttonHoverClass"
-              style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+              style={{ 'margin-bottom':'0px', 'margin-top':'0px', 'width':'15px', 'height':'15px', 'display':'flex', 'align-items':'center', 'justifyContent':'center'  }}>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 style={{ color: 'black', 'font-size': '8px' }}
