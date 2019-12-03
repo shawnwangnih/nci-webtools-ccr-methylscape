@@ -16,7 +16,7 @@ class Samples extends React.Component {
     this.state = {
       filterSampleName: '',
       filterProject: props.filter.project,
-      filterSentrixID: props.filter.sentrix_id,
+      filterSentrixID: props.filter.experiment,
       filterSurgicalCase: '',
       filterGender: '',
       filterAge: '',
@@ -197,10 +197,10 @@ class Samples extends React.Component {
         }
       );
     }
-    if (nextProps.filter.sentrix_id !== undefined) {
+    if (nextProps.filter.experiment !== undefined) {
       this.setState(
         {
-          filterSentrixID: nextProps.filter.sentrix_id,
+          filterSentrixID: nextProps.filter.experiment,
           filterSampleName: '',
           filterSurgicalCase: '',
           filterGender: '',
