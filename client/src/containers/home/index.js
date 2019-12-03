@@ -7,13 +7,17 @@ import Samples from './components/Samples';
 import Projects from './components/Projects';
 import Help from './components/Help';
 import { Route, Link } from 'react-router-dom';
-import { faChartPie, faClipboard,  faVials, faUserFriends} from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartPie,
+  faClipboard,
+  faVials,
+  faUserFriends
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import CountUp from 'react-countup';
 
 const TabPane = Tabs.TabPane;
-
 
 class Home extends React.Component {
   constructor(props) {
@@ -61,6 +65,9 @@ class Home extends React.Component {
   }
 
   successScan(data) {
+    for(var key in data){
+      data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString('fullwide', {useGrouping:false})
+    }
     this.setState({
       data: data,
       scanCheck: false
@@ -72,99 +79,182 @@ class Home extends React.Component {
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
-        /*fetch(
-          `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
-          { method: 'POST' }
-        )*/
-        fetch(`${root}scanMethylScapeTable`)
+    /*fetch(
+      `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
+      { method: 'POST' }
+    )*/
+      fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
   }
 
-  getNumProjects(){
+  getNumProjects() {
     let projects = [];
-    this.state.data.forEach(element =>{
-      if(!projects.includes(element.project)){
-        projects.push(element.project)
-      }      
-    })
-    return projects.length
+    this.state.data.forEach(element => {
+      if (!projects.includes(element.project)) {
+        projects.push(element.project);
+      }
+    });
+    return projects.length;
   }
 
-  getNumExperiments(){
+  getNumExperiments() {
     let experiments = [];
-    this.state.data.forEach(element =>{
-      if(!experiments.includes(element.sentrix_id)){
-        experiments.push(element.sentrix_id)
-      }      
-    })
-    return experiments.length
+    this.state.data.forEach(element => {
+      if (!experiments.includes(element.sentrix_id)) {
+        experiments.push(element.sentrix_id);
+      }
+    });
+    return experiments.length;
   }
 
-  getNumSamples(){
+  getNumSamples() {
     let samples = [];
-    this.state.data.forEach(element =>{
-      if(!samples.includes(element.sample_name)){
-        samples.push(element.sample_name)
-      }      
-    })
-    return samples.length
+    this.state.data.forEach(element => {
+      if (!samples.includes(element.sample_name)) {
+        samples.push(element.sample_name);
+      }
+    });
+    return samples.length;
   }
 
   render() {
-    console.log(this.state.data);
     let numProjects = this.getNumProjects();
-    console.log(numProjects)
     let numExperiments = this.getNumExperiments();
     let numSamples = this.getNumSamples();
-    
+
     return (
       <div>
         {/* <PageHeader /> */}
-        <div style = {{'background-color' : '#f0f2f5'}}>
-          <div style={{'max-width':'1300px', 'margin':'auto', 'padding-top':'15px', 'padding-bottom':'15px'}}>
-            <Link style={{'padding-left':'20px'}} onClick = {() => {
-              this.changeTab('projects', {
-                project: '',
-                experiment: ''
-              })
+        <div style={{ 'background-color': '#f0f2f5' }}>
+          <div
+            style={{
+              'max-width': '1300px',
+              margin: 'auto',
+              'padding-top': '15px',
+              'padding-bottom': '15px'
             }}>
-                <FontAwesomeIcon icon={faChartPie} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
-                <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
+            <Link
+              style={{ 'padding-left': '20px' }}
+              onClick={() => {
+                this.changeTab('projects', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faChartPie}
+                style={{
+                  color: 'black',
                   'font-size': '24px',
-                  'font-weight': '200', 'display':'inline'}} end = {numProjects}></CountUp>
-                <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
                   'font-size': '24px',
-                  'font-weight': '200', 'display':'inline'}}> Projects</h3>
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numProjects}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Projects
+              </h3>
             </Link>
-            <Link style={{'padding-left':'50px'}} onClick = {() => {
-              this.changeTab('experiments', {
-                project: '',
-                experiment: ''
-              })
-            }}>
-              <FontAwesomeIcon icon={faVials} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
-              <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
-                'font-size': '24px',
-                'font-weight': '200', 'display':'inline'}} end = {numExperiments}>{numExperiments} </CountUp>
-              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
-                'font-size': '24px',
-                'font-weight': '200', 'display':'inline'}}> Experiments</h3>
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('experiments', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faVials}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numExperiments}>
+                {numExperiments}{' '}
+              </CountUp>
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Experiments
+              </h3>
             </Link>
-            <Link style={{'padding-left':'50px'}} onClick = {() => {
-              this.changeTab('samples',{
-                project: '',
-                experiment: ''
-              })
-            }}>
-              <FontAwesomeIcon icon={faUserFriends} style = {{color:'black', 'font-size':'24px', 'display':'inline'}}/>
-              <CountUp style={{'padding-left':'5px', 'margin-bottom':'0px', color: 'blue',
-                'font-size': '24px',
-                'font-weight': '200', 'display':'inline'}} end = {numSamples}></CountUp>
-              <h3 style={{'padding-left':'0px', 'margin-bottom':'0px', color: 'black',
-                'font-size': '24px',
-                'font-weight': '200', 'display':'inline'}}> Samples</h3>
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('samples', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numSamples}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Samples
+              </h3>
             </Link>
           </div>
         </div>
@@ -177,7 +267,7 @@ class Home extends React.Component {
             showIcon
           />
         )}
-        
+
         <Tabs
           tabPosition="top"
           activeKey={this.props.current}
@@ -214,7 +304,14 @@ class Home extends React.Component {
               filter={this.state.filter}
             />
           </TabPane>
-          <TabPane tab={<div><p>Help!!!</p></div>} key="help" disabled={this.state.scanCheck}>
+          <TabPane
+            tab={
+              <div>
+                <p>Help!!!</p>
+              </div>
+            }
+            key="help"
+            disabled={this.state.scanCheck}>
             <Help />
           </TabPane>
         </Tabs>
