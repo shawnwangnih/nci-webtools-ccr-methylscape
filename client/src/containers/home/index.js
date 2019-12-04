@@ -65,8 +65,11 @@ class Home extends React.Component {
   }
 
   successScan(data) {
-    for(var key in data){
-      data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString('fullwide', {useGrouping:false})
+    for (var key in data) {
+      data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString(
+        'fullwide',
+        { useGrouping: false }
+      );
     }
     this.setState({
       data: data,
@@ -83,7 +86,7 @@ class Home extends React.Component {
       `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
       { method: 'POST' }
     )*/
-      fetch(`${root}scanMethylScapeTable`)
+    fetch(`${root}scanMethylScapeTable`)
       .then(response => response.json())
       .then(data => this.successScan(data))
       .catch(error => this.failedScanSetPage(error));
@@ -106,7 +109,7 @@ class Home extends React.Component {
         experiments.push(element.experiment);
       }
     });
-    console.log(JSON.stringify(experiments))
+    console.log(JSON.stringify(experiments));
     return experiments.length;
   }
 

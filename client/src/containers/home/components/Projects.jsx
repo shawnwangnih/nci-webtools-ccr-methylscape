@@ -44,22 +44,25 @@ class Projects extends React.Component {
         startDate: '',
         filterNumSamples: '',
         filterNumExperiments: '',
-        filterProject:'',
+        filterProject: ''
       });
       return;
     }
-    this.setState({
-      currRecord: nextProps.project !== undefined ? nextProps.project : '',
-      filterInvestigator: '',
-      endDate: '',
-      startDate: '',
-      filterNumSamples: '',
-      filterNumExperiments: '',
-      filterProject:'',
-    },() => {
-      this.handleFilter();
-    });
-    
+    this.setState(
+      {
+        currRecord: nextProps.project !== undefined ? nextProps.project : '',
+        filterInvestigator: '',
+        endDate: '',
+        startDate: '',
+        filterNumSamples: '',
+        filterNumExperiments: '',
+        filterProject: ''
+      },
+      () => {
+        this.handleFilter();
+      }
+    );
+
     await this.createDataTable(nextProps.data);
     if (nextProps.filter.project !== undefined) {
       this.setState({ filterProject: nextProps.filter.project }, () => {
