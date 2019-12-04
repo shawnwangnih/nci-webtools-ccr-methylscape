@@ -102,10 +102,11 @@ class Home extends React.Component {
   getNumExperiments() {
     let experiments = [];
     this.state.data.forEach(element => {
-      if (!experiments.includes(element.sentrix_id)) {
-        experiments.push(element.sentrix_id);
+      if (!experiments.includes(element.experiment)) {
+        experiments.push(element.experiment);
       }
     });
+    console.log(JSON.stringify(experiments))
     return experiments.length;
   }
 
