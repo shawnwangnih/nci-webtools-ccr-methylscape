@@ -170,7 +170,7 @@ class Experiments extends React.Component {
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}/getMethylScapeQCFile`, {
+    fetch(`${root}getMethylScapeQCFile`, {
       method: 'POST',
       body: JSON.stringify({
         experiment: experiment,
@@ -180,7 +180,7 @@ class Experiments extends React.Component {
       .then(res => res.blob())
       .then(function(blob) {
         // (**)
-        fileSaver(blob, file);
+        //fileSaver(blob, file);
         return URL.createObjectURL(blob);
       })
       .then(url => {

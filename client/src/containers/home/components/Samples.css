@@ -20,7 +20,9 @@
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
-
+.ant-table-expanded-row-level-1 > td > div > div > div > div > div > div > div > table > tbody > tr > td{
+  vertical-align: top;
+}
 .linkSpan {
   color: #1890ff;
 }

@@ -178,7 +178,6 @@ class Samples extends React.Component {
   };
 
   async componentWillReceiveProps(nextProps) {
-    console.log(JSON.stringify('SAMPLE: ' + this.state.currSample));
     if (nextProps.filter.project !== undefined) {
       this.setState(
         {
@@ -444,7 +443,7 @@ class Samples extends React.Component {
           title: 'Header name',
           dataIndex: 'header_name',
           sorter: true,
-          width: '16%',
+          width: '15%',
           render: text => {
             return (
               <p style={{ 'font-weight': 'bold', 'margin-bottom': '0px' }}>
@@ -457,7 +456,7 @@ class Samples extends React.Component {
         {
           title: 'Value',
           dataIndex: 'value',
-          width: '31%',
+          width: '32%',
           // sorter: true,
 
           //Gives functionality to the rows with download links
@@ -521,7 +520,7 @@ class Samples extends React.Component {
           title: 'Header name',
           dataIndex: 'header_name2',
           sorter: true,
-          width: '16%',
+          width: '15%',
           render: text => {
             return (
               <p style={{ 'font-weight': 'bold', 'margin-bottom': '0px' }}>
@@ -534,7 +533,7 @@ class Samples extends React.Component {
         {
           title: 'Value',
           dataIndex: 'value2',
-          width: '32%',
+          width: '33%',
           // sorter: true,
 
           //Gives functionality to the rows with download links
@@ -1044,7 +1043,7 @@ class Samples extends React.Component {
               <Button
                 size="small"
                 className="buttonHoverClass"
-                style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+                style={{ 'margin-bottom':'0px', 'margin-top':'0px', 'width':'15px', 'height':'15px', 'display':'flex', 'align-items':'center', 'justifyContent':'center' }}>
                 <FontAwesomeIcon
                   icon={faChevronUp}
                   style={{ color: 'black', 'font-size': '8px' }}
@@ -1056,7 +1055,7 @@ class Samples extends React.Component {
             <Button
               size = "small"
               className="buttonHoverClass"
-              style={{ 'margin-top':'2px', 'margin-bottom':'2px', 'margin-bottom':'0px', 'margin-top':'0px' }}>
+              style={{ 'margin-bottom':'0px', 'margin-top':'0px', 'width':'15px', 'height':'15px', 'display':'flex', 'align-items':'center', 'justifyContent':'center'  }}>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 style={{ color: 'black', 'font-size': '8px' }}
