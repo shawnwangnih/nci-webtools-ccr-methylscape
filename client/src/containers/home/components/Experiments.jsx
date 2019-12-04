@@ -180,7 +180,7 @@ class Experiments extends React.Component {
       .then(res => res.blob())
       .then(function(blob) {
         // (**)
-        fileSaver(blob, file);
+        //fileSaver(blob, file);
         return URL.createObjectURL(blob);
       })
       .then(url => {
