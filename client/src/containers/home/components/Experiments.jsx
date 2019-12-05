@@ -179,16 +179,25 @@ class Experiments extends React.Component {
     })
       .then(res => {
         console.log(res)
+        if(res.status == 404){
+          return null;
+        }
         return res.blob()
       })
       .then(function(blob) {
         // (**)
         //fileSaver(blob, file);
+        if(blob ==  null){
+          return null;
+        }
         return URL.createObjectURL(blob);
       })
       .then(url => {
-        window.open(url, '_blank');
-        URL.revokeObjectUrl(url);
+        if(url != null){
+          window.open(url, '_blank');
+          URL.revokeObjectUrl(url);
+        }
+        
       })
       .then()
       /*
