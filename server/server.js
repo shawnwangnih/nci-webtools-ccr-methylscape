@@ -78,7 +78,7 @@ app.post('/getMethylScapeQCFile', (req, res) => {
         s3.headObject(params, function (err, metadata) {  
             if (err && err.code === 'NotFound') {  
               // Handle no object on cloud here  
-              res.send('File not found');
+              res.status(404).send('File not found');
             } else {  
                 var fileStream = s3.getObject(params).createReadStream().on('error', e => {
                     logger.log('error', 'Request file download failed: %s', e)
