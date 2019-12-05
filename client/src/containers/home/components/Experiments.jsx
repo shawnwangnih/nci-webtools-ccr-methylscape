@@ -177,7 +177,10 @@ class Experiments extends React.Component {
         fileName: file
       })
     })
-      .then(res => res.blob())
+      .then(res => {
+        console.log(res)
+        return res.blob()
+      })
       .then(function(blob) {
         // (**)
         //fileSaver(blob, file);
