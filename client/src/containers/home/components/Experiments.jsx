@@ -182,7 +182,7 @@ class Experiments extends React.Component {
         console.log(res);
         console.log(res.status);
         if (res.status == 404) {
-          console.log('NULL')
+          console.log('NULL');
           return null;
         }
         return res.blob();
@@ -192,7 +192,7 @@ class Experiments extends React.Component {
         //fileSaver(blob, file);
         if (blob == null) {
           return null;
-          console.log('NULL')
+          console.log('NULL');
         }
         return URL.createObjectURL(blob);
       })
@@ -302,7 +302,9 @@ class Experiments extends React.Component {
     });
   }
   renderPopUp() {
+    console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp) {
+      
       return (
         <Modal
           title="File Does Not Exist"
