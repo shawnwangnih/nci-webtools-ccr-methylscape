@@ -301,12 +301,16 @@ class Experiments extends React.Component {
   renderPopUp() {
     if (this.state.filePopUp) {
       return (
-        <div className="popup">
-          <div className="popup\_inner">
-            <h1>{'File Not Found'}</h1>
-            <button onClick={this.closePopup}>close me</button>
-          </div>
-        </div>
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}>
+          <p>The file you are looking for does not exist</p>
+        </Modal>
       );
     }
   }
@@ -409,16 +413,7 @@ class Experiments extends React.Component {
 
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
-        <Modal
-          title="File Does Not Exist"
-          visible={this.state.filePopUp}
-          footer={[
-            <Button key="submit" type="primary" onClick={this.closePopup()}>
-              close
-            </Button>
-          ]}>
-          <p>The file you are looking for does not exist</p>
-        </Modal>
+        {this.renderPopUp()}
         <div
           style={{
             'padding-left': '0',
