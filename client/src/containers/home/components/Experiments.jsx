@@ -302,8 +302,10 @@ class Experiments extends React.Component {
   }
   renderPopUp() {
     console.log('Popup State: ' + this.state.filePopUp);
+    if (this.state.filePopUp == true) {
       
-      return <Modal
+      return (
+        <Modal
           title="File Does Not Exist"
           visible={this.state.filePopUp}
           footer={[
@@ -313,7 +315,9 @@ class Experiments extends React.Component {
           ]}>
           <p>The file you are looking for does not exist</p>
         </Modal>
-      
+      );
+    }
+    return <div></div>
   }
 
   render() {
