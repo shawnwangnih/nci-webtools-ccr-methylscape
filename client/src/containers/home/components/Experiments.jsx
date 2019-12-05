@@ -29,7 +29,8 @@ class Experiments extends React.Component {
       },
       rawData: props.data,
       data: [],
-      filteredData: []
+      filteredData: [],
+      filePopUp: false,
     };
   }
 
@@ -197,6 +198,9 @@ class Experiments extends React.Component {
           window.open(url, '_blank');
           URL.revokeObjectUrl(url);
         }
+        else{
+          this.setState({filePopUp:true})
+        }
         
       })
       .then()
@@ -289,6 +293,22 @@ class Experiments extends React.Component {
       return <a>&#62;</a>;
     }
     return <a>{current}</a>;
+  }
+
+  closePopup(){
+    this.setState({
+      filePopUp: false;
+    })
+  }
+  renderPopUp(){
+    if(this.state.filePopUp){
+      return <div className='popup'>  
+        <div className='popup\_inner'>  
+          <h1>{"File Not Found"}</h1>  
+          <button onClick={this.closePopup}>close me</button>  
+        </div>  
+      </div>  
+    }
   }
 
   render() {
@@ -386,9 +406,10 @@ class Experiments extends React.Component {
 
     const Option = Select.Option;
     const InputGroup = Input.Group;
-
+    
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+        {this.renderPopUp()}
         <div
           style={{
             'padding-left': '0',
