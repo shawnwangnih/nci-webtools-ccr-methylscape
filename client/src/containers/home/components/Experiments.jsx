@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DatePicker, Table, Input, Button, Form, Select } from 'antd';
+import { DatePicker, Table, Input, Button, Form, Select, Modal } from 'antd';
 import fileSaver from 'file-saver';
 import './Experiments.css';
 import moment from 'moment';
@@ -409,7 +409,12 @@ class Experiments extends React.Component {
 
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
-        {this.renderPopUp()}
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          onOk={this.closePopup()}>
+          <p>The file you are looking for does not exist</p>
+        </Modal>
         <div
           style={{
             'padding-left': '0',
