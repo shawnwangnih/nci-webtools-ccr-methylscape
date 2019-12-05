@@ -412,7 +412,11 @@ class Experiments extends React.Component {
         <Modal
           title="File Does Not Exist"
           visible={this.state.filePopUp}
-          onOk={this.closePopup()}>
+          footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}>
           <p>The file you are looking for does not exist</p>
         </Modal>
         <div
