@@ -30,7 +30,7 @@ class Experiments extends React.Component {
       rawData: props.data,
       data: [],
       filteredData: [],
-      filePopUp: false,
+      filePopUp: false
     };
   }
 
@@ -179,29 +179,27 @@ class Experiments extends React.Component {
       })
     })
       .then(res => {
-        console.log(res)
-        if(res.status == 404){
+        console.log(res);
+        if (res.status == 404) {
           return null;
         }
-        return res.blob()
+        return res.blob();
       })
       .then(function(blob) {
         // (**)
         //fileSaver(blob, file);
-        if(blob ==  null){
+        if (blob == null) {
           return null;
         }
         return URL.createObjectURL(blob);
       })
       .then(url => {
-        if(url != null){
+        if (url != null) {
           window.open(url, '_blank');
           URL.revokeObjectUrl(url);
+        } else {
+          this.setState({ filePopUp: true });
         }
-        else{
-          this.setState({filePopUp:true})
-        }
-        
       })
       .then()
       /*
@@ -295,19 +293,21 @@ class Experiments extends React.Component {
     return <a>{current}</a>;
   }
 
-  closePopup(){
+  closePopup() {
     this.setState({
-      filePopUp: false;
-    })
+      filePopUp: false
+    });
   }
-  renderPopUp(){
-    if(this.state.filePopUp){
-      return <div className='popup'>  
-        <div className='popup\_inner'>  
-          <h1>{"File Not Found"}</h1>  
-          <button onClick={this.closePopup}>close me</button>  
-        </div>  
-      </div>  
+  renderPopUp() {
+    if (this.state.filePopUp) {
+      return (
+        <div className="popup">
+          <div className="popup\_inner">
+            <h1>{'File Not Found'}</h1>
+            <button onClick={this.closePopup}>close me</button>
+          </div>
+        </div>
+      );
     }
   }
 
@@ -406,7 +406,7 @@ class Experiments extends React.Component {
 
     const Option = Select.Option;
     const InputGroup = Input.Group;
-    
+
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
         {this.renderPopUp()}
