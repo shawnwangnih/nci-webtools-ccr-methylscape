@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DatePicker, Table, Input, Button, Form, Select } from 'antd';
+import { DatePicker, Table, Input, Button, Form, Select, Modal } from 'antd';
 import fileSaver from 'file-saver';
 import './Experiments.css';
 import moment from 'moment';
@@ -29,7 +29,8 @@ class Experiments extends React.Component {
       },
       rawData: props.data,
       data: [],
-      filteredData: []
+      filteredData: [],
+      filePopUp: false
     };
   }
 
@@ -177,15 +178,30 @@ class Experiments extends React.Component {
         fileName: file
       })
     })
-      .then(res => res.blob())
+      .then(res => {
+        console.log(res);
+        console.log(res.status);
+        if (res.status == 404) {
+          console.log('NULL');
+          return null;
+        }
+        return res.blob();
+      })
       .then(function(blob) {
         // (**)
         //fileSaver(blob, file);
+        if (blob == null) {
+          return null;
+        }
         return URL.createObjectURL(blob);
       })
       .then(url => {
-        window.open(url, '_blank');
-        URL.revokeObjectUrl(url);
+        if (url != null) {
+          window.open(url, '_blank');
+          URL.revokeObjectUrl(url);
+        } else {
+          this.setState({ filePopUp: true });
+        }
       })
       .then()
       /*
@@ -277,6 +293,31 @@ class Experiments extends React.Component {
       return <a>&#62;</a>;
     }
     return <a>{current}</a>;
+  }
+
+  closePopup() {
+    this.setState({
+      filePopUp: false
+    });
+  }
+  renderPopUp() {
+    console.log('Popup State: ' + this.state.filePopUp);
+    if (this.state.filePopUp == true) {
+      
+      return (
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}>
+          <p>The file you are looking for does not exist</p>
+        </Modal>
+      );
+    }
+    return <div></div>
   }
 
   render() {
@@ -377,6 +418,7 @@ class Experiments extends React.Component {
 
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+        {this.renderPopUp()}
         <div
           style={{
             'padding-left': '0',

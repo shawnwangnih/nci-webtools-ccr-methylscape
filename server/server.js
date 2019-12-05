@@ -75,12 +75,19 @@ app.post('/getMethylScapeQCFile', (req, res) => {
             Key: key
         };
         logger.log('info', 'Request file download params: %j', params)
-        var fileStream = s3.getObject(params).createReadStream().on('error', e => {
-            logger.log('error', 'Request file download failed: %s', e)
-            res.send(e)
-        });;
-        res.attachment(data.fileName);
-        fileStream.pipe(res);
+        s3.headObject(params, function (err, metadata) {  
+            if (err && err.code === 'NotFound') {  
+              // Handle no object on cloud here  
+              res.status(404).send('File not found');
+            } else {  
+                var fileStream = s3.getObject(params).createReadStream().on('error', e => {
+                    logger.log('error', 'Request file download failed: %s', e)
+                    res.send(e);
+                });;
+                res.attachment(data.fileName);
+                fileStream.pipe(res);
+            }
+          });
     }catch (e){
         logger.log('error', 'File download failed: %s', e)
         res.send(e)
