@@ -180,7 +180,9 @@ class Experiments extends React.Component {
     })
       .then(res => {
         console.log(res);
+        console.log(res.status);
         if (res.status == 404) {
+          console.log('NULL')
           return null;
         }
         return res.blob();
@@ -190,6 +192,7 @@ class Experiments extends React.Component {
         //fileSaver(blob, file);
         if (blob == null) {
           return null;
+          console.log('NULL')
         }
         return URL.createObjectURL(blob);
       })
