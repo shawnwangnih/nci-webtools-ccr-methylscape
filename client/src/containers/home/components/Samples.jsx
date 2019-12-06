@@ -1032,6 +1032,7 @@ class Samples extends React.Component {
   }
 
   render() {
+    console.log(JSON.stringify(this.state.filteredData))
     const columns = [
       {
         title: '',
