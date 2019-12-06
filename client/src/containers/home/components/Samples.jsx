@@ -1,6 +1,6 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import { Table, Input, Button, Form, Select, Icon } from 'antd';
+import { Table, Input, Button, Form, Select, Icon, Modal } from 'antd';
 import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
@@ -39,7 +39,7 @@ class Samples extends React.Component {
       filteredData: [],
       currSample: '',
       expandedRowKeys: [],
-      filePopUp: false,
+      filePopUp: false
     };
   }
 
@@ -401,14 +401,13 @@ class Samples extends React.Component {
           fileName: file
         })
       });
-      if(response.status == 404){
-        this.setState({filePopUp: true});
-      }else{
+      if (response.status == 404) {
+        this.setState({ filePopUp: true });
+      } else {
         let url = URL.createObjectURL(await response.blob());
         window.open(url, '_blank');
         URL.revokeObjectUrl(url);
       }
-      
     } catch (e) {
       console.log(e);
     }
