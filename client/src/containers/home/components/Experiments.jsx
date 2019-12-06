@@ -303,22 +303,34 @@ class Experiments extends React.Component {
   renderPopUp() {
     console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      console.log('TRUE')
+      console.log('TRUE');
       return (
-        <p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
-        /*<Modal
-          title="File Does Not Exist"
-          visible={this.state.filePopUp}
-          footer={[
+        //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
+        /*
+        footer={[
             <Button key="submit" type="primary" onClick={this.closePopup()}>
               close
             </Button>
+          ]}*/
+
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          footer={[
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => {
+                this.setState({ filePopUp: false });
+              }}>
+              Ok
+            </Button>
           ]}>
           <p>The file you are looking for does not exist</p>
-        </Modal>*/
+        </Modal>
       );
     }
-    return <div></div>
+    return <div />;
   }
 
   render() {
