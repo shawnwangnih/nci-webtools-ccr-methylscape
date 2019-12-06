@@ -38,7 +38,8 @@ class Samples extends React.Component {
       data: [],
       filteredData: [],
       currSample: '',
-      expandedRowKeys: []
+      expandedRowKeys: [],
+      filePopUp: false,
     };
   }
 
@@ -400,9 +401,14 @@ class Samples extends React.Component {
           fileName: file
         })
       });
-      let url = URL.createObjectURL(await response.blob());
-      window.open(url, '_blank');
-      URL.revokeObjectUrl(url);
+      if(response.status == 404){
+        this.setState({filePopUp: true});
+      }else{
+        let url = URL.createObjectURL(await response.blob());
+        window.open(url, '_blank');
+        URL.revokeObjectUrl(url);
+      }
+      
     } catch (e) {
       console.log(e);
     }
@@ -1031,6 +1037,38 @@ class Samples extends React.Component {
     }
   }
 
+  renderPopUp() {
+    console.log('Popup State: ' + this.state.filePopUp);
+    if (this.state.filePopUp == true) {
+      console.log('TRUE');
+      return (
+        //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
+        /*
+        footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}*/
+
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          footer={[
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => {
+                this.setState({ filePopUp: false });
+              }}>
+              Ok
+            </Button>
+          ]}>
+          <p>The file you are looking for does not exist</p>
+        </Modal>
+      );
+    }
+    return <div />;
+  }
   render() {
     console.log(JSON.stringify(this.state.filteredData));
     const columns = [
@@ -1193,6 +1231,7 @@ class Samples extends React.Component {
 
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+        {this.renderPopUp()}
         <div
           style={{
             'padding-left': '0px',
