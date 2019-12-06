@@ -45,13 +45,13 @@ class App extends React.Component {
 
   changeTab = (activeTab, filter = {}) => {
     this.setState({ current: activeTab, filter: filter });
-    /*console.log(
+    console.log(
       this.state.activeTab +
         ', ' +
         JSON.stringify(this.state.filter) +
         ', ' +
         JSON.stringify(this.state.data)
-    );*/
+    );
   };
 
   renderMain() {

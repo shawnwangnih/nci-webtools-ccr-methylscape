@@ -376,7 +376,7 @@ class Experiments extends React.Component {
         )
       },
       {
-        title: 'Date Created',
+        title: 'Experiment Date',
         dataIndex: 'date',
         sorter: (a, b) => this.compareDates(a, b),
         width: '13%'
