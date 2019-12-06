@@ -305,7 +305,8 @@ class Experiments extends React.Component {
     if (this.state.filePopUp == true) {
       console.log('TRUE')
       return (
-        <Modal
+        <p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
+        /*<Modal
           title="File Does Not Exist"
           visible={this.state.filePopUp}
           footer={[
@@ -314,7 +315,7 @@ class Experiments extends React.Component {
             </Button>
           ]}>
           <p>The file you are looking for does not exist</p>
-        </Modal>
+        </Modal>*/
       );
     }
     return <div></div>
