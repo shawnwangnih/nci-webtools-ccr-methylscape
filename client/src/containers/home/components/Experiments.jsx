@@ -303,7 +303,7 @@ class Experiments extends React.Component {
   renderPopUp() {
     console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      
+      console.log('TRUE')
       return (
         <Modal
           title="File Does Not Exist"
