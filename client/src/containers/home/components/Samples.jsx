@@ -1172,7 +1172,7 @@ class Samples extends React.Component {
         title: 'Date',
         //Should be this in the future, but for now all pool_ids are null
         //dataIndex:'pool_id'
-        dataIndex: 'date',
+        dataIndex: 'pool_id',
         ellipsis: true,
         sorter: (a, b) => this.compareDates(a, b),
         width: '8%',
