@@ -328,7 +328,7 @@ class Projects extends React.Component {
             {text}
           </a>
         )
-      },
+      }
     ];
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
@@ -419,7 +419,6 @@ class Projects extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            
           </Form>
         </div>
         {/*rowClassName={(record, index) => {

@@ -8,6 +8,8 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import ReactTooltip from 'react-tooltip';
+import Cookies from 'js-cookie';
+
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 class Samples extends React.Component {
@@ -255,11 +257,10 @@ class Samples extends React.Component {
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
   checkDates(date, s) {
-    
     if (s == '') {
       return true;
     }
-    if(date == null){
+    if (date == null) {
       return false;
     }
     let start = s.split('-');
@@ -1075,7 +1076,9 @@ class Samples extends React.Component {
     return <div />;
   }
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    console.log('COOKIES');
+    console.log(JSON.stringify(Cookies.get('s_fid')));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
