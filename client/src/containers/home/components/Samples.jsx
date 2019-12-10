@@ -255,6 +255,9 @@ class Samples extends React.Component {
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
   checkDates(date, s) {
+    if(date == null){
+      return false;
+    }
     if (s == '') {
       return true;
     }
@@ -311,7 +314,7 @@ class Samples extends React.Component {
             row.diagnosis
               .toLowerCase()
               .includes(this.state.filterDiagnosis.toLowerCase()) &&
-            this.checkDates(row.date, this.state.startDate)
+            this.checkDates(row.pool_id, this.state.startDate)
           );
         })
       },
