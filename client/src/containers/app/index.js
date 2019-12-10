@@ -32,7 +32,7 @@ class App extends React.Component {
     scanCheck: true,
     showErrorAlert: false,
     projectSummery: '',
-    windowWidth: 100,
+    windowWidth: document.body.clientWidth,
   };
   handleClick = e => {
     this.setState({
@@ -77,24 +77,10 @@ class App extends React.Component {
     //(this.state.data);
   }
 
-  render() {
-    console.log(
-      this.state.activeTab +
-        ', ' +
-        JSON.stringify(this.state.filter) +
-        ', ' +
-        JSON.stringify(this.state.data)
-    );
-    let mainContent = this.renderMain();
-    return (
-      <div>
-        <Layout
-          style={
-            {
-              // background: 'black',
-            }
-          }>
-          <Header
+  renderHeader(){
+    if(this.state.windowWidth >= 1500){
+      return(
+        <Header
             className="header"
             style={{
               height: 'auto',
@@ -125,6 +111,64 @@ class App extends React.Component {
               </a>
             </div>
           </Header>
+      )
+    }
+    else{
+      return (
+        <Header
+            className="header"
+            style={{
+              height: 'auto',
+              // theme: 'light',
+              background: '#f0f2f5',
+              // position: 'fixed',
+              zIndex: 1,
+              width: '100%',
+              padding: '0 50'
+            }}>
+            <div
+              style={{
+                padding: '0 0px',
+                'max-width': '1400px',
+                width: '100%',
+                'margin-right': 'auto',
+                'margin-left': 'auto'
+              }}>
+              <a href="https://ccr.cancer.gov/" target="_blank">
+                <img
+                  height="auto"
+                  className="logo"
+                  src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                  alt="National Cancer Institute"
+                  width="80%"
+                  style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+                />
+              </a>
+            </div>
+          </Header>
+      )
+    }
+  }
+
+  render() {
+    console.log(
+      this.state.activeTab +
+        ', ' +
+        JSON.stringify(this.state.filter) +
+        ', ' +
+        JSON.stringify(this.state.data)
+    );
+    let mainContent = this.renderMain();
+    return (
+      <div>
+        <Layout
+          style={
+            {
+              // background: 'black',
+            }
+          }>
+
+          {this.renderHeader()}
           {/*
           <Header
             className="header"
