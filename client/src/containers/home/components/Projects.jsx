@@ -285,7 +285,7 @@ class Projects extends React.Component {
         ),
         dataIndex: 'key',
         sorter: true,
-        width: '20%',
+        width: '35%',
         sorter: (a, b) => a.key.localeCompare(b.key),
         defaultSortOrder: 'ascend',
         render: (text, record) => (
@@ -329,12 +329,6 @@ class Projects extends React.Component {
           </a>
         )
       },
-      {
-        title: 'Project Date',
-        dataIndex: 'date',
-        sorter: true,
-        width: '15%'
-      }
     ];
     return (
       <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
@@ -356,7 +350,7 @@ class Projects extends React.Component {
             />
             <Form.Item
               style={{
-                width: '20%',
+                width: '35%',
                 'padding-left': '8px',
                 'padding-right': '16px',
                 'margin-right': '0px'
@@ -425,28 +419,7 @@ class Projects extends React.Component {
                 onPressEnter={this.handleFilter}
               />
             </Form.Item>
-            <Form.Item
-              style={{
-                width: '15%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <DatePicker
-                onChange={(date, dateString) => {
-                  this.setState({ startDate: dateString }, () => {
-                    this.handleFilter();
-                  });
-                }}
-                format="MM-DD-YYYY"
-                value={
-                  this.state.startDate == ''
-                    ? ''
-                    : moment(this.state.startDate, 'MM-DD-YYYY')
-                }
-                placeholder=""
-              />
-            </Form.Item>
+            
           </Form>
         </div>
         {/*rowClassName={(record, index) => {
