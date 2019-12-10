@@ -114,6 +114,7 @@ class App extends React.Component {
       )
     }
     else{
+      console.log('SMALL');
       return (
         <Header
             className="header"
@@ -124,7 +125,7 @@ class App extends React.Component {
               // position: 'fixed',
               zIndex: 1,
               width: '100%',
-              padding: '0 50'
+              padding: '0 50px'
             }}>
             <div
               style={{
