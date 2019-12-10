@@ -255,11 +255,12 @@ class Samples extends React.Component {
   //Checks the dates from the form and and each date in the table
   //and sees if the date falls between the two days
   checkDates(date, s) {
-    if(date == null){
-      return false;
-    }
+    
     if (s == '') {
       return true;
+    }
+    if(date == null){
+      return false;
     }
     let start = s.split('-');
     //let end = e.split('-');
@@ -279,8 +280,8 @@ class Samples extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
-    console.log(JSON.stringify(start))
-    console.log(JSON.stringify(check))
+    //console.log(JSON.stringify(start))
+    //console.log(JSON.stringify(check))
     return (
       parseInt(start[2]) == parseInt(check[2]) &&
       parseInt(start[1]) == parseInt(check[1]) &&
