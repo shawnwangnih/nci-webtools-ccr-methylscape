@@ -31,7 +31,8 @@ class App extends React.Component {
     },
     scanCheck: true,
     showErrorAlert: false,
-    projectSummery: ''
+    projectSummery: '',
+    windowWidth: 100,
   };
   handleClick = e => {
     this.setState({
@@ -42,6 +43,14 @@ class App extends React.Component {
       }
     });
   };
+
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.setState({windowWidth: document.body.clientWidth}, () => {
+        console.log(this.state.windowWidth);
+      })
+    });
+  }
 
   changeTab = (activeTab, filter = {}) => {
     this.setState({ current: activeTab, filter: filter });
