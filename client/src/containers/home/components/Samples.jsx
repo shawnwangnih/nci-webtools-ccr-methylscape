@@ -1076,8 +1076,6 @@ class Samples extends React.Component {
     return <div />;
   }
   render() {
-    console.log('COOKIES');
-    console.log(JSON.stringify(Cookies.get('s_fid')));
     //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
