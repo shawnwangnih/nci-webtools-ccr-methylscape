@@ -276,6 +276,8 @@ class Samples extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
+    console.log(JSON.stringify(start))
+    console.log(JSON.stringify(check))
     return (
       parseInt(start[2]) == parseInt(check[2]) &&
       parseInt(start[1]) == parseInt(check[1]) &&
