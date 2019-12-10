@@ -1175,7 +1175,7 @@ class Samples extends React.Component {
         )
       },
       {
-        title: 'Date',
+        title: 'Sample Date',
         //Should be this in the future, but for now all pool_ids are null
         //dataIndex:'pool_id'
         dataIndex: 'pool_id',
