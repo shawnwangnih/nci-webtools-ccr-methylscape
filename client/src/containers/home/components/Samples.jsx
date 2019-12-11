@@ -1243,7 +1243,8 @@ class Samples extends React.Component {
             'padding-left': '0px',
             'padding-bottom': '0px',
             'padding-top': '15px',
-            'padding-right': '0px'
+            'padding-right': '0px',
+            'min-width':'535px'
           }}>
           <Form layout="inline">
             <Form.Item
