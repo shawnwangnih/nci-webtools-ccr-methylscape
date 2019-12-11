@@ -12,7 +12,8 @@ class Summary extends React.Component {
     this.state = {
       project: '',
       filteredData: [],
-      moreClasses: false
+      moreClasses: false,
+      windowWidth: document.body.clientWidth
     };
     this.methylationHeight = 0;
     this.lastMethylationHeight = 0;
@@ -54,7 +55,13 @@ class Summary extends React.Component {
       this.filterData(nextProps.project, nextProps.data);
     }
   }
-
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.setState({ windowWidth: document.body.clientWidth }, () => {
+        console.log(this.state.windowWidth);
+      });
+    });
+  }
   async componentDidUpdate() {
     this.methylationHeight =
       document.getElementById('methylationLegend').clientHeight + 21 - 84;
@@ -194,6 +201,29 @@ class Summary extends React.Component {
       );
     }
   }
+  renderSmallGenderLegend() {
+    const list = this.getGender().map((item, index) => (
+      <div style={{ 'text-align': 'left' }}>
+        <div
+          className="color-box"
+          style={{
+            'background-color': this.backgroundColor[
+              index % this.backgroundColor.length
+            ]
+          }}
+        />
+        {item[0]}
+      </div>
+    ));
+
+    return (
+      <div
+        className="overflow-box"
+        style={{ 'max-width': '350px', margin: 'auto' }}>
+        {list}
+      </div>
+    );
+  }
   showMore() {
     this.setState({ moreClasses: true });
   }
@@ -244,6 +274,29 @@ class Summary extends React.Component {
       );
     }
   }
+
+  smallMethylationLegend() {
+    if (this.state.moreClasses == false) {
+      return (
+        <div
+          id="methylationLegend"
+          className="overflow-box"
+          style={{ 'max-width': '350px', margin: 'auto' }}>
+          {this.renderMethylationLegend()}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          id="methylationLegend"
+          className="non-overflow-box"
+          style={{ 'max-width': '350px', margin: 'auto' }}>
+          {this.renderMethylationLegend()}
+        </div>
+      );
+    }
+  }
+
   renderColumnChart() {
     if (this.state.moreClasses == true) {
       return (
@@ -287,6 +340,120 @@ class Summary extends React.Component {
         />
       </Col>
     );
+  }
+
+  renderGraphs() {
+    if (this.state.windowWidth >= 800) {
+      return (
+        <Row
+          type="flex"
+          justify="center"
+          align="middle"
+          style={{
+            'padding-bottom': '100px',
+            'padding-left': '30px',
+            'padding-right': '30px'
+          }}>
+          <Col
+            span={8}
+            order={1}
+            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
+            <h4 className="summery-data-title">Methylation Classes</h4>
+            <br />
+            <PieChart
+              height="300px"
+              data={this.getMethylationClasses()}
+              legend={false}
+            />
+
+            {this.methylationLegend()}
+            {/*
+          <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {this.renderMethylationLegend()}
+          </div>*/}
+            {/*<h4 className="summery-data-title">Methylation Classes</h4>
+          <br />
+          <canvas
+            style={{ width: '100%', height: '70%' }}
+            ref={graph1 => (this.graph1 = graph1)}
+            width="100%"
+            height="70%"
+/>*/}
+            {this.renderMore()}
+          </Col>
+          <Col
+            span={8}
+            order={2}
+            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
+            <h4 className="summery-data-title">Gender</h4>
+            <br />
+            {/*<canvas
+            style={{ width: '100%', height: '70%' }}
+            ref={graph2 => (this.graph2 = graph2)}
+            width="100%"
+            height="70%"
+          />*/}
+            <PieChart height="300px" data={this.getGender()} legend={false} />
+            {/*<div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {this.renderGenderLegend()}
+        </div>*/}
+            {this.renderGenderLegend()}
+          </Col>
+          {this.renderColumnChart()}
+        </Row>
+      );
+    } else {
+      return (
+        <div>
+          <h4 className="summery-data-title">Methylation Classes</h4>
+          <br />
+          <PieChart
+            height="300px"
+            data={this.getMethylationClasses()}
+            legend={false}
+          />
+          {this.smallMethylationLegend()}
+          {/*
+          <div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {this.renderMethylationLegend()}
+          </div>*/}
+          {/*<h4 className="summery-data-title">Methylation Classes</h4>
+          <br />
+          <canvas
+            style={{ width: '100%', height: '70%' }}
+            ref={graph1 => (this.graph1 = graph1)}
+            width="100%"
+            height="70%"
+/>*/}
+          {this.renderMore()}
+          <br />
+          <br />
+          <h4 className="summery-data-title">Gender</h4>
+          <br />
+          {/*<canvas
+            style={{ width: '100%', height: '70%' }}
+            ref={graph2 => (this.graph2 = graph2)}
+            width="100%"
+            height="70%"
+          />*/}
+          <PieChart height="300px" data={this.getGender()} legend={false} />
+          {/*<div className="overflow-box" style={{ 'padding-left': '51px' }}>
+            {this.renderGenderLegend()}
+        </div>*/}
+          {this.renderSmallGenderLegend()}
+          <br />
+          <h4 className="summery-data-title">Age Distribution</h4>
+          <br />
+          <ColumnChart
+            height="300px"
+            data={this.getAgeDistribution()}
+            library={{
+              scales: { yAxes: [{ gridLines: { display: false } }] }
+            }}
+          />
+        </div>
+      );
+    }
   }
   render() {
     /*console.log(this.getMethylationClasses());
@@ -346,62 +513,7 @@ class Summary extends React.Component {
           Project summary: {this.state.project} Project
         </h3>
         <br />
-        <Row
-          type="flex"
-          justify="center"
-          align="middle"
-          style={{
-            'padding-bottom': '100px',
-            'padding-left': '30px',
-            'padding-right': '30px'
-          }}>
-          <Col
-            span={8}
-            order={1}
-            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
-            <h4 className="summery-data-title">Methylation Classes</h4>
-            <br />
-            <PieChart
-              height="300px"
-              data={this.getMethylationClasses()}
-              legend={false}
-            />
-
-            {this.methylationLegend()}
-            {/*
-            <div className="overflow-box" style={{ 'padding-left': '51px' }}>
-              {this.renderMethylationLegend()}
-            </div>*/}
-            {/*<h4 className="summery-data-title">Methylation Classes</h4>
-            <br />
-            <canvas
-              style={{ width: '100%', height: '70%' }}
-              ref={graph1 => (this.graph1 = graph1)}
-              width="100%"
-              height="70%"
-  />*/}
-            {this.renderMore()}
-          </Col>
-          <Col
-            span={8}
-            order={2}
-            style={{ 'padding-left': '5px', 'padding-right': '5px' }}>
-            <h4 className="summery-data-title">Gender</h4>
-            <br />
-            {/*<canvas
-              style={{ width: '100%', height: '70%' }}
-              ref={graph2 => (this.graph2 = graph2)}
-              width="100%"
-              height="70%"
-            />*/}
-            <PieChart height="300px" data={this.getGender()} legend={false} />
-            {/*<div className="overflow-box" style={{ 'padding-left': '51px' }}>
-              {this.renderGenderLegend()}
-          </div>*/}
-            {this.renderGenderLegend()}
-          </Col>
-          {this.renderColumnChart()}
-        </Row>
+        {this.renderGraphs()}
       </div>
     );
   }

@@ -57,6 +57,13 @@
   cursor: pointer;
 }
 
-.ant-select-dropdown{
-  min-width:85px;
+.ant-select-dropdown {
+  min-width: 85px;
+}
+
+.page-overflow-box {
+  overflow-x: hidden;
+}
+.page-overflow-box:hover {
+  overflow-x: auto;
 }

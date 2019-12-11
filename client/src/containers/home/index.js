@@ -276,9 +276,7 @@ class Home extends React.Component {
           tabPosition="top"
           activeKey={this.props.current}
           onChange={this.changeTab}
-          defaultActiveKey="projects"
-          style = {{'min-width':'535px',
-          'overflow-x': 'scroll'}}>
+          defaultActiveKey="projects">
           <TabPane tab="Project" key="projects" disabled={this.state.scanCheck}>
             <Projects
               data={this.state.data}
