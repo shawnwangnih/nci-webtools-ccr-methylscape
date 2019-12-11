@@ -1366,8 +1366,7 @@ class Samples extends React.Component {
                     this.handleFilter();
                   });
                 }}
-                value={this.state.filterGender}
-                style={{ width: '85px' }}>
+                value={this.state.filterGender}>
                 <Option value="">&nbsp;</Option>
                 <Option value="Male">Male</Option>
                 <Option value="Female">Female</Option>

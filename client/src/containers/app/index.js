@@ -32,7 +32,7 @@ class App extends React.Component {
     scanCheck: true,
     showErrorAlert: false,
     projectSummery: '',
-    windowWidth: document.body.clientWidth,
+    windowWidth: document.body.clientWidth
   };
   handleClick = e => {
     this.setState({
@@ -46,9 +46,9 @@ class App extends React.Component {
 
   componentDidMount() {
     window.addEventListener('resize', () => {
-      this.setState({windowWidth: document.body.clientWidth}, () => {
+      this.setState({ windowWidth: document.body.clientWidth }, () => {
         console.log(this.state.windowWidth);
-      })
+      });
     });
   }
 
@@ -77,77 +77,76 @@ class App extends React.Component {
     //(this.state.data);
   }
 
-  renderHeader(){
-    if(this.state.windowWidth >= 1500){
-      return(
+  renderHeader() {
+    if (this.state.windowWidth >= 1500) {
+      return (
         <Header
-            className="header"
+          className="header"
+          style={{
+            height: 'auto',
+            // theme: 'light',
+            background: '#f0f2f5',
+            // position: 'fixed',
+            zIndex: 1,
+            width: '100%',
+            padding: '0'
+          }}>
+          <div
             style={{
-              height: 'auto',
-              // theme: 'light',
-              background: '#f0f2f5',
-              // position: 'fixed',
-              zIndex: 1,
+              padding: '0 0px',
+              'max-width': '1400px',
               width: '100%',
-              padding: '0'
+              'margin-right': 'auto',
+              'margin-left': 'auto'
             }}>
-            <div
-              style={{
-                padding: '0 0px',
-                'max-width': '1400px',
-                width: '100%',
-                'margin-right': 'auto',
-                'margin-left': 'auto'
-              }}>
-              <a href="https://ccr.cancer.gov/" target="_blank">
-                <img
-                  height="auto"
-                  className="logo"
-                  src="./assets/img/NIH_NCI_Logo_Grey.svg"
-                  alt="National Cancer Institute"
-                  width="80%"
-                  style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
-                />
-              </a>
-            </div>
-          </Header>
-      )
-    }
-    else{
+            <a href="https://ccr.cancer.gov/" target="_blank">
+              <img
+                height="auto"
+                className="logo"
+                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                alt="National Cancer Institute"
+                width="80%"
+                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+              />
+            </a>
+          </div>
+        </Header>
+      );
+    } else {
       console.log('SMALL');
       return (
         <Header
-            className="header"
+          className="header"
+          style={{
+            height: 'auto',
+            // theme: 'light',
+            background: '#f0f2f5',
+            // position: 'fixed',
+            zIndex: 1,
+            width: '100%',
+            padding: '0 50px'
+          }}>
+          <div
             style={{
-              height: 'auto',
-              // theme: 'light',
-              background: '#f0f2f5',
-              // position: 'fixed',
-              zIndex: 1,
+              padding: '0 0px',
+              'max-width': '1400px',
               width: '100%',
-              padding: '0 50px'
+              'margin-right': 'auto',
+              'margin-left': 'auto'
             }}>
-            <div
-              style={{
-                padding: '0 0px',
-                'max-width': '1400px',
-                width: '100%',
-                'margin-right': 'auto',
-                'margin-left': 'auto'
-              }}>
-              <a href="https://ccr.cancer.gov/" target="_blank">
-                <img
-                  height="auto"
-                  className="logo"
-                  src="./assets/img/NIH_NCI_Logo_Grey.svg"
-                  alt="National Cancer Institute"
-                  width="80%"
-                  style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
-                />
-              </a>
-            </div>
-          </Header>
-      )
+            <a href="https://ccr.cancer.gov/" target="_blank">
+              <img
+                height="auto"
+                className="logo"
+                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                alt="National Cancer Institute"
+                width="80%"
+                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+              />
+            </a>
+          </div>
+        </Header>
+      );
     }
   }
 
@@ -168,7 +167,6 @@ class App extends React.Component {
               // background: 'black',
             }
           }>
-
           {this.renderHeader()}
           {/*
           <Header
