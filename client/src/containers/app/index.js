@@ -269,7 +269,8 @@ class App extends React.Component {
               padding: '0 50px',
               height: '100%',
               'max-width': '1400px',
-              width: '100%',
+              'min-width':'535px',
+              'overflow-x': 'scroll',
               'margin-right': 'auto',
               'margin-left': 'auto'
             }}>
