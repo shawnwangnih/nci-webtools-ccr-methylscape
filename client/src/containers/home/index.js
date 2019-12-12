@@ -279,7 +279,7 @@ class Home extends React.Component {
               'padding-bottom': '15px'
             }}>
             <Link
-              style={{ 'padding-left': '20px' }}
+              style={{ 'margin':'auto' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
@@ -320,7 +320,7 @@ class Home extends React.Component {
             </Link>
             <br />
             <Link
-              style={{ 'padding-left': '50px' }}
+              style={{ 'margin':'auto' }}
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
@@ -362,7 +362,7 @@ class Home extends React.Component {
             </Link>
             <br />
             <Link
-              style={{ 'padding-left': '50px' }}
+              style={{ 'margin':'auto' }}
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
