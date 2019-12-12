@@ -30,7 +30,7 @@ class Home extends React.Component {
       showErrorAlert: false,
       projectSummery: '',
       current: props.current,
-      windowWidth: document.body.clientWidth,
+      windowWidth: document.body.clientWidth
     };
   }
   async componentWillReceiveProps(nextProps) {
@@ -129,282 +129,285 @@ class Home extends React.Component {
     return samples.length;
   }
 
-  renderTopHeader(){
-    if(this.state.windowWidth >= 685){
-      return (<div style={{ 'background-color': '#f0f2f5' }}>
-      <div
-        style={{
-          'max-width': '1300px',
-          margin: 'auto',
-          'padding-top': '15px',
-          'padding-bottom': '15px'
-        }}>
-        <Link
-          style={{ 'padding-left': '20px' }}
-          onClick={() => {
-            this.changeTab('projects', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faChartPie}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numProjects}
-          />
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Projects
-          </h3>
-        </Link>
-        <Link
-          style={{ 'padding-left': '50px' }}
-          onClick={() => {
-            this.changeTab('experiments', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faVials}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numExperiments}>
-            {numExperiments}{' '}
-          </CountUp>
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Experiments
-          </h3>
-        </Link>
-        <Link
-          style={{ 'padding-left': '50px' }}
-          onClick={() => {
-            this.changeTab('samples', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faUserFriends}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numSamples}
-          />
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Samples
-          </h3>
-        </Link>
-      </div>
-    </div>)
-    }
-    else{
-      return (<div style={{ 'background-color': '#f0f2f5' }}>
-      <div
-        style={{
-          'max-width': '1300px',
-          margin: 'auto',
-          'padding-top': '15px',
-          'padding-bottom': '15px'
-        }}>
-        <Link
-          style={{ 'padding-left': '20px' }}
-          onClick={() => {
-            this.changeTab('projects', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faChartPie}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numProjects}
-          />
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Projects
-          </h3>
-        </Link>
-        <br/>
-        <Link
-          style={{ 'padding-left': '50px' }}
-          onClick={() => {
-            this.changeTab('experiments', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faVials}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numExperiments}>
-            {numExperiments}{' '}
-          </CountUp>
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Experiments
-          </h3>
-        </Link>
-        <br/>
-        <Link
-          style={{ 'padding-left': '50px' }}
-          onClick={() => {
-            this.changeTab('samples', {
-              project: '',
-              experiment: ''
-            });
-          }}>
-          <FontAwesomeIcon
-            icon={faUserFriends}
-            style={{
-              color: 'black',
-              'font-size': '24px',
-              display: 'inline'
-            }}
-          />
-          <CountUp
-            style={{
-              'padding-left': '5px',
-              'margin-bottom': '0px',
-              color: 'blue',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}
-            end={numSamples}
-          />
-          <h3
-            style={{
-              'padding-left': '0px',
-              'margin-bottom': '0px',
-              color: 'black',
-              'font-size': '24px',
-              'font-weight': '200',
-              display: 'inline'
-            }}>
-            {' '}
-            Samples
-          </h3>
-        </Link>
-      </div>
-    </div>)
-    }
-  }
-
-  render() {
+  renderTopHeader() {
     let numProjects = this.getNumProjects();
     let numExperiments = this.getNumExperiments();
     let numSamples = this.getNumSamples();
 
+    if (this.state.windowWidth >= 685) {
+      return (
+        <div style={{ 'background-color': '#f0f2f5' }}>
+          <div
+            style={{
+              'max-width': '1300px',
+              margin: 'auto',
+              'padding-top': '15px',
+              'padding-bottom': '15px'
+            }}>
+            <Link
+              style={{ 'padding-left': '20px' }}
+              onClick={() => {
+                this.changeTab('projects', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faChartPie}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numProjects}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Projects
+              </h3>
+            </Link>
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('experiments', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faVials}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numExperiments}>
+                {numExperiments}{' '}
+              </CountUp>
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Experiments
+              </h3>
+            </Link>
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('samples', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numSamples}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Samples
+              </h3>
+            </Link>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div style={{ 'background-color': '#f0f2f5' }}>
+          <div
+            style={{
+              'max-width': '1300px',
+              margin: 'auto',
+              'padding-top': '15px',
+              'padding-bottom': '15px'
+            }}>
+            <Link
+              style={{ 'padding-left': '20px' }}
+              onClick={() => {
+                this.changeTab('projects', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faChartPie}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numProjects}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Projects
+              </h3>
+            </Link>
+            <br />
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('experiments', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faVials}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numExperiments}>
+                {numExperiments}{' '}
+              </CountUp>
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Experiments
+              </h3>
+            </Link>
+            <br />
+            <Link
+              style={{ 'padding-left': '50px' }}
+              onClick={() => {
+                this.changeTab('samples', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numSamples}
+              />
+              <h3
+                style={{
+                  'padding-left': '0px',
+                  'margin-bottom': '0px',
+                  color: 'black',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}>
+                {' '}
+                Samples
+              </h3>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  render() {
     return (
       <div>
         {/* <PageHeader /> */}
