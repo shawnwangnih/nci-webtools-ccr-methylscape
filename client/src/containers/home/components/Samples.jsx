@@ -991,7 +991,7 @@ class Samples extends React.Component {
         {
           key: 'NGS_reports',
           header_name: 'NGS reports (pdf-files)',
-          value: 'Download pdf'
+          value: 'Download report'
         },
         {
           key: 'slide_image',
