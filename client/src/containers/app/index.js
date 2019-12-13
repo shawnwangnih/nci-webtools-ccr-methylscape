@@ -16,7 +16,8 @@ import {
   faChartPie,
   faClipboard,
   faVials,
-  faUserFriends
+  faUserFriends,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const { Header, Content, Footer } = Layout;
@@ -76,7 +77,84 @@ class App extends React.Component {
   get_num_projects() {
     //(this.state.data);
   }
+  renderNavbar(){
+    if(windowWidth >= 520){
+      return(<Menu
+        onClick={this.handleClick}
+        selectedKeys={[this.state.current]}
+        theme="dark"
+        mode="horizontal"
+        style={{
+          width: '100%',
+          height: '40px',
+          lineHeight: '40px',
+          'background-color': 'steelblue'
+        }}>
+        {/* Home */}
+        <Menu.Item key="projects" className="testMenu">
+          <div>
+            <Link
+              style={{
+                color: 'white',
+                'font-size': '16px',
+                'font-weight': '600'
+              }}>
+              Projects
+            </Link>
+          </div>
+        </Menu.Item>
 
+        <Menu.Item className="testMenu" key="experiments">
+          <Link
+            style={{
+              color: 'white',
+              'font-size': '16px',
+              'font-weight': '600'
+            }}>
+            Experiments
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="samples" className="testMenu">
+          <Link
+            style={{
+              color: 'white',
+              'font-size': '16px',
+              'font-weight': '600'
+            }}>
+            Samples
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="help">
+          <Link
+            style={{
+              color: 'white',
+              'font-size': '16px',
+              'font-weight': '600'
+            }}>
+            Help
+          </Link>
+        </Menu.Item>
+      </Menu>)
+    }
+    else{
+      return (
+        <div>
+          <div style={{'background-color':'steelblue'}}>
+            <h2>{this.state.current}</h2>
+          </div>
+          <div>
+            <FontAwesomeIcon icon={faChartPie}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline', float:'right'}}></FontAwesomeIcon>
+          </div>
+        </div>
+      )
+    }
+  }
   renderHeader() {
     if (this.state.windowWidth >= 1500) {
       return (
