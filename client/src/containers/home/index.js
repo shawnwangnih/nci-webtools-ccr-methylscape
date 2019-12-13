@@ -273,13 +273,13 @@ class Home extends React.Component {
         <div style={{ 'background-color': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '1300px',
+              'max-width': '180px',
               margin: 'auto',
               'padding-top': '15px',
               'padding-bottom': '15px'
             }}>
             <Link
-              style={{ 'margin':'auto' }}
+              style={{ margin: 'auto' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
@@ -320,7 +320,7 @@ class Home extends React.Component {
             </Link>
             <br />
             <Link
-              style={{ 'margin':'auto' }}
+              style={{ margin: 'auto' }}
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
@@ -362,7 +362,7 @@ class Home extends React.Component {
             </Link>
             <br />
             <Link
-              style={{ 'margin':'auto' }}
+              style={{ margin: 'auto' }}
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
