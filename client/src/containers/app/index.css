@@ -4,3 +4,11 @@
 .testMenu:hover {
   background-color: #38678f !important;
 }
+
+.mobileMenu {
+  padding: 0px 50px;
+}
+.mobileMenu:hover {
+  background-color: #38678f !important;
+  cursor: pointer;
+}

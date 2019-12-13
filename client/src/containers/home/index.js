@@ -273,13 +273,13 @@ class Home extends React.Component {
         <div style={{ 'background-color': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '180px',
+              'max-width': '1300px',
               margin: 'auto',
               'padding-top': '15px',
               'padding-bottom': '15px'
             }}>
             <Link
-              style={{ margin: 'auto' }}
+              style={{ 'padding-left': '20px' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
@@ -305,22 +305,9 @@ class Home extends React.Component {
                 }}
                 end={numProjects}
               />
-              <h3
-                style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
-                  color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
-                  display: 'inline'
-                }}>
-                {' '}
-                Projects
-              </h3>
             </Link>
-            <br />
             <Link
-              style={{ margin: 'auto' }}
+              style={{ 'padding-left': '30px' }}
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
@@ -347,22 +334,9 @@ class Home extends React.Component {
                 end={numExperiments}>
                 {numExperiments}{' '}
               </CountUp>
-              <h3
-                style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
-                  color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
-                  display: 'inline'
-                }}>
-                {' '}
-                Experiments
-              </h3>
             </Link>
-            <br />
             <Link
-              style={{ margin: 'auto' }}
+              style={{ 'padding-left': '30px' }}
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
@@ -388,18 +362,6 @@ class Home extends React.Component {
                 }}
                 end={numSamples}
               />
-              <h3
-                style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
-                  color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
-                  display: 'inline'
-                }}>
-                {' '}
-                Samples
-              </h3>
             </Link>
           </div>
         </div>

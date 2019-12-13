@@ -551,7 +551,7 @@ class Samples extends React.Component {
           //Gives functionality to the rows with download links
           render: (text, row, index) => {
             //Should probably make these into indices in the future
-            if (text == 'View plot') {
+            if (index == 1) {
               return (
                 <a
                   style={{
@@ -566,7 +566,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download pdf') {
+            if (index == 3) {
               return (
                 <a
                   style={{
@@ -584,7 +584,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download image') {
+            if (index == 4) {
               return (
                 <a
                   style={{
@@ -599,7 +599,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download report') {
+            if (index == 2) {
               return (
                 <a
                   style={{
@@ -746,7 +746,7 @@ class Samples extends React.Component {
           key: 'family',
           header_name: 'MF Calibrated Scores',
           value: currRow.family_score,
-          header_name2: 'Report',
+          header_name2: 'Profiling Report',
           value2: 'Download report'
         },
         {
@@ -754,7 +754,7 @@ class Samples extends React.Component {
           header_name: 'Methylation Class (MC)',
           value: currRow.class,
           header_name2: 'NGS reports (pdf-files)',
-          value2: 'Download pdf'
+          value2: 'Download report'
         },
         {
           key: 'class',
