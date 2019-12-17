@@ -18,7 +18,9 @@ class Projects extends React.Component {
         showSizeChanger: true,
         style: {
           'margin-bottom': '0px'
-        }
+        },
+        defaultPageSize: 10,
+        pageSizeOptions: ['10', '25', '50', '100'],
       },
       sortedInfo: null,
       data: [],
