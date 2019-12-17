@@ -453,7 +453,7 @@ class Projects extends React.Component {
               showSizeChanger: this.state.pagination.showSizeChanger,
               showTotal: this.rangeFunction,
               itemRender: this.itemRender,
-              defaultPageSize: 25,
+              defaultPageSize: 10,
               pageSizeOptions: ['10', '25', '50', '100'],
             }}
             rowClassName={(record, index) => {
