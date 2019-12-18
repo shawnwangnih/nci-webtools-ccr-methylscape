@@ -198,7 +198,7 @@ class Experiments extends React.Component {
       .then(url => {
         if (url != null) {
           window.open(url, '_blank');
-          URL.revokeObjectUrl(url);
+          URL.revokeObjectURL(url);
         } else {
           this.setState({ filePopUp: true });
         }

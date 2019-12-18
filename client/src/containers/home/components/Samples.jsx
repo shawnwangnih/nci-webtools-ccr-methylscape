@@ -413,7 +413,7 @@ class Samples extends React.Component {
       } else {
         let url = URL.createObjectURL(await response.blob());
         window.open(url, '_blank');
-        URL.revokeObjectUrl(url);
+        URL.revokeObjectURL(url);
       }
     } catch (e) {
       console.log(e);
