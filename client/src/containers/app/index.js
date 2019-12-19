@@ -16,7 +16,8 @@ import {
   faChartPie,
   faClipboard,
   faVials,
-  faUserFriends
+  faUserFriends,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const { Header, Content, Footer } = Layout;
@@ -31,7 +32,9 @@ class App extends React.Component {
     },
     scanCheck: true,
     showErrorAlert: false,
-    projectSummery: ''
+    projectSummery: '',
+    windowWidth: document.body.clientWidth,
+    mobileOpened: false
   };
   handleClick = e => {
     this.setState({
@@ -42,6 +45,14 @@ class App extends React.Component {
       }
     });
   };
+
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.setState({ windowWidth: document.body.clientWidth }, () => {
+        console.log(this.state.windowWidth);
+      });
+    });
+  }
 
   changeTab = (activeTab, filter = {}) => {
     this.setState({ current: activeTab, filter: filter });
@@ -68,15 +79,368 @@ class App extends React.Component {
     //(this.state.data);
   }
 
+  handleExpandHamburger = e => {
+    this.setState({
+      mobileOpened: !this.state.mobileOpened
+    });
+  };
+
+  getCurrentMobileHeader() {
+    if (this.state.current == 'projects') {
+      return 'Projects';
+    }
+    if (this.state.current == 'experiments') {
+      return 'Experiments';
+    }
+    if (this.state.current == 'samples') {
+      return 'Samples';
+    }
+    return 'Help';
+  }
+
+  renderNavbar() {
+    if (this.state.windowWidth >= 685) {
+      return (
+        <div
+          style={{
+            padding: '0px 50px',
+            'max-width': '1400px',
+            width: '100%',
+            'margin-right': 'auto',
+            'margin-left': 'auto'
+          }}>
+          <Menu
+            onClick={this.handleClick}
+            selectedKeys={[this.state.current]}
+            theme="dark"
+            mode="horizontal"
+            style={{
+              width: '100%',
+              height: '40px',
+              lineHeight: '40px',
+              'background-color': 'steelblue'
+            }}>
+            {/* Home */}
+            <Menu.Item key="projects" className="testMenu">
+              <div>
+                <Link
+                  style={{
+                    color: 'white',
+                    'font-size': '16px',
+                    'font-weight': '600'
+                  }}>
+                  Projects
+                </Link>
+              </div>
+            </Menu.Item>
+
+            <Menu.Item className="testMenu" key="experiments">
+              <Link
+                style={{
+                  color: 'white',
+                  'font-size': '16px',
+                  'font-weight': '600'
+                }}>
+                Experiments
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item key="samples" className="testMenu">
+              <Link
+                style={{
+                  color: 'white',
+                  'font-size': '16px',
+                  'font-weight': '600'
+                }}>
+                Samples
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item key="help">
+              <Link
+                style={{
+                  color: 'white',
+                  'font-size': '16px',
+                  'font-weight': '600'
+                }}>
+                Help
+              </Link>
+            </Menu.Item>
+          </Menu>
+        </div>
+      );
+    } else {
+      if (this.state.mobileOpened == true) {
+        return (
+          <div
+            style={{
+              padding: '0px 0px',
+              'max-width': '1400px',
+              width: '100%',
+              'margin-right': 'auto',
+              'margin-left': 'auto'
+            }}>
+            <div style={{ height: '40px' }}>
+              <div style={{ padding: '0px 50px', height: '40px' }}>
+                <div
+                  style={{
+                    'background-color': 'steelblue',
+                    height: '40px',
+                    'line-height': '40px',
+                    float: 'left',
+                    'font-size': '16px',
+                    'font-weight': '600'
+                  }}>
+                  <p style={{ color: 'white' }}>
+                    {this.getCurrentMobileHeader()}
+                  </p>
+                </div>
+                <a
+                  style={{
+                    height: '40px',
+                    'line-height': '40px',
+                    float: 'right'
+                  }}
+                  onClick={this.handleExpandHamburger}>
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    style={{
+                      'padding-top': '10px',
+                      color: 'white',
+                      'font-size': '30px'
+                    }}
+                  />
+                </a>
+              </div>
+              <div style={{ 'background-color': 'black' }}>
+                <div className="mobileMenu" onClick={this.handleProjectClick}>
+                  <p
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600',
+                      padding: '0px 0px',
+                      margin: '0',
+                      'line-height': '50px'
+                    }}>
+                    Projects
+                  </p>
+                </div>
+                <div
+                  className="mobileMenu"
+                  onClick={this.handleExperimentClick}>
+                  <p
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600',
+                      padding: '0px 0px',
+                      margin: '0',
+                      'line-height': '50px'
+                    }}>
+                    Experiments
+                  </p>
+                </div>
+                <div className="mobileMenu" onClick={this.handleSampleClick}>
+                  <p
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600',
+                      padding: '0px 0px',
+                      margin: '0',
+                      'line-height': '50px'
+                    }}>
+                    Samples
+                  </p>
+                </div>
+                <div className="mobileMenu" onClick={this.handleHelpClick}>
+                  <p
+                    style={{
+                      color: 'white',
+                      'font-size': '16px',
+                      'font-weight': '600',
+                      padding: '0px 0px',
+                      margin: '0',
+                      'line-height': '50px'
+                    }}>
+                    Help
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div
+            style={{
+              padding: '0px 0px',
+              'max-width': '1400px',
+              width: '100%',
+              'margin-right': 'auto',
+              'margin-left': 'auto'
+            }}>
+            <div style={{ height: '40px' }}>
+              <div style={{ padding: '0px 50px', height: '40px' }}>
+                <div
+                  style={{
+                    'background-color': 'steelblue',
+                    height: '40px',
+                    'line-height': '40px',
+                    float: 'left',
+                    'font-size': '16px',
+                    'font-weight': '600'
+                  }}>
+                  <p style={{ color: 'white' }}>
+                    {this.getCurrentMobileHeader()}
+                  </p>
+                </div>
+                <a
+                  style={{
+                    height: '40px',
+                    'line-height': '40px',
+                    float: 'right'
+                  }}
+                  onClick={this.handleExpandHamburger}>
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    style={{
+                      'padding-top': '10px',
+                      color: 'white',
+                      'font-size': '30px'
+                    }}
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+  }
+  renderHeader() {
+    if (this.state.windowWidth >= 1500) {
+      return (
+        <Header
+          className="header"
+          style={{
+            height: 'auto',
+            // theme: 'light',
+            background: '#f0f2f5',
+            // position: 'fixed',
+            zIndex: 1,
+            width: '100%',
+            padding: '0'
+          }}>
+          <div
+            style={{
+              padding: '0 0px',
+              'max-width': '1400px',
+              width: '100%',
+              'margin-right': 'auto',
+              'margin-left': 'auto'
+            }}>
+            <a href="https://ccr.cancer.gov/" target="_blank">
+              <img
+                height="auto"
+                className="logo"
+                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                alt="National Cancer Institute"
+                width="80%"
+                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+              />
+            </a>
+          </div>
+        </Header>
+      );
+    } else {
+      console.log('SMALL');
+      return (
+        <Header
+          className="header"
+          style={{
+            height: 'auto',
+            // theme: 'light',
+            background: '#f0f2f5',
+            // position: 'fixed',
+            zIndex: 1,
+            width: '100%',
+            padding: '0 50px'
+          }}>
+          <div
+            style={{
+              padding: '0 0px',
+              'max-width': '1400px',
+              width: '100%',
+              'margin-right': 'auto',
+              'margin-left': 'auto'
+            }}>
+            <a href="https://ccr.cancer.gov/" target="_blank">
+              <img
+                height="auto"
+                className="logo"
+                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                alt="National Cancer Institute"
+                width="80%"
+                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+              />
+            </a>
+          </div>
+        </Header>
+      );
+    }
+  }
+
+  handleProjectClick = e => {
+    this.setState({
+      current: 'projects',
+      filter: {
+        project: '',
+        experiment: ''
+      },
+      mobileOpened: false
+    });
+  };
+  handleExperimentClick = e => {
+    this.setState({
+      current: 'experiments',
+      filter: {
+        project: '',
+        experiment: ''
+      },
+      mobileOpened: false
+    });
+  };
+  handleSampleClick = e => {
+    this.setState({
+      current: 'samples',
+      filter: {
+        project: '',
+        experiment: ''
+      },
+      mobileOpened: false
+    });
+  };
+  handleHelpClick = e => {
+    this.setState({
+      current: 'help',
+      filter: {
+        project: '',
+        experiment: ''
+      },
+      mobileOpened: false
+    });
+  };
+
   render() {
-    /*
     console.log(
       this.state.activeTab +
         ', ' +
         JSON.stringify(this.state.filter) +
         ', ' +
         JSON.stringify(this.state.data)
-    );*/
+    );
     let mainContent = this.renderMain();
     return (
       <div>
@@ -86,37 +450,7 @@ class App extends React.Component {
               // background: 'black',
             }
           }>
-          <Header
-            className="header"
-            style={{
-              height: 'auto',
-              // theme: 'light',
-              background: '#f0f2f5',
-              // position: 'fixed',
-              zIndex: 1,
-              width: '100%',
-              padding: '0'
-            }}>
-            <div
-              style={{
-                padding: '0 50px',
-                'max-width': '1400px',
-                width: '100%',
-                'margin-right': 'auto',
-                'margin-left': 'auto'
-              }}>
-              <a href="https://ccr.cancer.gov/" target="_blank">
-                <img
-                  height="auto"
-                  className="logo"
-                  src="./assets/img/NIH_NCI_Logo_Grey.svg"
-                  alt="National Cancer Institute"
-                  width="80%"
-                  style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
-                />
-              </a>
-            </div>
-          </Header>
+          {this.renderHeader()}
           {/*
           <Header
             className="header"
@@ -135,7 +469,10 @@ class App extends React.Component {
           <Header
             className="header"
             style={{
-              height: '40px',
+              height:
+                this.state.windowWidth < 685 && this.state.mobileOpened == true
+                  ? '240px'
+                  : '40px',
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
@@ -144,73 +481,7 @@ class App extends React.Component {
 
               background: 'steelblue'
             }}>
-            <div
-              style={{
-                padding: '0px 50px',
-                'max-width': '1400px',
-                width: '100%',
-                'margin-right': 'auto',
-                'margin-left': 'auto'
-              }}>
-              <Menu
-                onClick={this.handleClick}
-                selectedKeys={[this.state.current]}
-                theme="dark"
-                mode="horizontal"
-                style={{
-                  width: '100%',
-                  height: '40px',
-                  lineHeight: '40px',
-                  'background-color': 'steelblue'
-                }}>
-                {/* Home */}
-                <Menu.Item key="projects" className="testMenu">
-                  <div>
-                    <Link
-                      style={{
-                        color: 'white',
-                        'font-size': '16px',
-                        'font-weight': '600'
-                      }}>
-                      Projects
-                    </Link>
-                  </div>
-                </Menu.Item>
-
-                <Menu.Item className="testMenu" key="experiments">
-                  <Link
-                    style={{
-                      color: 'white',
-                      'font-size': '16px',
-                      'font-weight': '600'
-                    }}>
-                    Experiments
-                  </Link>
-                </Menu.Item>
-
-                <Menu.Item key="samples" className="testMenu">
-                  <Link
-                    style={{
-                      color: 'white',
-                      'font-size': '16px',
-                      'font-weight': '600'
-                    }}>
-                    Samples
-                  </Link>
-                </Menu.Item>
-
-                <Menu.Item key="help">
-                  <Link
-                    style={{
-                      color: 'white',
-                      'font-size': '16px',
-                      'font-weight': '600'
-                    }}>
-                    Help
-                  </Link>
-                </Menu.Item>
-              </Menu>
-            </div>
+            {this.renderNavbar()}
           </Header>
 
           <Content

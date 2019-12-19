@@ -1,6 +1,6 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import { Table, Input, Button, Form, Select, Icon } from 'antd';
+import { Table, Input, Button, Form, Select, Icon, Modal } from 'antd';
 import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
@@ -8,6 +8,8 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import ReactTooltip from 'react-tooltip';
+import Cookies from 'js-cookie';
+
 const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
 
 class Samples extends React.Component {
@@ -38,7 +40,8 @@ class Samples extends React.Component {
       data: [],
       filteredData: [],
       currSample: '',
-      expandedRowKeys: []
+      expandedRowKeys: [],
+      filePopUp: false
     };
   }
 
@@ -257,6 +260,9 @@ class Samples extends React.Component {
     if (s == '') {
       return true;
     }
+    if (date == null) {
+      return false;
+    }
     let start = s.split('-');
     //let end = e.split('-');
     let check = date.split('/');
@@ -275,6 +281,8 @@ class Samples extends React.Component {
       parseInt(check[0]) - 1,
       parseInt(check[1])
     );
+    //console.log(JSON.stringify(start))
+    //console.log(JSON.stringify(check))
     return (
       parseInt(start[2]) == parseInt(check[2]) &&
       parseInt(start[1]) == parseInt(check[1]) &&
@@ -285,6 +293,7 @@ class Samples extends React.Component {
   //As each search bar is updated, the handlefilter function is called
   //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
+    console.log(this.state.data);
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
@@ -305,10 +314,11 @@ class Samples extends React.Component {
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
-            row.diagnosis
-              .toLowerCase()
-              .includes(this.state.filterDiagnosis.toLowerCase()) &&
-            this.checkDates(row.date, this.state.startDate)
+            (row.diagnosis != null &&
+              row.diagnosis
+                .toLowerCase()
+                .includes(this.state.filterDiagnosis.toLowerCase())) &&
+            this.checkDates(row.pool_id, this.state.startDate)
           );
         })
       },
@@ -400,9 +410,13 @@ class Samples extends React.Component {
           fileName: file
         })
       });
-      let url = URL.createObjectURL(await response.blob());
-      window.open(url, '_blank');
-      URL.revokeObjectUrl(url);
+      if (response.status == 404) {
+        this.setState({ filePopUp: true });
+      } else {
+        let url = URL.createObjectURL(await response.blob());
+        window.open(url, '_blank');
+        URL.revokeObjectURL(url);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -539,7 +553,7 @@ class Samples extends React.Component {
           //Gives functionality to the rows with download links
           render: (text, row, index) => {
             //Should probably make these into indices in the future
-            if (text == 'View plot') {
+            if (index == 1) {
               return (
                 <a
                   style={{
@@ -554,7 +568,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download pdf') {
+            if (index == 3) {
               return (
                 <a
                   style={{
@@ -572,7 +586,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download image') {
+            if (index == 4) {
               return (
                 <a
                   style={{
@@ -587,7 +601,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (text == 'Download report') {
+            if (index == 2) {
               return (
                 <a
                   style={{
@@ -734,7 +748,7 @@ class Samples extends React.Component {
           key: 'family',
           header_name: 'MF Calibrated Scores',
           value: currRow.family_score,
-          header_name2: 'Report',
+          header_name2: 'Profiling Report',
           value2: 'Download report'
         },
         {
@@ -742,7 +756,7 @@ class Samples extends React.Component {
           header_name: 'Methylation Class (MC)',
           value: currRow.class,
           header_name2: 'NGS reports (pdf-files)',
-          value2: 'Download pdf'
+          value2: 'Download report'
         },
         {
           key: 'class',
@@ -979,7 +993,7 @@ class Samples extends React.Component {
         {
           key: 'NGS_reports',
           header_name: 'NGS reports (pdf-files)',
-          value: 'Download pdf'
+          value: 'Download report'
         },
         {
           key: 'slide_image',
@@ -1031,7 +1045,40 @@ class Samples extends React.Component {
     }
   }
 
+  renderPopUp() {
+    console.log('Popup State: ' + this.state.filePopUp);
+    if (this.state.filePopUp == true) {
+      console.log('TRUE');
+      return (
+        //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
+        /*
+        footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}*/
+
+        <Modal
+          title="File Does Not Exist"
+          visible={this.state.filePopUp}
+          footer={[
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => {
+                this.setState({ filePopUp: false });
+              }}>
+              Ok
+            </Button>
+          ]}>
+          <p>The file you are looking for does not exist</p>
+        </Modal>
+      );
+    }
+    return <div />;
+  }
   render() {
+    console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
@@ -1131,8 +1178,10 @@ class Samples extends React.Component {
         )
       },
       {
-        title: 'Date',
-        dataIndex: 'date',
+        title: 'Sample Date',
+        //Should be this in the future, but for now all pool_ids are null
+        //dataIndex:'pool_id'
+        dataIndex: 'pool_id',
         ellipsis: true,
         sorter: (a, b) => this.compareDates(a, b),
         width: '8%',
@@ -1189,121 +1238,131 @@ class Samples extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+      <div className="page-overflow-box">
         <div
           style={{
-            'padding-left': '0px',
-            'padding-bottom': '0px',
-            'padding-top': '15px',
-            'padding-right': '0px'
+            'min-width': '785px',
+            'padding-left': '30px',
+            'padding-right': '30px'
           }}>
-          <Form layout="inline">
-            <Form.Item
-              style={{
-                width: '3%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}
-            />
-            <Form.Item
-              style={{
-                width: '12%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterSampleName}
-                onChange={e =>
-                  this.setState({ filterSampleName: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '15%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterProject}
-                onChange={e =>
-                  this.setState({ filterProject: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '12%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterSentrixID}
-                onChange={e =>
-                  this.setState({ filterSentrixID: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '8%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <DatePicker
-                onChange={(date, dateString) => {
-                  this.setState({ startDate: dateString }, () => {
-                    this.handleFilter();
-                  });
+          {this.renderPopUp()}
+          <div
+            style={{
+              'padding-left': '0px',
+              'padding-bottom': '0px',
+              'padding-top': '15px',
+              'padding-right': '0px'
+            }}>
+            <Form layout="inline">
+              <Form.Item
+                style={{
+                  width: '3%',
+                  'padding-left': '0px',
+                  'padding-right': '0px',
+                  'margin-right': '0px'
                 }}
-                format="MM-DD-YYYY"
-                value={
-                  this.state.startDate == ''
-                    ? ''
-                    : moment(this.state.startDate, 'MM-DD-YYYY')
-                }
-                placeholder=""
               />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '10%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterSurgicalCase}
-                onChange={e =>
-                  this.setState({ filterSurgicalCase: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '9%',
-                'padding-left': '8px',
-                'padding-right': '0px',
-                'margin-right': '0px'
-              }}>
-              {/*<Input
+              <Form.Item
+                style={{
+                  width: '12%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterSampleName}
+                  onChange={e =>
+                    this.setState({ filterSampleName: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '15%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterProject}
+                  onChange={e =>
+                    this.setState({ filterProject: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '12%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterSentrixID}
+                  onChange={e =>
+                    this.setState({ filterSentrixID: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '8%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <DatePicker
+                  onChange={(date, dateString) => {
+                    this.setState({ startDate: dateString }, () => {
+                      this.handleFilter();
+                    });
+                  }}
+                  format="MM-DD-YYYY"
+                  value={
+                    this.state.startDate == ''
+                      ? ''
+                      : moment(this.state.startDate, 'MM-DD-YYYY')
+                  }
+                  placeholder=""
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '10%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterSurgicalCase}
+                  onChange={e =>
+                    this.setState(
+                      { filterSurgicalCase: e.target.value },
+                      () => {
+                        this.handleFilter();
+                      }
+                    )
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '9%',
+                  'padding-left': '8px',
+                  'padding-right': '0px',
+                  'margin-right': '0px'
+                }}>
+                {/*<Input
                 value={this.state.filterGender}
                 onChange={e =>
                   this.setState({ filterGender: e.target.value }, () => {
@@ -1312,106 +1371,106 @@ class Samples extends React.Component {
                 }
                 onPressEnter={this.handleFilter}
               />*/}
-              <Select
-                onChange={value => {
-                  this.setState({ filterGender: value }, () => {
-                    this.handleFilter();
-                  });
-                }}
-                value={this.state.filterGender}
-                style={{ width: '85px' }}>
-                <Option value="">&nbsp;</Option>
-                <Option value="Male">Male</Option>
-                <Option value="Female">Female</Option>
-                <Option value="Unknown">Unknown</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '7%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterAge}
-                onChange={e =>
-                  this.setState({ filterAge: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '23%',
-                'padding-left': '8px',
-                'padding-right': '30px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterDiagnosis}
-                onChange={e =>
-                  this.setState({ filterDiagnosis: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-          </Form>
-        </div>
-        <div>
-          {/*rowClassName={(record, index) => {
+                <Select
+                  onChange={value => {
+                    this.setState({ filterGender: value }, () => {
+                      this.handleFilter();
+                    });
+                  }}
+                  value={this.state.filterGender}>
+                  <Option value="">&nbsp;</Option>
+                  <Option value="Male">Male</Option>
+                  <Option value="Female">Female</Option>
+                  <Option value="Unknown">Unknown</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '7%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterAge}
+                  onChange={e =>
+                    this.setState({ filterAge: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '23%',
+                  'padding-left': '8px',
+                  'padding-right': '30px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterDiagnosis}
+                  onChange={e =>
+                    this.setState({ filterDiagnosis: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+          <div>
+            {/*rowClassName={(record, index) => {
               return this.state.currSample == '' ? '' : record.key == this.state.currSample ? 'testing' : '';
             }}*/}
-          <Table
-            {...this.state}
-            columns={columns}
-            dataSource={this.state.filteredData}
-            onChange={this.handleTableChange}
-            size="small"
-            ellipsis="true"
-            expandedRowRender={this.expandedRowRender}
-            expandRowByClick={true}
-            expandedRowKeys={this.state.expandedRowKeys}
-            onExpand={this.onTableRowExpand}
-            expandIcon={props => this.customExpandIcon(props)}
-            rowClassName={(record, index) => {
-              /*let selected =
+            <Table
+              {...this.state}
+              columns={columns}
+              dataSource={this.state.filteredData}
+              onChange={this.handleTableChange}
+              size="small"
+              ellipsis="true"
+              expandedRowRender={this.expandedRowRender}
+              expandRowByClick={true}
+              expandedRowKeys={this.state.expandedRowKeys}
+              onExpand={this.onTableRowExpand}
+              expandIcon={props => this.customExpandIcon(props)}
+              rowClassName={(record, index) => {
+                /*let selected =
                 this.state.currSample == ''
                   ? ''
                   : record.key == this.state.currSample
                   ? 'testing'
                   : '';*/
-              let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
-              //return selected == '' ? coloring : selected;
-              return coloring;
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: event => {
-                  if (this.state.currSample == record.id) {
-                    this.setState({
-                      currSample: ''
-                    });
-                  } else {
-                    this.setState({
-                      currSample: record.id
-                    });
+                let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
+                //return selected == '' ? coloring : selected;
+                return coloring;
+              }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: event => {
+                    if (this.state.currSample == record.id) {
+                      this.setState({
+                        currSample: ''
+                      });
+                    } else {
+                      this.setState({
+                        currSample: record.id
+                      });
+                    }
                   }
-                }
-              };
-            }}
-          />
-        </div>
-        {/*Returns summary if something has been selected */}
-        {/*this.renderSummary(this.state.currSample)*/}
+                };
+              }}
+            />
+          </div>
+          {/*Returns summary if something has been selected */}
+          {/*this.renderSummary(this.state.currSample)*/}
 
-        <br />
-        <br />
-        {/*<p>{JSON.stringify(this.state.data)}</p>*/}
+          <br />
+          <br />
+          {/*<p>{JSON.stringify(this.state.data)}</p>*/}
+        </div>
       </div>
     );
   }

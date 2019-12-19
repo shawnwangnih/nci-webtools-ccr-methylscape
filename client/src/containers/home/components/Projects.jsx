@@ -18,7 +18,9 @@ class Projects extends React.Component {
         showSizeChanger: true,
         style: {
           'margin-bottom': '0px'
-        }
+        },
+        defaultPageSize: 10,
+        pageSizeOptions: ['10', '25', '50', '100']
       },
       sortedInfo: null,
       data: [],
@@ -231,6 +233,7 @@ class Projects extends React.Component {
   }
 
   render() {
+    console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
@@ -285,7 +288,7 @@ class Projects extends React.Component {
         ),
         dataIndex: 'key',
         sorter: true,
-        width: '20%',
+        width: '35%',
         sorter: (a, b) => a.key.localeCompare(b.key),
         defaultSortOrder: 'ascend',
         render: (text, record) => (
@@ -328,128 +331,109 @@ class Projects extends React.Component {
             {text}
           </a>
         )
-      },
-      {
-        title: 'Project Date',
-        dataIndex: 'date',
-        sorter: true,
-        width: '15%'
       }
     ];
     return (
-      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+      <div className="page-overflow-box">
         <div
           style={{
-            'padding-left': '0px',
-            'padding-bottom': '0px',
-            'padding-top': '15px'
+            'min-width': '535px',
+            'padding-left': '30px',
+            'padding-right': '30px'
           }}>
-          {/* <PageHeader title={"MethylScape Results"} /> */}
-          <Form layout="inline">
-            <Form.Item
-              style={{
-                width: '5%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}
-            />
-            <Form.Item
-              style={{
-                width: '20%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterProject}
-                onChange={e =>
-                  this.setState({ filterProject: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '20%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterInvestigator}
-                onChange={e =>
-                  this.setState({ filterInvestigator: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '20%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterNumExperiments}
-                onChange={e =>
-                  this.setState(
-                    { filterNumExperiments: e.target.value },
-                    () => {
-                      this.handleFilter();
-                    }
-                  )
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '20%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterNumSamples}
-                onChange={e =>
-                  this.setState({ filterNumSamples: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '15%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <DatePicker
-                onChange={(date, dateString) => {
-                  this.setState({ startDate: dateString }, () => {
-                    this.handleFilter();
-                  });
+          <div
+            style={{
+              'padding-left': '0px',
+              'padding-bottom': '0px',
+              'padding-top': '15px'
+            }}>
+            {/* <PageHeader title={"MethylScape Results"} /> */}
+            <Form layout="inline">
+              <Form.Item
+                style={{
+                  width: '5%',
+                  'padding-left': '0px',
+                  'padding-right': '0px',
+                  'margin-right': '0px'
                 }}
-                format="MM-DD-YYYY"
-                value={
-                  this.state.startDate == ''
-                    ? ''
-                    : moment(this.state.startDate, 'MM-DD-YYYY')
-                }
-                placeholder=""
               />
-            </Form.Item>
-          </Form>
-        </div>
-        {/*rowClassName={(record, index) => {
+              <Form.Item
+                style={{
+                  width: '35%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterProject}
+                  onChange={e =>
+                    this.setState({ filterProject: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '20%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterInvestigator}
+                  onChange={e =>
+                    this.setState(
+                      { filterInvestigator: e.target.value },
+                      () => {
+                        this.handleFilter();
+                      }
+                    )
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '20%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterNumExperiments}
+                  onChange={e =>
+                    this.setState(
+                      { filterNumExperiments: e.target.value },
+                      () => {
+                        this.handleFilter();
+                      }
+                    )
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '20%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterNumSamples}
+                  onChange={e =>
+                    this.setState({ filterNumSamples: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+          {/*rowClassName={(record, index) => {
             let selected =
               this.state.currRecord == ''
                 ? index == 0
@@ -461,36 +445,39 @@ class Projects extends React.Component {
             let coloring = index % 2 == 0 ? 'whiteBack' : 'grayBack';
             return selected == '' ? coloring : selected;
           }}*/}
-        <Table
-          {...this.state}
-          size="small"
-          pagination={{
-            position: 'bottom',
-            size: this.state.pagination.size,
-            showSizeChanger: this.state.pagination.showSizeChanger,
-            showTotal: this.rangeFunction,
-            itemRender: this.itemRender
-          }}
-          rowClassName={(record, index) => {
-            return this.state.currRecord == ''
-              ? index == 0
+          <Table
+            {...this.state}
+            size="small"
+            pagination={{
+              position: 'bottom',
+              size: this.state.pagination.size,
+              showSizeChanger: this.state.pagination.showSizeChanger,
+              showTotal: this.rangeFunction,
+              itemRender: this.itemRender,
+              defaultPageSize: 10,
+              pageSizeOptions: ['10', '25', '50', '100']
+            }}
+            rowClassName={(record, index) => {
+              return this.state.currRecord == ''
+                ? index == 0
+                  ? 'testing'
+                  : ''
+                : record.project == this.state.currRecord
                 ? 'testing'
-                : ''
-              : record.project == this.state.currRecord
-              ? 'testing'
-              : '';
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => {
-                this.handleProjectClick(rowIndex, record);
-              }
-            };
-          }}
-          columns={columns}
-          dataSource={this.state.filteredData}
-          onChange={this.handleTableChange}
-        />
+                : '';
+            }}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: event => {
+                  this.handleProjectClick(rowIndex, record);
+                }
+              };
+            }}
+            columns={columns}
+            dataSource={this.state.filteredData}
+            onChange={this.handleTableChange}
+          />
+        </div>
       </div>
     );
   }

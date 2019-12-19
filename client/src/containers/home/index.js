@@ -29,7 +29,8 @@ class Home extends React.Component {
       scanCheck: true,
       showErrorAlert: false,
       projectSummery: '',
-      current: props.current
+      current: props.current,
+      windowWidth: document.body.clientWidth
     };
   }
   async componentWillReceiveProps(nextProps) {
@@ -66,10 +67,14 @@ class Home extends React.Component {
 
   successScan(data) {
     for (var key in data) {
-      data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString(
-        'fullwide',
-        { useGrouping: false }
-      );
+      if (data[key]['experiment'] == null) {
+        console.log('NULL: ' + JSON.stringify(data[key]));
+        delete data[key];
+      } else {
+        data[key]['experiment'] = Number(
+          data[key]['experiment']
+        ).toLocaleString('fullwide', { useGrouping: false });
+      }
     }
     this.setState({
       data: data,
@@ -78,6 +83,11 @@ class Home extends React.Component {
   }
 
   async componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.setState({ windowWidth: document.body.clientWidth }, () => {
+        console.log(this.state.windowWidth);
+      });
+    });
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
@@ -123,14 +133,13 @@ class Home extends React.Component {
     return samples.length;
   }
 
-  render() {
+  renderTopHeader() {
     let numProjects = this.getNumProjects();
     let numExperiments = this.getNumExperiments();
     let numSamples = this.getNumSamples();
 
-    return (
-      <div>
-        {/* <PageHeader /> */}
+    if (this.state.windowWidth >= 685) {
+      return (
         <div style={{ 'background-color': '#f0f2f5' }}>
           <div
             style={{
@@ -262,6 +271,113 @@ class Home extends React.Component {
             </Link>
           </div>
         </div>
+      );
+    } else {
+      return (
+        <div style={{ 'background-color': '#f0f2f5' }}>
+          <div
+            style={{
+              'max-width': '1300px',
+              margin: 'auto',
+              'padding-top': '15px',
+              'padding-bottom': '15px'
+            }}>
+            <Link
+              style={{ 'padding-left': '20px' }}
+              onClick={() => {
+                this.changeTab('projects', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faChartPie}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numProjects}
+              />
+            </Link>
+            <Link
+              style={{ 'padding-left': '30px' }}
+              onClick={() => {
+                this.changeTab('experiments', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faVials}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numExperiments}>
+                {numExperiments}{' '}
+              </CountUp>
+            </Link>
+            <Link
+              style={{ 'padding-left': '30px' }}
+              onClick={() => {
+                this.changeTab('samples', {
+                  project: '',
+                  experiment: ''
+                });
+              }}>
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{
+                  color: 'black',
+                  'font-size': '24px',
+                  display: 'inline'
+                }}
+              />
+              <CountUp
+                style={{
+                  'padding-left': '5px',
+                  'margin-bottom': '0px',
+                  color: 'blue',
+                  'font-size': '24px',
+                  'font-weight': '200',
+                  display: 'inline'
+                }}
+                end={numSamples}
+              />
+            </Link>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        {/* <PageHeader /> */}
+        {this.renderTopHeader()}
 
         {this.state.showErrorAlert && (
           <Alert

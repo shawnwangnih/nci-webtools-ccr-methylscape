@@ -22,3 +22,10 @@
 .ant-table {
   /*line-height: 0.5;*/
 }
+
+.page-overflow-box {
+  overflow-x: hidden;
+}
+.page-overflow-box:hover {
+  overflow-x: auto;
+}

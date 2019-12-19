@@ -198,7 +198,7 @@ class Experiments extends React.Component {
       .then(url => {
         if (url != null) {
           window.open(url, '_blank');
-          URL.revokeObjectUrl(url);
+          URL.revokeObjectURL(url);
         } else {
           this.setState({ filePopUp: true });
         }
@@ -303,31 +303,45 @@ class Experiments extends React.Component {
   renderPopUp() {
     console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      
+      console.log('TRUE');
       return (
+        //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
+        /*
+        footer={[
+            <Button key="submit" type="primary" onClick={this.closePopup()}>
+              close
+            </Button>
+          ]}*/
+
         <Modal
           title="File Does Not Exist"
           visible={this.state.filePopUp}
           footer={[
-            <Button key="submit" type="primary" onClick={this.closePopup()}>
-              close
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => {
+                this.setState({ filePopUp: false });
+              }}>
+              Ok
             </Button>
           ]}>
           <p>The file you are looking for does not exist</p>
         </Modal>
       );
     }
-    return <div></div>
+    return <div />;
   }
 
   render() {
+    console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: 'Project',
         dataIndex: 'project',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.project.localeCompare(b.project),
+        //sorter: (a, b) => a.project.localeCompare(b.project),
         defaultSortOrder: 'ascend',
         render: (text, record) => (
           <a
@@ -376,7 +390,7 @@ class Experiments extends React.Component {
         )
       },
       {
-        title: 'Date Created',
+        title: 'Experiment Date',
         dataIndex: 'date',
         sorter: (a, b) => this.compareDates(a, b),
         width: '13%'
@@ -417,106 +431,115 @@ class Experiments extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
-        {this.renderPopUp()}
+      <div className="page-overflow-box">
         <div
           style={{
-            'padding-left': '0',
-            'padding-bottom': '0px',
-            'padding-top': '15px'
+            'min-width': '790px',
+            'padding-left': '30px',
+            'padding-right': '30px'
           }}>
-          <Form layout="inline">
-            <Form.Item
-              style={{
-                width: '20%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterProject}
-                onChange={e =>
-                  this.setState({ filterProject: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '15%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterExperiment}
-                onChange={e =>
-                  this.setState({ filterExperiment: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '15%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterInvestigator}
-                onChange={e =>
-                  this.setState({ filterInvestigator: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '13%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <Input
-                value={this.state.filterNumSamples}
-                onChange={e =>
-                  this.setState({ filterNumSamples: e.target.value }, () => {
-                    this.handleFilter();
-                  })
-                }
-                onPressEnter={this.handleFilter}
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                width: '13%',
-                'padding-left': '8px',
-                'padding-right': '16px',
-                'margin-right': '0px'
-              }}>
-              <DatePicker
-                onChange={(date, dateString) => {
-                  this.setState({ startDate: dateString }, () => {
-                    this.handleFilter();
-                  });
-                }}
-                format="MM-DD-YYYY"
-                value={
-                  this.state.startDate == ''
-                    ? ''
-                    : moment(this.state.startDate, 'MM-DD-YYYY')
-                }
-                placeholder=""
-              />
-            </Form.Item>
-            {/* <Form.Item label="Date">
+          {this.renderPopUp()}
+          <div
+            style={{
+              'padding-left': '0',
+              'padding-bottom': '0px',
+              'padding-top': '15px'
+            }}>
+            <Form layout="inline">
+              <Form.Item
+                style={{
+                  width: '20%',
+                  'padding-left': '0px',
+                  'padding-right': '0px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterProject}
+                  onChange={e =>
+                    this.setState({ filterProject: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '15%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterExperiment}
+                  onChange={e =>
+                    this.setState({ filterExperiment: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '15%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterInvestigator}
+                  onChange={e =>
+                    this.setState(
+                      { filterInvestigator: e.target.value },
+                      () => {
+                        this.handleFilter();
+                      }
+                    )
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '13%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <Input
+                  value={this.state.filterNumSamples}
+                  onChange={e =>
+                    this.setState({ filterNumSamples: e.target.value }, () => {
+                      this.handleFilter();
+                    })
+                  }
+                  onPressEnter={this.handleFilter}
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  width: '13%',
+                  'padding-left': '8px',
+                  'padding-right': '16px',
+                  'margin-right': '0px'
+                }}>
+                <DatePicker
+                  onChange={(date, dateString) => {
+                    this.setState({ startDate: dateString }, () => {
+                      this.handleFilter();
+                    });
+                  }}
+                  format="MM-DD-YYYY"
+                  value={
+                    this.state.startDate == ''
+                      ? ''
+                      : moment(this.state.startDate, 'MM-DD-YYYY')
+                  }
+                  placeholder=""
+                />
+              </Form.Item>
+              {/* <Form.Item label="Date">
               <Input
                 value={this.state.filterDate}
                 onChange={e => this.setState({ filterDate: e.target.value })}
@@ -524,30 +547,31 @@ class Experiments extends React.Component {
                 placeholder="Jane Doe"
               />
             </Form.Item> */}
-            {/*<Form.Item>
+              {/*<Form.Item>
               <Button icon="search" type="primary" onClick={this.handleFilter}>
                 Search
               </Button>
               {/* <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 Clear
               </Button> */}
-            {/*</Form.Item>*/}
-          </Form>
-        </div>
-        {/*rowClassName={(record, index) => {
+              {/*</Form.Item>*/}
+            </Form>
+          </div>
+          {/*rowClassName={(record, index) => {
               return index % 2 == 0 ? 'whiteBack' : 'grayBack';
             }}*/}
-        <div>
-          <Table
-            {...this.state}
-            size="small"
-            columns={columns}
-            dataSource={this.state.filteredData}
-            onChange={this.handleTableChange}
-            rowClassName={(record, index) => {
-              return index % 2 == 0 ? 'whiteBack' : 'grayBack';
-            }}
-          />
+          <div>
+            <Table
+              {...this.state}
+              size="small"
+              columns={columns}
+              dataSource={this.state.filteredData}
+              onChange={this.handleTableChange}
+              rowClassName={(record, index) => {
+                return index % 2 == 0 ? 'whiteBack' : 'grayBack';
+              }}
+            />
+          </div>
         </div>
       </div>
     );

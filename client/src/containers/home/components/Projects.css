@@ -132,3 +132,10 @@
   > .ant-table-small {
   border: 0px !important;
 }
+
+.page-overflow-box {
+  overflow-x: hidden;
+}
+.page-overflow-box:hover {
+  overflow-x: auto;
+}
