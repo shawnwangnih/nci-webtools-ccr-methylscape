@@ -69,10 +69,7 @@ class Home extends React.Component {
     console.log(JSON.stringify(data))
 
     for (var key in data) {
-      if(data[key]['experiment'] == null){
-        console.log(JSON.stringify(data[key]))
-        delete data[key];
-      }
+      
       data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString(
         'fullwide',
         { useGrouping: false }
