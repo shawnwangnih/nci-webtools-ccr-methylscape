@@ -66,6 +66,7 @@ class Home extends React.Component {
   }
 
   successScan(data) {
+    console.log(JSON.stringify(data))
     for (var key in data) {
       data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString(
         'fullwide',
