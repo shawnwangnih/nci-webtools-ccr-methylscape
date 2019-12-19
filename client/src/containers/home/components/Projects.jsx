@@ -20,7 +20,7 @@ class Projects extends React.Component {
           'margin-bottom': '0px'
         },
         defaultPageSize: 10,
-        pageSizeOptions: ['10', '25', '50', '100'],
+        pageSizeOptions: ['10', '25', '50', '100']
       },
       sortedInfo: null,
       data: [],
@@ -455,7 +455,7 @@ class Projects extends React.Component {
               showTotal: this.rangeFunction,
               itemRender: this.itemRender,
               defaultPageSize: 10,
-              pageSizeOptions: ['10', '25', '50', '100'],
+              pageSizeOptions: ['10', '25', '50', '100']
             }}
             rowClassName={(record, index) => {
               return this.state.currRecord == ''

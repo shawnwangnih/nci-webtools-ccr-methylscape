@@ -293,6 +293,7 @@ class Samples extends React.Component {
   //As each search bar is updated, the handlefilter function is called
   //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
+    console.log(this.state.data);
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
@@ -313,9 +314,10 @@ class Samples extends React.Component {
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
-            row.diagnosis
-              .toLowerCase()
-              .includes(this.state.filterDiagnosis.toLowerCase()) &&
+            (row.diagnosis != null &&
+              row.diagnosis
+                .toLowerCase()
+                .includes(this.state.filterDiagnosis.toLowerCase())) &&
             this.checkDates(row.pool_id, this.state.startDate)
           );
         })
