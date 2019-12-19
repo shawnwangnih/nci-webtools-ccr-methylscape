@@ -66,16 +66,15 @@ class Home extends React.Component {
   }
 
   successScan(data) {
-    console.log(JSON.stringify(data))
-
     for (var key in data) {
-      if(data[key]['experiment'] == null){
-        console.log(JSON.stringify(data[key]))
+      if (data[key]['experiment'] == null) {
+        console.log('NULL: ' + JSON.stringify(data[key]));
+        delete data[key];
+      } else {
+        data[key]['experiment'] = Number(
+          data[key]['experiment']
+        ).toLocaleString('fullwide', { useGrouping: false });
       }
-      data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString(
-        'fullwide',
-        { useGrouping: false }
-      );
     }
     this.setState({
       data: data,
@@ -127,7 +126,6 @@ class Home extends React.Component {
   getNumSamples() {
     let samples = [];
     this.state.data.forEach(element => {
-      console.log(element.sample_name + ", " + element.experiment);
       if (!samples.includes(element.sample_name)) {
         samples.push(element.sample_name);
       }
