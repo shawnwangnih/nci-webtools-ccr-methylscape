@@ -1076,7 +1076,7 @@ class Samples extends React.Component {
     return <div />;
   }
   render() {
-    //console.log(JSON.stringify(this.state.filteredData));
+    console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
