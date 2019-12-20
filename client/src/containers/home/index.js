@@ -84,9 +84,14 @@ class Home extends React.Component {
 
   async componentDidMount() {
     window.addEventListener('resize', () => {
-      this.setState({ windowWidth: document.body.clientWidth }, () => {
-        console.log(this.state.windowWidth);
-      });
+      clearTimeout(this.state.timeout);
+      // start timing for event "completion"
+      timeout = setTimeout(() => {
+        this.setState({ windowWidth: document.body.clientWidth }, () => {
+          console.log(this.state.windowWidth);
+        });
+      }, 250);
+      
     });
     const root =
       process.env.NODE_ENV === 'development'

@@ -57,9 +57,14 @@ class Summary extends React.Component {
   }
   componentDidMount() {
     window.addEventListener('resize', () => {
-      this.setState({ windowWidth: document.body.clientWidth }, () => {
-        console.log(this.state.windowWidth);
-      });
+      clearTimeout(this.state.timeout);
+      // start timing for event "completion"
+      timeout = setTimeout(() => {
+        this.setState({ windowWidth: document.body.clientWidth }, () => {
+          console.log(this.state.windowWidth);
+        });
+      }, 250);
+      
     });
   }
   async componentDidUpdate() {
