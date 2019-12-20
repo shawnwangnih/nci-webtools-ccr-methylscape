@@ -1241,7 +1241,7 @@ class Samples extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'min-width': '785px',
+            'min-width': '1400px',
             'padding-left': '30px',
             'padding-right': '30px'
           }}>

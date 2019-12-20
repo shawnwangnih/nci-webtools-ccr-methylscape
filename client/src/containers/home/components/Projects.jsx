@@ -337,7 +337,7 @@ class Projects extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'min-width': '535px',
+            'min-width': '800px',
             'padding-left': '30px',
             'padding-right': '30px'
           }}>

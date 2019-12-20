@@ -13,7 +13,8 @@ class Summary extends React.Component {
       project: '',
       filteredData: [],
       moreClasses: false,
-      windowWidth: document.body.clientWidth
+      windowWidth: document.body.clientWidth,
+      timeout: false
     };
     this.methylationHeight = 0;
     this.lastMethylationHeight = 0;
@@ -59,12 +60,13 @@ class Summary extends React.Component {
     window.addEventListener('resize', () => {
       clearTimeout(this.state.timeout);
       // start timing for event "completion"
-      timeout = setTimeout(() => {
-        this.setState({ windowWidth: document.body.clientWidth }, () => {
-          console.log(this.state.windowWidth);
-        });
-      }, 250);
-      
+      this.setState({
+        timeout: setTimeout(() => {
+          this.setState({ windowWidth: document.body.clientWidth }, () => {
+            console.log(this.state.windowWidth);
+          });
+        }, 250)
+      });
     });
   }
   async componentDidUpdate() {

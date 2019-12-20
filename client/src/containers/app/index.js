@@ -35,7 +35,7 @@ class App extends React.Component {
     projectSummery: '',
     windowWidth: document.body.clientWidth,
     mobileOpened: false,
-    timeout = false,
+    timeout: false
   };
   handleClick = e => {
     this.setState({
@@ -51,12 +51,13 @@ class App extends React.Component {
     window.addEventListener('resize', () => {
       clearTimeout(this.state.timeout);
       // start timing for event "completion"
-      timeout = setTimeout(() => {
-        this.setState({ windowWidth: document.body.clientWidth }, () => {
-          console.log(this.state.windowWidth);
-        });
-      }, 250);
-      
+      this.setState({
+        timeout: setTimeout(() => {
+          this.setState({ windowWidth: document.body.clientWidth }, () => {
+            console.log(this.state.windowWidth);
+          });
+        }, 250)
+      });
     });
   }
 
