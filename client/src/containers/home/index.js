@@ -69,7 +69,6 @@ class Home extends React.Component {
   successScan(data) {
     for (var key in data) {
       if (data[key]['experiment'] == null) {
-        console.log('NULL: ' + JSON.stringify(data[key]));
         delete data[key];
       } else {
         data[key]['experiment'] = Number(
@@ -126,7 +125,7 @@ class Home extends React.Component {
         experiments.push(element.experiment);
       }
     });
-    console.log(JSON.stringify(experiments));
+    //console.log(JSON.stringify(experiments));
     return experiments.length;
   }
 

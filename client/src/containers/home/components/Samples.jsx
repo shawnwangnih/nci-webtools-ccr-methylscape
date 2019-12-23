@@ -293,7 +293,7 @@ class Samples extends React.Component {
   //As each search bar is updated, the handlefilter function is called
   //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
-    console.log(this.state.data);
+    //console.log(this.state.data);
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
@@ -1046,9 +1046,7 @@ class Samples extends React.Component {
   }
 
   renderPopUp() {
-    console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      console.log('TRUE');
       return (
         //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
         /*
@@ -1078,7 +1076,7 @@ class Samples extends React.Component {
     return <div />;
   }
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',

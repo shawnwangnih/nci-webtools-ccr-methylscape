@@ -228,12 +228,12 @@ class Projects extends React.Component {
   }
 
   handleRowClick(record, rowIndex) {
-    console.log('RECORD: ' + record);
-    console.log('INDEX: ' + rowIndex);
+    //console.log('RECORD: ' + record);
+    //console.log('INDEX: ' + rowIndex);
   }
 
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
