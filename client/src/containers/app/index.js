@@ -54,7 +54,7 @@ class App extends React.Component {
       this.setState({
         timeout: setTimeout(() => {
           this.setState({ windowWidth: document.body.clientWidth }, () => {
-            console.log(this.state.windowWidth);
+            //console.log(this.state.windowWidth);
           });
         }, 250)
       });
@@ -492,7 +492,7 @@ class App extends React.Component {
 
           <Content
             style={{
-              padding: '0 50px',
+              padding: '0 0px',
               height: '100%',
               'max-width': '1400px',
               width: '100%',
