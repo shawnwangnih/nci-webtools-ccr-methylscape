@@ -89,7 +89,7 @@ class Home extends React.Component {
       this.setState({
         timeout: setTimeout(() => {
           this.setState({ windowWidth: document.body.clientWidth }, () => {
-            console.log(this.state.windowWidth);
+            //console.log(this.state.windowWidth);
           });
         }, 250)
       });
@@ -134,6 +134,7 @@ class Home extends React.Component {
     this.state.data.forEach(element => {
       if (!samples.includes(element.sample_name)) {
         samples.push(element.sample_name);
+        console.log(element.sample_name)
       }
     });
     return samples.length;
