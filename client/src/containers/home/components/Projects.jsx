@@ -228,12 +228,12 @@ class Projects extends React.Component {
   }
 
   handleRowClick(record, rowIndex) {
-    console.log('RECORD: ' + record);
-    console.log('INDEX: ' + rowIndex);
+    //console.log('RECORD: ' + record);
+    //console.log('INDEX: ' + rowIndex);
   }
 
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
@@ -337,7 +337,7 @@ class Projects extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'min-width': '535px',
+            'min-width': '800px',
             'padding-left': '30px',
             'padding-right': '30px'
           }}>

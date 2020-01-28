@@ -293,11 +293,11 @@ class Samples extends React.Component {
   //As each search bar is updated, the handlefilter function is called
   //The function changes the filteredData, which is what is portrayed in the table
   handleFilter = () => {
-    console.log(this.state.data);
+    //console.log(this.state.data);
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
-          return (
+          if (
             row.project != null &&
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.experiment != null &&
@@ -314,12 +314,17 @@ class Samples extends React.Component {
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
-            (row.diagnosis != null &&
-              row.diagnosis
-                .toLowerCase()
-                .includes(this.state.filterDiagnosis.toLowerCase())) &&
+            (row.diagnosis == null ||
+              (row.diagnosis != null &&
+                row.diagnosis
+                  .toLowerCase()
+                  .includes(this.state.filterDiagnosis.toLowerCase()))) &&
             this.checkDates(row.pool_id, this.state.startDate)
-          );
+          ) {
+            return true;
+          } else {
+            return false;
+          }
         })
       },
       this.setState({ loading: false })
@@ -1046,9 +1051,7 @@ class Samples extends React.Component {
   }
 
   renderPopUp() {
-    console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      console.log('TRUE');
       return (
         //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
         /*
@@ -1078,7 +1081,7 @@ class Samples extends React.Component {
     return <div />;
   }
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: '',
@@ -1241,7 +1244,7 @@ class Samples extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'min-width': '785px',
+            'min-width': '1400px',
             'padding-left': '30px',
             'padding-right': '30px'
           }}>

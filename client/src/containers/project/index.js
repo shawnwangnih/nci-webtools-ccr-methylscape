@@ -15,7 +15,6 @@ function callback(key) {
 class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       projectID: props.match.params.id,
       experiments: []
@@ -46,7 +45,7 @@ class ProjectPage extends React.Component {
         <PageHeader onBack={() => null} title={this.state.projectID} />
         <Tabs
           defaultActiveKey="summary"
-          onChange={callback}
+          //onChange={callback}
           style={{ theme: 'dark' }}>
           <TabPane tab="Summary" key="summary">
             <Summary projectID={this.state.projectID} />

@@ -179,10 +179,7 @@ class Experiments extends React.Component {
       })
     })
       .then(res => {
-        console.log(res);
-        console.log(res.status);
         if (res.status == 404) {
-          console.log('NULL');
           return null;
         }
         return res.blob();
@@ -301,9 +298,7 @@ class Experiments extends React.Component {
     });
   }
   renderPopUp() {
-    console.log('Popup State: ' + this.state.filePopUp);
     if (this.state.filePopUp == true) {
-      console.log('TRUE');
       return (
         //<p>HELLO lqkwejbgvoiasudvnboiasulbjnalwegijabvidjbahpiduvjbawelkjbvasidlubjaldkvjwaebsvilubjva</p>
         /*
@@ -334,7 +329,7 @@ class Experiments extends React.Component {
   }
 
   render() {
-    console.log(JSON.stringify(this.state.filteredData));
+    //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
         title: 'Project',
@@ -434,7 +429,7 @@ class Experiments extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'min-width': '790px',
+            'min-width': '1200px',
             'padding-left': '30px',
             'padding-right': '30px'
           }}>

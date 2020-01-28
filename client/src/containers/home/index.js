@@ -30,7 +30,8 @@ class Home extends React.Component {
       showErrorAlert: false,
       projectSummery: '',
       current: props.current,
-      windowWidth: document.body.clientWidth
+      windowWidth: document.body.clientWidth,
+      timeout: false
     };
   }
   async componentWillReceiveProps(nextProps) {
@@ -68,7 +69,6 @@ class Home extends React.Component {
   successScan(data) {
     for (var key in data) {
       if (data[key]['experiment'] == null) {
-        console.log('NULL: ' + JSON.stringify(data[key]));
         delete data[key];
       } else {
         data[key]['experiment'] = Number(
@@ -84,8 +84,14 @@ class Home extends React.Component {
 
   async componentDidMount() {
     window.addEventListener('resize', () => {
-      this.setState({ windowWidth: document.body.clientWidth }, () => {
-        console.log(this.state.windowWidth);
+      clearTimeout(this.state.timeout);
+      // start timing for event "completion"
+      this.setState({
+        timeout: setTimeout(() => {
+          this.setState({ windowWidth: document.body.clientWidth }, () => {
+            //console.log(this.state.windowWidth);
+          });
+        }, 250)
       });
     });
     const root =
@@ -119,7 +125,7 @@ class Home extends React.Component {
         experiments.push(element.experiment);
       }
     });
-    console.log(JSON.stringify(experiments));
+    //console.log(JSON.stringify(experiments));
     return experiments.length;
   }
 
@@ -128,6 +134,7 @@ class Home extends React.Component {
     this.state.data.forEach(element => {
       if (!samples.includes(element.sample_name)) {
         samples.push(element.sample_name);
+        console.log(element.sample_name)
       }
     });
     return samples.length;

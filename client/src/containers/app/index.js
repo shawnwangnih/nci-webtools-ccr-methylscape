@@ -34,7 +34,8 @@ class App extends React.Component {
     showErrorAlert: false,
     projectSummery: '',
     windowWidth: document.body.clientWidth,
-    mobileOpened: false
+    mobileOpened: false,
+    timeout: false
   };
   handleClick = e => {
     this.setState({
@@ -48,8 +49,14 @@ class App extends React.Component {
 
   componentDidMount() {
     window.addEventListener('resize', () => {
-      this.setState({ windowWidth: document.body.clientWidth }, () => {
-        console.log(this.state.windowWidth);
+      clearTimeout(this.state.timeout);
+      // start timing for event "completion"
+      this.setState({
+        timeout: setTimeout(() => {
+          this.setState({ windowWidth: document.body.clientWidth }, () => {
+            //console.log(this.state.windowWidth);
+          });
+        }, 250)
       });
     });
   }
@@ -355,7 +362,6 @@ class App extends React.Component {
         </Header>
       );
     } else {
-      console.log('SMALL');
       return (
         <Header
           className="header"
@@ -434,13 +440,13 @@ class App extends React.Component {
   };
 
   render() {
-    console.log(
+    /*console.log(
       this.state.activeTab +
         ', ' +
         JSON.stringify(this.state.filter) +
         ', ' +
         JSON.stringify(this.state.data)
-    );
+    );*/
     let mainContent = this.renderMain();
     return (
       <div>
@@ -486,7 +492,7 @@ class App extends React.Component {
 
           <Content
             style={{
-              padding: '0 50px',
+              padding: '0 0px',
               height: '100%',
               'max-width': '1400px',
               width: '100%',
