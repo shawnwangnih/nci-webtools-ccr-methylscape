@@ -297,7 +297,7 @@ class Samples extends React.Component {
     this.setState(
       {
         filteredData: this.state.data.filter(row => {
-          return (
+          if (
             row.project != null &&
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.experiment != null &&
@@ -314,12 +314,17 @@ class Samples extends React.Component {
             (row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
-            (row.diagnosis != null &&
-              row.diagnosis
-                .toLowerCase()
-                .includes(this.state.filterDiagnosis.toLowerCase())) &&
+            (row.diagnosis == null ||
+              (row.diagnosis != null &&
+                row.diagnosis
+                  .toLowerCase()
+                  .includes(this.state.filterDiagnosis.toLowerCase()))) &&
             this.checkDates(row.pool_id, this.state.startDate)
-          );
+          ) {
+            return true;
+          } else {
+            return false;
+          }
         })
       },
       this.setState({ loading: false })
