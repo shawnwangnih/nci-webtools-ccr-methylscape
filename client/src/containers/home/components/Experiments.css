@@ -24,7 +24,7 @@
 }
 
 .page-overflow-box {
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 .page-overflow-box:hover {
   overflow-x: auto;
