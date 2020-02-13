@@ -311,10 +311,11 @@ class Samples extends React.Component {
             (row.gender.toLowerCase() ==
               this.state.filterGender.toLowerCase() ||
               this.state.filterGender == '') &&
-            (row.age == this.state.filterAge.trim() ||
+            ((row.age == null && this.state.filterAge == '') || 
+              row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
-            (row.diagnosis == null ||
+            ((row.diagnosis == null && this.state.filterDiagnosis == '') ||
               (row.diagnosis != null &&
                 row.diagnosis
                   .toLowerCase()
