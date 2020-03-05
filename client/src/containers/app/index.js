@@ -110,7 +110,7 @@ class App extends React.Component {
       return (
         <div
           style={{
-            padding: '0px 50px',
+            padding: '0px 0px',
             'max-width': '1400px',
             width: '100%',
             'margin-right': 'auto',
@@ -352,7 +352,7 @@ class App extends React.Component {
               <img
                 height="auto"
                 className="logo"
-                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                src="./assets/img/nci-ccr-logo.svg"
                 alt="National Cancer Institute"
                 width="80%"
                 style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
@@ -386,7 +386,7 @@ class App extends React.Component {
               <img
                 height="auto"
                 className="logo"
-                src="./assets/img/NIH_NCI_Logo_Grey.svg"
+                src="./assets/img/nci-ccr-logo.svg"
                 alt="National Cancer Institute"
                 width="80%"
                 style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
