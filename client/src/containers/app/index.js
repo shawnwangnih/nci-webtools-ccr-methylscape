@@ -355,7 +355,7 @@ class App extends React.Component {
                 src="./assets/img/nci-ccr-logo.svg"
                 alt="National Cancer Institute"
                 width="80%"
-                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+                style={{ 'padding-top': '20px' }}
               />
             </a>
           </div>
@@ -389,7 +389,7 @@ class App extends React.Component {
                 src="./assets/img/nci-ccr-logo.svg"
                 alt="National Cancer Institute"
                 width="80%"
-                style={{ 'padding-top': '20px', 'padding-bottom': '20px' }}
+                style={{ 'padding-top': '20px' }}
               />
             </a>
           </div>
@@ -457,6 +457,25 @@ class App extends React.Component {
             }
           }>
           {this.renderHeader()}
+          <div
+            style={{
+              padding: '0 0px',
+              'max-width': '1400px',
+              width: '100%',
+              'margin-right': 'auto',
+              'margin-left': 'auto'
+            }}>
+            <a
+              href="https://ccrod.cancer.gov/confluence/display/CCRLP/NCI+COMPASS"
+              target="_blank"
+              style={{
+                'font-size': '20px',
+                'padding-left': '115px',
+                color: '#4f4f4f'
+              }}>
+              Laboratory of Pathology, NCI Compass
+            </a>
+          </div>
           {/*
           <Header
             className="header"
@@ -482,6 +501,7 @@ class App extends React.Component {
               zIndex: 1,
               width: '100%',
               padding: '0 0px',
+              'margin-top': '10px',
               //'border-bottom': '0',
               // position: 'fixed',
 
