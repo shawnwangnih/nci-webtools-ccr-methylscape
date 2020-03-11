@@ -76,6 +76,15 @@ class Home extends React.Component {
         ).toLocaleString('fullwide', { useGrouping: false });
       }
     }
+    /*data = data.filter(row => {
+      if (row.classifier_prediction) {
+        return true;
+      } else {
+        console.log('NOT ON');
+        console.log(JSON.stringify(row));
+        return false;
+      }
+    });*/
     this.setState({
       data: data,
       scanCheck: false
@@ -131,10 +140,11 @@ class Home extends React.Component {
 
   getNumSamples() {
     let samples = [];
+    //console.log(JSON.stringify(this.state.data));
     this.state.data.forEach(element => {
       if (!samples.includes(element.sample_name)) {
         samples.push(element.sample_name);
-        console.log(element.sample_name)
+        //console.log(element.sample_name)
       }
     });
     return samples.length;
@@ -150,7 +160,7 @@ class Home extends React.Component {
         <div style={{ 'background-color': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '1300px',
+              'max-width': '1400px',
               margin: 'auto',
               'padding-top': '15px',
               'padding-bottom': '15px'
@@ -284,7 +294,7 @@ class Home extends React.Component {
         <div style={{ 'background-color': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '1300px',
+              'max-width': '1400px',
               margin: 'auto',
               'padding-top': '15px',
               'padding-bottom': '15px'
