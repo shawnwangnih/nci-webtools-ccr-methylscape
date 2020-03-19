@@ -228,6 +228,19 @@ class Samples extends React.Component {
     this.handleFilter();
   }
 
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName(
+      'ant-calendar-range-picker-input'
+    );
+    for (var i = 0; i < elements.length; i++) {
+      if (i % 2 == 0) {
+        elements[i].setAttribute('aria-label', 'Start Date Filter');
+      } else {
+        elements[i].setAttribute('aria-label', 'End Date Filter');
+      }
+    }
+  }
+
   //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
@@ -311,7 +324,7 @@ class Samples extends React.Component {
             (row.gender.toLowerCase() ==
               this.state.filterGender.toLowerCase() ||
               this.state.filterGender == '') &&
-            ((row.age == null && this.state.filterAge == '') || 
+            ((row.age == null && this.state.filterAge == '') ||
               row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&

@@ -160,6 +160,18 @@ class Experiments extends React.Component {
       this.handleFilter();
     });
   }
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName(
+      'ant-calendar-range-picker-input'
+    );
+    for (var i = 0; i < elements.length; i++) {
+      if (i % 2 == 0) {
+        elements[i].setAttribute('aria-label', 'Start Date Filter');
+      } else {
+        elements[i].setAttribute('aria-label', 'End Date Filter');
+      }
+    }
+  }
 
   showFile(blob) {
     return;
