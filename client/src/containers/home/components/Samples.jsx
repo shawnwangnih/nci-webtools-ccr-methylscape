@@ -227,7 +227,7 @@ class Samples extends React.Component {
     );
     this.handleFilter();
   }
-
+/*
   async componentDidUpdate() {
     var elements = document.getElementsByClassName(
       'ant-calendar-range-picker-input'
@@ -240,7 +240,7 @@ class Samples extends React.Component {
       }
     }
   }
-
+*/
   //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
@@ -1287,6 +1287,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Sample Filter Input"
                   value={this.state.filterSampleName}
                   onChange={e =>
                     this.setState({ filterSampleName: e.target.value }, () => {
@@ -1304,6 +1305,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Project Filter Input"
                   value={this.state.filterProject}
                   onChange={e =>
                     this.setState({ filterProject: e.target.value }, () => {
@@ -1321,6 +1323,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Experiment Filter Input"
                   value={this.state.filterSentrixID}
                   onChange={e =>
                     this.setState({ filterSentrixID: e.target.value }, () => {
@@ -1360,6 +1363,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="SurgicalCase Filter Input"
                   value={this.state.filterSurgicalCase}
                   onChange={e =>
                     this.setState(
@@ -1389,6 +1393,7 @@ class Samples extends React.Component {
                 onPressEnter={this.handleFilter}
               />*/}
                 <Select
+                aria-label="Gender Filter Input"
                   onChange={value => {
                     this.setState({ filterGender: value }, () => {
                       this.handleFilter();
@@ -1409,6 +1414,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Age Filter Input"
                   value={this.state.filterAge}
                   onChange={e =>
                     this.setState({ filterAge: e.target.value }, () => {
@@ -1426,6 +1432,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Diagnosis Filter Input"
                   value={this.state.filterDiagnosis}
                   onChange={e =>
                     this.setState({ filterDiagnosis: e.target.value }, () => {

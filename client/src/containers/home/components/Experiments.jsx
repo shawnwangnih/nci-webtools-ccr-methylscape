@@ -160,6 +160,7 @@ class Experiments extends React.Component {
       this.handleFilter();
     });
   }
+  /*
   async componentDidUpdate() {
     var elements = document.getElementsByClassName(
       'ant-calendar-range-picker-input'
@@ -171,7 +172,7 @@ class Experiments extends React.Component {
         elements[i].setAttribute('aria-label', 'End Date Filter');
       }
     }
-  }
+  }*/
 
   showFile(blob) {
     return;
@@ -461,6 +462,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Project Filter Input"
                   value={this.state.filterProject}
                   onChange={e =>
                     this.setState({ filterProject: e.target.value }, () => {
@@ -478,6 +480,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Experiment Filter Input"
                   value={this.state.filterExperiment}
                   onChange={e =>
                     this.setState({ filterExperiment: e.target.value }, () => {
@@ -495,6 +498,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Investivator Filter Input"
                   value={this.state.filterInvestigator}
                   onChange={e =>
                     this.setState(
@@ -515,6 +519,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                aria-label="Number of Samples Filter Input"
                   value={this.state.filterNumSamples}
                   onChange={e =>
                     this.setState({ filterNumSamples: e.target.value }, () => {
