@@ -440,6 +440,32 @@ class Samples extends React.Component {
       console.log(e);
     }
   }
+  //Helper to download files from the s3 bucket
+  async downloadQCIFile(sampleId, file) {
+    const root =
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
+
+    try {
+      let response = await fetch(`${root}getMethylScapeQCIFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file
+        })
+      });
+      if (response.status == 404) {
+        this.setState({ filePopUp: true });
+      } else {
+        let url = URL.createObjectURL(await response.blob());
+        window.open(url, '_blank');
+        URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   //renders the items in the pagination
   itemRender(current, type, originalElement) {
@@ -791,6 +817,10 @@ class Samples extends React.Component {
             currRow.mgmt_prediction == null
               ? ''
               : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
+          header_name2: 'QCI Report',
+          value2: 'View report'
+        },
+        {
           header_name2: 'Notes',
           value2: currRow.notes
         }
@@ -915,6 +945,17 @@ class Samples extends React.Component {
                   style={{ 'padding-left': '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
+                  }>
+                  {text}
+                </a>
+              );
+            }
+            if (text == 'View report') {
+              return (
+                <a
+                  style={{ 'padding-left': '20%' }}
+                  onClick={() =>
+                    this.downloadQCIFile(currRow.id)
                   }>
                   {text}
                 </a>
