@@ -646,6 +646,21 @@ class Samples extends React.Component {
                 </a>
               );
             }
+            if (index == 5) {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadQCIFile(currRow.id, currRow.sample_name + '.jpg')
+                  }>
+                  {text}
+                </a>
+              );
+            }
             if (index == 2) {
               return (
                 <a
