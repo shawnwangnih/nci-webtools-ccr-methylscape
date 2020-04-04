@@ -480,7 +480,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Experiment Filter Input"
+                  aria-label="Experiment Filter Input"
                   value={this.state.filterExperiment}
                   onChange={e =>
                     this.setState({ filterExperiment: e.target.value }, () => {
@@ -498,7 +498,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Investivator Filter Input"
+                  aria-label="Investivator Filter Input"
                   value={this.state.filterInvestigator}
                   onChange={e =>
                     this.setState(
@@ -519,7 +519,7 @@ class Experiments extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Number of Samples Filter Input"
+                  aria-label="Number of Samples Filter Input"
                   value={this.state.filterNumSamples}
                   onChange={e =>
                     this.setState({ filterNumSamples: e.target.value }, () => {

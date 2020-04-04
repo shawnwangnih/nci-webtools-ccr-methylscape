@@ -74,7 +74,7 @@ class Projects extends React.Component {
       this.handleFilter();
     }
   }
-/*
+  /*
   async componentDidMount() {
     var elements = document.getElementsByClassName(
       'ant-calendar-range-picker-input'
@@ -378,7 +378,7 @@ class Projects extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Project Filter Input"
+                  aria-label="Project Filter Input"
                   value={this.state.filterProject}
                   onChange={e =>
                     this.setState({ filterProject: e.target.value }, () => {
@@ -396,7 +396,7 @@ class Projects extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Investigator Filter Input"
+                  aria-label="Investigator Filter Input"
                   value={this.state.filterInvestigator}
                   onChange={e =>
                     this.setState(
@@ -417,7 +417,7 @@ class Projects extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Number of Experiments Filter Input"
+                  aria-label="Number of Experiments Filter Input"
                   value={this.state.filterNumExperiments}
                   onChange={e =>
                     this.setState(
@@ -438,7 +438,7 @@ class Projects extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
-                aria-label="Number of Samples Filter Input"
+                  aria-label="Number of Samples Filter Input"
                   value={this.state.filterNumSamples}
                   onChange={e =>
                     this.setState({ filterNumSamples: e.target.value }, () => {
