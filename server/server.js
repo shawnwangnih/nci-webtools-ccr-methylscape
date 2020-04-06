@@ -166,6 +166,7 @@ app.get('/scanMethylScapeTable', (req, res) => {
 
 app.post('/getMethylScapeFile', (req, res) => {
     logger.log('info', 'Request file download data: %j', req.body)
+    console.log(req.body);
     try{
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
@@ -198,19 +199,22 @@ app.post('/getMethylScapeFile', (req, res) => {
 
 app.post('/getMethylScapeQCIFile', (req, res) => {
     logger.log('info', 'Request file download data: %j', req.body)
+    console.log(req.body)
     try{
+        console.log('TEST1')
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
+        console.log('TEST2')
         const data = req.body
         const key = path.join(S3SamplesKey, data.sampleId)
-        
-        logger.log('info', 'Request file download params: %j', params)
+        console.log('TEST3');
 
         const paramsList = {
             Bucket: S3BucketName,
             Delimiter: '',
             Prefix:key,
         }
+        console.log('TEST4')
         s3.listObjects(paramsList, function(err, data){
             if (err) {
                 logger.error('error', '1 - DynamoDB scan fail: %s', error)
@@ -219,14 +223,19 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
             if(data){
                 var fileName = ""
                 for(var i = 0; i < data.Contents.length; i++){
-                    if(data.Contents[i].endsWith("xml_report.txt")){
-                        fileName = data.Contents[i]
+                    if(data.Contents[i].Key.endsWith("xml_report.txt")){
+                        fileName = data.Contents[i].Key
                     }
                 }
+                if(fileName == ""){
+                    res.status(404).send('File not found');
+                }
+                else{
                 const params = {
                     Bucket: S3BucketName,
                     Key: fileName
                 };
+                console.log(fileName);
                 s3.headObject(params, function (err, metadata) {  
                     if (err && err.code === 'NotFound') {  
                     // Handle no object on cloud here  
@@ -234,7 +243,7 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
                     } else {  
                         s3.getObject(params, (err, data) =>{
                             if (err){
-                                logger.log('error', 'Request file download failed: %s', e)
+                                logger.log('error', 'Request file download failed: %s', err)
                                 res.send(err)
                             }
                             fs.writeFileSync('test.txt', data.Body.toString());
@@ -249,8 +258,9 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
                         
                         
                     }
-            });
+                });
             }
+        }
         })
         
     }catch (e){

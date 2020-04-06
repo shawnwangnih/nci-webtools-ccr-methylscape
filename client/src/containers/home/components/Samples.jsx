@@ -654,7 +654,9 @@ class Samples extends React.Component {
                     'margin-bottom': '0px',
                     'padding-right': '1%'
                   }}
-                  onClick={() => this.downloadQCIFile()}>
+                  onClick={() =>
+                    this.downloadQCIFile(currRow.id, currRow.report_file_name)
+                  }>
                   {text}
                 </a>
               );
