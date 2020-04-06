@@ -227,7 +227,20 @@ class Samples extends React.Component {
     );
     this.handleFilter();
   }
-
+  /*
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName(
+      'ant-calendar-range-picker-input'
+    );
+    for (var i = 0; i < elements.length; i++) {
+      if (i % 2 == 0) {
+        elements[i].setAttribute('aria-label', 'Start Date Filter');
+      } else {
+        elements[i].setAttribute('aria-label', 'End Date Filter');
+      }
+    }
+  }
+*/
   //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
@@ -311,7 +324,7 @@ class Samples extends React.Component {
             (row.gender.toLowerCase() ==
               this.state.filterGender.toLowerCase() ||
               this.state.filterGender == '') &&
-            ((row.age == null && this.state.filterAge == '') || 
+            ((row.age == null && this.state.filterAge == '') ||
               row.age == this.state.filterAge.trim() ||
               this.state.filterAge.trim() == '' ||
               'unknown'.includes(this.state.filterAge.trim().toLowerCase())) &&
@@ -410,6 +423,32 @@ class Samples extends React.Component {
 
     try {
       let response = await fetch(`${root}getMethylScapeFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file
+        })
+      });
+      if (response.status == 404) {
+        this.setState({ filePopUp: true });
+      } else {
+        let url = URL.createObjectURL(await response.blob());
+        window.open(url, '_blank');
+        URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  //Helper to download files from the s3 bucket
+  async downloadQCIFile(sampleId, file) {
+    const root =
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
+
+    try {
+      let response = await fetch(`${root}getMethylScapeQCIFile`, {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,
@@ -607,6 +646,21 @@ class Samples extends React.Component {
                 </a>
               );
             }
+            if (index == 5) {
+              return (
+                <a
+                  style={{
+                    'padding-left': '5%',
+                    'margin-bottom': '0px',
+                    'padding-right': '1%'
+                  }}
+                  onClick={() =>
+                    this.downloadQCIFile(currRow.id, currRow.report_file_name)
+                  }>
+                  {text}
+                </a>
+              );
+            }
             if (index == 2) {
               return (
                 <a
@@ -778,6 +832,10 @@ class Samples extends React.Component {
             currRow.mgmt_prediction == null
               ? ''
               : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
+          header_name2: 'QCI Report',
+          value2: 'View report'
+        },
+        {
           header_name2: 'Notes',
           value2: currRow.notes
         }
@@ -907,6 +965,7 @@ class Samples extends React.Component {
                 </a>
               );
             }
+
             return <p style={{ 'padding-left': '20%' }}>{text}</p>;
           }
         }
@@ -1274,6 +1333,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Sample Filter Input"
                   value={this.state.filterSampleName}
                   onChange={e =>
                     this.setState({ filterSampleName: e.target.value }, () => {
@@ -1291,6 +1351,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Project Filter Input"
                   value={this.state.filterProject}
                   onChange={e =>
                     this.setState({ filterProject: e.target.value }, () => {
@@ -1308,6 +1369,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Experiment Filter Input"
                   value={this.state.filterSentrixID}
                   onChange={e =>
                     this.setState({ filterSentrixID: e.target.value }, () => {
@@ -1347,6 +1409,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="SurgicalCase Filter Input"
                   value={this.state.filterSurgicalCase}
                   onChange={e =>
                     this.setState(
@@ -1376,6 +1439,7 @@ class Samples extends React.Component {
                 onPressEnter={this.handleFilter}
               />*/}
                 <Select
+                  aria-label="Gender Filter Input"
                   onChange={value => {
                     this.setState({ filterGender: value }, () => {
                       this.handleFilter();
@@ -1396,6 +1460,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Age Filter Input"
                   value={this.state.filterAge}
                   onChange={e =>
                     this.setState({ filterAge: e.target.value }, () => {
@@ -1413,6 +1478,7 @@ class Samples extends React.Component {
                   'margin-right': '0px'
                 }}>
                 <Input
+                  aria-label="Diagnosis Filter Input"
                   value={this.state.filterDiagnosis}
                   onChange={e =>
                     this.setState({ filterDiagnosis: e.target.value }, () => {
