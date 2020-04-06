@@ -90,7 +90,7 @@ function createHTML(filename){
         htmlText += "<p style = \"font-size:24px; background-color:lightgrey; padding-top:7px; padding-bottom: 5px;\"><b>Result: </b>" + 1 + " relevant variant was detected in this study.<p>"
     }
     else{
-        htmlText += "<p style = \"font-size:24px; background-color:lightgrey; padding-top:7px; padding-bottom: 5px;\"><b>Result: </b>" + 1 + " relevant variants were detected in this study.<p>"
+        htmlText += "<p style = \"font-size:24px; background-color:lightgrey; padding-top:7px; padding-bottom: 5px;\"><b>Result: </b>" + significantArray.length + " relevant variants were detected in this study.<p>"
     }
     //look for significants with the same tiers
     var findTiers = {};
@@ -202,35 +202,56 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
         const data = req.body
-        const key = path.join(S3SamplesKey, 'X085_xml_report.txt')
-        const params = {
-            Bucket: S3BucketName,
-            Key: key
-        };
+        const key = path.join(S3SamplesKey, data.sampleId)
+        
         logger.log('info', 'Request file download params: %j', params)
-        s3.headObject(params, function (err, metadata) {  
-            if (err && err.code === 'NotFound') {  
-              // Handle no object on cloud here  
-              res.status(404).send('File not found');
-            } else {  
-                s3.getObject(params, (err, data) =>{
-                    if (err){
-                        logger.log('error', 'Request file download failed: %s', e)
-                        res.send(err)
-                    }
-                    fs.writeFileSync('test.txt', data.Body.toString());
-                    createHTML('test.txt');
-                    var fileStream = fs.createReadStream('test.html')
-                    res.attachment(data.fileName);
-                    
-                    fileStream.pipe(res);
-                })
-                //console.log(data.fileName)
-                //fs.writeFileSync('~/test.txt', JSON.stringify(data))
-                
-                
+
+        const paramsList = {
+            Bucket: S3BucketName,
+            Delimiter: '',
+            Prefix:key,
+        }
+        s3.listObjects(paramsList, function(err, data){
+            if (err) {
+                logger.error('error', '1 - DynamoDB scan fail: %s', error)
+                res.send(error)
             }
-          });
+            if(data){
+                var fileName = ""
+                for(var i = 0; i < data.Contents.length; i++){
+                    if(data.Contents[i].endsWith("xml_report.txt")){
+                        fileName = data.Contents[i]
+                    }
+                }
+                const params = {
+                    Bucket: S3BucketName,
+                    Key: fileName
+                };
+                s3.headObject(params, function (err, metadata) {  
+                    if (err && err.code === 'NotFound') {  
+                    // Handle no object on cloud here  
+                    res.status(404).send('File not found');
+                    } else {  
+                        s3.getObject(params, (err, data) =>{
+                            if (err){
+                                logger.log('error', 'Request file download failed: %s', e)
+                                res.send(err)
+                            }
+                            fs.writeFileSync('test.txt', data.Body.toString());
+                            createHTML('test.txt');
+                            var fileStream = fs.createReadStream('test.html')
+                            res.attachment(data.fileName);
+                            
+                            fileStream.pipe(res);
+                        })
+                        //console.log(data.fileName)
+                        //fs.writeFileSync('~/test.txt', JSON.stringify(data))
+                        
+                        
+                    }
+            });
+            }
+        })
         
     }catch (e){
         logger.log('error', 'File download failed: %s', e)
