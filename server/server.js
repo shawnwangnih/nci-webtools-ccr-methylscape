@@ -205,7 +205,7 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
         const key = path.join(S3SamplesKey, 'X085_xml_report.txt')
         const params = {
             Bucket: S3BucketName,
-            Key: 'X085_xml_report.txt'
+            Key: key
         };
         logger.log('info', 'Request file download params: %j', params)
         s3.headObject(params, function (err, metadata) {  
