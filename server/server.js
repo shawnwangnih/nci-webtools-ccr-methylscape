@@ -118,7 +118,7 @@ function createHTML(filename){
 }
     htmlText +="\n</body>\n</html>"
 
-    fs.writeFileSync( 'test.html', htmlText);
+    fs.writeFileSync( path.join(__dirname + '/test.html'), htmlText);
 
     /*
     for(let i = 0; i < listToFilter.length; i++){
@@ -245,7 +245,7 @@ app.get('/getMethylScapeQCIFile', (req, res) => {
                             fs.writeFileSync('test.txt', data.Body.toString());
                             createHTML('test.txt');
                             var fileStream = fs.createReadStream('test.html')
-                            res.sendFile('test.html');
+                            res.sendFile(path.join(__dirname + '/test.html'));
                             
                             fileStream.pipe(res);
                         })
