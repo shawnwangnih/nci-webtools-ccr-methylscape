@@ -448,19 +448,16 @@ class Samples extends React.Component {
         : window.location.pathname;
 
     try {
-      let response = await fetch(`${root}getMethylScapeQCIFile`, {
-        method: 'POST',
-        body: JSON.stringify({
-          sampleId: sampleId,
-          fileName: file
-        })
+      let response = await fetch(`${root}getMethylScapeQCIFile?sampleId=` + sampleId + '&fileName=' + file, {
+        method: 'GET',
       });
       if (response.status == 404) {
         this.setState({ filePopUp: true });
       } else {
-        let url = URL.createObjectURL(await response.blob());
-        window.open(url, '_blank');
-        URL.revokeObjectURL(url);
+        //let url = URL.createObjectURL(await response.blob());
+        
+        window.open(`${root}getMethylScapeQCIFile?sampleId=` + sampleId + '&fileName=' + file, '_blank');
+        //URL.revokeObjectURL(url);
       }
     } catch (e) {
       console.log(e);
