@@ -226,21 +226,19 @@ class Samples extends React.Component {
       this.setState({ loading: false })
     );
     this.handleFilter();
-  }
-  /*
-  async componentDidUpdate() {
-    var elements = document.getElementsByClassName(
-      'ant-calendar-range-picker-input'
-    );
+    var elements = document.getElementsByClassName('ant-calendar-picker-input');
     for (var i = 0; i < elements.length; i++) {
-      if (i % 2 == 0) {
-        elements[i].setAttribute('aria-label', 'Start Date Filter');
-      } else {
-        elements[i].setAttribute('aria-label', 'End Date Filter');
-      }
+      elements[i].setAttribute('aria-label', 'Date Filter');
     }
   }
-*/
+
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName('ant-calendar-picker-input');
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute('aria-label', 'Date Filter');
+    }
+  }
+
   //Updates the data based on the rawData passed in
   createDataTable = async rawData => {
     var sampleData = {};
@@ -1170,7 +1168,8 @@ class Samples extends React.Component {
                   display: 'flex',
                   'align-items': 'center',
                   justifyContent: 'center'
-                }}>
+                }}
+                aria-label="hide row button">
                 <FontAwesomeIcon
                   icon={faChevronUp}
                   style={{ color: 'black', 'font-size': '8px' }}
@@ -1190,7 +1189,8 @@ class Samples extends React.Component {
                 display: 'flex',
                 'align-items': 'center',
                 justifyContent: 'center'
-              }}>
+              }}
+              aria-label="expand row button">
               <FontAwesomeIcon
                 icon={faChevronDown}
                 style={{ color: 'black', 'font-size': '8px' }}

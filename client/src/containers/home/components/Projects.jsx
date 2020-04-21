@@ -74,20 +74,24 @@ class Projects extends React.Component {
       this.handleFilter();
     }
   }
-  /*
+
   async componentDidMount() {
     var elements = document.getElementsByClassName(
-      'ant-calendar-range-picker-input'
+      'ant-select-selection__rendered'
     );
     for (var i = 0; i < elements.length; i++) {
-      if (i % 2 == 0) {
-        elements[i].setAttribute('aria-label', 'Start Date Filter');
-      } else {
-        elements[i].setAttribute('aria-label', 'End Date Filter');
-      }
+      elements[i].setAttribute('role', 'textbox');
     }
   }
-*/
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName(
+      'ant-select-selection__rendered'
+    );
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute('role', 'textbox');
+    }
+  }
+
   createDataTable = async rawData => {
     var projectData = {};
     if (rawData !== undefined) {
