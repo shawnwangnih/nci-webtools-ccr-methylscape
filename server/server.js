@@ -118,7 +118,7 @@ function createHTML(filename){
 }
     htmlText +="\n</body>\n</html>"
 
-    fs.writeFileSync( 'test.html', htmlText);
+    fs.writeFileSync( path.join(__dirname + '/test.html'), htmlText);
 
     /*
     for(let i = 0; i < listToFilter.length; i++){
@@ -197,24 +197,20 @@ app.post('/getMethylScapeFile', (req, res) => {
     }
 })
 
-app.post('/getMethylScapeQCIFile', (req, res) => {
-    logger.log('info', 'Request file download data: %j', req.body)
-    console.log(req.body)
+app.get('/getMethylScapeQCIFile', (req, res) => {
+    logger.log('info', 'Request file download data: %j', req.query)
+    //console.log(req.body)
     try{
-        console.log('TEST1')
         const s3 = new AWS.S3();
         AWS.config.update({ region: 'us-east-1' });
-        console.log('TEST2')
-        const data = req.body
+        const data = req.query
         const key = path.join(S3SamplesKey, data.sampleId)
-        console.log('TEST3');
 
         const paramsList = {
             Bucket: S3BucketName,
             Delimiter: '',
             Prefix:key,
         }
-        console.log('TEST4')
         s3.listObjects(paramsList, function(err, data){
             if (err) {
                 logger.error('error', '1 - DynamoDB scan fail: %s', error)
@@ -249,7 +245,7 @@ app.post('/getMethylScapeQCIFile', (req, res) => {
                             fs.writeFileSync('test.txt', data.Body.toString());
                             createHTML('test.txt');
                             var fileStream = fs.createReadStream('test.html')
-                            res.attachment(data.fileName);
+                            res.sendFile(path.join(__dirname + '/test.html'));
                             
                             fileStream.pipe(res);
                         })

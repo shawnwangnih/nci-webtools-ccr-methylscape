@@ -74,20 +74,24 @@ class Projects extends React.Component {
       this.handleFilter();
     }
   }
-  /*
+
   async componentDidMount() {
     var elements = document.getElementsByClassName(
-      'ant-calendar-range-picker-input'
+      'ant-select-selection__rendered'
     );
     for (var i = 0; i < elements.length; i++) {
-      if (i % 2 == 0) {
-        elements[i].setAttribute('aria-label', 'Start Date Filter');
-      } else {
-        elements[i].setAttribute('aria-label', 'End Date Filter');
-      }
+      elements[i].setAttribute('role', 'textbox');
     }
   }
-*/
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName(
+      'ant-select-selection__rendered'
+    );
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute('role', 'textbox');
+    }
+  }
+
   createDataTable = async rawData => {
     var projectData = {};
     if (rawData !== undefined) {
@@ -261,7 +265,14 @@ class Projects extends React.Component {
                 onClick={() => {
                   this.handleProjectClick(text, record);
                 }}
+                aria-checked="true"
+                aria-label={'Select Project ' + record.project}
               />
+              /*<div class="radio">
+                <label>
+                  <input type="radio" value="Check" />
+                </label>
+              </div>*/
             );
           }
           return (
@@ -270,7 +281,14 @@ class Projects extends React.Component {
               onClick={() => {
                 this.handleProjectClick(text, record);
               }}
+              aria-checked="false"
+              aria-label={'Select Project ' + record.project}
             />
+            /*<div class="radio">
+              <label>
+                <input type="radio" value="Uncheck" />
+              </label>
+            </div>*/
           );
         }
       },
@@ -472,7 +490,8 @@ class Projects extends React.Component {
               showTotal: this.rangeFunction,
               itemRender: this.itemRender,
               defaultPageSize: 10,
-              pageSizeOptions: ['10', '25', '50', '100']
+              pageSizeOptions: ['10', '25', '50', '100'],
+              role: 'textbox'
             }}
             rowClassName={(record, index) => {
               return this.state.currRecord == ''

@@ -159,20 +159,18 @@ class Experiments extends React.Component {
       this.setState({ loading: false });
       this.handleFilter();
     });
-  }
-  /*
-  async componentDidUpdate() {
-    var elements = document.getElementsByClassName(
-      'ant-calendar-range-picker-input'
-    );
+    var elements = document.getElementsByClassName('ant-calendar-picker-input');
     for (var i = 0; i < elements.length; i++) {
-      if (i % 2 == 0) {
-        elements[i].setAttribute('aria-label', 'Start Date Filter');
-      } else {
-        elements[i].setAttribute('aria-label', 'End Date Filter');
-      }
+      elements[i].setAttribute('aria-label', 'Date Filter');
     }
-  }*/
+  }
+
+  async componentDidUpdate() {
+    var elements = document.getElementsByClassName('ant-calendar-picker-input');
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute('aria-label', 'Date Filter');
+    }
+  }
 
   showFile(blob) {
     return;
