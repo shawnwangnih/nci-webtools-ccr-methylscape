@@ -2,51 +2,95 @@ import React, { useState } from 'react';
 import { Table } from 'antd';
 import { xml2js } from 'xml-js';
 
-export default function QCITable(props) {
+export default function QCI(props) {
   const [snvTable, setSnv] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene' },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation' },
-      { title: 'TRANSCRIPT', dataIndex: 'transcript' },
-      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange' },
-      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange' },
-      { title: 'VAF* (%)', dataIndex: 'vaf' },
-      { title: 'PATHOGENICITY ASSESSMENT', dataIndex: 'pathAssessment' },
-      { title: 'TIER**', dataIndex: 'tier' },
+      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => boldItalic(text) },
+      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
+      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange', align: 'center' },
+      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange', align: 'center' },
+      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
+      {
+        title: 'PATHOGENICITY ASSESSMENT',
+        dataIndex: 'pathAssessment',
+        align: 'center',
+        render: (text) => displayRed(text),
+      },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
     ],
     data: [],
   });
   const [cnvTable, setCnv] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene' },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation' },
-      { title: 'PATHOGENICITY ASSESSMENT', dataIndex: 'pathAssessment' },
-      { title: 'TIER**', dataIndex: 'tier' },
+      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => displayGeneRef(text) },
+      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      {
+        title: 'PATHOGENICITY ASSESSMENT',
+        dataIndex: 'pathAssessment',
+        align: 'center',
+        render: (text) => displayRed(text),
+      },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
     ],
     data: [],
   });
   const [fusionTable, setFusion] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene' },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation' },
-      { title: 'READS', dataIndex: 'reads' },
-      { title: 'PATHOGENICITY ASSESSMENT', dataIndex: 'pathAssessment' },
-      { title: 'TIER**', dataIndex: 'tier' },
+      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => displayGeneRef(text) },
+      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      { title: 'READS', dataIndex: 'reads', align: 'center' },
+      {
+        title: 'PATHOGENICITY ASSESSMENT',
+        dataIndex: 'pathAssessment',
+        align: 'center',
+        render: (text) => displayRed(text),
+      },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
     ],
     data: [],
   });
   const [unkTable, setUnk] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene' },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation' },
-      { title: 'TRANSCRIPT', dataIndex: 'transcript' },
-      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange' },
-      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange' },
-      { title: 'VAF* (%)', dataIndex: 'vaf' },
+      { title: 'GENE', dataIndex: 'gene', align: 'center' },
+      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
+      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange', align: 'center' },
+      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange', align: 'center' },
+      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
     ],
     data: [],
   });
-  const [intTable, setInt] = useState({});
+
+  // display gene with reference
+  function displayGeneRef(gene) {
+    return (
+      <div>
+        <div>
+          <b>
+            <i>{gene.split(' ')[0]}</i>
+          </b>
+        </div>
+        <div>{gene.split(' ')[1]}</div>
+      </div>
+    );
+  }
+  // bold and italicize text
+  function boldItalic(text) {
+    return (
+      <b>
+        <i>{text}</i>
+      </b>
+    );
+  }
+  // red text
+  function displayRed(text) {
+    return <span style={{ color: '#dc3545' }}>{text}</span>;
+  }
+  // render string as html
+  function renderHTML(html) {
+    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  }
 
   function parseVariants(file) {
     let reader = new FileReader();
@@ -56,8 +100,8 @@ export default function QCITable(props) {
       if (!Array.isArray(variants)) variants = [variants];
       const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
       const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
-      console.log('sig', significant);
-      console.log('un', uncertain);
+      // console.log('sig', significant);
+      // console.log('un', uncertain);
       sigVariants(significant);
       unknownVariants(uncertain);
     };
@@ -70,12 +114,12 @@ export default function QCITable(props) {
     let cnvData = [];
     let fusionData = [];
 
-    variants.forEach((v, i) => {
-      let loc = `chr${v.chromosome._text}:${v.position._text}`;
-      let tier = `Tier ${v.actionability._text}`;
+    variants.forEach((v) => {
+      const loc = `chr${v.chromosome._text}:${v.position._text}`;
+      const tier = `Tier ${v.actionability._text}`;
 
       if (v.gene) {
-        let vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
         snvData.push({
           key: snvData.length,
           gene: v.gene._text,
@@ -85,25 +129,30 @@ export default function QCITable(props) {
           vaf: vaf,
           pathAssessment: v.assessment._text,
           tier: tier,
+          interpretation: v.rcomment[0].text._text,
         });
-      }
-      if (v.length) {
+      } else if (v.length) {
+        const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
+
         cnvData.push({
           key: cnvData.length,
-          gene: v.structuralChange.gene._text,
+          gene: gene,
           genomicLocation: loc,
           pathAssessment: v.assessment._text,
           tier: tier,
+          interpretation: v.rcomment[0].text._text,
         });
-      }
-      if (v.readDepth) {
+      } else if (v.readDepth) {
+        const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
+
         fusionData.push({
           key: fusionData.length,
-          gene: v.structuralChange.gene._text,
+          gene: gene,
           genomicLocation: loc,
           reads: v.readDepth._text,
           pathAssessment: v.assessment._text,
           tier: tier,
+          interpretation: v.rcomment[0].text._text,
         });
       }
     });
@@ -114,8 +163,8 @@ export default function QCITable(props) {
 
   function unknownVariants(variants) {
     let data = variants.map((v, i) => {
-      let loc = `chr${v.chromosome._text}:${v.position._text}`;
-      let vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+      const loc = `chr${v.chromosome._text}:${v.position._text}`;
+      const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
       return {
         key: i,
         gene: v.gene._text,
@@ -128,8 +177,6 @@ export default function QCITable(props) {
 
     setUnk({ ...unkTable, ...{ data: data } });
   }
-
-  function varientInterpretation() {}
 
   return (
     <div>
@@ -149,6 +196,7 @@ export default function QCITable(props) {
               columns={snvTable.columns}
               dataSource={snvTable.data}
               pagination={false}
+              expandedRowRender={(record) => renderHTML(record.interpretation)}
               bordered
               title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
               footer={() => (
@@ -159,6 +207,7 @@ export default function QCITable(props) {
               columns={cnvTable.columns}
               dataSource={cnvTable.data}
               pagination={false}
+              expandedRowRender={(record) => renderHTML(record.interpretation)}
               bordered
               title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
               footer={() => (
@@ -176,6 +225,7 @@ export default function QCITable(props) {
               columns={fusionTable.columns}
               dataSource={fusionTable.data}
               pagination={false}
+              expandedRowRender={(record) => renderHTML(record.interpretation)}
               bordered
               title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
               footer={() => <sub>**TIER: Actionability Classification</sub>}
