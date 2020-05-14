@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Table } from 'antd';
 import { xml2js } from 'xml-js';
+import './QCI.css';
 
-export default function QCI(props) {
+export default function QCI() {
+  const { qci } = useParams();
+  // console.log('param', qci);
+
   const [snvTable, setSnv] = useState({
     columns: [
       { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => boldItalic(text) },
@@ -85,7 +90,7 @@ export default function QCI(props) {
   }
   // red text
   function displayRed(text) {
-    return <span style={{ color: '#dc3545' }}>{text}</span>;
+    return <span className="textRed">{text}</span>;
   }
   // render string as html
   function renderHTML(html) {
@@ -96,7 +101,7 @@ export default function QCI(props) {
     let reader = new FileReader();
     reader.onload = () => {
       const result = xml2js(reader.result, { compact: true });
-      let variants = result.report.variant;
+      let variants = result.report.variant.reverse();
       if (!Array.isArray(variants)) variants = [variants];
       const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
       const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
@@ -191,7 +196,7 @@ export default function QCI(props) {
         />
         <div>
           <div>
-            <h3>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h3>
+            <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
             <Table
               columns={snvTable.columns}
               dataSource={snvTable.data}
@@ -232,7 +237,7 @@ export default function QCI(props) {
             />
           </div>
           <div>
-            <h3>VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE</h3>
+            <h2>VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE</h2>
             <Table
               columns={unkTable.columns}
               dataSource={unkTable.data}
@@ -241,9 +246,6 @@ export default function QCI(props) {
               title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
               footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
             />
-          </div>
-          <div>
-            <h3>VARIANT INTERPRETATION</h3>
           </div>
         </div>
       </div>

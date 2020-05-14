@@ -1,25 +1,27 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import Home from '../home';
-import CNSProfiling from '../cnsprofiling';
-import Help from '../help';
+// import CNSProfiling from '../cnsprofiling';
+// import Help from '../help';
 // import ProjectPage from "../project"
-import Summary from '../home/components/Summary';
-import Experiments from '../home/components/Experiments';
-import Samples from '../home/components/Samples';
-import Projects from '../home/components/Projects';
+// import Summary from '../home/components/Summary';
+// import Experiments from '../home/components/Experiments';
+// import Samples from '../home/components/Samples';
+// import Projects from '../home/components/Projects';
+import QCI from '../home/components/QCI';
 //import Help from '../home/components/Help'
 import { Layout, Menu, PageHeader } from 'antd';
-import FooterContent from './components/footer';
+// import FooterContent from './components/footer';
 import './index.css';
 import {
-  faChartPie,
-  faClipboard,
-  faVials,
-  faUserFriends,
+  // faChartPie,
+  // faClipboard,
+  // faVials,
+  // faUserFriends,
   faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { Router } from 'express';
 const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
@@ -511,7 +513,11 @@ class App extends React.Component {
                 minHeight: 380,
               }}
             >
-              {mainContent}
+              <Switch>
+                <Route path="/qci/:id" children={<QCI />} />
+                <Route path="/" children={mainContent} />
+              </Switch>
+
               {/* <Route exact path="/methylscape" component={Home} />
               <Route
                 exact
