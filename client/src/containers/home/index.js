@@ -157,16 +157,16 @@ class Home extends React.Component {
 
     if (this.state.windowWidth >= 685) {
       return (
-        <div style={{ 'background-color': '#f0f2f5' }}>
+        <div style={{ 'backgroundColor': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '1400px',
+              'maxWidth': '1400px',
               margin: 'auto',
-              'padding-top': '15px',
-              'padding-bottom': '15px'
+              'paddingTop': '15px',
+              'paddingBottom': '15px'
             }}>
             <Link
-              style={{ 'padding-left': '20px' }}
+              style={{ 'paddingLeft': '20px' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
@@ -177,28 +177,28 @@ class Home extends React.Component {
                 icon={faChartPie}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numProjects}
               />
               <h3
                 style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '0px',
+                  'marginBottom': '0px',
                   color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}>
                 {' '}
@@ -206,7 +206,7 @@ class Home extends React.Component {
               </h3>
             </Link>
             <Link
-              style={{ 'padding-left': '50px' }}
+              style={{ 'paddingLeft': '50px' }}
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
@@ -217,17 +217,17 @@ class Home extends React.Component {
                 icon={faVials}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numExperiments}>
@@ -235,11 +235,11 @@ class Home extends React.Component {
               </CountUp>
               <h3
                 style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '0px',
+                  'marginBottom': '0px',
                   color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}>
                 {' '}
@@ -247,7 +247,7 @@ class Home extends React.Component {
               </h3>
             </Link>
             <Link
-              style={{ 'padding-left': '50px' }}
+              style={{ 'paddingLeft': '50px' }}
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
@@ -258,28 +258,28 @@ class Home extends React.Component {
                 icon={faUserFriends}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numSamples}
               />
               <h3
                 style={{
-                  'padding-left': '0px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '0px',
+                  'marginBottom': '0px',
                   color: 'black',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}>
                 {' '}
@@ -291,16 +291,16 @@ class Home extends React.Component {
       );
     } else {
       return (
-        <div style={{ 'background-color': '#f0f2f5' }}>
+        <div style={{ 'backgroundColor': '#f0f2f5' }}>
           <div
             style={{
-              'max-width': '1400px',
+              'maxWidth': '1400px',
               margin: 'auto',
-              'padding-top': '15px',
-              'padding-bottom': '15px'
+              'paddingTop': '15px',
+              'paddingBottom': '15px'
             }}>
             <Link
-              style={{ 'padding-left': '20px' }}
+              style={{ 'paddingLeft': '20px' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
@@ -311,24 +311,24 @@ class Home extends React.Component {
                 icon={faChartPie}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numProjects}
               />
             </Link>
             <Link
-              style={{ 'padding-left': '30px' }}
+              style={{ 'paddingLeft': '30px' }}
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
@@ -339,17 +339,17 @@ class Home extends React.Component {
                 icon={faVials}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numExperiments}>
@@ -357,7 +357,7 @@ class Home extends React.Component {
               </CountUp>
             </Link>
             <Link
-              style={{ 'padding-left': '30px' }}
+              style={{ 'paddingLeft': '30px' }}
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
@@ -368,17 +368,17 @@ class Home extends React.Component {
                 icon={faUserFriends}
                 style={{
                   color: 'black',
-                  'font-size': '24px',
+                  'fontSize': '24px',
                   display: 'inline'
                 }}
               />
               <CountUp
                 style={{
-                  'padding-left': '5px',
-                  'margin-bottom': '0px',
+                  'paddingLeft': '5px',
+                  'marginBottom': '0px',
                   color: 'blue',
-                  'font-size': '24px',
-                  'font-weight': '200',
+                  'fontSize': '24px',
+                  'fontWeight': '200',
                   display: 'inline'
                 }}
                 end={numSamples}

@@ -103,12 +103,12 @@ class Experiments extends React.Component {
     const InputGroup = Input.Group;
 
     return (
-      <div style={{ 'padding-left': '30px', 'padding-right': '30px' }}>
+      <div style={{ 'paddingLeft': '30px', 'paddingRight': '30px' }}>
         <div
           style={{
-            'padding-left': '16px',
-            'padding-bottom': '5px',
-            'padding-top': '2px'
+            'paddingLeft': '16px',
+            'paddingBottom': '5px',
+            'paddingTop': '2px'
           }}>
           <Form layout="inline">
             <Form.Item label="Experiment">
