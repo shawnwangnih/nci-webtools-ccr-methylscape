@@ -440,24 +440,24 @@ class Experiments extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'minWidth': '1200px',
-            'paddingLeft': '30px',
-            'paddingRight': '30px'
+            minWidth: '1200px',
+            paddingLeft: '30px',
+            paddingRight: '30px'
           }}>
           {this.renderPopUp()}
           <div
             style={{
-              'paddingLeft': '0',
-              'paddingBottom': '0px',
-              'paddingTop': '15px'
+              paddingLeft: '0',
+              paddingBottom: '0px',
+              paddingTop: '15px'
             }}>
             <Form layout="inline">
               <Form.Item
                 style={{
                   width: '20%',
-                  'paddingLeft': '0px',
-                  'paddingRight': '0px',
-                  'marginRight': '0px'
+                  paddingLeft: '0px',
+                  paddingRight: '0px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Project Filter Input"
@@ -473,9 +473,9 @@ class Experiments extends React.Component {
               <Form.Item
                 style={{
                   width: '15%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Experiment Filter Input"
@@ -491,9 +491,9 @@ class Experiments extends React.Component {
               <Form.Item
                 style={{
                   width: '15%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Investivator Filter Input"
@@ -512,9 +512,9 @@ class Experiments extends React.Component {
               <Form.Item
                 style={{
                   width: '13%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Number of Samples Filter Input"
@@ -530,9 +530,9 @@ class Experiments extends React.Component {
               <Form.Item
                 style={{
                   width: '13%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <DatePicker
                   onChange={(date, dateString) => {

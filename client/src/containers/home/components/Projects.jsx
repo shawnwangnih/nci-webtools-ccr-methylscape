@@ -17,7 +17,7 @@ class Projects extends React.Component {
         size: 'small',
         showSizeChanger: true,
         style: {
-          'marginBottom': '0px'
+          marginBottom: '0px'
         },
         defaultPageSize: 10,
         pageSizeOptions: ['10', '25', '50', '100']
@@ -294,8 +294,8 @@ class Projects extends React.Component {
       },
       {
         title: (
-          <div style={{ 'marginTop': '0px' }}>
-            <p style={{ 'marginBottom': '0px' }}>Project</p>
+          <div style={{ marginTop: '0px' }}>
+            <p style={{ marginBottom: '0px' }}>Project</p>
             {/*<Form>
         <Form.Item
           style={{
@@ -368,32 +368,32 @@ class Projects extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'minWidth': '800px',
-            'paddingLeft': '30px',
-            'paddingRight': '30px'
+            minWidth: '800px',
+            paddingLeft: '30px',
+            paddingRight: '30px'
           }}>
           <div
             style={{
-              'paddingLeft': '0px',
-              'paddingBottom': '0px',
-              'paddingTop': '15px'
+              paddingLeft: '0px',
+              paddingBottom: '0px',
+              paddingTop: '15px'
             }}>
             {/* <PageHeader title={"MethylScape Results"} /> */}
             <Form layout="inline">
               <Form.Item
                 style={{
                   width: '5%',
-                  'paddingLeft': '0px',
-                  'paddingRight': '0px',
-                  'marginRight': '0px'
+                  paddingLeft: '0px',
+                  paddingRight: '0px',
+                  marginRight: '0px'
                 }}
               />
               <Form.Item
                 style={{
                   width: '35%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Project Filter Input"
@@ -409,9 +409,9 @@ class Projects extends React.Component {
               <Form.Item
                 style={{
                   width: '20%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Investigator Filter Input"
@@ -430,9 +430,9 @@ class Projects extends React.Component {
               <Form.Item
                 style={{
                   width: '20%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Number of Experiments Filter Input"
@@ -451,9 +451,9 @@ class Projects extends React.Component {
               <Form.Item
                 style={{
                   width: '20%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '16px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '16px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Number of Samples Filter Input"

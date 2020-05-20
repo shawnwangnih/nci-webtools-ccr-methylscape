@@ -151,11 +151,11 @@ class Summary extends React.Component {
   };
   renderMethylationLegend() {
     const list = this.getMethylationClasses().map((item, index) => (
-      <div style={{ 'textAlign': 'left' }}>
+      <div style={{ textAlign: 'left' }}>
         <div
           className="color-box"
           style={{
-            'backgroundColor': this.backgroundColor[
+            backgroundColor: this.backgroundColor[
               index % this.backgroundColor.length
             ]
           }}
@@ -167,11 +167,11 @@ class Summary extends React.Component {
   }
   renderGenderLegend() {
     const list = this.getGender().map((item, index) => (
-      <div style={{ 'textAlign': 'left' }}>
+      <div style={{ textAlign: 'left' }}>
         <div
           className="color-box"
           style={{
-            'backgroundColor': this.backgroundColor[
+            backgroundColor: this.backgroundColor[
               index % this.backgroundColor.length
             ]
           }}
@@ -185,8 +185,8 @@ class Summary extends React.Component {
           <div
             className="overflow-box"
             style={{
-              'paddingLeft': '51px',
-              'marginBottom': this.methylationHeight.toString() + 'px'
+              paddingLeft: '51px',
+              marginBottom: this.methylationHeight.toString() + 'px'
             }}>
             {list}
           </div>
@@ -195,14 +195,14 @@ class Summary extends React.Component {
         return (
           <div
             className="overflow-box"
-            style={{ 'paddingLeft': '51px', 'marginBottom': '21px' }}>
+            style={{ paddingLeft: '51px', marginBottom: '21px' }}>
             {list}
           </div>
         );
       }
     } else {
       return (
-        <div className="overflow-box" style={{ 'paddingLeft': '51px' }}>
+        <div className="overflow-box" style={{ paddingLeft: '51px' }}>
           {list}
         </div>
       );
@@ -210,11 +210,11 @@ class Summary extends React.Component {
   }
   renderSmallGenderLegend() {
     const list = this.getGender().map((item, index) => (
-      <div style={{ 'textAlign': 'left' }}>
+      <div style={{ textAlign: 'left' }}>
         <div
           className="color-box"
           style={{
-            'backgroundColor': this.backgroundColor[
+            backgroundColor: this.backgroundColor[
               index % this.backgroundColor.length
             ]
           }}
@@ -243,7 +243,7 @@ class Summary extends React.Component {
       this.state.moreClasses == false
     ) {
       return (
-        <div style={{ margin: 'auto', 'textAlign': 'center' }}>
+        <div style={{ margin: 'auto', textAlign: 'center' }}>
           <a onClick={() => this.showMore()} style={{}}>
             show more
           </a>
@@ -252,7 +252,7 @@ class Summary extends React.Component {
     }
     if (this.state.moreClasses == true) {
       return (
-        <div style={{ margin: 'auto', 'textAlign': 'center' }}>
+        <div style={{ margin: 'auto', textAlign: 'center' }}>
           <a onClick={() => this.showLess()}>show less</a>
         </div>
       );
@@ -266,7 +266,7 @@ class Summary extends React.Component {
         <div
           id="methylationLegend"
           className="overflow-box"
-          style={{ 'paddingLeft': '51px' }}>
+          style={{ paddingLeft: '51px' }}>
           {this.renderMethylationLegend()}
         </div>
       );
@@ -275,7 +275,7 @@ class Summary extends React.Component {
         <div
           id="methylationLegend"
           className="non-overflow-box"
-          style={{ 'paddingLeft': '51px' }}>
+          style={{ paddingLeft: '51px' }}>
           {this.renderMethylationLegend()}
         </div>
       );
@@ -311,9 +311,9 @@ class Summary extends React.Component {
           span={8}
           order={3}
           style={{
-            'marginBottom': (this.methylationHeight + 63).toString() + 'px',
-            'paddingLeft': '5px',
-            'paddingRight': '56px'
+            marginBottom: (this.methylationHeight + 63).toString() + 'px',
+            paddingLeft: '5px',
+            paddingRight: '56px'
           }}>
           <h4 className="summery-data-title">Age Distribution</h4>
           <br />
@@ -332,9 +332,9 @@ class Summary extends React.Component {
         span={8}
         order={3}
         style={{
-          'marginBottom': '84px',
-          'paddingLeft': '5px',
-          'paddingRight': '56px'
+          marginBottom: '84px',
+          paddingLeft: '5px',
+          paddingRight: '56px'
         }}>
         <h4 className="summery-data-title">Age Distribution</h4>
         <br />
@@ -357,14 +357,14 @@ class Summary extends React.Component {
           justify="center"
           align="middle"
           style={{
-            'paddingBottom': '100px',
-            'paddingLeft': '30px',
-            'paddingRight': '30px'
+            paddingBottom: '100px',
+            paddingLeft: '30px',
+            paddingRight: '30px'
           }}>
           <Col
             span={8}
             order={1}
-            style={{ 'paddingLeft': '5px', 'paddingRight': '5px' }}>
+            style={{ paddingLeft: '5px', paddingRight: '5px' }}>
             <h4 className="summery-data-title">Methylation Classes</h4>
             <br />
             <PieChart
@@ -391,7 +391,7 @@ class Summary extends React.Component {
           <Col
             span={8}
             order={2}
-            style={{ 'paddingLeft': '5px', 'paddingRight': '5px' }}>
+            style={{ paddingLeft: '5px', paddingRight: '5px' }}>
             <h4 className="summery-data-title">Gender</h4>
             <br />
             {/*<canvas
@@ -512,10 +512,10 @@ class Summary extends React.Component {
       <div>
         <h3
           style={{
-            'textAlign': 'center',
-            'fontSize': '20px',
+            textAlign: 'center',
+            fontSize: '20px',
             color: 'steelblue',
-            'fontWeight': '600'
+            fontWeight: '600'
           }}>
           Project summary: {this.state.project} Project
         </h3>

@@ -10,61 +10,108 @@ export default function QCI() {
 
   const [snvTable, setSnv] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => boldItalic(text) },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      {
+        title: 'GENE',
+        dataIndex: 'gene',
+        align: 'center',
+        render: text => boldItalic(text)
+      },
+      {
+        title: 'GENOMIC LOCATION',
+        dataIndex: 'genomicLocation',
+        align: 'center'
+      },
       { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
-      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange', align: 'center' },
-      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange', align: 'center' },
+      {
+        title: 'NUCLEOTIDE CHANGE',
+        dataIndex: 'nucleotideChange',
+        align: 'center'
+      },
+      {
+        title: 'AMINO ACID CHANGE',
+        dataIndex: 'aminoAcidChange',
+        align: 'center'
+      },
       { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
       {
         title: 'PATHOGENICITY ASSESSMENT',
         dataIndex: 'pathAssessment',
         align: 'center',
-        render: (text) => displayRed(text),
+        render: text => displayRed(text)
       },
-      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' }
     ],
-    data: [],
+    data: []
   });
   const [cnvTable, setCnv] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => displayGeneRef(text) },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      {
+        title: 'GENE',
+        dataIndex: 'gene',
+        align: 'center',
+        render: text => displayGeneRef(text)
+      },
+      {
+        title: 'GENOMIC LOCATION',
+        dataIndex: 'genomicLocation',
+        align: 'center'
+      },
       {
         title: 'PATHOGENICITY ASSESSMENT',
         dataIndex: 'pathAssessment',
         align: 'center',
-        render: (text) => displayRed(text),
+        render: text => displayRed(text)
       },
-      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' }
     ],
-    data: [],
+    data: []
   });
   const [fusionTable, setFusion] = useState({
     columns: [
-      { title: 'GENE', dataIndex: 'gene', align: 'center', render: (text) => displayGeneRef(text) },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      {
+        title: 'GENE',
+        dataIndex: 'gene',
+        align: 'center',
+        render: text => displayGeneRef(text)
+      },
+      {
+        title: 'GENOMIC LOCATION',
+        dataIndex: 'genomicLocation',
+        align: 'center'
+      },
       { title: 'READS', dataIndex: 'reads', align: 'center' },
       {
         title: 'PATHOGENICITY ASSESSMENT',
         dataIndex: 'pathAssessment',
         align: 'center',
-        render: (text) => displayRed(text),
+        render: text => displayRed(text)
       },
-      { title: 'TIER**', dataIndex: 'tier', align: 'center' },
+      { title: 'TIER**', dataIndex: 'tier', align: 'center' }
     ],
-    data: [],
+    data: []
   });
   const [unkTable, setUnk] = useState({
     columns: [
       { title: 'GENE', dataIndex: 'gene', align: 'center' },
-      { title: 'GENOMIC LOCATION', dataIndex: 'genomicLocation', align: 'center' },
+      {
+        title: 'GENOMIC LOCATION',
+        dataIndex: 'genomicLocation',
+        align: 'center'
+      },
       { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
-      { title: 'NUCLEOTIDE CHANGE', dataIndex: 'nucleotideChange', align: 'center' },
-      { title: 'AMINO ACID CHANGE', dataIndex: 'aminoAcidChange', align: 'center' },
-      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
+      {
+        title: 'NUCLEOTIDE CHANGE',
+        dataIndex: 'nucleotideChange',
+        align: 'center'
+      },
+      {
+        title: 'AMINO ACID CHANGE',
+        dataIndex: 'aminoAcidChange',
+        align: 'center'
+      },
+      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' }
     ],
-    data: [],
+    data: []
   });
 
   // display gene with reference
@@ -103,8 +150,12 @@ export default function QCI() {
       const result = xml2js(reader.result, { compact: true });
       let variants = result.report.variant.reverse();
       if (!Array.isArray(variants)) variants = [variants];
-      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+      const significant = variants.filter(v =>
+        v.assessment._text.match(/pathogenic/gi)
+      );
+      const uncertain = variants.filter(v =>
+        v.assessment._text.match(/uncertain/gi)
+      );
       // console.log('sig', significant);
       // console.log('un', uncertain);
       sigVariants(significant);
@@ -119,12 +170,14 @@ export default function QCI() {
     let cnvData = [];
     let fusionData = [];
 
-    variants.forEach((v) => {
+    variants.forEach(v => {
       const loc = `chr${v.chromosome._text}:${v.position._text}`;
       const tier = `Tier ${v.actionability._text}`;
 
       if (v.gene) {
-        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
+          v.readdepth._text
+        } reads)`;
         snvData.push({
           key: snvData.length,
           gene: v.gene._text,
@@ -134,7 +187,7 @@ export default function QCI() {
           vaf: vaf,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: v.rcomment[0].text._text
         });
       } else if (v.length) {
         const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
@@ -145,7 +198,7 @@ export default function QCI() {
           genomicLocation: loc,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: v.rcomment[0].text._text
         });
       } else if (v.readDepth) {
         const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
@@ -157,7 +210,7 @@ export default function QCI() {
           reads: v.readDepth._text,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: v.rcomment[0].text._text
         });
       }
     });
@@ -169,14 +222,16 @@ export default function QCI() {
   function unknownVariants(variants) {
     let data = variants.map((v, i) => {
       const loc = `chr${v.chromosome._text}:${v.position._text}`;
-      const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+      const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
+        v.readdepth._text
+      } reads)`;
       return {
         key: i,
         gene: v.gene._text,
         genomicLocation: loc,
         transcript: v.transcriptchange.transcript._text,
         nucleotideChange: v.transcriptchange.change._text,
-        vaf: vaf,
+        vaf: vaf
       };
     });
 
@@ -190,7 +245,7 @@ export default function QCI() {
         <input
           type="file"
           id="xmlInput"
-          onChange={(e) => {
+          onChange={e => {
             parseVariants(e.target.files[0]);
           }}
         />
@@ -201,27 +256,34 @@ export default function QCI() {
               columns={snvTable.columns}
               dataSource={snvTable.data}
               pagination={false}
-              expandedRowRender={(record) => renderHTML(record.interpretation)}
+              expandedRowRender={record => renderHTML(record.interpretation)}
               bordered
               title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
               footer={() => (
-                <sub>*VAF: Variant Allele Frequency; **TIER: Actionability Classification</sub>
+                <sub>
+                  *VAF: Variant Allele Frequency; **TIER: Actionability
+                  Classification
+                </sub>
               )}
             />{' '}
             <Table
               columns={cnvTable.columns}
               dataSource={cnvTable.data}
               pagination={false}
-              expandedRowRender={(record) => renderHTML(record.interpretation)}
+              expandedRowRender={record => renderHTML(record.interpretation)}
               bordered
-              title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
+              title={() => (
+                <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>
+              )}
               footer={() => (
                 <div>
                   <div>
                     <sub>**TIER: Actionability Classification</sub>
                   </div>
                   <div>
-                    <sub>CNV analysis is not performed when tumor content &lt;50%.</sub>
+                    <sub>
+                      CNV analysis is not performed when tumor content &lt;50%.
+                    </sub>
                   </div>
                 </div>
               )}
@@ -230,7 +292,7 @@ export default function QCI() {
               columns={fusionTable.columns}
               dataSource={fusionTable.data}
               pagination={false}
-              expandedRowRender={(record) => renderHTML(record.interpretation)}
+              expandedRowRender={record => renderHTML(record.interpretation)}
               bordered
               title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
               footer={() => <sub>**TIER: Actionability Classification</sub>}
@@ -243,7 +305,9 @@ export default function QCI() {
               dataSource={unkTable.data}
               pagination={false}
               bordered
-              title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
+              title={() => (
+                <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>
+              )}
               footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
             />
           </div>

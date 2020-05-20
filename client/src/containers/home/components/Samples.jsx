@@ -512,9 +512,7 @@ class Samples extends React.Component {
           width: '15%',
           render: text => {
             return (
-              <p style={{ 'fontWeight': 'bold', 'marginBottom': '0px' }}>
-                {text}:
-              </p>
+              <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
             );
           }
           //defaultSortOrder: 'ascend',
@@ -531,7 +529,7 @@ class Samples extends React.Component {
             if (text == 'View plot') {
               return (
                 <a
-                  style={{ 'paddingLeft': '5%', 'marginBottom': '0px' }}
+                  style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
                   }>
@@ -542,7 +540,7 @@ class Samples extends React.Component {
             if (text == 'Download pdf') {
               return (
                 <a
-                  style={{ 'paddingLeft': '5%', 'marginBottom': '0px' }}
+                  style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(
                       currRow.id,
@@ -556,7 +554,7 @@ class Samples extends React.Component {
             if (text == 'Download image') {
               return (
                 <a
-                  style={{ 'paddingLeft': '5%', 'marginBottom': '0px' }}
+                  style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                   }>
@@ -567,7 +565,7 @@ class Samples extends React.Component {
             if (text == 'Download report') {
               return (
                 <a
-                  style={{ 'paddingLeft': '5%', 'marginBottom': '0px' }}
+                  style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
                   }>
@@ -576,9 +574,7 @@ class Samples extends React.Component {
               );
             }
             return (
-              <p style={{ 'paddingLeft': '5%', 'marginBottom': '0px' }}>
-                {text}
-              </p>
+              <p style={{ paddingLeft: '5%', marginBottom: '0px' }}>{text}</p>
             );
           }
         },
@@ -589,9 +585,7 @@ class Samples extends React.Component {
           width: '15%',
           render: text => {
             return (
-              <p style={{ 'fontWeight': 'bold', 'marginBottom': '0px' }}>
-                {text}:
-              </p>
+              <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
             );
           }
           //defaultSortOrder: 'ascend',
@@ -609,9 +603,9 @@ class Samples extends React.Component {
               return (
                 <a
                   style={{
-                    'paddingLeft': '5%',
-                    'marginBottom': '0px',
-                    'paddingRight': '1%'
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%'
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
@@ -624,9 +618,9 @@ class Samples extends React.Component {
               return (
                 <a
                   style={{
-                    'paddingLeft': '5%',
-                    'marginBottom': '0px',
-                    'paddingRight': '1%'
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%'
                   }}
                   onClick={() =>
                     this.downloadFile(
@@ -642,9 +636,9 @@ class Samples extends React.Component {
               return (
                 <a
                   style={{
-                    'paddingLeft': '5%',
-                    'marginBottom': '0px',
-                    'paddingRight': '1%'
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%'
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
@@ -657,9 +651,9 @@ class Samples extends React.Component {
               return (
                 <a
                   style={{
-                    'paddingLeft': '5%',
-                    'marginBottom': '0px',
-                    'paddingRight': '1%'
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%'
                   }}
                   onClick={() =>
                     this.downloadQCIFile(currRow.id, currRow.report_file_name)
@@ -672,9 +666,9 @@ class Samples extends React.Component {
               return (
                 <a
                   style={{
-                    'paddingLeft': '5%',
-                    'marginBottom': '0px',
-                    'paddingRight': '1%'
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%'
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
@@ -686,9 +680,9 @@ class Samples extends React.Component {
             return (
               <p
                 style={{
-                  'paddingLeft': '5%',
-                  'marginBottom': '0px',
-                  'paddingRight': '1%'
+                  paddingLeft: '5%',
+                  marginBottom: '0px',
+                  paddingRight: '1%'
                 }}>
                 {text}
               </p>
@@ -848,9 +842,9 @@ class Samples extends React.Component {
         }
       ];
       return (
-        <div style={{ 'paddingBottom': '4px' }}>
+        <div style={{ paddingBottom: '4px' }}>
           <Table
-            style={{ 'marginLeft': '0px', 'marginRight': '0px' }}
+            style={{ marginLeft: '0px', marginRight: '0px' }}
             columns={columns}
             dataSource={extraData}
             pagination={false}
@@ -909,9 +903,7 @@ class Samples extends React.Component {
           width: '50%',
           render: text => {
             return (
-              <p style={{ 'paddingLeft': '70%', 'fontWeight': 'bold' }}>
-                {text}:
-              </p>
+              <p style={{ paddingLeft: '70%', fontWeight: 'bold' }}>{text}:</p>
             );
           }
           //defaultSortOrder: 'ascend',
@@ -928,7 +920,7 @@ class Samples extends React.Component {
             if (text == 'View plot') {
               return (
                 <a
-                  style={{ 'paddingLeft': '20%' }}
+                  style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
                   }>
@@ -939,7 +931,7 @@ class Samples extends React.Component {
             if (text == 'Download pdf') {
               return (
                 <a
-                  style={{ 'paddingLeft': '20%' }}
+                  style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(
                       currRow.id,
@@ -953,7 +945,7 @@ class Samples extends React.Component {
             if (text == 'Download image') {
               return (
                 <a
-                  style={{ 'paddingLeft': '20%' }}
+                  style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                   }>
@@ -964,7 +956,7 @@ class Samples extends React.Component {
             if (text == 'Download report') {
               return (
                 <a
-                  style={{ 'paddingLeft': '20%' }}
+                  style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
                   }>
@@ -973,7 +965,7 @@ class Samples extends React.Component {
               );
             }
 
-            return <p style={{ 'paddingLeft': '20%' }}>{text}</p>;
+            return <p style={{ paddingLeft: '20%' }}>{text}</p>;
           }
         }
       ];
@@ -1096,7 +1088,7 @@ class Samples extends React.Component {
       };
       return (
         <div>
-          <h2 style={{ 'textAlign': 'center' }}>Sample Information</h2>
+          <h2 style={{ textAlign: 'center' }}>Sample Information</h2>
           <br />
           <Table
             showHeader={false}
@@ -1161,8 +1153,8 @@ class Samples extends React.Component {
                 size="small"
                 className="buttonHoverClass"
                 style={{
-                  'marginBottom': '0px',
-                  'marginTop': '0px',
+                  marginBottom: '0px',
+                  marginTop: '0px',
                   width: '15px',
                   height: '15px',
                   display: 'flex',
@@ -1172,7 +1164,7 @@ class Samples extends React.Component {
                 aria-label="hide row button">
                 <FontAwesomeIcon
                   icon={faChevronUp}
-                  style={{ color: 'black', 'fontSize': '8px' }}
+                  style={{ color: 'black', fontSize: '8px' }}
                 />
               </Button>
             );
@@ -1182,8 +1174,8 @@ class Samples extends React.Component {
               size="small"
               className="buttonHoverClass"
               style={{
-                'marginBottom': '0px',
-                'marginTop': '0px',
+                marginBottom: '0px',
+                marginTop: '0px',
                 width: '15px',
                 height: '15px',
                 display: 'flex',
@@ -1193,7 +1185,7 @@ class Samples extends React.Component {
               aria-label="expand row button">
               <FontAwesomeIcon
                 icon={faChevronDown}
-                style={{ color: 'black', 'fontSize': '8px' }}
+                style={{ color: 'black', fontSize: '8px' }}
               />
             </Button>
           );
@@ -1313,33 +1305,33 @@ class Samples extends React.Component {
       <div className="page-overflow-box">
         <div
           style={{
-            'minWidth': '1400px',
-            'paddingLeft': '30px',
-            'paddingRight': '30px'
+            minWidth: '1400px',
+            paddingLeft: '30px',
+            paddingRight: '30px'
           }}>
           {this.renderPopUp()}
           <div
             style={{
-              'paddingLeft': '0px',
-              'paddingBottom': '0px',
-              'paddingTop': '15px',
-              'paddingRight': '0px'
+              paddingLeft: '0px',
+              paddingBottom: '0px',
+              paddingTop: '15px',
+              paddingRight: '0px'
             }}>
             <Form layout="inline">
               <Form.Item
                 style={{
                   width: '3%',
-                  'paddingLeft': '0px',
-                  'paddingRight': '0px',
-                  'marginRight': '0px'
+                  paddingLeft: '0px',
+                  paddingRight: '0px',
+                  marginRight: '0px'
                 }}
               />
               <Form.Item
                 style={{
                   width: '12%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Sample Filter Input"
@@ -1355,9 +1347,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '15%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Project Filter Input"
@@ -1373,9 +1365,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '12%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Experiment Filter Input"
@@ -1391,9 +1383,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '8%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <DatePicker
                   onChange={(date, dateString) => {
@@ -1413,9 +1405,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '10%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="SurgicalCase Filter Input"
@@ -1434,9 +1426,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '9%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '0px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '0px',
+                  marginRight: '0px'
                 }}>
                 {/*<Input
                 value={this.state.filterGender}
@@ -1464,9 +1456,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '7%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Age Filter Input"
@@ -1482,9 +1474,9 @@ class Samples extends React.Component {
               <Form.Item
                 style={{
                   width: '23%',
-                  'paddingLeft': '8px',
-                  'paddingRight': '30px',
-                  'marginRight': '0px'
+                  paddingLeft: '8px',
+                  paddingRight: '30px',
+                  marginRight: '0px'
                 }}>
                 <Input
                   aria-label="Diagnosis Filter Input"

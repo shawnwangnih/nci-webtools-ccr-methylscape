@@ -6,7 +6,12 @@ import Samples from './components/Samples';
 import Projects from './components/Projects';
 import Help from './components/Help';
 import { Route, Link } from 'react-router-dom';
-import { faChartPie, faClipboard, faVials, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChartPie,
+  faClipboard,
+  faVials,
+  faUserFriends
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import CountUp from 'react-countup';
@@ -26,7 +31,7 @@ class Home extends React.Component {
       projectSummery: '',
       current: props.current,
       windowWidth: document.body.clientWidth,
-      timeout: false,
+      timeout: false
     };
   }
   async componentWillReceiveProps(nextProps) {
@@ -53,7 +58,7 @@ class Home extends React.Component {
     }
   };
 
-  changeSummeryPorject = (projectSummery) => {
+  changeSummeryPorject = projectSummery => {
     this.setState({ projectSummery });
   };
 
@@ -66,8 +71,10 @@ class Home extends React.Component {
       if (data[key]['experiment'] == null) {
         delete data[key];
       } else {
-        data[key]['experiment'] = Number(data[key]['experiment']).toLocaleString('fullwide', {
-          useGrouping: false,
+        data[key]['experiment'] = Number(
+          data[key]['experiment']
+        ).toLocaleString('fullwide', {
+          useGrouping: false
         });
       }
     }
@@ -82,7 +89,7 @@ class Home extends React.Component {
     });*/
     this.setState({
       data: data,
-      scanCheck: false,
+      scanCheck: false
     });
   }
 
@@ -95,24 +102,26 @@ class Home extends React.Component {
           this.setState({ windowWidth: document.body.clientWidth }, () => {
             //console.log(this.state.windowWidth);
           });
-        }, 250),
+        }, 250)
       });
     });
     const root =
-      process.env.NODE_ENV === 'development' ? 'http://0.0.0.0:8290/' : window.location.pathname;
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
     /*fetch(
       `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
       { method: 'POST' }
     )*/
     fetch(`${root}scanMethylScapeTable`)
-      .then((response) => response.json())
-      .then((data) => this.successScan(data))
-      .catch((error) => this.failedScanSetPage(error));
+      .then(response => response.json())
+      .then(data => this.successScan(data))
+      .catch(error => this.failedScanSetPage(error));
   }
 
   getNumProjects() {
     let projects = [];
-    this.state.data.forEach((element) => {
+    this.state.data.forEach(element => {
       if (!projects.includes(element.project)) {
         projects.push(element.project);
       }
@@ -122,7 +131,7 @@ class Home extends React.Component {
 
   getNumExperiments() {
     let experiments = [];
-    this.state.data.forEach((element) => {
+    this.state.data.forEach(element => {
       if (!experiments.includes(element.experiment)) {
         experiments.push(element.experiment);
       }
@@ -134,7 +143,7 @@ class Home extends React.Component {
   getNumSamples() {
     let samples = [];
     //console.log(JSON.stringify(this.state.data));
-    this.state.data.forEach((element) => {
+    this.state.data.forEach(element => {
       if (!samples.includes(element.sample_name)) {
         samples.push(element.sample_name);
         //console.log(element.sample_name)
@@ -156,24 +165,22 @@ class Home extends React.Component {
               maxWidth: '1400px',
               margin: 'auto',
               paddingTop: '15px',
-              paddingBottom: '15px',
-            }}
-          >
+              paddingBottom: '15px'
+            }}>
             <Link
               style={{ paddingLeft: '20px' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faChartPie}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -183,7 +190,7 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
                 end={numProjects}
               />
@@ -194,9 +201,8 @@ class Home extends React.Component {
                   color: 'black',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
-                }}
-              >
+                  display: 'inline'
+                }}>
                 {' '}
                 Projects
               </h3>
@@ -206,16 +212,15 @@ class Home extends React.Component {
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faVials}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -225,10 +230,9 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
-                end={numExperiments}
-              >
+                end={numExperiments}>
                 {numExperiments}{' '}
               </CountUp>
               <h3
@@ -238,9 +242,8 @@ class Home extends React.Component {
                   color: 'black',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
-                }}
-              >
+                  display: 'inline'
+                }}>
                 {' '}
                 Experiments
               </h3>
@@ -250,16 +253,15 @@ class Home extends React.Component {
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faUserFriends}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -269,7 +271,7 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
                 end={numSamples}
               />
@@ -280,9 +282,8 @@ class Home extends React.Component {
                   color: 'black',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
-                }}
-              >
+                  display: 'inline'
+                }}>
                 {' '}
                 Samples
               </h3>
@@ -298,24 +299,22 @@ class Home extends React.Component {
               maxWidth: '1400px',
               margin: 'auto',
               paddingTop: '15px',
-              paddingBottom: '15px',
-            }}
-          >
+              paddingBottom: '15px'
+            }}>
             <Link
               style={{ paddingLeft: '20px' }}
               onClick={() => {
                 this.changeTab('projects', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faChartPie}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -325,7 +324,7 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
                 end={numProjects}
               />
@@ -335,16 +334,15 @@ class Home extends React.Component {
               onClick={() => {
                 this.changeTab('experiments', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faVials}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -354,10 +352,9 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
-                end={numExperiments}
-              >
+                end={numExperiments}>
                 {numExperiments}{' '}
               </CountUp>
             </Link>
@@ -366,16 +363,15 @@ class Home extends React.Component {
               onClick={() => {
                 this.changeTab('samples', {
                   project: '',
-                  experiment: '',
+                  experiment: ''
                 });
-              }}
-            >
+              }}>
               <FontAwesomeIcon
                 icon={faUserFriends}
                 style={{
                   color: 'black',
                   fontSize: '24px',
-                  display: 'inline',
+                  display: 'inline'
                 }}
               />
               <CountUp
@@ -385,7 +381,7 @@ class Home extends React.Component {
                   color: 'blue',
                   fontSize: '24px',
                   fontWeight: '200',
-                  display: 'inline',
+                  display: 'inline'
                 }}
                 end={numSamples}
               />
@@ -415,8 +411,7 @@ class Home extends React.Component {
           tabPosition="top"
           activeKey={this.props.current}
           onChange={this.changeTab}
-          defaultActiveKey="projects"
-        >
+          defaultActiveKey="projects">
           <TabPane tab="Project" key="projects" disabled={this.state.scanCheck}>
             <Projects
               data={this.state.data}
@@ -431,7 +426,10 @@ class Home extends React.Component {
               changeSummeryPorject={this.changeSummeryPorject}
             />
           </TabPane>
-          <TabPane tab="Experiments" key="experiments" disabled={this.state.scanCheck}>
+          <TabPane
+            tab="Experiments"
+            key="experiments"
+            disabled={this.state.scanCheck}>
             <Experiments
               data={this.state.data}
               changeTab={this.changeTab}
@@ -439,7 +437,11 @@ class Home extends React.Component {
             />
           </TabPane>
           <TabPane tab="Samples" key="samples" disabled={this.state.scanCheck}>
-            <Samples data={this.state.data} changeTab={this.changeTab} filter={this.state.filter} />
+            <Samples
+              data={this.state.data}
+              changeTab={this.changeTab}
+              filter={this.state.filter}
+            />
           </TabPane>
           <TabPane
             tab={
@@ -448,8 +450,7 @@ class Home extends React.Component {
               </div>
             }
             key="help"
-            disabled={this.state.scanCheck}
-          >
+            disabled={this.state.scanCheck}>
             <Help />
           </TabPane>
         </Tabs>
