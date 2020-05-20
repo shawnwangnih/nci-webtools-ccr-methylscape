@@ -36,6 +36,8 @@ def lambda_handler(event, context):
             parse_mgmt_prediction(sample_id, bucket, file_key)
         elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
             updateTable(sample_id, {'report_file_name':file_name})
+        elif 'xml_report' in file_name.lower() and file_name.lower().endswith('.txt'):
+            updateTable(sample_id, {'xml_report':file_name})
         else:
             return {
                 'statusCode': 200,
@@ -51,6 +53,8 @@ def lambda_handler(event, context):
         elif re.search('ClassifierReports/' + sample_id + '/$', file_key):
             delete_row(sample_id)
         elif 'report' in file_name.lower() and 'run' in file_name.lower() and file_name.lower().endswith('.pdf'):
+            delete_file_name(sample_id, file_name)
+        elif 'xml_report' in file_name.lower() and file_name.lower().endswith('.txt'):
             delete_file_name(sample_id, file_name)
         else:
             return {

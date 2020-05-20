@@ -5,8 +5,8 @@ import { xml2js } from 'xml-js';
 import './QCI.css';
 
 export default function QCI() {
-  const { qci } = useParams();
-  // console.log('param', qci);
+  const { id } = useParams();
+  console.log('param', id);
 
   const [snvTable, setSnv] = useState({
     columns: [
