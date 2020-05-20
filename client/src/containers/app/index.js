@@ -504,8 +504,8 @@ class App extends React.Component {
                 minHeight: 380
               }}>
               <Switch>
-                <Route path="/qci/:id" children={<QCI />} />
-                <Route path="/" children={mainContent} />
+                <Route path="/qci/:id/:file" component={QCI} />
+                <Route exact path="/" children={mainContent} />
               </Switch>
 
               {/* <Route exact path="/methylscape" component={Home} />

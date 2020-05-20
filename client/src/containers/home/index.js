@@ -15,7 +15,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import CountUp from 'react-countup';
-import QCI from './components/QCI';
 
 const TabPane = Tabs.TabPane;
 

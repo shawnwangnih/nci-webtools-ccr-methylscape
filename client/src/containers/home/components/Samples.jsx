@@ -445,33 +445,35 @@ class Samples extends React.Component {
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    try {
-      let response = await fetch(
-        `${root}getMethylScapeQCIFile?sampleId=` +
-          sampleId +
-          '&fileName=' +
-          file,
-        {
-          method: 'GET'
-        }
-      );
-      if (response.status == 404) {
-        this.setState({ filePopUp: true });
-      } else {
-        //let url = URL.createObjectURL(await response.blob());
+    window.open(`${root}qci/${sampleId}/${file}`, '_blank');
 
-        window.open(
-          `${root}getMethylScapeQCIFile?sampleId=` +
-            sampleId +
-            '&fileName=' +
-            file,
-          '_blank'
-        );
-        //URL.revokeObjectURL(url);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   let response = await fetch(
+    //     `${root}getMethylScapeQCIFile?sampleId=` +
+    //       sampleId +
+    //       '&fileName=' +
+    //       file,
+    //     {
+    //       method: 'GET'
+    //     }
+    //   );
+    //   if (response.status == 404) {
+    //     this.setState({ filePopUp: true });
+    //   } else {
+    //     //let url = URL.createObjectURL(await response.blob());
+
+    //     window.open(
+    //       `${root}getMethylScapeQCIFile?sampleId=` +
+    //         sampleId +
+    //         '&fileName=' +
+    //         file,
+    //       '_blank'
+    //     );
+    //     //URL.revokeObjectURL(url);
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   }
 
   //renders the items in the pagination
@@ -656,7 +658,7 @@ class Samples extends React.Component {
                     paddingRight: '1%'
                   }}
                   onClick={() =>
-                    this.downloadQCIFile(currRow.id, currRow.report_file_name)
+                    this.downloadQCIFile(currRow.id, currRow.xml_report)
                   }>
                   {text}
                 </a>

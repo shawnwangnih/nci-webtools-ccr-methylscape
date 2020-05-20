@@ -134,8 +134,6 @@ function createHTML(filename){
 
 
 app.use(cors());
-
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({
     type: ['application/json', 'text/plain']
@@ -144,6 +142,8 @@ app.use(express.json({
 app.use(express.static(path.join('client', 'build')));
 
 app.get('/ping', (req, res) => res.send(true));
+
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../client/build/index.html')));
 
 app.get('/scanMethylScapeTable', (req, res) => {
     logger.log('info', 'Request scan on dynamoDB table: %s', dynamoDBTableName)
@@ -197,73 +197,73 @@ app.post('/getMethylScapeFile', (req, res) => {
     }
 })
 
-app.get('/getMethylScapeQCIFile', (req, res) => {
-    logger.log('info', 'Request file download data: %j', req.query)
-    //console.log(req.body)
-    try{
-        const s3 = new AWS.S3();
-        AWS.config.update({ region: 'us-east-1' });
-        const data = req.query
-        const key = path.join(S3SamplesKey, data.sampleId)
+// app.get('/getMethylScapeQCIFile', (req, res) => {
+//     logger.log('info', 'Request file download data: %j', req.query)
+//     //console.log(req.body)
+//     try{
+//         const s3 = new AWS.S3();
+//         AWS.config.update({ region: 'us-east-1' });
+//         const data = req.query
+//         const key = path.join(S3SamplesKey, data.sampleId)
 
-        const paramsList = {
-            Bucket: S3BucketName,
-            Delimiter: '',
-            Prefix:key,
-        }
-        s3.listObjects(paramsList, function(err, data){
-            if (err) {
-                logger.error('error', '1 - DynamoDB scan fail: %s', error)
-                res.send(error)
-            }
-            if(data){
-                var fileName = ""
-                for(var i = 0; i < data.Contents.length; i++){
-                    if(data.Contents[i].Key.endsWith("xml_report.txt")){
-                        fileName = data.Contents[i].Key
-                    }
-                }
-                if(fileName == ""){
-                    res.status(404).send('File not found');
-                }
-                else{
-                const params = {
-                    Bucket: S3BucketName,
-                    Key: fileName
-                };
-                console.log(fileName);
-                s3.headObject(params, function (err, metadata) {  
-                    if (err && err.code === 'NotFound') {  
-                    // Handle no object on cloud here  
-                    res.status(404).send('File not found');
-                    } else {  
-                        s3.getObject(params, (err, data) =>{
-                            if (err){
-                                logger.log('error', 'Request file download failed: %s', err)
-                                res.send(err)
-                            }
-                            fs.writeFileSync('test.txt', data.Body.toString());
-                            createHTML('test.txt');
-                            var fileStream = fs.createReadStream('test.html')
-                            res.sendFile(path.join(__dirname + '/test.html'));
+//         const paramsList = {
+//             Bucket: S3BucketName,
+//             Delimiter: '',
+//             Prefix:key,
+//         }
+//         s3.listObjects(paramsList, function(err, data){
+//             if (err) {
+//                 logger.error('error', '1 - DynamoDB scan fail: %s', error)
+//                 res.send(error)
+//             }
+//             if(data){
+//                 var fileName = ""
+//                 for(var i = 0; i < data.Contents.length; i++){
+//                     if(data.Contents[i].Key.endsWith("xml_report.txt")){
+//                         fileName = data.Contents[i].Key
+//                     }
+//                 }
+//                 if(fileName == ""){
+//                     res.status(404).send('File not found');
+//                 }
+//                 else{
+//                 const params = {
+//                     Bucket: S3BucketName,
+//                     Key: fileName
+//                 };
+//                 console.log(fileName);
+//                 s3.headObject(params, function (err, metadata) {  
+//                     if (err && err.code === 'NotFound') {  
+//                     // Handle no object on cloud here  
+//                     res.status(404).send('File not found');
+//                     } else {  
+//                         s3.getObject(params, (err, data) =>{
+//                             if (err){
+//                                 logger.log('error', 'Request file download failed: %s', err)
+//                                 res.send(err)
+//                             }
+//                             fs.writeFileSync('test.txt', data.Body.toString());
+//                             createHTML('test.txt');
+//                             var fileStream = fs.createReadStream('test.html')
+//                             res.sendFile(path.join(__dirname + '/test.html'));
                             
-                            fileStream.pipe(res);
-                        })
-                        //console.log(data.fileName)
-                        //fs.writeFileSync('~/test.txt', JSON.stringify(data))
+//                             fileStream.pipe(res);
+//                         })
+//                         //console.log(data.fileName)
+//                         //fs.writeFileSync('~/test.txt', JSON.stringify(data))
                         
                         
-                    }
-                });
-            }
-        }
-        })
+//                     }
+//                 });
+//             }
+//         }
+//         })
         
-    }catch (e){
-        logger.log('error', 'File download failed: %s', e)
-        res.send(e)
-    }
-})
+//     }catch (e){
+//         logger.log('error', 'File download failed: %s', e)
+//         res.send(e)
+//     }
+// })
 
 app.post('/getMethylScapeQCFile', (req, res) => {
     logger.log('info', 'Request file download data: %j', req.body)

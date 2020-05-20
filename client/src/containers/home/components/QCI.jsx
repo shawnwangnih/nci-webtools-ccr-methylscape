@@ -5,8 +5,32 @@ import { xml2js } from 'xml-js';
 import './QCI.css';
 
 export default function QCI() {
-  const { id } = useParams();
-  console.log('param', id);
+  const { id, file } = useParams();
+  console.log('params', id, file);
+
+  //Helper to download files from the s3 bucket
+  async function downloadFile(sampleId, file) {
+    const root =
+      process.env.NODE_ENV === 'development' ? 'http://0.0.0.0:8290/' : window.location.pathname;
+
+    try {
+      let response = await fetch(`${root}getMethylScapeFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file,
+        }),
+      });
+      if (response.status == 404) {
+        console.log(response);
+      } else {
+        let xml = await response.text();
+        parseVariants(xml);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const [snvTable, setSnv] = useState({
     columns: [
@@ -14,23 +38,23 @@ export default function QCI() {
         title: 'GENE',
         dataIndex: 'gene',
         align: 'center',
-        render: text => boldItalic(text)
+        render: (text) => boldItalic(text),
       },
       {
         title: 'GENOMIC LOCATION',
         dataIndex: 'genomicLocation',
-        align: 'center'
+        align: 'center',
       },
       { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
       {
         title: 'NUCLEOTIDE CHANGE',
         dataIndex: 'nucleotideChange',
-        align: 'center'
+        align: 'center',
       },
       {
         title: 'AMINO ACID CHANGE',
         dataIndex: 'aminoAcidChange',
-        align: 'center'
+        align: 'center',
       },
       { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
       {
@@ -49,12 +73,12 @@ export default function QCI() {
         title: 'GENE',
         dataIndex: 'gene',
         align: 'center',
-        render: text => displayGeneRef(text)
+        render: (text) => displayGeneRef(text),
       },
       {
         title: 'GENOMIC LOCATION',
         dataIndex: 'genomicLocation',
-        align: 'center'
+        align: 'center',
       },
       {
         title: 'PATHOGENICITY ASSESSMENT',
@@ -72,12 +96,12 @@ export default function QCI() {
         title: 'GENE',
         dataIndex: 'gene',
         align: 'center',
-        render: text => displayGeneRef(text)
+        render: (text) => displayGeneRef(text),
       },
       {
         title: 'GENOMIC LOCATION',
         dataIndex: 'genomicLocation',
-        align: 'center'
+        align: 'center',
       },
       { title: 'READS', dataIndex: 'reads', align: 'center' },
       {
@@ -96,20 +120,20 @@ export default function QCI() {
       {
         title: 'GENOMIC LOCATION',
         dataIndex: 'genomicLocation',
-        align: 'center'
+        align: 'center',
       },
       { title: 'TRANSCRIPT', dataIndex: 'transcript', align: 'center' },
       {
         title: 'NUCLEOTIDE CHANGE',
         dataIndex: 'nucleotideChange',
-        align: 'center'
+        align: 'center',
       },
       {
         title: 'AMINO ACID CHANGE',
         dataIndex: 'aminoAcidChange',
-        align: 'center'
+        align: 'center',
       },
-      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' }
+      { title: 'VAF* (%)', dataIndex: 'vaf', align: 'center' },
     ],
     data: []
   });
@@ -241,14 +265,19 @@ export default function QCI() {
   return (
     <div>
       <div>
-        <label>Upload Here</label>
-        <input
-          type="file"
-          id="xmlInput"
-          onChange={e => {
-            parseVariants(e.target.files[0]);
-          }}
-        />
+        <div>
+          <label>Upload Here</label>
+          <input
+            type="file"
+            id="xmlInput"
+            onChange={(e) => {
+              parseVariants(e.target.files[0]);
+            }}
+          />
+        </div>
+        <div>
+          <button onClick={() => downloadFile(id, file)}>s3</button>
+        </div>
         <div>
           <div>
             <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
