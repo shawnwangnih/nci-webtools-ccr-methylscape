@@ -143,7 +143,7 @@ app.use(express.static(path.join('client', 'build')));
 
 app.get('/ping', (req, res) => res.send(true));
 
-app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../client/build/index.html')));
+app.get('/qci/*', (req, res) => res.sendFile(path.join(__dirname, '../client/build/index.html')));
 
 app.get('/scanMethylScapeTable', (req, res) => {
     logger.log('info', 'Request scan on dynamoDB table: %s', dynamoDBTableName)
