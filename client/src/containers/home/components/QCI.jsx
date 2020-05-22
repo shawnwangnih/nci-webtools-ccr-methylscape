@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table } from 'antd';
+import { Table, Modal } from 'antd';
 import { xml2js } from 'xml-js';
 import './QCI.css';
 
 export default function QCI() {
   const { id, file } = useParams();
   console.log('params', id, file);
+
+  useEffect(() => {
+    downloadFile(id, file);
+  }, []);
 
   //Helper to download files from the s3 bucket
   async function downloadFile(sampleId, file) {
@@ -22,6 +26,10 @@ export default function QCI() {
         }),
       });
       if (response.status == 404) {
+        Modal.error({
+          title: 'Could Not Find QCI Report',
+          content: 'some messages...some messages...',
+        });
         console.log(response);
       } else {
         let xml = await response.text();
@@ -179,20 +187,6 @@ export default function QCI() {
     // console.log('un', uncertain);
     sigVariants(significant);
     unknownVariants(uncertain);
-
-    // let reader = new FileReader();
-    // reader.onload = () => {
-    //   const result = xml2js(reader.result, { compact: true });
-    //   let variants = result.report.variant.reverse();
-    //   if (!Array.isArray(variants)) variants = [variants];
-    //   const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-    //   const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
-    //   // console.log('sig', significant);
-    //   // console.log('un', uncertain);
-    //   sigVariants(significant);
-    //   unknownVariants(uncertain);
-    // };
-    // reader.readAsText(file);
   }
 
   // VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE
@@ -269,16 +263,6 @@ export default function QCI() {
     <div>
       <div>
         <div>
-          <label>Upload Here</label>
-          <input
-            type="file"
-            id="xmlInput"
-            onChange={(e) => {
-              parseVariants(e.target.files[0]);
-            }}
-          />
-        </div>
-        <div>
           <button onClick={() => downloadFile(id, file)}>s3</button>
         </div>
         <div>
@@ -329,6 +313,9 @@ export default function QCI() {
               columns={unkTable.columns}
               dataSource={unkTable.data}
               pagination={false}
+              expandRowByClick={true}
+              size="small"
+              ellipsis={true}
               bordered
               title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
               footer={() => <sub>*VAF: Variant Allele Frequency</sub>}

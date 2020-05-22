@@ -445,7 +445,7 @@ class Samples extends React.Component {
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    window.open(`${root}qci/${sampleId}/${file}`, '_blank');
+    window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
 
     // try {
     //   let response = await fetch(
@@ -1073,21 +1073,21 @@ class Samples extends React.Component {
         }
       ];
 
-      let tableSettings = {
-        loading: true,
-        pagination: {
-          position: 'bottom',
-          size: 'small',
-          // pageSize: 15,
-          defaultPageSize: 25,
-          pageSizeOptions: ['10', '25', '50', '100'],
-          showSizeChanger: true,
-          itemRender: this.itemRender,
-          showTotal: this.rangeFunction
-        },
-        data: [],
-        filteredData: []
-      };
+      // let tableSettings = {
+      //   loading: true,
+      //   pagination: {
+      //     position: 'bottom',
+      //     size: 'small',
+      //     // pageSize: 15,
+      //     defaultPageSize: 25,
+      //     pageSizeOptions: ['10', '25', '50', '100'],
+      //     showSizeChanger: true,
+      //     itemRender: this.itemRender,
+      //     showTotal: this.rangeFunction
+      //   },
+      //   data: [],
+      //   filteredData: []
+      // };
       return (
         <div>
           <h2 style={{ textAlign: 'center' }}>Sample Information</h2>
