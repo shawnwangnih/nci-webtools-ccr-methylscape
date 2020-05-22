@@ -25,6 +25,7 @@ export default function QCI() {
         console.log(response);
       } else {
         let xml = await response.text();
+        console.log(xml);
         parseVariants(xml);
       }
     } catch (e) {
@@ -169,19 +170,29 @@ export default function QCI() {
   }
 
   function parseVariants(file) {
-    let reader = new FileReader();
-    reader.onload = () => {
-      const result = xml2js(reader.result, { compact: true });
-      let variants = result.report.variant.reverse();
-      if (!Array.isArray(variants)) variants = [variants];
-      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
-      // console.log('sig', significant);
-      // console.log('un', uncertain);
-      sigVariants(significant);
-      unknownVariants(uncertain);
-    };
-    reader.readAsText(file);
+    const parsed = xml2js(file, { compact: true });
+    let variants = parsed.report.variant.reverse();
+    if (!Array.isArray(variants)) variants = [variants];
+    const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
+    const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+    // console.log('sig', significant);
+    // console.log('un', uncertain);
+    sigVariants(significant);
+    unknownVariants(uncertain);
+
+    // let reader = new FileReader();
+    // reader.onload = () => {
+    //   const result = xml2js(reader.result, { compact: true });
+    //   let variants = result.report.variant.reverse();
+    //   if (!Array.isArray(variants)) variants = [variants];
+    //   const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
+    //   const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+    //   // console.log('sig', significant);
+    //   // console.log('un', uncertain);
+    //   sigVariants(significant);
+    //   unknownVariants(uncertain);
+    // };
+    // reader.readAsText(file);
   }
 
   // VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE
