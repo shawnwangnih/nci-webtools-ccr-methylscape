@@ -6,7 +6,6 @@ import './QCI.css';
 
 export default function QCI() {
   const { id, file } = useParams();
-
   const [snvTable, setSnv] = useState({
     columns: [
       {
@@ -154,14 +153,13 @@ export default function QCI() {
           title: 'Could Not Find QCI Report',
           content: 'some messages...some messages...',
         });
-        // console.log(response);
+        console.log(response);
       } else {
         let xml = await response.text();
-        // console.log(xml);
         parseVariants(xml);
       }
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   }
 
@@ -171,6 +169,7 @@ export default function QCI() {
       const result = xml2js(reader.result, { compact: true });
       let variants = result.report.variant;
       !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
+      console.log(variants);
       const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
       const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
       // console.log('sig', significant);
@@ -233,6 +232,7 @@ export default function QCI() {
       const loc = `chr${v.chromosome._text}:${v.position._text}`;
       const tier = `Tier ${v.actionability._text}`;
 
+      // SMALL NUCLEOTIDE VARIANTS (SNV)
       if (v.gene) {
         const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
         snvData.push({
@@ -246,6 +246,7 @@ export default function QCI() {
           tier: tier,
           interpretation: v.rcomment[0].text._text,
         });
+        // STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)
       } else if (v.length) {
         const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
 
@@ -257,6 +258,7 @@ export default function QCI() {
           tier: tier,
           interpretation: v.rcomment[0].text._text,
         });
+        // STRUCTURAL VARIANTS: FUSION
       } else if (v.readDepth) {
         const gene = `${v.structuralChange.gene._text} ${v.reference._text}`;
 
@@ -272,11 +274,12 @@ export default function QCI() {
       }
     });
 
-    setSnv((snvTable) => ({ ...snvTable, ...{ data: snvData } }));
-    setCnv((cnvTable) => ({ ...cnvTable, ...{ data: cnvData } }));
-    setFusion((fusionTable) => ({ ...fusionTable, ...{ data: fusionData } }));
+    setSnv({ ...snvTable, ...{ data: snvData } });
+    setCnv({ ...cnvTable, ...{ data: cnvData } });
+    setFusion({ ...fusionTable, ...{ data: fusionData } });
   }
 
+  // VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE
   function unknownVariants(variants) {
     let data = variants.map((v, i) => {
       const loc = `chr${v.chromosome._text}:${v.position._text}`;
@@ -310,7 +313,7 @@ export default function QCI() {
         <div>
           <button
             onClick={() => {
-              // downloadFile(id, file);
+              downloadFile(id, file);
             }}
           >
             s3
@@ -374,7 +377,6 @@ export default function QCI() {
               dataSource={unkTable.data}
               pagination={false}
               bordered
-              title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
               footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
             />
           </div>

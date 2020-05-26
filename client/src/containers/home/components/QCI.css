@@ -1,14 +1,18 @@
+h2 {
+  margin: 0.5em !important;
+}
+
 .textRed {
   color: #dc3545;
 }
 
 .ant-table-title {
-  /* background-color: #0050d8 ; */
+  background-color: #757575;
   text-align: center;
   padding: 0.5em !important;
 }
 
 .ant-table-title > h3 {
-  /* color: #fff; */
+  color: white;
   margin: 0;
 }
