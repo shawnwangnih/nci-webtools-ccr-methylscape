@@ -429,12 +429,7 @@ class App extends React.Component {
     let mainContent = this.renderMain();
     return (
       <div>
-        <Layout
-          style={
-            {
-              // background: 'black',
-            }
-          }>
+        <Layout>
           {this.renderHeader()}
           <div
             style={{
@@ -442,52 +437,82 @@ class App extends React.Component {
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <a
               href="https://ccrod.cancer.gov/confluence/display/CCRLP/NCI+COMPASS"
               target="_blank"
               style={{
                 fontSize: '20px',
                 paddingLeft: '115px',
-                color: '#4f4f4f'
-              }}>
+                color: '#4f4f4f',
+              }}
+            >
               Laboratory of Pathology, NCI Compass
             </a>
           </div>
-          {/*
-          <Header
-            className="header"
-            style={{
-              height: '40px',
-              theme: 'light',
-              background: '#0d2943',
-              // position: 'fixed',
-              zIndex: 1,
-              width: '100%',
-              padding: '0 50px'
-            }}>
-          </Header>
- */}
 
-          <Header
-            className="header"
-            style={{
-              height:
-                this.state.windowWidth < 685 && this.state.mobileOpened == true
-                  ? '240px'
-                  : '40px',
-              zIndex: 1,
-              width: '100%',
-              padding: '0 0px',
-              marginTop: '10px',
-              //'border-bottom': '0',
-              // position: 'fixed',
-
-              background: 'steelblue'
-            }}>
-            {this.renderNavbar()}
-          </Header>
+          {/* Header */}
+          <Switch>
+            <Route
+              exact
+              path="/"
+              children={
+                <Header
+                  className="header"
+                  style={{
+                    height:
+                      this.state.windowWidth < 685 && this.state.mobileOpened == true
+                        ? '240px'
+                        : '40px',
+                    zIndex: 1,
+                    width: '100%',
+                    padding: '0 0px',
+                    marginTop: '10px',
+                    background: 'steelblue',
+                  }}
+                >
+                  {this.renderNavbar()}
+                </Header>
+              }
+            />
+            <Route
+              path="/qci/:id/:file"
+              children={
+                <Header
+                  className="header"
+                  style={{
+                    height:
+                      this.state.windowWidth < 685 && this.state.mobileOpened == true
+                        ? '240px'
+                        : '40px',
+                    zIndex: 1,
+                    width: '100%',
+                    padding: '0 0px',
+                    marginTop: '10px',
+                    background: 'steelblue',
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: '0px 0px',
+                      maxWidth: '1400px',
+                      width: '100%',
+                      marginRight: 'auto',
+                      marginLeft: 'auto',
+                      lineHeight: '40px',
+                      color: 'white',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    QCI Report
+                  </div>
+                </Header>
+              }
+            ></Route>
+          </Switch>
 
           <Content
             style={{
@@ -496,13 +521,15 @@ class App extends React.Component {
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <div
               style={{
                 background: '#fff',
-                minHeight: 380
-              }}>
+                minHeight: 380,
+              }}
+            >
               <Switch>
                 <Route path="/qci/:id/:file" component={QCI} />
                 <Route exact path="/" children={mainContent} />

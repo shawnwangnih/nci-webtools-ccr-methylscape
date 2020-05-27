@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Modal } from 'antd';
+import { Table, Modal, Layout } from 'antd';
 import { xml2js } from 'xml-js';
 import './QCI.css';
+const { Header } = Layout;
 
 export default function QCI() {
   const { id, file } = useParams();
@@ -299,26 +300,8 @@ export default function QCI() {
 
   return (
     <div>
+      <div style={{ backgroundColor: 'rgb(240, 242, 245)', height: '20px' }}></div>
       <div>
-        <div>
-          <label>Upload Here</label>
-          <input
-            type="file"
-            id="xmlInput"
-            onChange={(e) => {
-              parseUpload(e.target.files[0]);
-            }}
-          />
-        </div>
-        <div>
-          <button
-            onClick={() => {
-              downloadFile(id, file);
-            }}
-          >
-            s3
-          </button>
-        </div>
         <div>
           <div>
             <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
@@ -382,6 +365,26 @@ export default function QCI() {
           </div>
         </div>
       </div>
+      <span>
+        Debugging
+        <label>Upload Here</label>
+        <input
+          type="file"
+          id="xmlInput"
+          onChange={(e) => {
+            parseUpload(e.target.files[0]);
+          }}
+        />
+      </span>
+      <span>
+        <button
+          onClick={() => {
+            downloadFile(id, file);
+          }}
+        >
+          s3
+        </button>
+      </span>
     </div>
   );
 }
