@@ -211,9 +211,18 @@ export default function QCI() {
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
   }
 
+  function getInterpretation(rcomment) {
+    if (Array.isArray(rcomment)) {
+      return rcomment[0].text._text;
+    } else {
+      return rcomment.text._text;
+    }
+  }
+
   function parseVariants(file) {
     const parsed = xml2js(file, { compact: true });
     let variants = parsed.report.variant;
+    console.log(variants);
     !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
     const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
     const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
@@ -245,7 +254,7 @@ export default function QCI() {
           vaf: vaf,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: getInterpretation(v.rcomment),
         });
         // STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)
       } else if (v.length) {
@@ -257,7 +266,7 @@ export default function QCI() {
           genomicLocation: loc,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: getInterpretation(v.rcomment),
         });
         // STRUCTURAL VARIANTS: FUSION
       } else if (v.readDepth) {
@@ -270,7 +279,7 @@ export default function QCI() {
           reads: v.readDepth._text,
           pathAssessment: v.assessment._text,
           tier: tier,
-          interpretation: v.rcomment[0].text._text,
+          interpretation: getInterpretation(v.rcomment),
         });
       }
     });
