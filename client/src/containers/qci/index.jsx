@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Modal, Layout } from 'antd';
+import { Table, Modal } from 'antd';
 import { xml2js } from 'xml-js';
 import './QCI.css';
-const { Header } = Layout;
 
 export default function QCI() {
   const { id, file } = useParams();

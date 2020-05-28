@@ -8,7 +8,7 @@ import Home from '../home';
 // import Experiments from '../home/components/Experiments';
 // import Samples from '../home/components/Samples';
 // import Projects from '../home/components/Projects';
-import QCI from '../home/components/QCI';
+import QCI from '../qci';
 //import Help from '../home/components/Help'
 import { Layout, Menu, PageHeader } from 'antd';
 // import FooterContent from './components/footer';
@@ -18,7 +18,7 @@ import {
   // faClipboard,
   // faVials,
   // faUserFriends,
-  faBars
+  faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { Router } from 'express';
@@ -30,22 +30,22 @@ class App extends React.Component {
     data: [],
     filter: {
       project: '',
-      experiment: ''
+      experiment: '',
     },
     scanCheck: true,
     showErrorAlert: false,
     projectSummery: '',
     windowWidth: document.body.clientWidth,
     mobileOpened: false,
-    timeout: false
+    timeout: false,
   };
-  handleClick = e => {
+  handleClick = (e) => {
     this.setState({
       current: e.key,
       filter: {
         project: '',
-        experiment: ''
-      }
+        experiment: '',
+      },
     });
   };
 
@@ -58,7 +58,7 @@ class App extends React.Component {
           this.setState({ windowWidth: document.body.clientWidth }, () => {
             //console.log(this.state.windowWidth);
           });
-        }, 250)
+        }, 250),
       });
     });
   }
@@ -76,11 +76,7 @@ class App extends React.Component {
 
   renderMain() {
     return (
-      <Home
-        current={this.state.current}
-        changeTab={this.changeTab}
-        filter={this.state.filter}
-      />
+      <Home current={this.state.current} changeTab={this.changeTab} filter={this.state.filter} />
     );
   }
 
@@ -88,9 +84,9 @@ class App extends React.Component {
     //(this.state.data);
   }
 
-  handleExpandHamburger = e => {
+  handleExpandHamburger = (e) => {
     this.setState({
-      mobileOpened: !this.state.mobileOpened
+      mobileOpened: !this.state.mobileOpened,
     });
   };
 
@@ -111,7 +107,7 @@ class App extends React.Component {
     const navLinkStyle = {
       color: 'white',
       fontSize: '16px',
-      fontWeight: '600'
+      fontWeight: '600',
     };
     if (this.state.windowWidth >= 685) {
       return (
@@ -121,8 +117,9 @@ class App extends React.Component {
             maxWidth: '1400px',
             width: '100%',
             marginRight: 'auto',
-            marginLeft: 'auto'
-          }}>
+            marginLeft: 'auto',
+          }}
+        >
           <Menu
             onClick={this.handleClick}
             selectedKeys={[this.state.current]}
@@ -132,8 +129,9 @@ class App extends React.Component {
               width: '100%',
               height: '40px',
               lineHeight: '40px',
-              backgroundColor: 'steelblue'
-            }}>
+              backgroundColor: 'steelblue',
+            }}
+          >
             {/* Home */}
             <Menu.Item key="projects" className="testMenu">
               <div>
@@ -164,8 +162,9 @@ class App extends React.Component {
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <div style={{ height: '40px' }}>
               <div style={{ padding: '0px 50px', height: '40px' }}>
                 <div
@@ -175,25 +174,25 @@ class App extends React.Component {
                     'line-height': '40px',
                     float: 'left',
                     fontSize: '16px',
-                    fontWeight: '600'
-                  }}>
-                  <p style={{ color: 'white' }}>
-                    {this.getCurrentMobileHeader()}
-                  </p>
+                    fontWeight: '600',
+                  }}
+                >
+                  <p style={{ color: 'white' }}>{this.getCurrentMobileHeader()}</p>
                 </div>
                 <a
                   style={{
                     height: '40px',
                     'line-height': '40px',
-                    float: 'right'
+                    float: 'right',
                   }}
-                  onClick={this.handleExpandHamburger}>
+                  onClick={this.handleExpandHamburger}
+                >
                   <FontAwesomeIcon
                     icon={faBars}
                     style={{
                       paddingTop: '10px',
                       color: 'white',
-                      fontSize: '30px'
+                      fontSize: '30px',
                     }}
                   />
                 </a>
@@ -207,14 +206,13 @@ class App extends React.Component {
                       fontWeight: '600',
                       padding: '0px 0px',
                       margin: '0',
-                      'line-height': '50px'
-                    }}>
+                      'line-height': '50px',
+                    }}
+                  >
                     Projects
                   </p>
                 </div>
-                <div
-                  className="mobileMenu"
-                  onClick={this.handleExperimentClick}>
+                <div className="mobileMenu" onClick={this.handleExperimentClick}>
                   <p
                     style={{
                       color: 'white',
@@ -222,8 +220,9 @@ class App extends React.Component {
                       fontWeight: '600',
                       padding: '0px 0px',
                       margin: '0',
-                      'line-height': '50px'
-                    }}>
+                      'line-height': '50px',
+                    }}
+                  >
                     Experiments
                   </p>
                 </div>
@@ -235,8 +234,9 @@ class App extends React.Component {
                       fontWeight: '600',
                       padding: '0px 0px',
                       margin: '0',
-                      'line-height': '50px'
-                    }}>
+                      'line-height': '50px',
+                    }}
+                  >
                     Samples
                   </p>
                 </div>
@@ -248,8 +248,9 @@ class App extends React.Component {
                       fontWeight: '600',
                       padding: '0px 0px',
                       margin: '0',
-                      'line-height': '50px'
-                    }}>
+                      'line-height': '50px',
+                    }}
+                  >
                     Help
                   </p>
                 </div>
@@ -265,8 +266,9 @@ class App extends React.Component {
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <div style={{ height: '40px' }}>
               <div style={{ padding: '0px 50px', height: '40px' }}>
                 <div
@@ -276,25 +278,25 @@ class App extends React.Component {
                     'line-height': '40px',
                     float: 'left',
                     fontSize: '16px',
-                    fontWeight: '600'
-                  }}>
-                  <p style={{ color: 'white' }}>
-                    {this.getCurrentMobileHeader()}
-                  </p>
+                    fontWeight: '600',
+                  }}
+                >
+                  <p style={{ color: 'white' }}>{this.getCurrentMobileHeader()}</p>
                 </div>
                 <a
                   style={{
                     height: '40px',
                     'line-height': '40px',
-                    float: 'right'
+                    float: 'right',
                   }}
-                  onClick={this.handleExpandHamburger}>
+                  onClick={this.handleExpandHamburger}
+                >
                   <FontAwesomeIcon
                     icon={faBars}
                     style={{
                       paddingTop: '10px',
                       color: 'white',
-                      fontSize: '30px'
+                      fontSize: '30px',
                     }}
                   />
                 </a>
@@ -317,16 +319,18 @@ class App extends React.Component {
             // position: 'fixed',
             zIndex: 1,
             width: '100%',
-            padding: '0'
-          }}>
+            padding: '0',
+          }}
+        >
           <div
             style={{
               padding: '0 0px',
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <a href="https://ccr.cancer.gov/" target="_blank">
               <img
                 height="auto"
@@ -351,16 +355,18 @@ class App extends React.Component {
             // position: 'fixed',
             zIndex: 1,
             width: '100%',
-            padding: '0 50px'
-          }}>
+            padding: '0 50px',
+          }}
+        >
           <div
             style={{
               padding: '0 0px',
               maxWidth: '1400px',
               width: '100%',
               marginRight: 'auto',
-              marginLeft: 'auto'
-            }}>
+              marginLeft: 'auto',
+            }}
+          >
             <a href="https://ccr.cancer.gov/" target="_blank">
               <img
                 height="auto"
@@ -377,44 +383,44 @@ class App extends React.Component {
     }
   }
 
-  handleProjectClick = e => {
+  handleProjectClick = (e) => {
     this.setState({
       current: 'projects',
       filter: {
         project: '',
-        experiment: ''
+        experiment: '',
       },
-      mobileOpened: false
+      mobileOpened: false,
     });
   };
-  handleExperimentClick = e => {
+  handleExperimentClick = (e) => {
     this.setState({
       current: 'experiments',
       filter: {
         project: '',
-        experiment: ''
+        experiment: '',
       },
-      mobileOpened: false
+      mobileOpened: false,
     });
   };
-  handleSampleClick = e => {
+  handleSampleClick = (e) => {
     this.setState({
       current: 'samples',
       filter: {
         project: '',
-        experiment: ''
+        experiment: '',
       },
-      mobileOpened: false
+      mobileOpened: false,
     });
   };
-  handleHelpClick = e => {
+  handleHelpClick = (e) => {
     this.setState({
       current: 'help',
       filter: {
         project: '',
-        experiment: ''
+        experiment: '',
       },
-      mobileOpened: false
+      mobileOpened: false,
     });
   };
 
