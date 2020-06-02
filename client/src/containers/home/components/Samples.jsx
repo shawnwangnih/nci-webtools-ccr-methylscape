@@ -1151,47 +1151,17 @@ class Samples extends React.Component {
         render: (text, record) => {
           if (record.id == this.state.currSample) {
             return (
-              <Button
-                size="small"
-                className="buttonHoverClass"
-                style={{
-                  marginBottom: '0px',
-                  marginTop: '0px',
-                  width: '15px',
-                  height: '15px',
-                  display: 'flex',
-                  'align-items': 'center',
-                  justifyContent: 'center'
-                }}
-                aria-label="hide row button">
-                <FontAwesomeIcon
-                  icon={faChevronUp}
-                  style={{ color: 'black', fontSize: '8px' }}
-                />
+              <Button size="small" className="buttonHoverClass" aria-label="hide row button">
+                <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
               </Button>
             );
           }
           return (
-            <Button
-              size="small"
-              className="buttonHoverClass"
-              style={{
-                marginBottom: '0px',
-                marginTop: '0px',
-                width: '15px',
-                height: '15px',
-                display: 'flex',
-                'align-items': 'center',
-                justifyContent: 'center'
-              }}
-              aria-label="expand row button">
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                style={{ color: 'black', fontSize: '8px' }}
-              />
+            <Button size="small" className="buttonHoverClass" aria-label="expand row button">
+              <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
             </Button>
           );
-        }
+        },
       },
       {
         title: 'Sample Name',
@@ -1201,7 +1171,7 @@ class Samples extends React.Component {
         defaultSortOrder: 'ascend',
         ellipsis: true,
         sorter: (a, b) => a.sample_name.localeCompare(b.sample_name),
-        render: (text, record) => <span>{text}</span>
+        render: (text, record) => <span>{text}</span>,
       },
       {
         title: 'Project',
@@ -1215,12 +1185,11 @@ class Samples extends React.Component {
             className="linkSpan"
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
-            onClick={() =>
-              this.props.changeTab('projects', { project: record.project })
-            }>
+            onClick={() => this.props.changeTab('projects', { project: record.project })}
+          >
             {text}
           </span>
-        )
+        ),
       },
       {
         title: 'Experiment',
@@ -1236,12 +1205,13 @@ class Samples extends React.Component {
             //   this.props.changeTab('experiments', { project: record.project })
             onClick={() =>
               this.props.changeTab('experiments', {
-                experiment: record.experiment
+                experiment: record.experiment,
               })
-            }>
+            }
+          >
             {text}
           </span>
-        )
+        ),
       },
       {
         title: 'Sample Date',
@@ -1251,7 +1221,7 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => this.compareDates(a, b),
         width: '8%',
-        render: (text, record) => <span>{text}</span>
+        render: (text, record) => <span>{text}</span>,
       },
       {
         title: 'Surgical Case',
@@ -1260,7 +1230,7 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.surgical_case.localeCompare(b.surgical_case),
         width: '10%',
-        render: (text, record) => <span>{text}</span>
+        render: (text, record) => <span>{text}</span>,
       },
       {
         title: 'Gender',
@@ -1269,7 +1239,7 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.gender.localeCompare(b.gender),
         width: '9%',
-        render: (text, record) => <span>{text}</span>
+        render: (text, record) => <span>{text}</span>,
       },
       {
         title: 'Age',
@@ -1287,7 +1257,7 @@ class Samples extends React.Component {
           return aNew - bNew;
         },
         width: '7%',
-        render: (text, record) => <span>{text}</span>
+        render: (text, record) => <span>{text}</span>,
       },
       {
         title: 'Diagnosis',
@@ -1296,8 +1266,8 @@ class Samples extends React.Component {
         ellipsis: true,
         sorter: (a, b) => a.diagnosis.localeCompare(b.diagnosis),
         width: '24%',
-        render: (text, record) => <span>{text}</span>
-      }
+        render: (text, record) => <span>{text}</span>,
+      },
     ];
 
     const Option = Select.Option;

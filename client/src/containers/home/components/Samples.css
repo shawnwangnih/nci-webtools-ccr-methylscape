@@ -42,19 +42,19 @@
   cursor: pointer;
 }
 
-.ant-table-small
-  > .ant-table-content
-  > .ant-table-body
-  > table
-  > .ant-table-tbody
-  > tr
-  > td {
+.ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
 .buttonHoverClass {
   cursor: pointer;
+  margin-top: '0px';
+  width: '15px';
+  height: '15px';
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'center';
 }
 
 .ant-select-dropdown {
