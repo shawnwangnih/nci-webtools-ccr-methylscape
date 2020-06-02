@@ -287,6 +287,19 @@ export default function QCI() {
     setUnk({ ...unkTable, ...{ data: data } });
   }
 
+  function customIcon(expanded) {
+    return (
+      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
+        {expanded ? (
+          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
+        ) : (
+          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
+        )}
+      </Button>
+    );
+  }
+
+  // debugging
   function parseUpload(file) {
     let reader = new FileReader();
     reader.onload = () => {
@@ -301,18 +314,6 @@ export default function QCI() {
       unknownVariants(uncertain);
     };
     reader.readAsText(file);
-  }
-
-  function customIcon(expanded) {
-    return (
-      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
-        {expanded ? (
-          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
-        ) : (
-          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
-        )}
-      </Button>
-    );
   }
 
   return (
@@ -333,7 +334,6 @@ export default function QCI() {
                 onExpand={snvTable.onExpand}
                 expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
-                // bordered
                 title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
                 footer={() => (
                   <sub>*VAF: Variant Allele Frequency; **TIER: Actionability Classification</sub>
@@ -353,7 +353,6 @@ export default function QCI() {
                 onExpand={cnvTable.onExpand}
                 expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
-                // bordered
                 title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
                 footer={() => (
                   <div>
@@ -380,7 +379,6 @@ export default function QCI() {
                 onExpand={fusionTable.onExpand}
                 expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
-                // bordered
                 title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
                 footer={() => <sub>**TIER: Actionability Classification</sub>}
               />
@@ -396,7 +394,7 @@ export default function QCI() {
                 dataSource={unkTable.data}
                 pagination={false}
                 size="small"
-                // bordered
+                title={() => <h3>UNKNOWN</h3>}
                 footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
               />
             ) : (
@@ -405,7 +403,7 @@ export default function QCI() {
           </div>
         </div>
       </div>
-      <span>
+      {/* <span>
         Debugging
         <label>Upload Here</label>
         <input
@@ -424,7 +422,7 @@ export default function QCI() {
         >
           s3
         </button>
-      </span>
+      </span> */}
     </div>
   );
 }

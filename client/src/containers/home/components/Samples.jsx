@@ -859,8 +859,16 @@ class Samples extends React.Component {
     return <div />;
   };
 
-  customExpandIcon(props) {
-    return <div style={{ width: '0px' }} />;
+  customExpandIcon(expanded) {
+    return (
+      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
+        {expanded ? (
+          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
+        ) : (
+          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
+        )}
+      </Button>
+    );
   }
 
   onTableRowExpand = (expanded, record) => {
@@ -1144,25 +1152,6 @@ class Samples extends React.Component {
   render() {
     //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
-      {
-        title: '',
-        dataIndex: 'expandBoxes',
-        width: '3%',
-        render: (text, record) => {
-          if (record.id == this.state.currSample) {
-            return (
-              <Button size="small" className="buttonHoverClass" aria-label="hide row button">
-                <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
-              </Button>
-            );
-          }
-          return (
-            <Button size="small" className="buttonHoverClass" aria-label="expand row button">
-              <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
-            </Button>
-          );
-        },
-      },
       {
         title: 'Sample Name',
         dataIndex: 'sample_name',
@@ -1478,7 +1467,7 @@ class Samples extends React.Component {
               expandRowByClick={true}
               expandedRowKeys={this.state.expandedRowKeys}
               onExpand={this.onTableRowExpand}
-              expandIcon={props => this.customExpandIcon(props)}
+              expandIcon={props => this.customExpandIcon(props.expanded)}
               rowClassName={(record, index) => {
                 /*let selected =
                 this.state.currSample == ''
