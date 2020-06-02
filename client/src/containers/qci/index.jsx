@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Modal } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import { xml2js } from 'xml-js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import './QCI.css';
 
 export default function QCI() {
@@ -153,7 +155,6 @@ export default function QCI() {
           title: 'Could Not Find QCI Report',
           content: 'some messages...some messages...',
         });
-        console.log(response);
       } else {
         let xml = await response.text();
         parseVariants(xml);
@@ -161,23 +162,6 @@ export default function QCI() {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  function parseUpload(file) {
-    let reader = new FileReader();
-    reader.onload = () => {
-      const result = xml2js(reader.result, { compact: true });
-      let variants = result.report.variant;
-      !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
-      console.log(variants);
-      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
-      // console.log('sig', significant);
-      // console.log('un', uncertain);
-      sigVariants(significant);
-      unknownVariants(uncertain);
-    };
-    reader.readAsText(file);
   }
 
   // display gene with reference
@@ -221,12 +205,9 @@ export default function QCI() {
   function parseVariants(file) {
     const parsed = xml2js(file, { compact: true });
     let variants = parsed.report.variant;
-    console.log(variants);
     !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
     const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
     const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
-    // console.log('sig', significant);
-    // console.log('un', uncertain);
     sigVariants(significant);
     unknownVariants(uncertain);
   }
@@ -306,6 +287,34 @@ export default function QCI() {
     setUnk({ ...unkTable, ...{ data: data } });
   }
 
+  function parseUpload(file) {
+    let reader = new FileReader();
+    reader.onload = () => {
+      const result = xml2js(reader.result, { compact: true });
+      let variants = result.report.variant;
+      !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
+      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
+      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+      console.log('sig', significant);
+      console.log('un', uncertain);
+      sigVariants(significant);
+      unknownVariants(uncertain);
+    };
+    reader.readAsText(file);
+  }
+
+  function customIcon(expanded) {
+    return (
+      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
+        {expanded ? (
+          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
+        ) : (
+          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
+        )}
+      </Button>
+    );
+  }
+
   return (
     <div>
       <div style={{ backgroundColor: 'rgb(240, 242, 245)', height: '20px' }}></div>
@@ -322,7 +331,9 @@ export default function QCI() {
                 expandedRowRender={(record) => renderHTML(record.interpretation)}
                 expandedRowKeys={snvTable.expandedRowKeys}
                 onExpand={snvTable.onExpand}
-                bordered
+                expandIcon={({ expanded }) => customIcon(expanded)}
+                size="small"
+                // bordered
                 title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
                 footer={() => (
                   <sub>*VAF: Variant Allele Frequency; **TIER: Actionability Classification</sub>
@@ -340,7 +351,9 @@ export default function QCI() {
                 expandedRowRender={(record) => renderHTML(record.interpretation)}
                 expandedRowKeys={cnvTable.expandedRowKeys}
                 onExpand={cnvTable.onExpand}
-                bordered
+                expandIcon={({ expanded }) => customIcon(expanded)}
+                size="small"
+                // bordered
                 title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
                 footer={() => (
                   <div>
@@ -365,7 +378,9 @@ export default function QCI() {
                 expandedRowRender={(record) => renderHTML(record.interpretation)}
                 expandedRowKeys={fusionTable.expandedRowKeys}
                 onExpand={fusionTable.onExpand}
-                bordered
+                expandIcon={({ expanded }) => customIcon(expanded)}
+                size="small"
+                // bordered
                 title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
                 footer={() => <sub>**TIER: Actionability Classification</sub>}
               />
@@ -380,7 +395,8 @@ export default function QCI() {
                 columns={unkTable.columns}
                 dataSource={unkTable.data}
                 pagination={false}
-                bordered
+                size="small"
+                // bordered
                 footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
               />
             ) : (
