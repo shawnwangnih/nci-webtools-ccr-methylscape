@@ -485,7 +485,7 @@ class App extends React.Component {
             />
             <Route
               path="/qci/:id/:file"
-              children={
+              children={(props) => (
                 <Header
                   className="header"
                   style={{
@@ -513,10 +513,10 @@ class App extends React.Component {
                       fontWeight: 'bold',
                     }}
                   >
-                    QCI Report
+                    QCI Report - {props.match.params.id}
                   </div>
                 </Header>
-              }
+              )}
             ></Route>
           </Switch>
 
