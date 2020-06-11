@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Modal, Button } from 'antd';
+import { Table, Modal, Spin } from 'antd';
 import { xml2js } from 'xml-js';
 import './QCI.css';
 
 export default function QCI() {
   const { id, file } = useParams();
+  const [tryS3, setTryS3] = useState(false);
   const [snvTable, setSnv] = useState({
     columns: [
       {
@@ -121,7 +122,9 @@ export default function QCI() {
     data: [],
   });
 
+  // attempt do download from s3 on component render
   useEffect(() => {
+    setTryS3(false);
     downloadFile(id, file);
   }, []);
 
@@ -158,15 +161,17 @@ export default function QCI() {
         }),
       });
       if (response.status == 404) {
-        Modal.error({
-          title: 'Could Not Find QCI Report',
-          content: 'some messages...some messages...',
-        });
+        setTryS3(true);
+        // Modal.error({
+        //   title: 'Could Not Find QCI Report',
+        //   content: 'some messages...some messages...',
+        // });
       } else {
         let xml = await response.text();
         parseVariants(xml);
       }
     } catch (e) {
+      setTryS3(true);
       console.log(e);
     }
   }
@@ -223,6 +228,7 @@ export default function QCI() {
     );
     sigVariants(significant);
     unknownVariants(uncertain);
+    setTryS3(true);
   }
 
   // VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE
@@ -330,109 +336,121 @@ export default function QCI() {
   return (
     <div>
       <div
-        style={{ backgroundColor: 'rgb(240, 242, 245)', height: '20px' }}
+        style={{ backgroundColor: 'rgb(240, 242, 245)', paddingBottom: '1rem' }}
       ></div>
-      <div>
-        <div>
-          <div id="significantTables">
-            <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
-            {snvTable.data.length ? (
-              <Table
-                columns={snvTable.columns}
-                dataSource={snvTable.data}
-                pagination={false}
-                expandRowByClick={true}
-                expandedRowRender={(record) =>
-                  renderHTML(record.interpretation)
-                }
-                expandedRowKeys={snvTable.expandedRowKeys}
-                onExpand={snvTable.onExpand}
-                size="small"
-                title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
-                footer={() => (
-                  <sub>
-                    *VAF: Variant Allele Frequency; **TIER: Actionability
-                    Classification
-                  </sub>
-                )}
-              />
-            ) : (
-              <h3 className="noDataTitle">
-                No reportable small nucleotide variants detected.
-              </h3>
-            )}
-            {cnvTable.data.length ? (
-              <Table
-                columns={cnvTable.columns}
-                dataSource={cnvTable.data}
-                pagination={false}
-                expandRowByClick={true}
-                expandedRowRender={(record) =>
-                  renderHTML(record.interpretation)
-                }
-                expandedRowKeys={cnvTable.expandedRowKeys}
-                onExpand={cnvTable.onExpand}
-                size="small"
-                title={() => (
-                  <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>
-                )}
-                footer={() => (
-                  <div>
+      {tryS3 ? (
+        snvTable.data.length ||
+        cnvTable.data.length ||
+        fusionTable.data.length ||
+        unkTable.data.length ? (
+          <div>
+            <div id="significantTables">
+              <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
+              {snvTable.data.length ? (
+                <Table
+                  columns={snvTable.columns}
+                  dataSource={snvTable.data}
+                  pagination={false}
+                  expandRowByClick={true}
+                  expandedRowRender={(record) =>
+                    renderHTML(record.interpretation)
+                  }
+                  expandedRowKeys={snvTable.expandedRowKeys}
+                  onExpand={snvTable.onExpand}
+                  size="small"
+                  title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
+                  footer={() => (
+                    <sub>
+                      *VAF: Variant Allele Frequency; **TIER: Actionability
+                      Classification
+                    </sub>
+                  )}
+                />
+              ) : (
+                <h3 className="noDataTitle">
+                  No reportable small nucleotide variants detected.
+                </h3>
+              )}
+              {cnvTable.data.length ? (
+                <Table
+                  columns={cnvTable.columns}
+                  dataSource={cnvTable.data}
+                  pagination={false}
+                  expandRowByClick={true}
+                  expandedRowRender={(record) =>
+                    renderHTML(record.interpretation)
+                  }
+                  expandedRowKeys={cnvTable.expandedRowKeys}
+                  onExpand={cnvTable.onExpand}
+                  size="small"
+                  title={() => (
+                    <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>
+                  )}
+                  footer={() => (
                     <div>
-                      <sub>**TIER: Actionability Classification</sub>
+                      <div>
+                        <sub>**TIER: Actionability Classification</sub>
+                      </div>
+                      <div>
+                        <sub>
+                          CNV analysis is not performed when tumor content
+                          &lt;50%.
+                        </sub>
+                      </div>
                     </div>
-                    <div>
-                      <sub>
-                        CNV analysis is not performed when tumor content
-                        &lt;50%.
-                      </sub>
-                    </div>
-                  </div>
-                )}
-              />
-            ) : (
-              <h3 className="noDataTitle">No reportable CNVs.</h3>
-            )}
-            {fusionTable.data.length ? (
-              <Table
-                columns={fusionTable.columns}
-                dataSource={fusionTable.data}
-                pagination={false}
-                expandRowByClick={true}
-                expandedRowRender={(record) =>
-                  renderHTML(record.interpretation)
-                }
-                expandedRowKeys={fusionTable.expandedRowKeys}
-                onExpand={fusionTable.onExpand}
-                size="small"
-                title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
-                footer={() => <sub>**TIER: Actionability Classification</sub>}
-              />
-            ) : (
-              <h3 className="noDataTitle">
-                No reportable fusions or rearrangements.
-              </h3>
-            )}
+                  )}
+                />
+              ) : (
+                <h3 className="noDataTitle">No reportable CNVs.</h3>
+              )}
+              {fusionTable.data.length ? (
+                <Table
+                  columns={fusionTable.columns}
+                  dataSource={fusionTable.data}
+                  pagination={false}
+                  expandRowByClick={true}
+                  expandedRowRender={(record) =>
+                    renderHTML(record.interpretation)
+                  }
+                  expandedRowKeys={fusionTable.expandedRowKeys}
+                  onExpand={fusionTable.onExpand}
+                  size="small"
+                  title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
+                  footer={() => <sub>**TIER: Actionability Classification</sub>}
+                />
+              ) : (
+                <h3 className="noDataTitle">
+                  No reportable fusions or rearrangements.
+                </h3>
+              )}
+            </div>
+            <div id="uncertainSignificance">
+              <h2>VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE</h2>
+              {unkTable.data.length ? (
+                <Table
+                  columns={unkTable.columns}
+                  dataSource={unkTable.data}
+                  pagination={false}
+                  size="small"
+                  title={() => <h3>UNKNOWN</h3>}
+                  footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
+                />
+              ) : (
+                <h3 className="noDataTitle">
+                  No reportable variants of uncertain significance
+                </h3>
+              )}
+            </div>
           </div>
-          <div id="uncertainSignificance">
-            <h2>VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE</h2>
-            {unkTable.data.length ? (
-              <Table
-                columns={unkTable.columns}
-                dataSource={unkTable.data}
-                pagination={false}
-                size="small"
-                title={() => <h3>UNKNOWN</h3>}
-                footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
-              />
-            ) : (
-              <h3 className="noDataTitle">
-                No reportable variants of uncertain significance
-              </h3>
-            )}
-          </div>
-        </div>
-      </div>
+        ) : (
+          <h2>No Report Available</h2>
+        )
+      ) : (
+        <h2>
+          <Spin size="large"></Spin> Loading
+        </h2>
+      )}
+
       {/* <span>
         Debugging
         <label>Upload Here</label>
