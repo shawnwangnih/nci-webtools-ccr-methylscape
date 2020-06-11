@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Table, Modal, Button } from 'antd';
 import { xml2js } from 'xml-js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import './QCI.css';
 
 export default function QCI() {
@@ -43,7 +41,8 @@ export default function QCI() {
     ],
     data: [],
     expandedRowKeys: [],
-    onExpand: (expanded, record) => manageExpandedRows(expanded, record, setSnv),
+    onExpand: (expanded, record) =>
+      manageExpandedRows(expanded, record, setSnv),
   });
   const [cnvTable, setCnv] = useState({
     columns: [
@@ -68,7 +67,8 @@ export default function QCI() {
     ],
     data: [],
     expandedRowKeys: [],
-    onExpand: (expanded, record) => manageExpandedRows(expanded, record, setCnv),
+    onExpand: (expanded, record) =>
+      manageExpandedRows(expanded, record, setCnv),
   });
   const [fusionTable, setFusion] = useState({
     columns: [
@@ -94,7 +94,8 @@ export default function QCI() {
     ],
     data: [],
     expandedRowKeys: [],
-    onExpand: (expanded, record) => manageExpandedRows(expanded, record, setFusion),
+    onExpand: (expanded, record) =>
+      manageExpandedRows(expanded, record, setFusion),
   });
   const [unkTable, setUnk] = useState({
     columns: [
@@ -133,14 +134,20 @@ export default function QCI() {
         }))
       : setter((prevTable) => ({
           ...prevTable,
-          ...{ expandedRowKeys: prevTable.expandedRowKeys.filter((key) => key != record.key) },
+          ...{
+            expandedRowKeys: prevTable.expandedRowKeys.filter(
+              (key) => key != record.key
+            ),
+          },
         }));
   }
 
   //Helper to download files from the s3 bucket
   async function downloadFile(sampleId, file) {
     const root =
-      process.env.NODE_ENV === 'development' ? 'http://0.0.0.0:8290/' : window.location.pathname;
+      process.env.NODE_ENV === 'development'
+        ? 'http://0.0.0.0:8290/'
+        : window.location.pathname;
 
     try {
       let response = await fetch(`${root}getMethylScapeFile`, {
@@ -205,9 +212,15 @@ export default function QCI() {
   function parseVariants(file) {
     const parsed = xml2js(file, { compact: true });
     let variants = parsed.report.variant;
-    !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
-    const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-    const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+    !Array.isArray(variants)
+      ? (variants = [variants])
+      : (variants = variants.reverse());
+    const significant = variants.filter((v) =>
+      v.assessment._text.match(/pathogenic/gi)
+    );
+    const uncertain = variants.filter((v) =>
+      v.assessment._text.match(/uncertain/gi)
+    );
     sigVariants(significant);
     unknownVariants(uncertain);
   }
@@ -224,7 +237,9 @@ export default function QCI() {
 
       // SMALL NUCLEOTIDE VARIANTS (SNV)
       if (v.gene) {
-        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
+          v.readdepth._text
+        } reads)`;
         snvData.push({
           key: snvData.length,
           gene: v.gene._text,
@@ -273,7 +288,9 @@ export default function QCI() {
   function unknownVariants(variants) {
     let data = variants.map((v, i) => {
       const loc = `chr${v.chromosome._text}:${v.position._text}`;
-      const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
+      const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
+        v.readdepth._text
+      } reads)`;
       return {
         key: i,
         gene: v.gene._text,
@@ -287,27 +304,21 @@ export default function QCI() {
     setUnk({ ...unkTable, ...{ data: data } });
   }
 
-  function customIcon(expanded) {
-    return (
-      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
-        {expanded ? (
-          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
-        ) : (
-          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
-        )}
-      </Button>
-    );
-  }
-
   // debugging
   function parseUpload(file) {
     let reader = new FileReader();
     reader.onload = () => {
       const result = xml2js(reader.result, { compact: true });
       let variants = result.report.variant;
-      !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
-      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
-      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
+      !Array.isArray(variants)
+        ? (variants = [variants])
+        : (variants = variants.reverse());
+      const significant = variants.filter((v) =>
+        v.assessment._text.match(/pathogenic/gi)
+      );
+      const uncertain = variants.filter((v) =>
+        v.assessment._text.match(/uncertain/gi)
+      );
       console.log('sig', significant);
       console.log('un', uncertain);
       sigVariants(significant);
@@ -318,7 +329,9 @@ export default function QCI() {
 
   return (
     <div>
-      <div style={{ backgroundColor: 'rgb(240, 242, 245)', height: '20px' }}></div>
+      <div
+        style={{ backgroundColor: 'rgb(240, 242, 245)', height: '20px' }}
+      ></div>
       <div>
         <div>
           <div id="significantTables">
@@ -329,18 +342,24 @@ export default function QCI() {
                 dataSource={snvTable.data}
                 pagination={false}
                 expandRowByClick={true}
-                expandedRowRender={(record) => renderHTML(record.interpretation)}
+                expandedRowRender={(record) =>
+                  renderHTML(record.interpretation)
+                }
                 expandedRowKeys={snvTable.expandedRowKeys}
                 onExpand={snvTable.onExpand}
-                expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
                 title={() => <h3>SMALL NUCLEOTIDE VARIANTS</h3>}
                 footer={() => (
-                  <sub>*VAF: Variant Allele Frequency; **TIER: Actionability Classification</sub>
+                  <sub>
+                    *VAF: Variant Allele Frequency; **TIER: Actionability
+                    Classification
+                  </sub>
                 )}
               />
             ) : (
-              <h3 className="noDataTitle">No reportable small nucleotide variants detected.</h3>
+              <h3 className="noDataTitle">
+                No reportable small nucleotide variants detected.
+              </h3>
             )}
             {cnvTable.data.length ? (
               <Table
@@ -348,19 +367,25 @@ export default function QCI() {
                 dataSource={cnvTable.data}
                 pagination={false}
                 expandRowByClick={true}
-                expandedRowRender={(record) => renderHTML(record.interpretation)}
+                expandedRowRender={(record) =>
+                  renderHTML(record.interpretation)
+                }
                 expandedRowKeys={cnvTable.expandedRowKeys}
                 onExpand={cnvTable.onExpand}
-                expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
-                title={() => <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>}
+                title={() => (
+                  <h3>STRUCTURAL VARIANTS: COPY NUMBER VARIATION (CNV)</h3>
+                )}
                 footer={() => (
                   <div>
                     <div>
                       <sub>**TIER: Actionability Classification</sub>
                     </div>
                     <div>
-                      <sub>CNV analysis is not performed when tumor content &lt;50%.</sub>
+                      <sub>
+                        CNV analysis is not performed when tumor content
+                        &lt;50%.
+                      </sub>
                     </div>
                   </div>
                 )}
@@ -374,16 +399,19 @@ export default function QCI() {
                 dataSource={fusionTable.data}
                 pagination={false}
                 expandRowByClick={true}
-                expandedRowRender={(record) => renderHTML(record.interpretation)}
+                expandedRowRender={(record) =>
+                  renderHTML(record.interpretation)
+                }
                 expandedRowKeys={fusionTable.expandedRowKeys}
                 onExpand={fusionTable.onExpand}
-                expandIcon={({ expanded }) => customIcon(expanded)}
                 size="small"
                 title={() => <h3>STRUCTURAL VARIANTS: FUSION</h3>}
                 footer={() => <sub>**TIER: Actionability Classification</sub>}
               />
             ) : (
-              <h3 className="noDataTitle">No reportable fusions or rearrangements.</h3>
+              <h3 className="noDataTitle">
+                No reportable fusions or rearrangements.
+              </h3>
             )}
           </div>
           <div id="uncertainSignificance">
@@ -398,7 +426,9 @@ export default function QCI() {
                 footer={() => <sub>*VAF: Variant Allele Frequency</sub>}
               />
             ) : (
-              <h3 className="noDataTitle">No reportable variants of uncertain significance</h3>
+              <h3 className="noDataTitle">
+                No reportable variants of uncertain significance
+              </h3>
             )}
           </div>
         </div>

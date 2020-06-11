@@ -5,8 +5,6 @@ import { DatePicker } from 'antd';
 import fileSaver from 'file-saver';
 import './Samples.css';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import ReactTooltip from 'react-tooltip';
 import Cookies from 'js-cookie';
 
@@ -34,14 +32,14 @@ class Samples extends React.Component {
         pageSizeOptions: ['10', '25', '50', '100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
-        showTotal: this.rangeFunction
+        showTotal: this.rangeFunction,
       },
       rawData: props.data,
       data: [],
       filteredData: [],
       currSample: '',
       expandedRowKeys: [],
-      filePopUp: false
+      filePopUp: false,
     };
   }
 
@@ -71,7 +69,7 @@ class Samples extends React.Component {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     for (let i = 0; i < months.length; i++) {
       if (months[i] == element) {
@@ -111,21 +109,21 @@ class Samples extends React.Component {
     return converted1 > converted2;
   }
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -136,38 +134,37 @@ class Samples extends React.Component {
           onClick={() => this.handleSearch(selectedKeys, confirm)}
           icon="search"
           size="small"
-          style={{ width: 90, marginRight: 8 }}>
+          style={{ width: 90, marginRight: 8 }}
+        >
           Search
         </Button>
         <Button
           onClick={() => this.handleReset(clearFilters)}
           size="small"
-          style={{ width: 90 }}>
+          style={{ width: 90 }}
+        >
           Reset
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text => (
+    render: (text) => (
       <Highlighter
         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text == undefined ? '' : text.toString()}
       />
-    )
+    ),
   });
 
   handleSearch = (selectedKeys, confirm) => {
@@ -175,7 +172,7 @@ class Samples extends React.Component {
     this.setState({ searchText: selectedKeys[0] });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: '' });
   };
@@ -193,7 +190,7 @@ class Samples extends React.Component {
           startDate: '',
           endDate: '',
           currSample: '',
-          expandedRowKeys: []
+          expandedRowKeys: [],
         },
         () => {
           this.handleFilter();
@@ -212,7 +209,7 @@ class Samples extends React.Component {
           startDate: '',
           endDate: '',
           currSample: '',
-          expandedRowKeys: []
+          expandedRowKeys: [],
         },
         () => {
           this.handleFilter();
@@ -240,9 +237,9 @@ class Samples extends React.Component {
   }
 
   //Updates the data based on the rawData passed in
-  createDataTable = async rawData => {
+  createDataTable = async (rawData) => {
     var sampleData = {};
-    sampleData = rawData.map(sample => {
+    sampleData = rawData.map((sample) => {
       sample.key = sample.id;
       var cp = sample.classifier_prediction;
       if (cp == null) {
@@ -258,7 +255,7 @@ class Samples extends React.Component {
       }
       return sample;
     });
-    sampleData = sampleData.filter(sample => {
+    sampleData = sampleData.filter((sample) => {
       return sample.sample_name != null;
     });
     this.setState({ data: sampleData });
@@ -307,7 +304,7 @@ class Samples extends React.Component {
     //console.log(this.state.data);
     this.setState(
       {
-        filteredData: this.state.data.filter(row => {
+        filteredData: this.state.data.filter((row) => {
           if (
             row.project != null &&
             row.project.toLowerCase().includes(this.getFilterProject()) &&
@@ -337,7 +334,7 @@ class Samples extends React.Component {
           } else {
             return false;
           }
-        })
+        }),
       },
       this.setState({ loading: false })
     );
@@ -357,7 +354,7 @@ class Samples extends React.Component {
   };
 
   //returns the methylation family if it exists
-  getMF = data => {
+  getMF = (data) => {
     //console.log(JSON.stringify(data));
     return Object.keys(data).length >= 2
       ? String(Object.keys(data['0'])[0]).substring(25)
@@ -365,12 +362,12 @@ class Samples extends React.Component {
   };
 
   //returns the methylation family score if it exists
-  getMFScore = data => {
+  getMFScore = (data) => {
     return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
   };
 
   //returns the methylation class
-  getMC = data => {
+  getMC = (data) => {
     const size = Object.keys(data).length;
     if (size >= 2) {
       return Object.keys(data['1'])[0];
@@ -382,7 +379,7 @@ class Samples extends React.Component {
   };
 
   //returns the methylation class score
-  getMCScore = data => {
+  getMCScore = (data) => {
     const size = Object.keys(data).length;
     if (size >= 2) {
       return Object.values(data['1'])[0];
@@ -404,7 +401,7 @@ class Samples extends React.Component {
         filterAge: '',
         filterDiagnosis: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
       },
       () => {
         this.handleFilter();
@@ -424,8 +421,8 @@ class Samples extends React.Component {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,
-          fileName: file
-        })
+          fileName: file,
+        }),
       });
       if (response.status == 404) {
         this.setState({ filePopUp: true });
@@ -490,7 +487,7 @@ class Samples extends React.Component {
   expandedRowRender = (record, index, indent, expanded) => {
     var found = []; //Stores variable row that was selected
 
-    let row = this.state.filteredData.filter(sample => {
+    let row = this.state.filteredData.filter((sample) => {
       if (sample.key == record.key) {
         found.push(sample);
       }
@@ -504,7 +501,7 @@ class Samples extends React.Component {
           title: '',
           dataIndex: 'emptySpace',
           sorter: true,
-          width: '3%'
+          width: '3%',
           //defaultSortOrder: 'ascend',
         },
         {
@@ -512,11 +509,11 @@ class Samples extends React.Component {
           dataIndex: 'header_name',
           sorter: true,
           width: '15%',
-          render: text => {
+          render: (text) => {
             return (
               <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
             );
-          }
+          },
           //defaultSortOrder: 'ascend',
         },
         {
@@ -534,7 +531,8 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -548,7 +546,8 @@ class Samples extends React.Component {
                       currRow.id,
                       currRow.sample_name + '_NGS.pdf'
                     )
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -559,7 +558,8 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -570,7 +570,8 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '5%', marginBottom: '0px' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -578,18 +579,18 @@ class Samples extends React.Component {
             return (
               <p style={{ paddingLeft: '5%', marginBottom: '0px' }}>{text}</p>
             );
-          }
+          },
         },
         {
           title: 'Header name',
           dataIndex: 'header_name2',
           sorter: true,
           width: '15%',
-          render: text => {
+          render: (text) => {
             return (
               <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
             );
-          }
+          },
           //defaultSortOrder: 'ascend',
         },
         {
@@ -607,11 +608,12 @@ class Samples extends React.Component {
                   style={{
                     paddingLeft: '5%',
                     marginBottom: '0px',
-                    paddingRight: '1%'
+                    paddingRight: '1%',
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -622,14 +624,15 @@ class Samples extends React.Component {
                   style={{
                     paddingLeft: '5%',
                     marginBottom: '0px',
-                    paddingRight: '1%'
+                    paddingRight: '1%',
                   }}
                   onClick={() =>
                     this.downloadFile(
                       currRow.id,
                       currRow.sample_name + '_NGS.pdf'
                     )
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -640,11 +643,12 @@ class Samples extends React.Component {
                   style={{
                     paddingLeft: '5%',
                     marginBottom: '0px',
-                    paddingRight: '1%'
+                    paddingRight: '1%',
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -655,11 +659,12 @@ class Samples extends React.Component {
                   style={{
                     paddingLeft: '5%',
                     marginBottom: '0px',
-                    paddingRight: '1%'
+                    paddingRight: '1%',
                   }}
                   onClick={() =>
                     this.downloadQCIFile(currRow.id, currRow.xml_report)
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -670,11 +675,12 @@ class Samples extends React.Component {
                   style={{
                     paddingLeft: '5%',
                     marginBottom: '0px',
-                    paddingRight: '1%'
+                    paddingRight: '1%',
                   }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -684,13 +690,14 @@ class Samples extends React.Component {
                 style={{
                   paddingLeft: '5%',
                   marginBottom: '0px',
-                  paddingRight: '1%'
-                }}>
+                  paddingRight: '1%',
+                }}
+              >
                 {text}
               </p>
             );
-          }
-        }
+          },
+        },
       ];
       /*
 {
@@ -798,35 +805,35 @@ class Samples extends React.Component {
           header_name: 'Diagnosis',
           value: currRow.diagnosis,
           header_name2: 'Tumor Site',
-          value2: currRow.tumor_data
+          value2: currRow.tumor_data,
         },
         {
           key: 'tumor_data',
           header_name: 'Methylation Family (MF)',
           value: currRow.family,
           header_name2: 't-SNE plot',
-          value2: 'View plot'
+          value2: 'View plot',
         },
         {
           key: 'family',
           header_name: 'MF Calibrated Scores',
           value: currRow.family_score,
           header_name2: 'Profiling Report',
-          value2: 'Download report'
+          value2: 'Download report',
         },
         {
           key: 'family_score',
           header_name: 'Methylation Class (MC)',
           value: currRow.class,
           header_name2: 'NGS reports (pdf-files)',
-          value2: 'Download report'
+          value2: 'Download report',
         },
         {
           key: 'class',
           header_name: 'MC Calibrated Scores',
           value: currRow.class_score,
           header_name2: 'Slide Image',
-          value2: 'Download image'
+          value2: 'Download image',
         },
         {
           key: 'class_score',
@@ -836,12 +843,12 @@ class Samples extends React.Component {
               ? ''
               : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
           header_name2: 'QCI Report',
-          value2: 'View report'
+          value2: 'View report',
         },
         {
           header_name2: 'Notes',
-          value2: currRow.notes
-        }
+          value2: currRow.notes,
+        },
       ];
       return (
         <div style={{ paddingBottom: '4px' }}>
@@ -859,18 +866,6 @@ class Samples extends React.Component {
     return <div />;
   };
 
-  customExpandIcon(expanded) {
-    return (
-      <Button size="small" className="buttonHoverClass" aria-label="hide row button">
-        {expanded ? (
-          <FontAwesomeIcon icon={faChevronDown} style={{ color: 'black', fontSize: '8px' }} />
-        ) : (
-          <FontAwesomeIcon icon={faChevronUp} style={{ color: 'black', fontSize: '8px' }} />
-        )}
-      </Button>
-    );
-  }
-
   onTableRowExpand = (expanded, record) => {
     var keys = [];
     if (expanded) {
@@ -879,7 +874,7 @@ class Samples extends React.Component {
 
     this.setState({
       expandedRowKeys: keys,
-      currSample: expanded ? record.id : ''
+      currSample: expanded ? record.id : '',
     });
   };
 
@@ -889,7 +884,7 @@ class Samples extends React.Component {
       return <div />;
     }
     var found = []; //Stores variable row that was selected
-    this.state.filteredData.forEach(sample => {
+    this.state.filteredData.forEach((sample) => {
       if (sample.id == id) {
         found.push(sample);
       }
@@ -911,11 +906,11 @@ class Samples extends React.Component {
           dataIndex: 'header_name',
           sorter: true,
           width: '50%',
-          render: text => {
+          render: (text) => {
             return (
               <p style={{ paddingLeft: '70%', fontWeight: 'bold' }}>{text}:</p>
             );
-          }
+          },
           //defaultSortOrder: 'ascend',
         },
         {
@@ -933,7 +928,8 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.html')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -947,7 +943,8 @@ class Samples extends React.Component {
                       currRow.id,
                       currRow.sample_name + '_NGS.pdf'
                     )
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -958,7 +955,8 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
@@ -969,82 +967,83 @@ class Samples extends React.Component {
                   style={{ paddingLeft: '20%' }}
                   onClick={() =>
                     this.downloadFile(currRow.id, currRow.report_file_name)
-                  }>
+                  }
+                >
                   {text}
                 </a>
               );
             }
 
             return <p style={{ paddingLeft: '20%' }}>{text}</p>;
-          }
-        }
+          },
+        },
       ];
       //Defines the rows for the summary
       let extraData = [
         {
           key: 'sample_name',
           header_name: 'Sample Name',
-          value: currRow.sample_name
+          value: currRow.sample_name,
         },
         {
           key: 'project',
           header_name: 'Project',
-          value: currRow.project
+          value: currRow.project,
         },
         {
           key: 'experiment',
           header_name: 'Experiment',
-          value: currRow.experiment
+          value: currRow.experiment,
         },
         {
           key: 'date',
           header_name: 'Date',
-          value: currRow.date
+          value: currRow.date,
         },
         {
           key: 'surgical_case',
           header_name: 'Surgical Case',
-          value: currRow.surgical_case
+          value: currRow.surgical_case,
         },
         {
           key: 'gender',
           header_name: 'Gender',
-          value: currRow.gender
+          value: currRow.gender,
         },
         {
           key: 'age',
           header_name: 'Age',
-          value: currRow.age
+          value: currRow.age,
         },
         {
           key: 'diagnosis',
           header_name: 'Diagnosis',
-          value: currRow.diagnosis
+          value: currRow.diagnosis,
         },
         {
           key: 'tumor_data',
           header_name: 'Tumor Data',
-          value: currRow.tumor_data
+          value: currRow.tumor_data,
         },
         {
           key: 'family',
           header_name: 'Methylation Family (MF)',
-          value: currRow.family
+          value: currRow.family,
         },
         {
           key: 'family_score',
           header_name: 'MF Calibrated Scores',
-          value: currRow.family_score
+          value: currRow.family_score,
         },
         {
           key: 'class',
           header_name: 'Methylation Class (MC)',
-          value: currRow.class
+          value: currRow.class,
         },
         {
           key: 'class_score',
           header_name: 'MF Calibrated Scores',
-          value: currRow.class_score
+          value: currRow.class_score,
         },
         {
           key: 'mgmt_prediction.Estimated',
@@ -1052,33 +1051,33 @@ class Samples extends React.Component {
           value:
             currRow.mgmt_prediction == null
               ? ''
-              : currRow.mgmt_prediction.Estimated.toFixed(3)
+              : currRow.mgmt_prediction.Estimated.toFixed(3),
         },
         {
           key: 't_SNE_plot',
           header_name: 't-SNE plot',
-          value: 'View plot'
+          value: 'View plot',
         },
         {
           key: 'General_report',
           header_name: 'Report',
-          value: 'Download report'
+          value: 'Download report',
         },
         {
           key: 'NGS_reports',
           header_name: 'NGS reports (pdf-files)',
-          value: 'Download report'
+          value: 'Download report',
         },
         {
           key: 'slide_image',
           header_name: 'Slide Image',
-          value: 'Download image'
+          value: 'Download image',
         },
         {
           key: 'notes',
           header_name: 'Notes',
-          value: currRow.notes
-        }
+          value: currRow.notes,
+        },
       ];
 
       // let tableSettings = {
@@ -1139,10 +1138,12 @@ class Samples extends React.Component {
               type="primary"
               onClick={() => {
                 this.setState({ filePopUp: false });
-              }}>
+              }}
+            >
               Ok
-            </Button>
-          ]}>
+            </Button>,
+          ]}
+        >
           <p>The file you are looking for does not exist</p>
         </Modal>
       );
@@ -1174,7 +1175,9 @@ class Samples extends React.Component {
             className="linkSpan"
             // onClick={() =>
             //   this.props.changeTab('experiments', { project: record.project })
-            onClick={() => this.props.changeTab('projects', { project: record.project })}
+            onClick={() =>
+              this.props.changeTab('projects', { project: record.project })
+            }
           >
             {text}
           </span>
@@ -1268,23 +1271,25 @@ class Samples extends React.Component {
           style={{
             minWidth: '1400px',
             paddingLeft: '30px',
-            paddingRight: '30px'
-          }}>
+            paddingRight: '30px',
+          }}
+        >
           {this.renderPopUp()}
           <div
             style={{
               paddingLeft: '0px',
               paddingBottom: '0px',
               paddingTop: '15px',
-              paddingRight: '0px'
-            }}>
+              paddingRight: '0px',
+            }}
+          >
             <Form layout="inline">
               <Form.Item
                 style={{
                   width: '3%',
                   paddingLeft: '0px',
                   paddingRight: '0px',
-                  marginRight: '0px'
+                  marginRight: '0px',
                 }}
               />
               <Form.Item
@@ -1292,12 +1297,13 @@ class Samples extends React.Component {
                   width: '12%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Sample Filter Input"
                   value={this.state.filterSampleName}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterSampleName: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -1310,12 +1316,13 @@ class Samples extends React.Component {
                   width: '15%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Project Filter Input"
                   value={this.state.filterProject}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterProject: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -1328,12 +1335,13 @@ class Samples extends React.Component {
                   width: '12%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Experiment Filter Input"
                   value={this.state.filterSentrixID}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterSentrixID: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -1346,8 +1354,9 @@ class Samples extends React.Component {
                   width: '8%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <DatePicker
                   onChange={(date, dateString) => {
                     this.setState({ startDate: dateString }, () => {
@@ -1368,12 +1377,13 @@ class Samples extends React.Component {
                   width: '10%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="SurgicalCase Filter Input"
                   value={this.state.filterSurgicalCase}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState(
                       { filterSurgicalCase: e.target.value },
                       () => {
@@ -1389,8 +1399,9 @@ class Samples extends React.Component {
                   width: '9%',
                   paddingLeft: '8px',
                   paddingRight: '0px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 {/*<Input
                 value={this.state.filterGender}
                 onChange={e =>
@@ -1402,12 +1413,13 @@ class Samples extends React.Component {
               />*/}
                 <Select
                   aria-label="Gender Filter Input"
-                  onChange={value => {
+                  onChange={(value) => {
                     this.setState({ filterGender: value }, () => {
                       this.handleFilter();
                     });
                   }}
-                  value={this.state.filterGender}>
+                  value={this.state.filterGender}
+                >
                   <Option value="">&nbsp;</Option>
                   <Option value="Male">Male</Option>
                   <Option value="Female">Female</Option>
@@ -1419,12 +1431,13 @@ class Samples extends React.Component {
                   width: '7%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Age Filter Input"
                   value={this.state.filterAge}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterAge: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -1437,12 +1450,13 @@ class Samples extends React.Component {
                   width: '23%',
                   paddingLeft: '8px',
                   paddingRight: '30px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Diagnosis Filter Input"
                   value={this.state.filterDiagnosis}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterDiagnosis: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -1467,7 +1481,6 @@ class Samples extends React.Component {
               expandRowByClick={true}
               expandedRowKeys={this.state.expandedRowKeys}
               onExpand={this.onTableRowExpand}
-              expandIcon={props => this.customExpandIcon(props.expanded)}
               rowClassName={(record, index) => {
                 /*let selected =
                 this.state.currSample == ''
@@ -1481,17 +1494,17 @@ class Samples extends React.Component {
               }}
               onRow={(record, rowIndex) => {
                 return {
-                  onClick: event => {
+                  onClick: (event) => {
                     if (this.state.currSample == record.id) {
                       this.setState({
-                        currSample: ''
+                        currSample: '',
                       });
                     } else {
                       this.setState({
-                        currSample: record.id
+                        currSample: record.id,
                       });
                     }
-                  }
+                  },
                 };
               }}
             />
