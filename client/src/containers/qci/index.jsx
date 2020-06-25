@@ -252,6 +252,7 @@ export default function QCI() {
           genomicLocation: loc,
           transcript: v.transcriptchange.transcript._text,
           nucleotideChange: v.transcriptchange.change._text,
+          aminoAcidChange: v.proteinchange ? v.proteinchange.change._text : '-',
           vaf: vaf,
           pathAssessment: v.assessment._text,
           tier: tier,
@@ -303,6 +304,7 @@ export default function QCI() {
         genomicLocation: loc,
         transcript: v.transcriptchange.transcript._text,
         nucleotideChange: v.transcriptchange.change._text,
+        aminoAcidChange: v.proteinchange ? v.proteinchange.change._text : '-',
         vaf: vaf,
       };
     });
