@@ -846,8 +846,8 @@ class Samples extends React.Component {
           value2: 'View report',
         },
         {
-          header_name2: 'Notes',
-          value2: currRow.notes,
+          header_name: 'Notes',
+          value: currRow.notes,
         },
       ];
       return (
