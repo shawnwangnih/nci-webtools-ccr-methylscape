@@ -165,37 +165,44 @@ app.get('/scanMethylScapeTable', (req, res) => {
 });
 
 app.post('/getMethylScapeFile', (req, res) => {
-    logger.log('info', 'Request file download data: %j', req.body)
-    console.log(req.body);
-    try{
-        const s3 = new AWS.S3();
-        AWS.config.update({ region: 'us-east-1' });
-        const data = req.body
-        const key = path.join(S3SamplesKey, data.sampleId, data.fileName)
-        const params = {
-            Bucket: S3BucketName,
-            Key: key
-        };
-        logger.log('info', 'Request file download params: %j', params)
-        s3.headObject(params, function (err, metadata) {  
-            if (err && err.code === 'NotFound') {  
-              // Handle no object on cloud here  
-              res.status(404).send('File not found');
-            } else {  
-                var fileStream = s3.getObject(params).createReadStream().on('error', e => {
-                    logger.log('error', 'Request file download failed: %s', e)
-                    res.send(e);
-                });;
-                res.attachment(data.fileName);
-                fileStream.pipe(res);
-            }
-          });
-        
-    }catch (e){
-        logger.log('error', 'File download failed: %s', e)
-        res.status(500).send(`File download failed: ${e}`)
+  logger.log('info', 'Request file download data: %j', req.body);
+  console.log(req.body);
+  try {
+    const s3 = new AWS.S3();
+    AWS.config.update({ region: 'us-east-1' });
+    const data = req.body;
+    if (data.fileName) {
+      const key = path.join(S3SamplesKey, data.sampleId, data.fileName);
+      const params = {
+        Bucket: S3BucketName,
+        Key: key,
+      };
+      logger.log('info', 'Request file download params: %j', params);
+      s3.headObject(params, function (err, metadata) {
+        if (err && err.code === 'NotFound') {
+          // Handle no object on cloud here
+          res.status(404).send('File not found');
+        } else {
+          var fileStream = s3
+            .getObject(params)
+            .createReadStream()
+            .on('error', (e) => {
+              logger.log('error', 'Request file download failed: %s', e);
+              res.send(e);
+            });
+          res.attachment(data.fileName);
+          fileStream.pipe(res);
+        }
+      });
+    } else {
+      logger.info('Filename not provided');
+      res.status(404).send('File not found');
     }
-})
+  } catch (e) {
+    logger.log('error', 'File download failed: %s', e);
+    res.status(500).send(`File download failed: ${e}`);
+  }
+});
 
 // app.get('/getMethylScapeQCIFile', (req, res) => {
 //     logger.log('info', 'Request file download data: %j', req.query)
