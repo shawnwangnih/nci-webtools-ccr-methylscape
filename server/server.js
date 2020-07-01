@@ -193,7 +193,7 @@ app.post('/getMethylScapeFile', (req, res) => {
         
     }catch (e){
         logger.log('error', 'File download failed: %s', e)
-        res.send(e)
+        res.status(500).send(`File download failed: ${e}`)
     }
 })
 
