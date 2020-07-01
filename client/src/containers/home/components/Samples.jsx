@@ -614,7 +614,39 @@ class Samples extends React.Component {
                 </a>
               );
             }
+            if (index == 2) {
+              return (
+                <a
+                  style={{
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%',
+                  }}
+                  onClick={() =>
+                    this.downloadFile(currRow.id, currRow.report_file_name)
+                  }
+                >
+                  {text}
+                </a>
+              );
+            }
             if (index == 3) {
+              return (
+                <a
+                  style={{
+                    paddingLeft: '5%',
+                    marginBottom: '0px',
+                    paddingRight: '1%',
+                  }}
+                  onClick={() =>
+                    this.downloadQCIFile(currRow.id, currRow.xml_report)
+                  }
+                >
+                  {text}
+                </a>
+              );
+            }
+            if (index == 4) {
               return (
                 <a
                   style={{
@@ -633,22 +665,6 @@ class Samples extends React.Component {
                 </a>
               );
             }
-            if (index == 4) {
-              return (
-                <a
-                  style={{
-                    paddingLeft: '5%',
-                    marginBottom: '0px',
-                    paddingRight: '1%',
-                  }}
-                  onClick={() =>
-                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
-                  }
-                >
-                  {text}
-                </a>
-              );
-            }
             if (index == 5) {
               return (
                 <a
@@ -658,23 +674,7 @@ class Samples extends React.Component {
                     paddingRight: '1%',
                   }}
                   onClick={() =>
-                    this.downloadQCIFile(currRow.id, currRow.xml_report)
-                  }
-                >
-                  {text}
-                </a>
-              );
-            }
-            if (index == 2) {
-              return (
-                <a
-                  style={{
-                    paddingLeft: '5%',
-                    marginBottom: '0px',
-                    paddingRight: '1%',
-                  }}
-                  onClick={() =>
-                    this.downloadFile(currRow.id, currRow.report_file_name)
+                    this.downloadFile(currRow.id, currRow.sample_name + '.jpg')
                   }
                 >
                   {text}
