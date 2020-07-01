@@ -812,28 +812,29 @@ class Samples extends React.Component {
           header_name: 'Methylation Family (MF)',
           value: currRow.family,
           header_name2: 't-SNE plot',
-          value2: 'View plot',
+          value2: 'View Plot',
         },
         {
           key: 'family',
           header_name: 'MF Calibrated Scores',
           value: currRow.family_score,
-          header_name2: 'Profiling Report',
-          value2: 'Download report',
+          header_name2: 'Methylation Report',
+          value2: 'Download Report',
         },
         {
           key: 'family_score',
           header_name: 'Methylation Class (MC)',
           value: currRow.class,
-          header_name2: 'NGS reports (pdf-files)',
-          value2: 'Download report',
+          header_name2: 'QCI Report',
+          value2: 'View Report',
         },
         {
           key: 'class',
           header_name: 'MC Calibrated Scores',
           value: currRow.class_score,
-          header_name2: 'Slide Image',
-          value2: 'Download image',
+
+          header_name2: 'NGS Report (legacy)',
+          value2: 'Download Report',
         },
         {
           key: 'class_score',
@@ -842,12 +843,14 @@ class Samples extends React.Component {
             currRow.mgmt_prediction == null
               ? ''
               : parseFloat(currRow.mgmt_prediction.Estimated).toFixed(3),
-          header_name2: 'QCI Report',
-          value2: 'View report',
+          header_name2: 'Slide Image',
+          value2: 'Download Image',
         },
         {
           header_name: 'Notes',
           value: currRow.notes,
+          header_name2: '',
+          value2: '',
         },
       ];
       return (
