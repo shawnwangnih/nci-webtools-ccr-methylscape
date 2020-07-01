@@ -506,9 +506,12 @@ class Samples extends React.Component {
           sorter: true,
           width: '15%',
           render: (text) => {
-            return (
-              <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
-            );
+            if (text && text.length)
+              return (
+                <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>
+                  {text}:
+                </p>
+              );
           },
           //defaultSortOrder: 'ascend',
         },
@@ -583,9 +586,12 @@ class Samples extends React.Component {
           sorter: true,
           width: '15%',
           render: (text) => {
-            return (
-              <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>{text}:</p>
-            );
+            if (text && text.length)
+              return (
+                <p style={{ fontWeight: 'bold', marginBottom: '0px' }}>
+                  {text}:
+                </p>
+              );
           },
           //defaultSortOrder: 'ascend',
         },
@@ -845,8 +851,6 @@ class Samples extends React.Component {
         {
           header_name: 'Notes',
           value: currRow.notes,
-          header_name2: '',
-          value2: '',
         },
       ];
       return (
