@@ -442,35 +442,31 @@ class Samples extends React.Component {
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
-
-    // try {
-    //   let response = await fetch(
-    //     `${root}getMethylScapeQCIFile?sampleId=` +
-    //       sampleId +
-    //       '&fileName=' +
-    //       file,
-    //     {
-    //       method: 'GET'
-    //     }
-    //   );
-    //   if (response.status == 404) {
-    //     this.setState({ filePopUp: true });
-    //   } else {
-    //     //let url = URL.createObjectURL(await response.blob());
-
-    //     window.open(
-    //       `${root}getMethylScapeQCIFile?sampleId=` +
-    //         sampleId +
-    //         '&fileName=' +
-    //         file,
-    //       '_blank'
-    //     );
-    //     //URL.revokeObjectURL(url);
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      let response = await fetch(`${root}getMethylScapeFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          sampleId: sampleId,
+          fileName: file,
+        }),
+      });
+      if (response.status == 404) {
+        this.setState({ filePopUp: true });
+      } else {
+        window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
+        //let url = URL.createObjectURL(await response.blob());
+        // window.open(
+        //   `${root}getMethylScapeQCIFile?sampleId=` +
+        //     sampleId +
+        //     '&fileName=' +
+        //     file,
+        //   '_blank'
+        // );
+        //URL.revokeObjectURL(url);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   //renders the items in the pagination
