@@ -17,10 +17,10 @@ class Projects extends React.Component {
         size: 'small',
         showSizeChanger: true,
         style: {
-          marginBottom: '0px'
+          marginBottom: '0px',
         },
         defaultPageSize: 10,
-        pageSizeOptions: ['10', '25', '50', '100']
+        pageSizeOptions: ['10', '25', '50', '100'],
       },
       sortedInfo: null,
       data: [],
@@ -33,7 +33,7 @@ class Projects extends React.Component {
       filterNumSamples: '',
       filterNumExperiments: '',
       numSamples: '',
-      numExperiments: ''
+      numExperiments: '',
     };
   }
 
@@ -46,7 +46,7 @@ class Projects extends React.Component {
         startDate: '',
         filterNumSamples: '',
         filterNumExperiments: '',
-        filterProject: ''
+        filterProject: '',
       });
       return;
     }
@@ -58,7 +58,7 @@ class Projects extends React.Component {
         startDate: '',
         filterNumSamples: '',
         filterNumExperiments: '',
-        filterProject: ''
+        filterProject: '',
       },
       () => {
         this.handleFilter();
@@ -76,26 +76,42 @@ class Projects extends React.Component {
   }
 
   async componentDidMount() {
-    var elements = document.getElementsByClassName(
-      'ant-select-selection__rendered'
-    );
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].setAttribute('role', 'textbox');
-    }
+    this.fix508();
   }
   async componentDidUpdate() {
-    var elements = document.getElementsByClassName(
+    this.fix508();
+  }
+
+  fix508() {
+    const pageSizeInner = document.getElementsByClassName(
       'ant-select-selection__rendered'
     );
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].setAttribute('role', 'textbox');
+    const pageSizeOuter = document.querySelectorAll('.ant-select-selection');
+    const pagination = document.querySelectorAll('.ant-pagination');
+    const paginationItems = document.querySelectorAll(
+      '.ant-pagination-total-text,  .ant-pagination-prev,.ant-pagination-item,.ant-pagination-next,.ant-pagination-options'
+    );
+
+    for (let element of pageSizeInner) {
+      element.setAttribute('role', 'textbox');
+      element.setAttribute('aria-label', 'current page size');
+    }
+    for (let element of pageSizeOuter) {
+      element.setAttribute('aria-label', 'select page size');
+    }
+    for (let element of pagination) {
+      element.setAttribute('role', 'list');
+      element.setAttribute('aria-label', 'pagination');
+    }
+    for (let element of paginationItems) {
+      element.setAttribute('role', 'listitem');
     }
   }
 
-  createDataTable = async rawData => {
+  createDataTable = async (rawData) => {
     var projectData = {};
     if (rawData !== undefined) {
-      rawData.map(sample => {
+      rawData.map((sample) => {
         var curProject = sample.project;
         if (curProject == null || sample.experiment == null) {
         } else if (curProject in projectData) {
@@ -109,7 +125,7 @@ class Projects extends React.Component {
             sampleSize: 1,
             date: sample.date,
             investigator: sample.investigator,
-            experiments: new Set([])
+            experiments: new Set([]),
           };
           projectData[curProject].experiments.add(sample.experiment);
         }
@@ -177,7 +193,7 @@ class Projects extends React.Component {
   handleFilter = () => {
     this.setState(
       {
-        filteredData: this.state.data.filter(row => {
+        filteredData: this.state.data.filter((row) => {
           return (
             row.project.toLowerCase().includes(this.getFilterProject()) &&
             row.investigator
@@ -190,7 +206,7 @@ class Projects extends React.Component {
               this.state.filterNumSamples.trim() == '') &&
             this.checkDates(row.date, this.state.startDate)
           );
-        })
+        }),
       },
       this.setState({ loading: false })
     );
@@ -200,7 +216,7 @@ class Projects extends React.Component {
     this.setState(
       {
         filterProject: '',
-        filterInvestigator: ''
+        filterInvestigator: '',
       },
       () => {
         this.handleFilter();
@@ -218,14 +234,14 @@ class Projects extends React.Component {
     this.setState({
       sortedInfo: {
         order: 'descend',
-        columnKey: 'key'
-      }
+        columnKey: 'key',
+      },
     });
   };
 
   handleProjectClick = (text, record) => {
     this.setState({
-      currRecord: record.project
+      currRecord: record.project,
     });
     this.props.changeSummeryPorject(record.project);
   };
@@ -290,7 +306,7 @@ class Projects extends React.Component {
               </label>
             </div>*/
           );
-        }
+        },
       },
       {
         title: (
@@ -324,14 +340,14 @@ class Projects extends React.Component {
         defaultSortOrder: 'ascend',
         render: (text, record) => (
           <a onClick={() => this.handleProjectClick(text, record)}>{text}</a>
-        )
+        ),
       },
       {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
         width: '20%',
-        sorter: (a, b) => a.investigator.localeCompare(b.investigator)
+        sorter: (a, b) => a.investigator.localeCompare(b.investigator),
       },
       {
         title: '# of Experiments',
@@ -343,10 +359,11 @@ class Projects extends React.Component {
           <a
             onClick={() =>
               this.props.changeTab('experiments', { project: record.project })
-            }>
+            }
+          >
             {record.experiments.size}
           </a>
-        )
+        ),
       },
       {
         title: '# of Samples',
@@ -358,11 +375,12 @@ class Projects extends React.Component {
           <a
             onClick={() =>
               this.props.changeTab('samples', { project: record.project })
-            }>
+            }
+          >
             {text}
           </a>
-        )
-      }
+        ),
+      },
     ];
     return (
       <div className="page-overflow-box">
@@ -370,14 +388,16 @@ class Projects extends React.Component {
           style={{
             minWidth: '800px',
             paddingLeft: '30px',
-            paddingRight: '30px'
-          }}>
+            paddingRight: '30px',
+          }}
+        >
           <div
             style={{
               paddingLeft: '0px',
               paddingBottom: '0px',
-              paddingTop: '15px'
-            }}>
+              paddingTop: '15px',
+            }}
+          >
             {/* <PageHeader title={"MethylScape Results"} /> */}
             <Form layout="inline">
               <Form.Item
@@ -385,7 +405,7 @@ class Projects extends React.Component {
                   width: '5%',
                   paddingLeft: '0px',
                   paddingRight: '0px',
-                  marginRight: '0px'
+                  marginRight: '0px',
                 }}
               />
               <Form.Item
@@ -393,12 +413,13 @@ class Projects extends React.Component {
                   width: '35%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Project Filter Input"
                   value={this.state.filterProject}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterProject: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -411,12 +432,13 @@ class Projects extends React.Component {
                   width: '20%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Investigator Filter Input"
                   value={this.state.filterInvestigator}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState(
                       { filterInvestigator: e.target.value },
                       () => {
@@ -432,12 +454,13 @@ class Projects extends React.Component {
                   width: '20%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Number of Experiments Filter Input"
                   value={this.state.filterNumExperiments}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState(
                       { filterNumExperiments: e.target.value },
                       () => {
@@ -453,12 +476,13 @@ class Projects extends React.Component {
                   width: '20%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Number of Samples Filter Input"
                   value={this.state.filterNumSamples}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterNumSamples: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -491,7 +515,7 @@ class Projects extends React.Component {
               itemRender: this.itemRender,
               defaultPageSize: 10,
               pageSizeOptions: ['10', '25', '50', '100'],
-              role: 'textbox'
+              role: 'textbox',
             }}
             rowClassName={(record, index) => {
               return this.state.currRecord == ''
@@ -504,9 +528,9 @@ class Projects extends React.Component {
             }}
             onRow={(record, rowIndex) => {
               return {
-                onClick: event => {
+                onClick: (event) => {
                   this.handleProjectClick(rowIndex, record);
-                }
+                },
               };
             }}
             columns={columns}
