@@ -269,7 +269,7 @@ class Projects extends React.Component {
     //console.log(JSON.stringify(this.state.filteredData));
     const columns = [
       {
-        title: '',
+        title: <span style={{ display: 'none' }}>Select Project</span>,
         dataIndex: 'selected',
         sorter: false,
         width: '5%',
@@ -277,11 +277,13 @@ class Projects extends React.Component {
           if (record.project == this.state.currRecord) {
             return (
               <Radio
+                name={text}
                 checked={true}
                 onClick={() => {
                   this.handleProjectClick(text, record);
                 }}
                 aria-checked="true"
+                title={'Select Project ' + record.project}
                 aria-label={'Select Project ' + record.project}
               />
               /*<div class="radio">
@@ -293,6 +295,7 @@ class Projects extends React.Component {
           }
           return (
             <Radio
+              name={text}
               checked={false}
               onClick={() => {
                 this.handleProjectClick(text, record);

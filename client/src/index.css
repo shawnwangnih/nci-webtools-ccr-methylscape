@@ -11,6 +11,23 @@ body {
   background: #f0f2f5;
 }
 
+footer.ant-layout-footer {
+  font-size: 16px;
+  background-color: #005ea2;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected {
+  background-color: #1a4480 !important;
+}
+
+td > span.linkSpan {
+  color: #0050d8;
+}
+
+td > a {
+  color: #0050d8;
+}
+
 .summery-data-title {
   text-align: center;
 }

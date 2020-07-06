@@ -129,7 +129,7 @@ class App extends React.Component {
               width: '100%',
               height: '40px',
               lineHeight: '40px',
-              backgroundColor: 'steelblue',
+              backgroundColor: '#005ea2',
             }}
           >
             {/* Home */}
@@ -476,7 +476,7 @@ class App extends React.Component {
                     width: '100%',
                     padding: '0 0px',
                     marginTop: '10px',
-                    background: 'steelblue',
+                    background: '#005ea2',
                   }}
                 >
                   {this.renderNavbar()}

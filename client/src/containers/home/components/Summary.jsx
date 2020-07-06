@@ -514,7 +514,7 @@ class Summary extends React.Component {
           style={{
             textAlign: 'center',
             fontSize: '20px',
-            color: 'steelblue',
+            color: '#0050d8',
             fontWeight: '600'
           }}>
           Project summary: {this.state.project} Project
