@@ -91,6 +91,12 @@ class Projects extends React.Component {
     const paginationItems = document.querySelectorAll(
       '.ant-pagination-total-text,  .ant-pagination-prev,.ant-pagination-item,.ant-pagination-next,.ant-pagination-options'
     );
+    const hiddenTabs = document.querySelectorAll(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-inactive'
+    );
+    const activeTab = document.querySelector(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-active'
+    );
 
     for (let element of pageSizeInner) {
       element.setAttribute('role', 'textbox');
@@ -106,6 +112,12 @@ class Projects extends React.Component {
     for (let element of paginationItems) {
       element.setAttribute('role', 'listitem');
     }
+
+    for (let tab of hiddenTabs) {
+      tab.style.visibility = 'hidden';
+    }
+
+    activeTab.style.visibility = 'visible';
   }
 
   createDataTable = async (rawData) => {
@@ -283,9 +295,12 @@ class Projects extends React.Component {
                   this.handleProjectClick(text, record);
                 }}
                 aria-checked="true"
-                title={'Select Project ' + record.project}
                 aria-label={'Select Project ' + record.project}
-              />
+              >
+                <span style={{ display: 'none' }}>
+                  {'Select Project ' + record.project}
+                </span>
+              </Radio>
               /*<div class="radio">
                 <label>
                   <input type="radio" value="Check" />
@@ -302,7 +317,9 @@ class Projects extends React.Component {
               }}
               aria-checked="false"
               aria-label={'Select Project ' + record.project}
-            />
+            >
+              <span style={{ display: 'none' }}>Select Project</span>
+            </Radio>
             /*<div class="radio">
               <label>
                 <input type="radio" value="Uncheck" />

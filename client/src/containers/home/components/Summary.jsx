@@ -43,6 +43,22 @@ class Summary extends React.Component {
       '#651067'
     ];
   }
+
+  fix508() {
+    const hiddenTabs = document.querySelectorAll(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-inactive'
+    );
+    const activeTab = document.querySelector(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-active'
+    );
+
+    for (let tab of hiddenTabs) {
+      tab.style.visibility = 'hidden';
+    }
+
+    activeTab.style.visibility = 'visible';
+  } 
+
   componentWillReceiveProps(nextProps) {
     this.setState({ moreClasses: false });
     if (nextProps.data.length === 0) {
@@ -68,6 +84,8 @@ class Summary extends React.Component {
         }, 250)
       });
     });
+
+    this.fix508();
   }
   async componentDidUpdate() {
     this.methylationHeight =
@@ -78,6 +96,8 @@ class Summary extends React.Component {
       this.setState({});
     }
     this.lastMethylationHeight = this.methylationHeight;
+
+    this.fix508()
   }
 
   filterData = (filter, data) => {

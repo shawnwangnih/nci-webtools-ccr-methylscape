@@ -218,6 +218,23 @@ class Samples extends React.Component {
     }
   }
 
+  fix508() {
+    const hiddenTabs = document.querySelectorAll(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-inactive'
+    );
+    const activeTab = document.querySelector(
+      'div.ant-tabs-tabpane.ant-tabs-tabpane-active'
+    );
+    const expandHeader = document.querySelector('th.ant-table-expand-icon-th');
+
+    for (let tab of hiddenTabs) {
+      tab.style.visibility = 'hidden';
+    }
+
+    activeTab.style.visibility = 'visible';
+    expandHeader.innerHTML = '<span style="display: none;">Expand Row</span>';
+  }
+
   async componentDidMount() {
     await this.createDataTable(this.state.rawData).then(
       this.setState({ loading: false })
@@ -227,6 +244,8 @@ class Samples extends React.Component {
     for (var i = 0; i < elements.length; i++) {
       elements[i].setAttribute('aria-label', 'Date Filter');
     }
+
+    this.fix508();
   }
 
   async componentDidUpdate() {
@@ -234,6 +253,8 @@ class Samples extends React.Component {
     for (var i = 0; i < elements.length; i++) {
       elements[i].setAttribute('aria-label', 'Date Filter');
     }
+
+    this.fix508();
   }
 
   //Updates the data based on the rawData passed in
@@ -493,13 +514,6 @@ class Samples extends React.Component {
       var currRow = found[0];
 
       let columns = [
-        {
-          title: '',
-          dataIndex: 'emptySpace',
-          sorter: true,
-          width: '3%',
-          //defaultSortOrder: 'ascend',
-        },
         {
           title: 'Header name',
           dataIndex: 'header_name',
