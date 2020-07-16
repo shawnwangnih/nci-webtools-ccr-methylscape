@@ -25,12 +25,12 @@ class Experiments extends React.Component {
         pageSizeOptions: ['10', '25', '50', '100'],
         showSizeChanger: true,
         itemRender: this.itemRender,
-        showTotal: this.rangeFunction
+        showTotal: this.rangeFunction,
       },
       rawData: props.data,
       data: [],
       filteredData: [],
-      filePopUp: false
+      filePopUp: false,
     };
   }
 
@@ -90,7 +90,7 @@ class Experiments extends React.Component {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     for (let i = 0; i < months.length; i++) {
       if (months[i] == element) {
@@ -146,7 +146,7 @@ class Experiments extends React.Component {
         filterNumSamples: '',
         filterInvestigator: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
       },
       () => {
         this.handleFilter();
@@ -176,52 +176,43 @@ class Experiments extends React.Component {
     return;
   }
 
-  downloadFile = (experiment, file) => {
+  async downloadFile(experiment, file) {
     const root =
       process.env.NODE_ENV === 'development'
         ? 'http://0.0.0.0:8290/'
         : window.location.pathname;
 
-    fetch(`${root}getMethylScapeQCFile`, {
-      method: 'POST',
-      body: JSON.stringify({
-        experiment: experiment,
-        fileName: file
-      })
-    })
-      .then(res => {
-        if (res.status == 404) {
-          return null;
-        }
-        return res.blob();
-      })
-      .then(function(blob) {
-        // (**)
-        //fileSaver(blob, file);
-        if (blob == null) {
-          return null;
-        }
-        return URL.createObjectURL(blob);
-      })
-      .then(url => {
-        if (url != null) {
+    try {
+      const response = await fetch(`${root}getMethylScapeQCFile`, {
+        method: 'POST',
+        body: JSON.stringify({
+          experiment: experiment,
+          fileName: file,
+        }),
+      });
+
+      if (!response.ok) {
+        this.setState({ filePopUp: true });
+      } else {
+        // check for siteminder redirect
+        // if x-powered-by: express exists then return blob url
+        // else repeat function
+        if (response.headers.get('x-powered-by')) {
+          const url = URL.createObjectURL(await response.blob());
           window.open(url, '_blank');
           URL.revokeObjectURL(url);
         } else {
-          this.setState({ filePopUp: true });
+          this.downloadFile(experiment, file);
         }
-      })
-      .then()
-      /*
-      .then(blob => {
-        fileSaver(blob, file);
-      })*/
-      .catch(error => console.log(error));
-  };
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  createDataTable = async rawData => {
+  createDataTable = async (rawData) => {
     var experimentData = {};
-    rawData.map(sample => {
+    rawData.map((sample) => {
       var curExperiment = sample.experiment;
       if (curExperiment == null) {
       } else if (curExperiment in experimentData) {
@@ -234,7 +225,7 @@ class Experiments extends React.Component {
           sampleSize: 1,
           date: sample.date,
           investigator: sample.investigator,
-          experiment: curExperiment
+          experiment: curExperiment,
         };
       }
     });
@@ -244,7 +235,7 @@ class Experiments extends React.Component {
 
   handleFilter = () => {
     this.setState({
-      filteredData: this.state.data.filter(row => {
+      filteredData: this.state.data.filter((row) => {
         return (
           row.project.toLowerCase().includes(this.getFilterProject()) &&
           row.experiment.toLowerCase().includes(this.getFilterExperiment()) &&
@@ -256,7 +247,7 @@ class Experiments extends React.Component {
           (this.state.startDate == '' ||
             this.checkDates(row.date, this.state.startDate))
         );
-      })
+      }),
     });
   };
 
@@ -284,7 +275,7 @@ class Experiments extends React.Component {
   handleReset = () => {
     this.setState(
       {
-        filterProject: ''
+        filterProject: '',
         // f: ''
       },
       () => {
@@ -305,7 +296,7 @@ class Experiments extends React.Component {
 
   closePopup() {
     this.setState({
-      filePopUp: false
+      filePopUp: false,
     });
   }
   renderPopUp() {
@@ -328,10 +319,12 @@ class Experiments extends React.Component {
               type="primary"
               onClick={() => {
                 this.setState({ filePopUp: false });
-              }}>
+              }}
+            >
               Ok
-            </Button>
-          ]}>
+            </Button>,
+          ]}
+        >
           <p>The file you are looking for does not exist</p>
         </Modal>
       );
@@ -353,10 +346,11 @@ class Experiments extends React.Component {
           <a
             onClick={() =>
               this.props.changeTab('projects', { project: record.project })
-            }>
+            }
+          >
             {record.project}
           </a>
-        )
+        ),
       },
       {
         title: 'Experiment',
@@ -368,17 +362,18 @@ class Experiments extends React.Component {
           <a
             onClick={() =>
               this.props.changeTab('samples', { experiment: record.experiment })
-            }>
+            }
+          >
             {text}
           </a>
-        )
+        ),
       },
       {
         title: 'Investigator Name',
         dataIndex: 'investigator',
         sorter: true,
         width: '15%',
-        sorter: (a, b) => a.investigator.localeCompare(b.investigator)
+        sorter: (a, b) => a.investigator.localeCompare(b.investigator),
       },
       {
         title: '# of Samples',
@@ -390,47 +385,50 @@ class Experiments extends React.Component {
           <a
             onClick={() =>
               this.props.changeTab('samples', { experiment: record.experiment })
-            }>
+            }
+          >
             {text}
           </a>
-        )
+        ),
       },
       {
         title: 'Experiment Date',
         dataIndex: 'date',
         sorter: (a, b) => this.compareDates(a, b),
-        width: '13%'
+        width: '13%',
       },
       {
         title: 'QC Sheet',
         width: '9%',
-        render: record => (
+        render: (record) => (
           <a
             onClick={() =>
               this.downloadFile(
                 record.experiment,
                 record.experiment + '.qcReport.pdf'
               )
-            }>
+            }
+          >
             view pdf
           </a>
-        )
+        ),
       },
       {
         title: 'QC Supplementary',
         width: '15%',
-        render: record => (
+        render: (record) => (
           <a
             onClick={() =>
               this.downloadFile(
                 record.experiment,
                 record.experiment + '.supplementary_plots.pdf'
               )
-            }>
+            }
+          >
             view pdf
           </a>
-        )
-      }
+        ),
+      },
     ];
 
     const Option = Select.Option;
@@ -442,27 +440,30 @@ class Experiments extends React.Component {
           style={{
             minWidth: '1200px',
             paddingLeft: '30px',
-            paddingRight: '30px'
-          }}>
+            paddingRight: '30px',
+          }}
+        >
           {this.renderPopUp()}
           <div
             style={{
               paddingLeft: '0',
               paddingBottom: '0px',
-              paddingTop: '15px'
-            }}>
+              paddingTop: '15px',
+            }}
+          >
             <Form layout="inline">
               <Form.Item
                 style={{
                   width: '20%',
                   paddingLeft: '0px',
                   paddingRight: '0px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Project Filter Input"
                   value={this.state.filterProject}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterProject: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -475,12 +476,13 @@ class Experiments extends React.Component {
                   width: '15%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Experiment Filter Input"
                   value={this.state.filterExperiment}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterExperiment: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -493,12 +495,13 @@ class Experiments extends React.Component {
                   width: '15%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Investivator Filter Input"
                   value={this.state.filterInvestigator}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState(
                       { filterInvestigator: e.target.value },
                       () => {
@@ -514,12 +517,13 @@ class Experiments extends React.Component {
                   width: '13%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <Input
                   aria-label="Number of Samples Filter Input"
                   value={this.state.filterNumSamples}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ filterNumSamples: e.target.value }, () => {
                       this.handleFilter();
                     })
@@ -532,8 +536,9 @@ class Experiments extends React.Component {
                   width: '13%',
                   paddingLeft: '8px',
                   paddingRight: '16px',
-                  marginRight: '0px'
-                }}>
+                  marginRight: '0px',
+                }}
+              >
                 <DatePicker
                   onChange={(date, dateString) => {
                     this.setState({ startDate: dateString }, () => {

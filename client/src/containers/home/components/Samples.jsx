@@ -40,6 +40,7 @@ class Samples extends React.Component {
       currSample: '',
       expandedRowKeys: [],
       filePopUp: false,
+      iFrame: false,
     };
   }
 
@@ -445,12 +446,19 @@ class Samples extends React.Component {
           fileName: file,
         }),
       });
-      if (response.status == 404) {
+      if (!response.ok) {
         this.setState({ filePopUp: true });
       } else {
-        let url = URL.createObjectURL(await response.blob());
-        window.open(url, '_blank');
-        URL.revokeObjectURL(url);
+        // check for siteminder redirect
+        // if x-powered-by: express exists then return blob url
+        // else repeat function
+        if (response.headers.get('x-powered-by')) {
+          const url = URL.createObjectURL(await response.blob());
+          window.open(url, '_blank');
+          URL.revokeObjectURL(url);
+        } else {
+          this.downloadFile(sampleId, file);
+        }
       }
     } catch (e) {
       console.log(e);
@@ -471,10 +479,18 @@ class Samples extends React.Component {
           fileName: file,
         }),
       });
-      if (response.status == 404) {
+      if (!response.ok) {
         this.setState({ filePopUp: true });
       } else {
-        window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
+        // check for siteminder redirect
+        // if x-powered-by: express exists then open new tab
+        // else repeat function
+        if (response.headers.get('x-powered-by')) {
+          window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
+        } else {
+          this.downloadQCIFile(sampleId, file);
+        }
+
         //let url = URL.createObjectURL(await response.blob());
         // window.open(
         //   `${root}getMethylScapeQCIFile?sampleId=` +
