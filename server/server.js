@@ -1,4 +1,3 @@
-var cors = require('cors');
 const AWS = require('aws-sdk');
 const path = require('path');
 const logger = require('./utils/loggerUtil').logger;
@@ -133,7 +132,6 @@ function createHTML(filename){
 }
 
 
-app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json({
     type: ['application/json', 'text/plain']

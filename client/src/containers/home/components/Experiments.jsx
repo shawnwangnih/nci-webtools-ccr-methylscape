@@ -177,13 +177,8 @@ class Experiments extends React.Component {
   }
 
   async downloadFile(experiment, file) {
-    const root =
-      process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:8290/'
-        : window.location.pathname;
-
     try {
-      const response = await fetch(`${root}getMethylScapeQCFile`, {
+      const response = await fetch(`/getMethylScapeQCFile`, {
         method: 'POST',
         body: JSON.stringify({
           experiment: experiment,

@@ -147,13 +147,8 @@ export default function QCI() {
 
   //Helper to download files from the s3 bucket
   async function downloadFile(sampleId, file) {
-    const root =
-      process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:8290/'
-        : window.location.pathname;
-
     try {
-      let response = await fetch(`${root}getMethylScapeFile`, {
+      let response = await fetch(`/getMethylScapeFile`, {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,

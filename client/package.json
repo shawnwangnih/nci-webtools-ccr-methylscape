@@ -2,6 +2,7 @@
   "private": true,
   "version": "0.1.0",
   "homepage": "./",
+  "proxy": "http://localhost:9290",
   "scripts": {
     "deploy": "now && now alias",
     "start": "react-scripts start",

@@ -433,13 +433,8 @@ class Samples extends React.Component {
 
   //Helper to download files from the s3 bucket
   async downloadFile(sampleId, file) {
-    const root =
-      process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:8290/'
-        : window.location.pathname;
-
     try {
-      let response = await fetch(`${root}getMethylScapeFile`, {
+      let response = await fetch(`/getMethylScapeFile`, {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,
@@ -466,13 +461,8 @@ class Samples extends React.Component {
   }
   //Helper to download files from the s3 bucket
   async downloadQCIFile(sampleId, file) {
-    const root =
-      process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:8290/'
-        : window.location.pathname;
-
     try {
-      let response = await fetch(`${root}getMethylScapeFile`, {
+      let response = await fetch(`/getMethylScapeFile`, {
         method: 'POST',
         body: JSON.stringify({
           sampleId: sampleId,
@@ -486,7 +476,7 @@ class Samples extends React.Component {
         // if x-powered-by: express exists then open new tab
         // else repeat function
         if (response.headers.get('x-powered-by')) {
-          window.open(`${root}#/qci/${sampleId}/${file}`, '_blank');
+          window.open(`/#/qci/${sampleId}/${file}`, '_blank');
         } else {
           this.downloadQCIFile(sampleId, file);
         }

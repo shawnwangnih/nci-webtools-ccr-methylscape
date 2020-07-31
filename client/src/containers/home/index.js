@@ -103,15 +103,12 @@ class Home extends React.Component {
         }, 250),
       });
     });
-    const root =
-      process.env.NODE_ENV === 'development'
-        ? 'http://0.0.0.0:8290/'
-        : window.location.pathname;
+
     /*fetch(
       `https://i6y17nvg51.execute-api.us-east-1.amazonaws.com/TestStage/scanmethylscapetable`,
       { method: 'POST' }
     )*/
-    fetch(`${root}scanMethylScapeTable`)
+    fetch(`/scanMethylScapeTable`)
       .then((response) => response.json())
       .then((data) => {
         if (Object.entries(data).length) {
