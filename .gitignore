@@ -40,3 +40,4 @@ yarn.lock
 
 server/config.json
 server/config.json
+package-lock.json
