@@ -432,7 +432,7 @@ class Samples extends React.Component {
   };
 
   //Helper to download files from the s3 bucket
-  async downloadFile(sampleId, file) {
+  async downloadFile(sampleId, file, retry = 3) {
     try {
       let response = await fetch(`/getMethylScapeFile`, {
         method: 'POST',
@@ -452,7 +452,8 @@ class Samples extends React.Component {
           window.open(url, '_blank');
           URL.revokeObjectURL(url);
         } else {
-          this.downloadFile(sampleId, file);
+          if (retry > 0) this.downloadFile(sampleId, file, retry - 1);
+          else this.setState({ filePopUp: true });
         }
       }
     } catch (e) {
@@ -460,7 +461,7 @@ class Samples extends React.Component {
     }
   }
   //Helper to download files from the s3 bucket
-  async downloadQCIFile(sampleId, file) {
+  async downloadQCIFile(sampleId, file, retry = 3) {
     try {
       let response = await fetch(`/getMethylScapeFile`, {
         method: 'POST',
@@ -478,7 +479,8 @@ class Samples extends React.Component {
         if (response.headers.get('x-powered-by')) {
           window.open(`/#/qci/${sampleId}/${file}`, '_blank');
         } else {
-          this.downloadQCIFile(sampleId, file);
+          if (retry > 0) this.downloadQCIFile(sampleId, file, retry - 1);
+          else this.setState({ filePopUp: true });
         }
 
         //let url = URL.createObjectURL(await response.blob());

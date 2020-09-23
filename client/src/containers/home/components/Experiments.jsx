@@ -176,7 +176,7 @@ class Experiments extends React.Component {
     return;
   }
 
-  async downloadFile(experiment, file) {
+  async downloadFile(experiment, file, retry = 3) {
     try {
       const response = await fetch(`/getMethylScapeQCFile`, {
         method: 'POST',
@@ -197,7 +197,8 @@ class Experiments extends React.Component {
           window.open(url, '_blank');
           URL.revokeObjectURL(url);
         } else {
-          this.downloadFile(experiment, file);
+          if (retry > 0) this.downloadFile(experiment, file, retry - 1);
+          else this.setState({ filePopUp: true });
         }
       }
     } catch (err) {
