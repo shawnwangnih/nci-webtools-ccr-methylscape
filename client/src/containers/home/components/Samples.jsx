@@ -462,39 +462,42 @@ class Samples extends React.Component {
   }
   //Helper to download files from the s3 bucket
   async downloadQCIFile(sampleId, file, retry = 3) {
-    try {
-      let response = await fetch(`/getMethylScapeFile`, {
-        method: 'POST',
-        body: JSON.stringify({
-          sampleId: sampleId,
-          fileName: file,
-        }),
-      });
-      if (!response.ok) {
-        this.setState({ filePopUp: true });
-      } else {
-        // check for siteminder redirect
-        // if x-powered-by: express exists then open new tab
-        // else repeat function
-        if (response.headers.get('x-powered-by')) {
-          window.open(`/#/qci/${sampleId}/${file}`, '_blank');
+    if (!file) this.setState({ filePopUp: true });
+    else {
+      try {
+        let response = await fetch(`/getMethylScapeFile`, {
+          method: 'POST',
+          body: JSON.stringify({
+            sampleId: sampleId,
+            fileName: file,
+          }),
+        });
+        if (!response.ok) {
+          this.setState({ filePopUp: true });
         } else {
-          if (retry > 0) this.downloadQCIFile(sampleId, file, retry - 1);
-          else this.setState({ filePopUp: true });
-        }
+          // check for siteminder redirect
+          // if x-powered-by: express exists then open new tab
+          // else repeat function
+          if (response.headers.get('x-powered-by')) {
+            window.open(`/#/qci/${sampleId}/${file}`, '_blank');
+          } else {
+            if (retry > 0) this.downloadQCIFile(sampleId, file, retry - 1);
+            else this.setState({ filePopUp: true });
+          }
 
-        //let url = URL.createObjectURL(await response.blob());
-        // window.open(
-        //   `${root}getMethylScapeQCIFile?sampleId=` +
-        //     sampleId +
-        //     '&fileName=' +
-        //     file,
-        //   '_blank'
-        // );
-        //URL.revokeObjectURL(url);
+          //let url = URL.createObjectURL(await response.blob());
+          // window.open(
+          //   `${root}getMethylScapeQCIFile?sampleId=` +
+          //     sampleId +
+          //     '&fileName=' +
+          //     file,
+          //   '_blank'
+          // );
+          //URL.revokeObjectURL(url);
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   }
 
@@ -660,8 +663,12 @@ class Samples extends React.Component {
             }
             if (index == 3) {
               return (
-                <a
+                <Button
+                  type="link"
+                  disabled={!currRow.xml_report}
                   style={{
+                    height: 'auto',
+                    color: currRow.xml_report ? '#0050d8' : 'rgba(0, 0, 0, 0.25)',
                     paddingLeft: '5%',
                     marginBottom: '0px',
                     paddingRight: '1%',
@@ -671,7 +678,7 @@ class Samples extends React.Component {
                   }
                 >
                   {text}
-                </a>
+                </Button>
               );
             }
             if (index == 4) {
