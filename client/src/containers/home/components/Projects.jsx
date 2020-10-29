@@ -47,6 +47,7 @@ class Projects extends React.Component {
         filterNumSamples: '',
         filterNumExperiments: '',
         filterProject: '',
+        loading: false,
       });
       return;
     }
