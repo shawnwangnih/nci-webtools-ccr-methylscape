@@ -1,0 +1,30 @@
+[
+  {
+    "type": "annotation",
+    "sourcePath": "./data/anno_neuro.tsv",
+    "stageTable": "stageNeuro",
+    "organSystem": "centralNervousSystem",
+    "embeddings": ["umap", "densmap"]
+  },
+  {
+    "type": "annotation",
+    "sourcePath": "./data/anno_neuro_sarcoma.tsv",
+    "stageTable": "stageNeuroSarcoma",
+    "organSystem": "centralNervousSystemSarcoma",
+    "embeddings": ["umap", "densmap"]
+  },
+  {
+    "type": "annotation",
+    "sourcePath": "./data/anno_sarcoma.tsv",
+    "stageTable": "stageSarcoma",
+    "organSystem": "boneAndSoftTissue",
+    "embeddings": ["umap", "densmap"]
+  },
+  {
+    "type": "annotation",
+    "sourcePath": "./data/anno_hemepath.tsv",
+    "stageTable": "stageHemepath",
+    "organSystem": "hematopoietic",
+    "embeddings": ["umap", "densmap"]
+  }
+]

@@ -1,0 +1,19 @@
+version: '3'
+services:
+    methylscape_analysis_backend:
+        build:
+            context: '.'
+            dockerfile: './docker/backend.dockerfile'
+        volumes:
+            - './database:/database'
+            - './server/config.json:/server/config.json'
+
+    methylscape_analysis_frontend:
+        build: 
+            context: '.'
+            dockerfile: './docker/frontend.dockerfile'
+        environment:
+            - 'API_HOST=http://methylscape_analysis_backend:10000'
+        ports: 
+            - '8100:80'
+

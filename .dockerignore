@@ -1,0 +1,5 @@
+.git
+**/node_modules
+database
+server/config.json
+server/logs

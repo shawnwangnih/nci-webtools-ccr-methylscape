@@ -1,23 +1,18 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-// import { ConnectedRouter } from 'connected-react-router';
-import { HashRouter } from 'react-router-dom';
-import store, { history } from './store';
-import App from './containers/app';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./styles/main.scss";
+import App from "./app";
+import reportWebVitals from "./reportWebVitals";
 
-import 'sanitize.css/sanitize.css';
-import './index.css';
-
-const target = document.querySelector('#root');
-
-render(
-  <Provider store={store}>
-    {/* <ConnectedRouter history={history}> */}
-    <HashRouter>
-      <App />
-    </HashRouter>
-    {/* </ConnectedRouter> */}
-  </Provider>,
-  target
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root"),
 );
+
+Array.from(document.querySelectorAll("[react-cloak]")).forEach((node) =>
+  node.removeAttribute("react-cloak"),
+);
+
+reportWebVitals(console.log);

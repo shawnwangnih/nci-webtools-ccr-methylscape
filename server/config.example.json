@@ -1,7 +1,18 @@
 {
-    "port": 8290,
-    "dynamoDBTableName":"MethylScapeSamplesTable-dev",
-    "S3BucketName": "nci-cbiit-analysistools",
-    "S3SamplesKey": "dev/ClassifierReports",
-    "S3QCReportsKey": "dev/QCreports"
+  "server": {
+    "port": 10000,
+    "client": "../client/build"
+  },
+  "logs": {
+    "folder": "logs",
+    "level": "debug"
+  },
+  "database": "../database/data.sqlite",
+  "aws": {
+    "region": "us-east-1",
+    "dynamoDBTable": "",
+    "s3Bucket": "",
+    "S3Key": "",
+    "S3QCReportsKey": ""
+  }
 }
