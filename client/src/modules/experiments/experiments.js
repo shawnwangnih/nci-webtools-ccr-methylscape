@@ -33,7 +33,7 @@ export default function Experiments() {
       canFilter: true,
     },
     {
-      id: "data",
+      id: "date",
       accessor: "date",
       Header: "Experiment Date",
       canFilter: true,

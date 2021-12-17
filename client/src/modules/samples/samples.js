@@ -13,6 +13,12 @@ export default function Samples() {
   const { tableData } = table;
 
   const columns = [
+    {
+      id: "sample_name",
+      accessor: "sample_name",
+      Header: "Sample Name",
+      canFilter: true,
+    },
     { id: "project", accessor: "project", Header: "Project", canFilter: true },
     {
       id: "experiment",
@@ -21,83 +27,100 @@ export default function Samples() {
       canFilter: true,
     },
     {
-      id: "investigator",
-      accessor: "investigator",
-      Header: "Investigator Name",
+      id: "pool_id",
+      accessor: "pool_id",
+      Header: "Sample Date",
       canFilter: true,
     },
     {
-      id: "samplesCount",
-      accessor: "samplesCount",
-      Header: "# of Samples",
+      id: "surgical_case",
+      accessor: "surgical_case",
+      Header: "Surgical Case",
       canFilter: true,
     },
     {
-      id: "data",
-      accessor: "date",
-      Header: "Experiment Date",
+      id: "gender",
+      accessor: "gender",
+      Header: "Gender",
       canFilter: true,
     },
     {
-      id: "qcSheet",
-      Header: "QC Sheet",
-      disableSortBy: true,
-      Cell: ({ row }) => {
-        const experiment = row.original.experiment;
-        return (
-          <Button
-            variant="link"
-            className="p-0"
-            onClick={() => download(experiment, experiment + ".qcReport.pdf")}>
-            View PDF
-          </Button>
-        );
-      },
+      id: "age",
+      accessor: "age",
+      Header: "Age",
+      canFilter: true,
     },
     {
-      id: "qcSupplementary",
-      Header: "QC Supplementary",
-      disableSortBy: true,
-      Cell: ({ row }) => {
-        const experiment = row.original.experiment;
-        return (
-          <Button
-            variant="link"
-            className="p-0"
-            onClick={() =>
-              download(experiment, experiment + ".supplementary_plots.pdf")
-            }>
-            View PDF
-          </Button>
-        );
-      },
+      id: "diagnosis",
+      accessor: "diagnosis",
+      Header: "Diagnosis",
+      canFilter: true,
     },
   ];
   const options = {};
 
   useEffect(() => {
+    //returns the methylation family if it exists
+    function getMF(data) {
+      return Object.keys(data).length >= 2
+        ? String(Object.keys(data["0"])[0]).substring(25)
+        : "";
+    }
+
+    //returns the methylation family score if it exists
+    function getMFScore(data) {
+      return Object.values(data).length >= 2 ? Object.values(data["0"]) : "";
+    }
+
+    //returns the methylation class
+    function getMC(data) {
+      const size = Object.keys(data).length;
+      if (size >= 2) {
+        return Object.keys(data["1"])[0];
+      } else if (size === 1) {
+        return Object.keys(data["0"])[0];
+      } else {
+        return "";
+      }
+    }
+
+    //returns the methylation class score
+    function getMCScore(data) {
+      const size = Object.keys(data).length;
+      if (size >= 2) {
+        return Object.values(data["1"])[0];
+      } else if (size === 1) {
+        return Object.values(data["0"])[0];
+      } else {
+        return "";
+      }
+    }
+
     if (dbData.length && !tableData.length) {
-      let experiments = [];
-      dbData.forEach((sample) => {
-        const curExperiment = sample.experiment;
-        if (curExperiment) {
-          if (curExperiment in experiments) {
-            experiments[curExperiment].samplesCount =
-              experiments[curExperiment].samplesCount + 1;
+      const samples = dbData
+        .filter(({ sample_name }) => sample_name)
+        .map((sample) => {
+          const cp = sample.classifier_prediction;
+          if (!cp) {
+            return {
+              ...sample,
+              family: "",
+              family_score: "",
+              class: "",
+              class_score: "",
+            };
           } else {
-            experiments[curExperiment] = {
-              experiment: curExperiment,
-              project: sample.project,
-              samplesCount: 1,
-              date: sample.date,
-              investigator: sample.investigator,
+            return {
+              ...sample,
+              family: getMF(cp),
+              family_score: getMFScore(cp),
+              class: getMC(cp),
+              class_score: getMCScore(cp),
             };
           }
-        }
-      });
+        });
 
-      const tableData = Object.values(experiments);
-      mergeState({ tableData });
+      mergeState({ tableData: Object.values(samples) });
     }
   }, [dbData]);
 

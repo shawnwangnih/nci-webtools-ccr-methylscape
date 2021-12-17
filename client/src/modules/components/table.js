@@ -9,6 +9,7 @@ import {
   usePagination,
   useSortBy,
   useRowSelect,
+  useExpanded,
 } from "react-table";
 import { ChevronUp, ChevronDown, ChevronExpand } from "react-bootstrap-icons";
 
@@ -94,8 +95,8 @@ export default function Table({ columns, data, options, useHooks = {} }) {
     useFilters,
     useSortBy,
     usePagination,
-    useRowSelect,
-
+    useHooks.rowSelect ? useRowSelect : () => {},
+    useHooks.expanded ? useExpanded : () => {},
     (hooks) => {
       if (useHooks.rowSelect) {
         hooks.visibleColumns.push((columns) => [
