@@ -2,17 +2,16 @@ import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { tableState } from "./projects.state";
+import { projectsTableData, projectState } from "./projects.state";
 import Table from "../components/table";
-import { methylscapeData } from "../data/data.state";
 import Summary from "./summary";
 
 export default function Projects() {
-  const dbData = useRecoilValue(methylscapeData);
-  const [table, setTable] = useRecoilState(tableState);
-  const mergeState = (state) => setTable({ ...table, ...state });
+  const tableData = useRecoilValue(projectsTableData);
+  const [state, setState] = useRecoilState(projectState);
+  const mergeState = (newState) => setState({ ...state, ...newState });
 
-  const { tableData } = table;
+  const { selectedProject } = state;
 
   const columns = [
     { id: "project", accessor: "project", Header: "Project", canFilter: true },
@@ -57,32 +56,12 @@ export default function Projects() {
     },
   };
 
+  // set inital selected project
   useEffect(() => {
-    if (dbData.length && !tableData.length) {
-      let projects = [];
-      dbData.forEach((sample) => {
-        const curProject = sample.project;
-        if (curProject && sample.experiment) {
-          if (curProject in projects) {
-            projects[curProject].samplesCount += 1;
-            projects[curProject].experiments.add(sample.experiment);
-          } else {
-            projects[curProject] = {
-              project: curProject,
-              samplesCount: 1,
-              date: sample.date,
-              investigator: sample.investigator,
-              experiments: new Set([]),
-            };
-            projects[curProject].experiments.add(sample.experiment);
-          }
-        }
-      });
-
-      const tableData = Object.values(projects);
-      mergeState({ tableData, selectedProject: tableData[0].project });
+    if (!selectedProject && tableData.length) {
+      mergeState({ selectedProject: tableData[0].project });
     }
-  }, [dbData]);
+  }, [selectedProject]);
 
   return (
     <Container fluid>

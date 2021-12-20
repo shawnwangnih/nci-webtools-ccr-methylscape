@@ -1,10 +1,31 @@
-import { atom } from "recoil";
+import { selector } from "recoil";
+import { methylscapeData } from "../data/data.state";
 
-export const defaultTableState = {
-  tableData: [],
-};
+export const experimentsTableData = selector({
+  key: "experimentsTableData",
+  get: ({ get }) => {
+    const dbData = get(methylscapeData);
 
-export const tableState = atom({
-  key: "experimentsTableState",
-  default: defaultTableState,
+    if (!dbData.length) return [];
+
+    let experiments = [];
+    dbData.forEach((sample) => {
+      const curExperiment = sample.experiment;
+      if (curExperiment) {
+        if (curExperiment in experiments) {
+          experiments[curExperiment].samplesCount += 1;
+        } else {
+          experiments[curExperiment] = {
+            experiment: curExperiment,
+            project: sample.project,
+            samplesCount: 1,
+            date: sample.date,
+            investigator: sample.investigator,
+          };
+        }
+      }
+    });
+
+    return Object.values(experiments);
+  },
 });

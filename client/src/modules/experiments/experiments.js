@@ -1,16 +1,10 @@
-import { useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { tableState } from "./experiments.state";
+import { useRecoilValue } from "recoil";
+import { experimentsTableData } from "./experiments.state";
 import Table from "../components/table";
-import { methylscapeData } from "../data/data.state";
 
 export default function Experiments() {
-  const dbData = useRecoilValue(methylscapeData);
-  const [table, setTable] = useRecoilState(tableState);
-  const mergeState = (state) => setTable({ ...table, ...state });
-
-  const { tableData } = table;
+  const tableData = useRecoilValue(experimentsTableData);
 
   const columns = [
     { id: "project", accessor: "project", Header: "Project", canFilter: true },
@@ -74,31 +68,6 @@ export default function Experiments() {
     },
   ];
   const options = {};
-
-  useEffect(() => {
-    if (dbData.length && !tableData.length) {
-      let experiments = [];
-      dbData.forEach((sample) => {
-        const curExperiment = sample.experiment;
-        if (curExperiment) {
-          if (curExperiment in experiments) {
-            experiments[curExperiment].samplesCount += 1;
-          } else {
-            experiments[curExperiment] = {
-              experiment: curExperiment,
-              project: sample.project,
-              samplesCount: 1,
-              date: sample.date,
-              investigator: sample.investigator,
-            };
-          }
-        }
-      });
-
-      const tableData = Object.values(experiments);
-      mergeState({ tableData });
-    }
-  }, [dbData]);
 
   async function download(experiment, file) {
     try {
