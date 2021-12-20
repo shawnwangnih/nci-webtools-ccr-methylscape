@@ -82,8 +82,7 @@ export default function Experiments() {
         const curExperiment = sample.experiment;
         if (curExperiment) {
           if (curExperiment in experiments) {
-            experiments[curExperiment].samplesCount =
-              experiments[curExperiment].samplesCount + 1;
+            experiments[curExperiment].samplesCount += 1;
           } else {
             experiments[curExperiment] = {
               experiment: curExperiment,

@@ -18,6 +18,7 @@ export function TextFilter({
 }) {
   return (
     <Form.Control
+      size="sm"
       value={filterValue || ""}
       onChange={(e) => setFilter(e.target.value || undefined)}
       placeholder={placeholder || `Search...`}
@@ -121,8 +122,19 @@ export default function Table({ columns, data, options, useHooks = {} }) {
   return (
     <>
       <div className="table-responsive">
-        <BootstrapTable {...getTableProps()} hover bordered size="sm">
+        <BootstrapTable {...getTableProps()} hover size="sm">
           <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <td {...column.getHeaderProps()}>
+                    <div>
+                      {column.canFilter ? column.render("Filter") : null}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -140,17 +152,6 @@ export default function Table({ columns, data, options, useHooks = {} }) {
                       )
                     )}
                   </th>
-                ))}
-              </tr>
-            ))}
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps()}>
-                    <div>
-                      {column.canFilter ? column.render("Filter") : null}
-                    </div>
-                  </td>
                 ))}
               </tr>
             ))}
