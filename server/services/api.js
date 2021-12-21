@@ -46,7 +46,7 @@ apiRouter.get("/query", (request, response) => {
 });
 
 // get entire dynamoDB table
-apiRouter.get("/scanDynamoDB", async (request, response) => {
+apiRouter.get("/scanDynamoDB", async (request, response, next) => {
   try {
     const results = await scanTable();
     response.json(results);
