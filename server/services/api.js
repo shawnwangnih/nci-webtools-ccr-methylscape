@@ -6,7 +6,7 @@ const fs = require("fs");
 const config = require("../config");
 const { getSchema, query } = require("./query");
 const { scanTable, getFile } = require("./aws");
-const { logRequests, publicCacheControl } = require("./middleware");
+const { logRequests, publicCacheControl, withAsync } = require("./middleware");
 
 const apiRouter = express.Router();
 const database = new sqlite(config.database);
@@ -46,29 +46,21 @@ apiRouter.get("/query", (request, response) => {
 });
 
 // get entire dynamoDB table
-apiRouter.get("/scanDynamoDB", async (request, response, next) => {
-  try {
-    const results = await scanTable();
-    response.json(results);
-  } catch (error) {
-    next(error);
-  }
-});
+apiRouter.get("/scanDynamoDB", withAsync(async (request, response) => {
+  const results = await scanTable();
+  response.json(results);
+}));
 
 // get file from s3
-apiRouter.post("/getFile", async (request, response, next) => {
+apiRouter.post("/getFile", withAsync(async (request, response) => {
   const { qc, sample } = request.body;
   const key = path.join(
     qc ? config.aws.S3QCReportsKey : config.aws.S3Key,
     qc || sample,
   );
 
-  try {
-    const file = await getFile(key);
-    file.Body.pipe(response);
-  } catch (error) {
-    next(error);
-  }
-});
+  const file = await getFile(key);
+  file.Body.pipe(response);
+}));
 
 module.exports = { apiRouter };
