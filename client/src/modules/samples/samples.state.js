@@ -4,7 +4,7 @@ import { methylscapeData } from "../data/data.state";
 export const samplesTableData = selector({
   key: "samplesTableData",
   get: ({ get }) => {
-    const dbData = get(methylscapeData).filter((d) => d.xml_report);
+    const dbData = get(methylscapeData);
 
     if (!dbData.length) return [];
 
