@@ -15,127 +15,7 @@ export const qciData = selector({
   key: "qciData",
   get: async ({ get }) => {
     const { id, file } = get(QCIState);
-    let snvTable = {
-      columns: [
-        {
-          Header: "GENE",
-          accessor: "gene",
 
-          Cell: ({ value }) => (
-            <b>
-              <i>{value}</i>
-            </b>
-          ),
-        },
-        {
-          Header: "GENOMIC LOCATION",
-          accessor: "genomicLocation",
-        },
-        { Header: "TRANSCRIPT", accessor: "transcript" },
-        {
-          Header: "NUCLEOTIDE CHANGE",
-          accessor: "nucleotideChange",
-        },
-        {
-          Header: "AMINO ACID CHANGE",
-          accessor: "aminoAcidChange",
-        },
-        { Header: "VAF* (%)", accessor: "vaf" },
-        {
-          Header: "PATHOGENICITY ASSESSMENT",
-          accessor: "pathAssessment",
-
-          Cell: ({ value }) => <span className="textRed">{value}</span>,
-        },
-        { Header: "TIER**", accessor: "tier" },
-      ],
-      data: [],
-    };
-    let cnvTable = {
-      columns: [
-        {
-          Header: "GENE",
-          accessor: "gene",
-
-          Cell: ({ value }) => (
-            <div>
-              <div>
-                <b>
-                  <i>{value.split(" ")[0]}</i>
-                </b>
-              </div>
-              <div>{value.split(" ")[1]}</div>
-            </div>
-          ),
-        },
-        {
-          Header: "GENOMIC LOCATION",
-          accessor: "genomicLocation",
-        },
-        {
-          Header: "PATHOGENICITY ASSESSMENT",
-          accessor: "pathAssessment",
-
-          Cell: ({ value }) => <span className="textRed">{value}</span>,
-        },
-        { Header: "TIER**", accessor: "tier" },
-      ],
-      data: [],
-    };
-    let fusionTable = {
-      columns: [
-        {
-          Header: "GENE",
-          accessor: "gene",
-
-          Cell: ({ value }) => (
-            <div>
-              <div>
-                <b>
-                  <i>{value.split(" ")[0]}</i>
-                </b>
-              </div>
-              <div>{value.split(" ")[1]}</div>
-            </div>
-          ),
-        },
-        {
-          Header: "GENOMIC LOCATION",
-          accessor: "genomicLocation",
-        },
-        { Header: "READS", accessor: "reads" },
-        {
-          Header: "PATHOGENICITY ASSESSMENT",
-          accessor: "pathAssessment",
-
-          Cell: ({ value }) => <span className="textRed">{value}</span>,
-        },
-        { Header: "TIER**", accessor: "tier" },
-      ],
-      data: [],
-    };
-    let unkTable = {
-      columns: [
-        { Header: "GENE", accessor: "gene" },
-        {
-          Header: "GENOMIC LOCATION",
-          accessor: "genomicLocation",
-        },
-        { Header: "TRANSCRIPT", accessor: "transcript" },
-        {
-          Header: "NUCLEOTIDE CHANGE",
-          accessor: "nucleotideChange",
-        },
-        {
-          Header: "AMINO ACID CHANGE",
-          accessor: "aminoAcidChange",
-        },
-        { Header: "VAF* (%)", accessor: "vaf" },
-      ],
-      data: [],
-    };
-
-    //Helper to download files from the s3 bucket
     async function downloadFile(id, file) {
       try {
         let response = await fetch(`api/getFile`, {
@@ -152,7 +32,7 @@ export const qciData = selector({
           return false;
         } else {
           let xml = await response.text();
-          parseVariants(xml);
+          return xml;
         }
       } catch (e) {
         console.log(e);
@@ -169,6 +49,7 @@ export const qciData = selector({
 
     function parseVariants(file) {
       const parsed = xml2js(file, { compact: true });
+
       let variants = parsed.report.variant;
       !Array.isArray(variants)
         ? (variants = [variants])
@@ -179,8 +60,7 @@ export const qciData = selector({
       const uncertain = variants.filter((v) =>
         v.assessment._text.match(/uncertain/gi),
       );
-      sigVariants(significant);
-      unknownVariants(uncertain);
+      return { ...sigVariants(significant), ...unknownVariants(uncertain) };
     }
 
     // VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE
@@ -237,9 +117,7 @@ export const qciData = selector({
         }
       });
 
-      snvTable.data = snvData;
-      cnvTable.data = cnvData;
-      fusionTable.data = fusionData;
+      return { snvData, cnvData, fusionData };
     }
 
     // VARIANTS OF UNCERTAIN CLINICAL SIGNIFICANCE
@@ -259,11 +137,135 @@ export const qciData = selector({
         };
       });
 
-      unkTable.data = data;
+      return { unkData: data };
     }
 
-    const data = id && file ? downloadFile(id, file) : false;
+    const xml = id && file ? await downloadFile(id, file) : false;
+    const data = xml ? parseVariants(xml) : false;
 
-    return data ? { snvTable, cnvTable, fusionTable, unkTable } : null;
+    if (!data) return null;
+
+    const snvTable = {
+      columns: [
+        {
+          Header: "GENE",
+          accessor: "gene",
+          Cell: ({ value }) => (
+            <b>
+              <i>{value}</i>
+            </b>
+          ),
+        },
+        {
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
+        },
+        { Header: "TRANSCRIPT", accessor: "transcript" },
+        {
+          Header: "NUCLEOTIDE CHANGE",
+          accessor: "nucleotideChange",
+        },
+        {
+          Header: "AMINO ACID CHANGE",
+          accessor: "aminoAcidChange",
+        },
+        { Header: "VAF* (%)", accessor: "vaf" },
+        {
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
+          Cell: ({ value }) => <span className="textRed">{value}</span>,
+        },
+        { Header: "TIER**", accessor: "tier" },
+      ],
+      data: data.snvData,
+      options: { disableFilters: true },
+    };
+
+    const cnvTable = {
+      columns: [
+        {
+          Header: "GENE",
+          accessor: "gene",
+          Cell: ({ value }) => (
+            <div>
+              <div>
+                <b>
+                  <i>{value.split(" ")[0]}</i>
+                </b>
+              </div>
+              <div>{value.split(" ")[1]}</div>
+            </div>
+          ),
+        },
+        {
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
+        },
+        {
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
+          Cell: ({ value }) => <span className="textRed">{value}</span>,
+        },
+        { Header: "TIER**", accessor: "tier" },
+      ],
+      data: data.cnvData,
+      options: { disableFilters: true },
+    };
+
+    const fusionTable = {
+      columns: [
+        {
+          Header: "GENE",
+          accessor: "gene",
+          Cell: ({ value }) => (
+            <div>
+              <div>
+                <b>
+                  <i>{value.split(" ")[0]}</i>
+                </b>
+              </div>
+              <div>{value.split(" ")[1]}</div>
+            </div>
+          ),
+        },
+        {
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
+        },
+        { Header: "READS", accessor: "reads" },
+        {
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
+          Cell: ({ value }) => <span className="textRed">{value}</span>,
+        },
+        { Header: "TIER**", accessor: "tier" },
+      ],
+      data: data.fusionData,
+      options: { disableFilters: true },
+    };
+
+    const unkTable = {
+      columns: [
+        { Header: "GENE", accessor: "gene" },
+        {
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
+        },
+        { Header: "TRANSCRIPT", accessor: "transcript" },
+        {
+          Header: "NUCLEOTIDE CHANGE",
+          accessor: "nucleotideChange",
+        },
+        {
+          Header: "AMINO ACID CHANGE",
+          accessor: "aminoAcidChange",
+        },
+        { Header: "VAF* (%)", accessor: "vaf" },
+      ],
+      data: data.unkData,
+      options: { disableFilters: true },
+    };
+
+    return { snvTable, cnvTable, fusionTable, unkTable };
   },
 });

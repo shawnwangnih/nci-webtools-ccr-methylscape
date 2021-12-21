@@ -1,11 +1,6 @@
-import React, { Suspense, useState, useEffect } from "react";
-import Alert from "react-bootstrap/Alert";
-import { useRecoilState, useRecoilValue } from "recoil";
-import parse from "html-react-parser";
-import { qciData, QCIState } from "./qci.state";
-import { useSearchParams } from "react-router-dom";
-import { json2xml, xml2js } from "xml-js";
-
+import { Container } from "react-bootstrap";
+import { useRecoilValue } from "recoil";
+import { qciData } from "./qci.state";
 import Table from "../components/table";
 import "./qci.css";
 
@@ -13,7 +8,7 @@ export default function Report() {
   const { snvTable, cnvTable, fusionTable, unkTable } = useRecoilValue(qciData);
 
   return (
-    <div>
+    <Container fluid="xxl">
       {snvTable.data.length ||
       cnvTable.data.length ||
       fusionTable.data.length ||
@@ -79,6 +74,6 @@ export default function Report() {
       ) : (
         <h2>No Report Available</h2>
       )}
-    </div>
+    </Container>
   );
 }
