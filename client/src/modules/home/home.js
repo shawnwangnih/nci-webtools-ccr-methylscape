@@ -37,13 +37,13 @@ export default function Home() {
               <Tab eventKey="overview" title="Overview">
                 <Overview className="px-3" />
               </Tab>
-              <Tab eventKey="sampleQuality" title="QC">
+              {/* <Tab eventKey="sampleQuality" title="QC">
                 <SampleQuality className="px-3" />
-              </Tab>
+              </Tab> */}
               <Tab eventKey="copyNumber" title="Copy number">
                 <CopyNumber className="px-3" />
               </Tab>
-              <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
+              {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
                 <PromoterMethylation className="px-3" />
               </Tab>
               <Tab eventKey="cohortAnalysis" title="Cohort analysis">
@@ -60,7 +60,7 @@ export default function Home() {
               </Tab>
               <Tab eventKey="methodology" title="Methodology">
                 <Methodology className="px-3" />
-              </Tab>
+              </Tab> */}
             </Tabs>
           </Card>
         </Col>
