@@ -127,7 +127,7 @@ export default function Samples() {
               <Link
                 className="btn btn-link p-0"
                 target="_blank"
-                to={`/#/qci?id=${original.id}&file=${original.xml_report}`}>
+                to={`/qci?id=${original.id}&file=${original.xml_report}`}>
                 View Report
               </Link>
             ) : (
