@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { samplesTableData } from "./samples.state";
 import { PlusSquare, DashSquare } from "react-bootstrap-icons";
 import Table from "../../components/table";
 
 export default function Samples() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const tableData = useRecoilValue(samplesTableData);
 
   const columns = [
@@ -23,46 +24,63 @@ export default function Samples() {
       id: "sample_name",
       accessor: "sample_name",
       Header: "Sample Name",
-      canFilter: true,
     },
-    { id: "project", accessor: "project", Header: "Project", canFilter: true },
+    {
+      id: "project",
+      accessor: "project",
+      Header: "Project",
+      Cell: (e) => (
+        <Link to={"/data/projects?project=" + e.data[e.row.index].project}>
+          {e.value}
+        </Link>
+      ),
+    },
     {
       id: "experiment",
       accessor: "experiment",
       Header: "Experiment",
-      canFilter: true,
+      Cell: (e) => (
+        <Link
+          to={"/data/experiments?experiment=" + e.data[e.row.index].experiment}>
+          {e.value}
+        </Link>
+      ),
     },
     {
       id: "pool_id",
       accessor: "pool_id",
       Header: "Sample Date",
-      canFilter: true,
     },
     {
       id: "surgical_case",
       accessor: "surgical_case",
       Header: "Surgical Case",
-      canFilter: true,
     },
     {
       id: "gender",
       accessor: "gender",
       Header: "Gender",
-      canFilter: true,
     },
     {
       id: "age",
       accessor: "age",
       Header: "Age",
-      canFilter: true,
     },
     {
       id: "diagnosis",
       accessor: "diagnosis",
       Header: "Diagnosis",
-      canFilter: true,
     },
   ];
+
+  const options = {
+    initialState: {
+      filters: [
+        { id: "project", value: searchParams.get("project") || "" },
+        { id: "experiment", value: searchParams.get("experiment") || "" },
+      ],
+    },
+  };
 
   const renderRowSubComponent = useCallback(({ row }) => {
     const { original } = row;
@@ -223,7 +241,7 @@ export default function Samples() {
             <Table
               data={tableData}
               columns={columns}
-              options={{}}
+              options={options}
               useHooks={{ expanded: true }}
               renderRowSubComponent={renderRowSubComponent}
             />

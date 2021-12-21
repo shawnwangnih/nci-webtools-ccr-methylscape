@@ -1,36 +1,48 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
+import { Link, useSearchParams } from "react-router-dom";
 import { experimentsTableData } from "./experiments.state";
 import Table from "../../components/table";
 
 export default function Experiments() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const tableData = useRecoilValue(experimentsTableData);
 
   const columns = [
-    { id: "project", accessor: "project", Header: "Project", canFilter: true },
+    {
+      id: "project",
+      accessor: "project",
+      Header: "Project",
+      Cell: (e) => (
+        <Link to={"/data/projects?project=" + e.data[e.row.index].project}>
+          {e.value}
+        </Link>
+      ),
+    },
     {
       id: "experiment",
       accessor: "experiment",
       Header: "Experiment",
-      canFilter: true,
+      Cell: (e) => (
+        <Link to={"/data/samples?experiment=" + e.data[e.row.index].experiment}>
+          {e.value}
+        </Link>
+      ),
     },
     {
       id: "investigator",
       accessor: "investigator",
       Header: "Investigator Name",
-      canFilter: true,
     },
     {
       id: "samplesCount",
       accessor: "samplesCount",
       Header: "# of Samples",
-      canFilter: true,
     },
     {
       id: "date",
       accessor: "date",
       Header: "Experiment Date",
-      canFilter: true,
     },
     {
       id: "qcSheet",
@@ -67,7 +79,14 @@ export default function Experiments() {
       },
     },
   ];
-  const options = {};
+  const options = {
+    initialState: {
+      filters: [
+        { id: "project", value: searchParams.get("project") || "" },
+        { id: "experiment", value: searchParams.get("experiment") || "" },
+      ],
+    },
+  };
 
   async function download(experiment, file) {
     try {

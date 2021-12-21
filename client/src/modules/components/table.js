@@ -86,7 +86,7 @@ export default function Table({
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, expanded },
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns: useMemo((_) => columns, [columns]),
