@@ -15,9 +15,9 @@ RUN dnf -y update \
     R \
  && dnf clean all
 
-RUN mkdir /server
+RUN mkdir -p /app/server
 
-WORKDIR /server
+WORKDIR /app/server
 
 COPY server/install.R .
 
