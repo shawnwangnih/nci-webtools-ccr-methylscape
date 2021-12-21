@@ -1,3 +1,5 @@
+const isProduction = process.env.NODE_ENV === "production";
+
 function publicCacheControl(maxAge) {
   return (request, response, next) => {
     if (request.method === "GET")
@@ -23,8 +25,19 @@ function logErrors(error, request, response, next) {
   response.status(500).json(isProduction ? name : `${name}: ${message}`);
 }
 
+function withAsync(fn) {
+  return async (request, response, next) => {
+    try {
+      return await fn(request, response, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
 module.exports = {
   publicCacheControl,
   logErrors,
   logRequests,
+  withAsync,
 };
