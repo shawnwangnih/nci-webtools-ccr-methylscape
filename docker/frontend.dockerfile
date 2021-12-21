@@ -1,31 +1,31 @@
-# docker build -t app:frontend -f docker/frontend.dockerfile .
-FROM centos:8.3.2011
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
 
 RUN dnf -y update \
- && dnf -y install \
-    dnf-plugins-core \
-    epel-release \
-    glibc-langpack-en \
  && dnf -y module enable nodejs:14 \
  && dnf -y install \
     gcc-c++ \
     httpd \
     make \
     nodejs \
+    npm \
  && dnf clean all
 
-RUN mkdir /client
+RUN mkdir -p /app/client
 
-WORKDIR /client
+WORKDIR /app/client
 
-COPY client/package*.json /client/
+COPY client/package.json /app/client/
 
 RUN npm install
 
-COPY client /client/
+COPY client /app/client/
 
-RUN npm run build \
- && mv -f /client/build/* /var/www/html
+RUN npm run build
+
+ARG APP_PATH
+
+RUN mkdir -p /var/www/html/${APP_PATH} \
+ && cp -r /app/client/build/* /var/www/html/${APP_PATH}
 
 COPY docker/frontend.conf /etc/httpd/conf.d/frontend.conf
 
@@ -36,4 +36,3 @@ EXPOSE 443
 
 CMD rm -rf /run/httpd/* /tmp/httpd* \
  && exec /usr/sbin/apachectl -DFOREGROUND
-
