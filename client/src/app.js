@@ -8,6 +8,7 @@ import Projects from "./modules/data/projects/projects";
 import Experiments from "./modules/data/experiments/experiments";
 import Samples from "./modules/data/samples/samples";
 import QCI from "./modules/qciReport/qci";
+import Admin from "./modules/components/admin/admin";
 
 export default function App() {
   const navbarLinks = [
@@ -31,6 +32,7 @@ export default function App() {
           </Route>
           <Route path="about/*" element={<About />} />
           <Route path="qci/*" element={<QCI />} />
+          <Route path="admin/*" element={<Admin />} />
         </Routes>
       </Router>
     </RecoilRoot>
