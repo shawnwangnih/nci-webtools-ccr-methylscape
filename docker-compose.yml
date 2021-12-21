@@ -5,8 +5,9 @@ services:
             context: '.'
             dockerfile: './docker/backend.dockerfile'
         volumes:
-            - './database:/database'
-            - './server/config.json:/server/config.json'
+            - './database/data.sqlite:/app/database/data.sqlite:ro'
+            - './server/config.json:/app/server/config.json:ro'
+            - './server/logs:/app/server/logs'
 
     frontend:
         build: 
@@ -15,8 +16,7 @@ services:
             args:
                 APP_PATH: /methylscape
         environment:
-            API_HOST: http://backend
-            API_PORT: 10000
+            API_BASE_URL: http://backend:10000
             APP_PATH: /methylscape
         ports: 
             - '8100:80'
