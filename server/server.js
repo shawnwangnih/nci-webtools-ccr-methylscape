@@ -15,8 +15,8 @@ if (forkCluster()) return;
 const app = express();
 app.locals.logger = getLogger("methylscape-analysis");
 app.use(helmet());
-app.use(logErrors);
 app.use("/api", apiRouter);
+app.use(logErrors); // logErrors should always be last
 
 // serve static assets during local development
 if (!isProduction) app.use(express.static(config.server.client));
