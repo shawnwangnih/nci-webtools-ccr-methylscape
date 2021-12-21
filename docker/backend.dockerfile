@@ -1,6 +1,4 @@
-# example build command (from repository root)
-# docker build -t app:backend -f docker/backend.dockerfile .
-FROM centos:8.3.2011
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
 
 RUN dnf -y update \
  && dnf -y install \
@@ -10,27 +8,26 @@ RUN dnf -y update \
  && dnf config-manager --set-enabled powertools \
  && dnf -y module enable nodejs:14 \
  && dnf -y install \
+    make \
+    gcc-c++ \
     nodejs \
     python3-devel \
     R \
  && dnf clean all
 
-ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
-
-RUN Rscript -e "install.packages(c(\
-    'jsonlite', \
-    'remotes' \
-), repos='https://cloud.r-project.org/')"
-
 RUN mkdir /server
 
 WORKDIR /server
 
-COPY server/package*.json /server/
+COPY server/install.R .
+
+RUN Rscript install.R
+
+COPY server/package.json .
 
 RUN npm install
 
-COPY server /server/
+COPY server .
 
 CMD npm start
 
