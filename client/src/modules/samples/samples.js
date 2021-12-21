@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { samplesTableData } from "./samples.state";
 import { PlusSquare, DashSquare } from "react-bootstrap-icons";
@@ -122,18 +123,18 @@ export default function Samples() {
             <b>QCI Report:</b>
           </Col>
           <Col sm="3">
-            <Button
-              variant="link"
-              className="p-0"
-              disabled={!original.xml_report}
-              onClick={() =>
-                window.open(
-                  `/#/qci?id=${original.id}&file=${original.xml_report}`,
-                  "_blank",
-                )
-              }>
-              View Report
-            </Button>
+            {original.xml_report ? (
+              <Link
+                className="btn btn-link p-0"
+                target="_blank"
+                to={`/#/qci?id=${original.id}&file=${original.xml_report}`}>
+                View Report
+              </Link>
+            ) : (
+              <Button variant="link" className="p-0" disabled={true}>
+                View Report
+              </Button>
+            )}
           </Col>
         </Row>
         <Row>
