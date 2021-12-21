@@ -1,17 +1,10 @@
-import { atom, selector } from "recoil";
+import { selector } from "recoil";
 import { methylscapeData } from "../data/data.state";
-
-export const defaultSamplesState = {};
-
-export const samplesState = atom({
-  key: "samplesState",
-  default: defaultSamplesState,
-});
 
 export const samplesTableData = selector({
   key: "samplesTableData",
   get: ({ get }) => {
-    const dbData = get(methylscapeData);
+    const dbData = get(methylscapeData).filter((d) => d.xml_report);
 
     if (!dbData.length) return [];
 

@@ -61,7 +61,7 @@ export default function Projects() {
     if (!selectedProject && tableData.length) {
       mergeState({ selectedProject: tableData[0].project });
     }
-  }, [selectedProject]);
+  }, [selectedProject, tableData]);
 
   return (
     <Container fluid>
@@ -72,7 +72,7 @@ export default function Projects() {
               data={tableData}
               columns={columns}
               options={options}
-              useHooks={{ rowSelect: true }}
+              useHooks={{ rowSelectRadio: true }}
             />
           )}
         </Col>

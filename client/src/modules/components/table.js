@@ -1,4 +1,4 @@
-import { useMemo, forwardRef, useRef, useEffect } from "react";
+import { useMemo, forwardRef, useRef, useEffect, Fragment } from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -53,7 +53,7 @@ export function RangeFilter({
   );
 }
 
-const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
+const IndeterminateRadio = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef();
   const resolvedRef = ref || defaultRef;
 
@@ -64,12 +64,19 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   return <input type="radio" ref={resolvedRef} {...rest} />;
 });
 
-export default function Table({ columns, data, options, useHooks = {} }) {
+export default function Table({
+  columns,
+  data,
+  options = {},
+  useHooks = {},
+  renderRowSubComponent = false,
+}) {
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
+    visibleColumns,
     page,
     rows,
     canPreviousPage,
@@ -79,7 +86,7 @@ export default function Table({ columns, data, options, useHooks = {} }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, expanded },
   } = useTable(
     {
       columns: useMemo((_) => columns, [columns]),
@@ -95,18 +102,18 @@ export default function Table({ columns, data, options, useHooks = {} }) {
     },
     useFilters,
     useSortBy,
-    usePagination,
-    useHooks.rowSelect ? useRowSelect : () => {},
     useHooks.expanded ? useExpanded : () => {},
+    usePagination,
+    useHooks.rowSelectRadio ? useRowSelect : () => {},
     (hooks) => {
-      if (useHooks.rowSelect) {
+      if (useHooks.rowSelectRadio) {
         hooks.visibleColumns.push((columns) => [
           {
             id: "selection",
             disableSortBy: true,
             Cell: ({ row }) => (
               <div className="d-flex justify-content-center">
-                <IndeterminateCheckbox
+                <IndeterminateRadio
                   {...row.getToggleRowSelectedProps()}
                   title={Object.values(row.values)[0]}
                 />
@@ -161,18 +168,30 @@ export default function Table({ columns, data, options, useHooks = {} }) {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <tr
-                  {...row.getRowProps()}
-                  onClick={() => {
-                    if (useHooks.rowSelect) {
-                      const { toggleRowSelected } = row;
-                      toggleRowSelected(row.id, true);
-                    }
-                  }}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  ))}
-                </tr>
+                <Fragment {...row.getRowProps()}>
+                  <tr
+                    onClick={() => {
+                      if (useHooks.rowSelectRadio) {
+                        const { toggleRowSelected } = row;
+                        toggleRowSelected(true);
+                      }
+                      if (useHooks.expanded) {
+                        const { toggleRowExpanded, isExpanded } = row;
+                        toggleRowExpanded(!isExpanded);
+                      }
+                    }}>
+                    {row.cells.map((cell) => (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    ))}
+                  </tr>
+                  {row.isExpanded ? (
+                    <tr>
+                      <td colSpan={visibleColumns.length}>
+                        {renderRowSubComponent({ row })}
+                      </td>
+                    </tr>
+                  ) : null}
+                </Fragment>
               );
             })}
           </tbody>
