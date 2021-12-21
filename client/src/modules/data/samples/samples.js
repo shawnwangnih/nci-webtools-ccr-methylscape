@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { samplesTableData } from "./samples.state";
 import { PlusSquare, DashSquare } from "react-bootstrap-icons";
-import Table from "../components/table";
+import Table from "../../components/table";
 
 export default function Samples() {
   const tableData = useRecoilValue(samplesTableData);

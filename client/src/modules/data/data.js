@@ -5,6 +5,7 @@ import CountUp from "react-countup";
 import { dataState } from "./data.state";
 import { NavLink } from "react-router-dom";
 import { PieChartFill, ClipboardData, PeopleFill } from "react-bootstrap-icons";
+import { Outlet } from "react-router-dom";
 import "./data.scss";
 
 export default function Data() {
@@ -51,58 +52,56 @@ export default function Data() {
   }, [data]);
 
   return (
-    <Container fluid="xxl" className="d-flex p-2">
-      <NavLink
-        to={"/projects"}
-        key={"/projects"}
-        className="text-decoration-none d-flex">
-        <PieChartFill className="stat-icon" />
-        {data.length ? (
-          <CountUp
-            className="countup"
-            start={projectsCount / 2}
-            end={projectsCount}
-            duration={1}
-          />
-        ) : (
-          <span className="countup">0</span>
-        )}
-        <h3 className="fw-light text-black">Projects</h3>
-      </NavLink>
-      <NavLink
-        to={"/experiments"}
-        key={"/experiments"}
-        className="text-decoration-none d-flex ms-4">
-        <ClipboardData className="stat-icon" />
-        {data.length ? (
-          <CountUp
-            className="countup"
-            start={experimentsCount / 2}
-            end={experimentsCount}
-            duration={1}
-          />
-        ) : (
-          <span className="countup">0</span>
-        )}
-        <h3 className="fw-light text-black">Experiments</h3>
-      </NavLink>
-      <NavLink
-        to={"/samples"}
-        key={"/samples"}
-        className="text-decoration-none d-flex ms-4">
-        <PeopleFill className="stat-icon" />
-        {data.length ? (
-          <CountUp
-            className="countup"
-            start={samplesCount / 2}
-            end={samplesCount}
-            duration={1}
-          />
-        ) : (
-          <span className="countup">0</span>
-        )}
-        <h3 className="fw-light text-black">Samples</h3>
-      </NavLink>
-    </Container>
+    <div>
+      <Container fluid="xxl" className="d-flex p-2">
+        <NavLink to={"projects"} className="text-decoration-none d-flex">
+          <PieChartFill className="stat-icon" />
+          {data.length ? (
+            <CountUp
+              className="countup"
+              start={projectsCount / 2}
+              end={projectsCount}
+              duration={1}
+            />
+          ) : (
+            <span className="countup">0</span>
+          )}
+          <h3 className="fw-light text-black">Projects</h3>
+        </NavLink>
+        <NavLink
+          to={"experiments"}
+          className="text-decoration-none d-flex ms-4">
+          <ClipboardData className="stat-icon" />
+          {data.length ? (
+            <CountUp
+              className="countup"
+              start={experimentsCount / 2}
+              end={experimentsCount}
+              duration={1}
+            />
+          ) : (
+            <span className="countup">0</span>
+          )}
+          <h3 className="fw-light text-black">Experiments</h3>
+        </NavLink>
+        <NavLink to={"samples"} className="text-decoration-none d-flex ms-4">
+          <PeopleFill className="stat-icon" />
+          {data.length ? (
+            <CountUp
+              className="countup"
+              start={samplesCount / 2}
+              end={samplesCount}
+              duration={1}
+            />
+          ) : (
+            <span className="countup">0</span>
+          )}
+          <h3 className="fw-light text-black">Samples</h3>
+        </NavLink>
+      </Container>
+      <Container fluid="xxl" className="bg-white">
+        <Outlet />
+      </Container>
+    </div>
   );
 }

@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { projectsTableData, projectState } from "./projects.state";
-import Table from "../components/table";
+import Table from "../../components/table";
 import Summary from "./summary";
 
 export default function Projects() {

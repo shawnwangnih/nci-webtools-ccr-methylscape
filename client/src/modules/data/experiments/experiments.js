@@ -1,7 +1,7 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
 import { experimentsTableData } from "./experiments.state";
-import Table from "../components/table";
+import Table from "../../components/table";
 
 export default function Experiments() {
   const tableData = useRecoilValue(experimentsTableData);

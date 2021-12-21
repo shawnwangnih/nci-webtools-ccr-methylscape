@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { methylscapeData } from "../data/data.state";
+import { methylscapeData } from "../data.state";
 
 export const experimentsTableData = selector({
   key: "experimentsTableData",
