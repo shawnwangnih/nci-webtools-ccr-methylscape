@@ -38,6 +38,11 @@ export default function Experiments() {
       id: "samplesCount",
       accessor: "samplesCount",
       Header: "# of Samples",
+      Cell: (e) => (
+        <Link to={"/data/samples?project=" + e.data[e.row.index].project}>
+          {e.value}
+        </Link>
+      ),
     },
     {
       id: "date",
