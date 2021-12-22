@@ -1,8 +1,8 @@
-import { selector } from "recoil";
-import { methylscapeData } from "../data.state";
+import { selector } from 'recoil';
+import { methylscapeData } from '../data.state';
 
 export const samplesTableData = selector({
-  key: "samplesTableData",
+  key: 'samplesTableData',
   get: ({ get }) => {
     const dbData = get(methylscapeData);
 
@@ -11,24 +11,24 @@ export const samplesTableData = selector({
     //returns the methylation family if it exists
     function getMF(data) {
       return Object.keys(data).length >= 2
-        ? String(Object.keys(data["0"])[0]).substring(25)
-        : "";
+        ? String(Object.keys(data['0'])[0]).substring(25)
+        : '';
     }
 
     //returns the methylation family score if it exists
     function getMFScore(data) {
-      return Object.values(data).length >= 2 ? Object.values(data["0"]) : "";
+      return Object.values(data).length >= 2 ? Object.values(data['0']) : '';
     }
 
     //returns the methylation class
     function getMC(data) {
       const size = Object.keys(data).length;
       if (size >= 2) {
-        return Object.keys(data["1"])[0];
+        return Object.keys(data['1'])[0];
       } else if (size === 1) {
-        return Object.keys(data["0"])[0];
+        return Object.keys(data['0'])[0];
       } else {
-        return "";
+        return '';
       }
     }
 
@@ -36,11 +36,11 @@ export const samplesTableData = selector({
     function getMCScore(data) {
       const size = Object.keys(data).length;
       if (size >= 2) {
-        return Object.values(data["1"])[0];
+        return Object.values(data['1'])[0];
       } else if (size === 1) {
-        return Object.values(data["0"])[0];
+        return Object.values(data['0'])[0];
       } else {
-        return "";
+        return '';
       }
     }
 
@@ -51,10 +51,10 @@ export const samplesTableData = selector({
         if (!cp) {
           return {
             ...sample,
-            family: "",
-            family_score: "",
-            class: "",
-            class_score: "",
+            family: '',
+            family_score: '',
+            class: '',
+            class_score: '',
           };
         } else {
           return {

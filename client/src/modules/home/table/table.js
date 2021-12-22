@@ -1,3 +1,3 @@
 export default function Table() {
-  return "Table";
+  return 'Table';
 }

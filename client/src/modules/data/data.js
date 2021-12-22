@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import { useRecoilState } from "recoil";
-import CountUp from "react-countup";
-import { dataState } from "./data.state";
-import { NavLink } from "react-router-dom";
-import { PieChartFill, ClipboardData, PeopleFill } from "react-bootstrap-icons";
-import { Outlet } from "react-router-dom";
-import "./data.scss";
+import { useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
+import { useRecoilState } from 'recoil';
+import CountUp from 'react-countup';
+import { dataState } from './data.state';
+import { NavLink } from 'react-router-dom';
+import { PieChartFill, ClipboardData, PeopleFill } from 'react-bootstrap-icons';
+import { Outlet } from 'react-router-dom';
+import './data.scss';
 
 export default function Data() {
   const [state, setState] = useRecoilState(dataState);
@@ -15,7 +15,7 @@ export default function Data() {
   useEffect(() => {
     async function scanTable() {
       try {
-        const data = await (await fetch("api/scanDynamoDB")).json();
+        const data = await (await fetch('api/scanDynamoDB')).json();
 
         const projectsCount = [
           ...new Set(
@@ -54,7 +54,7 @@ export default function Data() {
   return (
     <div>
       <Container fluid="xxl" className="d-flex p-2">
-        <NavLink to={"projects"} className="text-decoration-none d-flex">
+        <NavLink to={'projects'} className="text-decoration-none d-flex">
           <PieChartFill className="stat-icon" />
           {data.length ? (
             <CountUp
@@ -69,8 +69,9 @@ export default function Data() {
           <h3 className="fw-light text-black">Projects</h3>
         </NavLink>
         <NavLink
-          to={"experiments"}
-          className="text-decoration-none d-flex ms-4">
+          to={'experiments'}
+          className="text-decoration-none d-flex ms-4"
+        >
           <ClipboardData className="stat-icon" />
           {data.length ? (
             <CountUp
@@ -84,7 +85,7 @@ export default function Data() {
           )}
           <h3 className="fw-light text-black">Experiments</h3>
         </NavLink>
-        <NavLink to={"samples"} className="text-decoration-none d-flex ms-4">
+        <NavLink to={'samples'} className="text-decoration-none d-flex ms-4">
           <PeopleFill className="stat-icon" />
           {data.length ? (
             <CountUp

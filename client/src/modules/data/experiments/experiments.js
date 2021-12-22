@@ -1,8 +1,8 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { useRecoilValue } from "recoil";
-import { Link, useSearchParams } from "react-router-dom";
-import { experimentsTableData } from "./experiments.state";
-import Table from "../../components/table";
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
+import { Link, useSearchParams } from 'react-router-dom';
+import { experimentsTableData } from './experiments.state';
+import Table from '../../components/table';
 
 export default function Experiments() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,48 +10,48 @@ export default function Experiments() {
 
   const columns = [
     {
-      id: "project",
-      accessor: "project",
-      Header: "Project",
+      id: 'project',
+      accessor: 'project',
+      Header: 'Project',
       Cell: (e) => (
-        <Link to={"/data/projects?project=" + e.data[e.row.index].project}>
+        <Link to={'/data/projects?project=' + e.data[e.row.index].project}>
           {e.value}
         </Link>
       ),
     },
     {
-      id: "experiment",
-      accessor: "experiment",
-      Header: "Experiment",
+      id: 'experiment',
+      accessor: 'experiment',
+      Header: 'Experiment',
       Cell: (e) => (
-        <Link to={"/data/samples?experiment=" + e.data[e.row.index].experiment}>
+        <Link to={'/data/samples?experiment=' + e.data[e.row.index].experiment}>
           {e.value}
         </Link>
       ),
     },
     {
-      id: "investigator",
-      accessor: "investigator",
-      Header: "Investigator Name",
+      id: 'investigator',
+      accessor: 'investigator',
+      Header: 'Investigator Name',
     },
     {
-      id: "samplesCount",
-      accessor: "samplesCount",
-      Header: "# of Samples",
+      id: 'samplesCount',
+      accessor: 'samplesCount',
+      Header: '# of Samples',
       Cell: (e) => (
-        <Link to={"/data/samples?project=" + e.data[e.row.index].project}>
+        <Link to={'/data/samples?project=' + e.data[e.row.index].project}>
           {e.value}
         </Link>
       ),
     },
     {
-      id: "date",
-      accessor: "date",
-      Header: "Experiment Date",
+      id: 'date',
+      accessor: 'date',
+      Header: 'Experiment Date',
     },
     {
-      id: "qcSheet",
-      Header: "QC Sheet",
+      id: 'qcSheet',
+      Header: 'QC Sheet',
       disableSortBy: true,
       Cell: ({ row }) => {
         const experiment = row.original.experiment;
@@ -59,15 +59,16 @@ export default function Experiments() {
           <Button
             variant="link"
             className="p-0"
-            onClick={() => download(experiment, experiment + ".qcReport.pdf")}>
+            onClick={() => download(experiment, experiment + '.qcReport.pdf')}
+          >
             View PDF
           </Button>
         );
       },
     },
     {
-      id: "qcSupplementary",
-      Header: "QC Supplementary",
+      id: 'qcSupplementary',
+      Header: 'QC Supplementary',
       disableSortBy: true,
       Cell: ({ row }) => {
         const experiment = row.original.experiment;
@@ -76,8 +77,9 @@ export default function Experiments() {
             variant="link"
             className="p-0"
             onClick={() =>
-              download(experiment, experiment + ".supplementary_plots.pdf")
-            }>
+              download(experiment, experiment + '.supplementary_plots.pdf')
+            }
+          >
             View PDF
           </Button>
         );
@@ -87,8 +89,8 @@ export default function Experiments() {
   const options = {
     initialState: {
       filters: [
-        { id: "project", value: searchParams.get("project") || "" },
-        { id: "experiment", value: searchParams.get("experiment") || "" },
+        { id: 'project', value: searchParams.get('project') || '' },
+        { id: 'experiment', value: searchParams.get('experiment') || '' },
       ],
     },
   };
@@ -96,21 +98,21 @@ export default function Experiments() {
   async function download(experiment, file) {
     try {
       const response = await fetch(`api/getFile`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          qc: experiment + "/" + file,
+          qc: experiment + '/' + file,
         }),
       });
 
       if (!response.ok) {
-        window.alert("File is unavailable");
+        window.alert('File is unavailable');
       } else {
         const url = URL.createObjectURL(await response.blob());
-        window.open(url, "_blank");
+        window.open(url, '_blank');
         URL.revokeObjectURL(url);
       }
     } catch (err) {

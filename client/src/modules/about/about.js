@@ -1,5 +1,5 @@
-import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
 
 export default function About() {
   return (

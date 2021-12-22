@@ -1,3 +1,3 @@
 export default function SampleQuality() {
-  return "Sample Quality";
+  return 'Sample Quality';
 }

@@ -1,3 +1,3 @@
 export default function CopyNumber() {
-  return "Copy Number";
+  return 'Copy Number';
 }

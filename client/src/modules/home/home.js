@@ -1,19 +1,19 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
-import Overview from "./overview/overview";
-import SampleQuality from "./sampleQuality/sampleQuality";
-import CopyNumber from "./copyNumber/copyNumber";
-import PromoterMethylation from "./promoterMethylation/promoterMethylation";
-import CohortAnalysis from "./cohortAnalysis/cohortAnalysis";
-import Survival from "./survival/survival";
-import Table from "./table/table";
-import SubgroupAnalysis from "./subgroupAnalysis/subgroupAnalysis";
-import Methodology from "./methodology/methodology";
-import Metadata from "./metadata/metadata";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import Overview from './overview/overview';
+import SampleQuality from './sampleQuality/sampleQuality';
+import CopyNumber from './copyNumber/copyNumber';
+import PromoterMethylation from './promoterMethylation/promoterMethylation';
+import CohortAnalysis from './cohortAnalysis/cohortAnalysis';
+import Survival from './survival/survival';
+import Table from './table/table';
+import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
+import Methodology from './methodology/methodology';
+import Metadata from './metadata/metadata';
 
 export default function Home() {
   function handleSelect(event) {

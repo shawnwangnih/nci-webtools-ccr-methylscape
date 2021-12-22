@@ -1,3 +1,3 @@
 export default function Methodology() {
-  return "Methodology";
+  return 'Methodology';
 }

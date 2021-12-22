@@ -1,8 +1,8 @@
-import { Container } from "react-bootstrap";
-import { useRecoilValue } from "recoil";
-import { qciData } from "./qci.state";
-import Table from "../components/table";
-import "./qci.css";
+import { Container } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
+import { qciData } from './qci.state';
+import Table from '../components/table';
+import './qci.css';
 
 export default function Report() {
   const { snvTable, cnvTable, fusionTable, unkTable } = useRecoilValue(qciData);
@@ -18,7 +18,7 @@ export default function Report() {
             <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
             {snvTable.data.length ? (
               <div>
-                <Table {...snvTable} size="small" />{" "}
+                <Table {...snvTable} size="small" />{' '}
                 <sub>
                   *VAF: Variant Allele Frequency; **TIER: Actionability
                   Classification

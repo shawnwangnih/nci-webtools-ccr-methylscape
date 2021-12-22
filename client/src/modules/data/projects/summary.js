@@ -1,8 +1,8 @@
-import { Row, Col } from "react-bootstrap";
-import { ColumnChart, PieChart } from "react-chartkick";
-import { useRecoilValue } from "recoil";
-import { selectedRow } from "./projects.state";
-import "chartkick/chart.js";
+import { Row, Col } from 'react-bootstrap';
+import { ColumnChart, PieChart } from 'react-chartkick';
+import { useRecoilValue } from 'recoil';
+import { selectedRow } from './projects.state';
+import 'chartkick/chart.js';
 
 export default function Summary() {
   const { selectedProject, methylationClasses, gender, ageDistribution } =

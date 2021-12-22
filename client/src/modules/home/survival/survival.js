@@ -1,3 +1,3 @@
 export default function Survival() {
-  return "Survival";
+  return 'Survival';
 }

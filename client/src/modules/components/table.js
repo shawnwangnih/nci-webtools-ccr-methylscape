@@ -1,8 +1,8 @@
-import { useMemo, forwardRef, useRef, useEffect, Fragment } from "react";
-import BootstrapTable from "react-bootstrap/Table";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Pagination from "react-bootstrap/Pagination";
+import { useMemo, forwardRef, useRef, useEffect, Fragment } from 'react';
+import BootstrapTable from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Pagination from 'react-bootstrap/Pagination';
 import {
   useTable,
   useFilters,
@@ -10,8 +10,8 @@ import {
   useSortBy,
   useRowSelect,
   useExpanded,
-} from "react-table";
-import { ChevronUp, ChevronDown, ChevronExpand } from "react-bootstrap-icons";
+} from 'react-table';
+import { ChevronUp, ChevronDown, ChevronExpand } from 'react-bootstrap-icons';
 
 export function TextFilter({
   column: { filterValue, setFilter, placeholder, aria },
@@ -19,7 +19,7 @@ export function TextFilter({
   return (
     <Form.Control
       size="sm"
-      value={filterValue || ""}
+      value={filterValue || ''}
       onChange={(e) => setFilter(e.target.value || undefined)}
       placeholder={placeholder || `Search...`}
       aria-label={aria}
@@ -36,18 +36,18 @@ export function RangeFilter({
   return (
     <InputGroup className="flex-nowrap">
       <Form.Control
-        placeholder={minPlaceholder || "Min value"}
+        placeholder={minPlaceholder || 'Min value'}
         type="number"
-        value={filterValue[0] || ""}
+        value={filterValue[0] || ''}
         onChange={(e) => setFilter((old = []) => [getInputValue(e), old[1]])}
-        aria-label={aria + " Min"}
+        aria-label={aria + ' Min'}
       />
       <Form.Control
-        placeholder={maxPlaceholder || "Max value"}
+        placeholder={maxPlaceholder || 'Max value'}
         type="number"
-        value={filterValue[1] || ""}
+        value={filterValue[1] || ''}
         onChange={(e) => setFilter((old = []) => [old[0], getInputValue(e)])}
-        aria-label={aria + " Max"}
+        aria-label={aria + ' Max'}
       />
     </InputGroup>
   );
@@ -109,7 +109,7 @@ export default function Table({
       if (useHooks.rowSelectRadio) {
         hooks.visibleColumns.push((columns) => [
           {
-            id: "selection",
+            id: 'selection',
             disableSortBy: true,
             Cell: ({ row }) => (
               <div className="d-flex justify-content-center">
@@ -136,7 +136,7 @@ export default function Table({
                 {headerGroup.headers.map((column) => (
                   <td {...column.getHeaderProps()}>
                     <div>
-                      {column.canFilter ? column.render("Filter") : null}
+                      {column.canFilter ? column.render('Filter') : null}
                     </div>
                   </td>
                 ))}
@@ -146,7 +146,7 @@ export default function Table({
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render("Header")}
+                    {column.render('Header')}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
                         <ChevronDown />
@@ -179,9 +179,10 @@ export default function Table({
                         const { toggleRowExpanded, isExpanded } = row;
                         toggleRowExpanded(!isExpanded);
                       }
-                    }}>
+                    }}
+                  >
                     {row.cells.map((cell) => (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     ))}
                   </tr>
                   {row.isExpanded ? (
@@ -201,7 +202,7 @@ export default function Table({
       <div className="d-flex flex-wrap align-items-center justify-content-between p-3">
         <div>
           Showing rows {(1 + pageIndex * pageSize).toLocaleString()}-
-          {Math.min(rows.length, (pageIndex + 1) * pageSize).toLocaleString()}{" "}
+          {Math.min(rows.length, (pageIndex + 1) * pageSize).toLocaleString()}{' '}
           of {rows.length.toLocaleString()}
         </div>
 
@@ -212,7 +213,8 @@ export default function Table({
             name="select-page-size"
             aria-label="Select page size"
             value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}>
+            onChange={(e) => setPageSize(Number(e.target.value))}
+          >
             {[10, 25, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
@@ -223,12 +225,14 @@ export default function Table({
           <Pagination className="mb-0">
             <Pagination.First
               onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}>
+              disabled={!canPreviousPage}
+            >
               First
             </Pagination.First>
             <Pagination.Prev
               onClick={() => previousPage()}
-              disabled={!canPreviousPage}>
+              disabled={!canPreviousPage}
+            >
               Previous
             </Pagination.Prev>
             <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
@@ -236,7 +240,8 @@ export default function Table({
             </Pagination.Next>
             <Pagination.Last
               onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}>
+              disabled={!canNextPage}
+            >
               Last
             </Pagination.Last>
           </Pagination>

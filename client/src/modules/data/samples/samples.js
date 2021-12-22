@@ -1,10 +1,10 @@
-import { useCallback } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link, useSearchParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { samplesTableData } from "./samples.state";
-import { PlusSquare, DashSquare } from "react-bootstrap-icons";
-import Table from "../../components/table";
+import { useCallback } from 'react';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { samplesTableData } from './samples.state';
+import { PlusSquare, DashSquare } from 'react-bootstrap-icons';
+import Table from '../../components/table';
 
 export default function Samples() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,7 +13,7 @@ export default function Samples() {
   const columns = [
     {
       Header: () => null,
-      id: "expander",
+      id: 'expander',
       Cell: ({ row }) => (
         <span {...row.getToggleRowExpandedProps()}>
           {row.isExpanded ? <DashSquare /> : <PlusSquare />}
@@ -21,63 +21,64 @@ export default function Samples() {
       ),
     },
     {
-      id: "sample_name",
-      accessor: "sample_name",
-      Header: "Sample Name",
+      id: 'sample_name',
+      accessor: 'sample_name',
+      Header: 'Sample Name',
     },
     {
-      id: "project",
-      accessor: "project",
-      Header: "Project",
+      id: 'project',
+      accessor: 'project',
+      Header: 'Project',
       Cell: (e) => (
-        <Link to={"/data/projects?project=" + e.data[e.row.index].project}>
+        <Link to={'/data/projects?project=' + e.data[e.row.index].project}>
           {e.value}
         </Link>
       ),
     },
     {
-      id: "experiment",
-      accessor: "experiment",
-      Header: "Experiment",
+      id: 'experiment',
+      accessor: 'experiment',
+      Header: 'Experiment',
       Cell: (e) => (
         <Link
-          to={"/data/experiments?experiment=" + e.data[e.row.index].experiment}>
+          to={'/data/experiments?experiment=' + e.data[e.row.index].experiment}
+        >
           {e.value}
         </Link>
       ),
     },
     {
-      id: "pool_id",
-      accessor: "pool_id",
-      Header: "Sample Date",
+      id: 'pool_id',
+      accessor: 'pool_id',
+      Header: 'Sample Date',
     },
     {
-      id: "surgical_case",
-      accessor: "surgical_case",
-      Header: "Surgical Case",
+      id: 'surgical_case',
+      accessor: 'surgical_case',
+      Header: 'Surgical Case',
     },
     {
-      id: "gender",
-      accessor: "gender",
-      Header: "Gender",
+      id: 'gender',
+      accessor: 'gender',
+      Header: 'Gender',
     },
     {
-      id: "age",
-      accessor: "age",
-      Header: "Age",
+      id: 'age',
+      accessor: 'age',
+      Header: 'Age',
     },
     {
-      id: "diagnosis",
-      accessor: "diagnosis",
-      Header: "Diagnosis",
+      id: 'diagnosis',
+      accessor: 'diagnosis',
+      Header: 'Diagnosis',
     },
   ];
 
   const options = {
     initialState: {
       filters: [
-        { id: "project", value: searchParams.get("project") || "" },
-        { id: "experiment", value: searchParams.get("experiment") || "" },
+        { id: 'project', value: searchParams.get('project') || '' },
+        { id: 'experiment', value: searchParams.get('experiment') || '' },
       ],
     },
   };
@@ -109,8 +110,9 @@ export default function Samples() {
               variant="link"
               className="p-0"
               onClick={() =>
-                download(original.id, original.sample_name + ".html")
-              }>
+                download(original.id, original.sample_name + '.html')
+              }
+            >
               View Plot
             </Button>
           </Col>
@@ -127,7 +129,8 @@ export default function Samples() {
             <Button
               variant="link"
               className="p-0"
-              onClick={() => download(original.id, original.report_file_name)}>
+              onClick={() => download(original.id, original.report_file_name)}
+            >
               Download Report
             </Button>
           </Col>
@@ -145,7 +148,8 @@ export default function Samples() {
               <Link
                 className="btn btn-link p-0"
                 target="_blank"
-                to={`/qci?id=${original.id}&file=${original.xml_report}`}>
+                to={`/qci?id=${original.id}&file=${original.xml_report}`}
+              >
                 View Report
               </Link>
             ) : (
@@ -168,8 +172,9 @@ export default function Samples() {
               variant="link"
               className="p-0"
               onClick={() =>
-                download(original.id, original.sample_name + "_NGS.pdf")
-              }>
+                download(original.id, original.sample_name + '_NGS.pdf')
+              }
+            >
               Download Report
             </Button>
           </Col>
@@ -180,7 +185,7 @@ export default function Samples() {
           </Col>
           <Col sm="3">
             {original.mgmt_prediction == null
-              ? ""
+              ? ''
               : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
           </Col>
           <Col sm="3">
@@ -191,8 +196,9 @@ export default function Samples() {
               variant="link"
               className="p-0"
               onClick={() =>
-                download(original.id, original.sample_name + ".jpg")
-              }>
+                download(original.id, original.sample_name + '.jpg')
+              }
+            >
               Download Image
             </Button>
           </Col>
@@ -211,21 +217,21 @@ export default function Samples() {
   async function download(id, file) {
     try {
       const response = await fetch(`api/getFile`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          sample: id + "/" + file,
+          sample: id + '/' + file,
         }),
       });
 
       if (!response.ok) {
-        window.alert("File is unavailable");
+        window.alert('File is unavailable');
       } else {
         const url = URL.createObjectURL(await response.blob());
-        window.open(url, "_blank");
+        window.open(url, '_blank');
         URL.revokeObjectURL(url);
       }
     } catch (err) {

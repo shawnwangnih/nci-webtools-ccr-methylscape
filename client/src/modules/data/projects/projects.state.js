@@ -1,17 +1,17 @@
-import { atom, selector } from "recoil";
-import { methylscapeData } from "../data.state";
+import { atom, selector } from 'recoil';
+import { methylscapeData } from '../data.state';
 
 export const defaultProjectState = {
-  selectedProject: "",
+  selectedProject: '',
 };
 
 export const projectState = atom({
-  key: "projectState",
+  key: 'projectState',
   default: defaultProjectState,
 });
 
 export const projectsTableData = selector({
-  key: "projectsTableData",
+  key: 'projectsTableData',
   get: ({ get }) => {
     const dbData = get(methylscapeData);
 
@@ -42,7 +42,7 @@ export const projectsTableData = selector({
 });
 
 export const selectedRow = selector({
-  key: "selectedProject",
+  key: 'selectedProject',
   get: ({ get }) => {
     const { selectedProject } = get(projectState);
     if (!selectedProject) return false;
@@ -58,7 +58,7 @@ export const selectedRow = selector({
         if (row.classifier_prediction != null) {
           if (Object.keys(row.classifier_prediction).length >= 2) {
             Object.keys(row.classifier_prediction).forEach((key) => {
-              if (key != "0") {
+              if (key != '0') {
                 Object.keys(row.classifier_prediction[key]).forEach((key1) => {
                   cur[key1] = cur[key1] + 1 || 1;
                 });
@@ -75,7 +75,7 @@ export const selectedRow = selector({
       });
       Object.keys(cur).forEach((k) => {
         // pieData.push({label:k, value:cur[k]})
-        pieData.push([k.replace("methylation class ", ""), cur[k]]);
+        pieData.push([k.replace('methylation class ', ''), cur[k]]);
         //pieData[0].push(k.replace('methylation class ', ''));
         //pieData[1].push(cur[k]);
       });

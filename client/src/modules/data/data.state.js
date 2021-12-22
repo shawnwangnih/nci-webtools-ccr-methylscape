@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom, selector } from 'recoil';
 
 export const defaultDataState = {
   data: [],
@@ -7,9 +7,9 @@ export const defaultDataState = {
   samplesCount: 0,
 };
 
-export const dataState = atom({ key: "appState", default: defaultDataState });
+export const dataState = atom({ key: 'appState', default: defaultDataState });
 
 export const methylscapeData = selector({
-  key: "methylscapeData",
+  key: 'methylscapeData',
   get: ({ get }) => get(dataState).data,
 });

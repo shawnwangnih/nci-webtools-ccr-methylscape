@@ -13,8 +13,8 @@ export default function Overview({ className }) {
         profiles can serve as an important adjunct and help refine
         morphology-based diagnostics in tumors of the brain and spinal cord.
         Notably, methylation results led to diagnostic revisions in a
-        significant proportion (129 / 139 or 12% of the entire cohort) of
-        cases. This finding was confirmed in five external centers (50 / 401, 12%),
+        significant proportion (129 / 139 or 12% of the entire cohort) of cases.
+        This finding was confirmed in five external centers (50 / 401, 12%),
         with reclassification rates in 6% - 25% of cases.
       </p>
       <p>
