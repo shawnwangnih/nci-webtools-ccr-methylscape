@@ -37,13 +37,17 @@ const args = require("minimist")(process.argv.slice(2));
           label: "NIH_labels",
           x: `${embedding}_x`,
           y: `${embedding}_y`,
+          study: "Primary_study",
+          institution: "Center_methy",
         };
 
         if (
           stageTableColums.includes(columns.class) &&
           stageTableColums.includes(columns.label) &&
           stageTableColums.includes(columns.x) &&
-          stageTableColums.includes(columns.y)
+          stageTableColums.includes(columns.y) &&
+          stageTableColums.includes(columns.study) &&
+          stageTableColums.includes(columns.institution)
         ) {
           database.exec(
             `insert into annotation 
@@ -53,7 +57,9 @@ const args = require("minimist")(process.argv.slice(2));
               "class",
               "label",
               "x",
-              "y"
+              "y",
+              "study",
+              "institution"
             )
             select
               '${organSystem}',
@@ -61,7 +67,9 @@ const args = require("minimist")(process.argv.slice(2));
               "${columns.class}",
               "${columns.label}",
               "${columns.x}",
-              "${columns.y}"
+              "${columns.y}",
+              "${columns.study}",
+              "${columns.institution}"
             from "${stageTable}"`,
           );
         }
