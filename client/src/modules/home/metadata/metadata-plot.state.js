@@ -72,7 +72,13 @@ export const plotState = selector({
 
     // transform data to traces
     const dataTraces = dataGroupedByClass
-      .sort((a, b) => a[0].localeCompare(b[0]))
+      .sort((a, b) =>
+        a[0] == 'No_match'
+          ? -1
+          : b[0] == 'No_match'
+          ? 1
+          : a[0].localeCompare(b[0]),
+      )
       .map(([name, data]) => ({
         name,
         x: data.map((e) => e.x),
@@ -115,9 +121,17 @@ export const plotState = selector({
         },
       );
 
+    function plotTitle(organSystem) {
+      if (organSystem == 'centralNervousSystem')
+        return 'Central Nervous System';
+      if (organSystem == 'centralNervousSystemSarcoma') return 'CNS Sarcoma';
+      if (organSystem == 'boneAndSoftTissue') return 'Bone and Soft Tissue';
+      if (organSystem == 'hematopoietic') return 'Hematopoietic';
+    }
+
     // set layout
     const layout = {
-      title: `${organSystem} (n=${data.length})`,
+      title: `${plotTitle(organSystem)} (n=${data.length})`,
       xaxis: {
         title: `${embedding}_x`,
       },
@@ -125,7 +139,10 @@ export const plotState = selector({
         title: `${embedding}_y`,
       },
       annotations: showAnnotations
-        ? [...labelAnnotations, ...classAnnotations]
+        ? [
+            ...labelAnnotations,
+            // ...classAnnotations
+          ]
         : [],
       uirevision: organSystem + embedding + search,
     };
