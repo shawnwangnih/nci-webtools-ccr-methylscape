@@ -7,5 +7,6 @@ create table annotation (
     "x" real,
     "y" real,
     "study" text,
-    "institution" text
+    "institution" text,
+    "category" text
 );

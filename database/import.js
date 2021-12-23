@@ -39,6 +39,7 @@ const args = require("minimist")(process.argv.slice(2));
           y: `${embedding}_y`,
           study: "Primary_study",
           institution: "Center_methy",
+          category: "Primary_category",
         };
 
         if (
@@ -47,7 +48,8 @@ const args = require("minimist")(process.argv.slice(2));
           stageTableColums.includes(columns.x) &&
           stageTableColums.includes(columns.y) &&
           stageTableColums.includes(columns.study) &&
-          stageTableColums.includes(columns.institution)
+          stageTableColums.includes(columns.institution) &&
+          stageTableColums.includes(columns.category)
         ) {
           database.exec(
             `insert into annotation 
@@ -59,7 +61,8 @@ const args = require("minimist")(process.argv.slice(2));
               "x",
               "y",
               "study",
-              "institution"
+              "institution",
+              "category"
             )
             select
               '${organSystem}',
@@ -69,7 +72,8 @@ const args = require("minimist")(process.argv.slice(2));
               "${columns.x}",
               "${columns.y}",
               "${columns.study}",
-              "${columns.institution}"
+              "${columns.institution}",
+              "${columns.category}"
             from "${stageTable}"`,
           );
         }

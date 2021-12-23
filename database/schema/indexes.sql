@@ -6,5 +6,6 @@ create index "index_annotation_query" on "annotation"(
     "x",
     "y",
     "study",
-    "institution"
+    "institution",
+    "category"
 );
