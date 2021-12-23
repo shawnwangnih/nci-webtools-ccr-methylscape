@@ -8,7 +8,7 @@ export default function MetadataPlot({ onSelect }) {
 
   return (
     <Plot
-      data={data}
+      data={cloneDeep(data)}
       className="w-100"
       style={{ height: '800px' }}
       layout={cloneDeep(layout)}
