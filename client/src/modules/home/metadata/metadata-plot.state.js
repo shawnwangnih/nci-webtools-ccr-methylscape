@@ -145,6 +145,7 @@ export const plotState = selector({
           ]
         : [],
       uirevision: organSystem + embedding + search,
+      legend: { title: { text: 'Methylation Class' } },
     };
 
     const config = {
