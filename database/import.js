@@ -40,6 +40,7 @@ const args = require("minimist")(process.argv.slice(2));
           study: "Primary_study",
           institution: "Center_methy",
           category: "Primary_category",
+          matched: "matched_cases",
         };
 
         if (
@@ -49,7 +50,8 @@ const args = require("minimist")(process.argv.slice(2));
           stageTableColums.includes(columns.y) &&
           stageTableColums.includes(columns.study) &&
           stageTableColums.includes(columns.institution) &&
-          stageTableColums.includes(columns.category)
+          stageTableColums.includes(columns.category) &&
+          stageTableColums.includes(columns.matched)
         ) {
           database.exec(
             `insert into annotation 
@@ -62,7 +64,8 @@ const args = require("minimist")(process.argv.slice(2));
               "y",
               "study",
               "institution",
-              "category"
+              "category",
+              "matched"
             )
             select
               '${organSystem}',
@@ -73,7 +76,8 @@ const args = require("minimist")(process.argv.slice(2));
               "${columns.y}",
               "${columns.study}",
               "${columns.institution}",
-              "${columns.category}"
+              "${columns.category}",
+              "${columns.matched}"
             from "${stageTable}"`,
           );
         }

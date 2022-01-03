@@ -7,5 +7,6 @@ create index "index_annotation_query" on "annotation"(
     "y",
     "study",
     "institution",
-    "category"
+    "category",
+    "matched"
 );

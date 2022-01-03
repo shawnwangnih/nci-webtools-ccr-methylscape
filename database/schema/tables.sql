@@ -8,5 +8,6 @@ create table annotation (
     "y" real,
     "study" text,
     "institution" text,
-    "category" text
+    "category" text,
+    "matched" text
 );
