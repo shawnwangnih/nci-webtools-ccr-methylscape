@@ -28,7 +28,7 @@ export default function Info() {
             </div>
             <div className="w-100 my-auto text-center">
               <div className="fw-light">NUMBER OF STUDIES</div>
-              <b>{samples}</b>
+              <b>{studies}</b>
             </div>
           </Card>
           <Card bg="light" className="d-flex flex-row">
@@ -37,7 +37,7 @@ export default function Info() {
             </div>
             <div className="w-100 my-auto text-center">
               <div className="fw-light">NUMBER OF INSTITUTIONS</div>
-              <b>{samples}</b>
+              <b>{institutions}</b>
             </div>
           </Card>
         </Col>
