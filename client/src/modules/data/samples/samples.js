@@ -219,7 +219,7 @@ export default function Samples() {
       const response = await fetch(`api/getFile`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

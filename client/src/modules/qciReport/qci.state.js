@@ -21,7 +21,7 @@ export const qciData = selector({
         let response = await fetch(`api/getFile`, {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -55,10 +55,10 @@ export const qciData = selector({
         ? (variants = [variants])
         : (variants = variants.reverse());
       const significant = variants.filter((v) =>
-        v.assessment._text.match(/pathogenic/gi),
+        v.assessment._text.match(/pathogenic/gi)
       );
       const uncertain = variants.filter((v) =>
-        v.assessment._text.match(/uncertain/gi),
+        v.assessment._text.match(/uncertain/gi)
       );
       return { ...sigVariants(significant), ...unknownVariants(uncertain) };
     }

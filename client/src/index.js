@@ -8,11 +8,11 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 
 Array.from(document.querySelectorAll('[react-cloak]')).forEach((node) =>
-  node.removeAttribute('react-cloak'),
+  node.removeAttribute('react-cloak')
 );
 
 reportWebVitals(console.log);

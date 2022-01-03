@@ -95,7 +95,7 @@ export default function Table({
         (_) => ({
           Filter: TextFilter,
         }),
-        [],
+        []
       ),
 
       ...options,
@@ -123,7 +123,7 @@ export default function Table({
           ...columns,
         ]);
       }
-    },
+    }
   );
 
   return (

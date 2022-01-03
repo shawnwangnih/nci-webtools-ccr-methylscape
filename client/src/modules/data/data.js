@@ -19,21 +19,21 @@ export default function Data() {
 
         const projectsCount = [
           ...new Set(
-            data.filter(({ project }) => project).map(({ project }) => project),
+            data.filter(({ project }) => project).map(({ project }) => project)
           ),
         ].length;
         const experimentsCount = [
           ...new Set(
             data
               .filter(({ experiment }) => experiment)
-              .map(({ experiment }) => experiment),
+              .map(({ experiment }) => experiment)
           ),
         ].length;
         const samplesCount = [
           ...new Set(
             data
               .filter(({ sample_name }) => sample_name)
-              .map(({ sample_name }) => sample_name),
+              .map(({ sample_name }) => sample_name)
           ),
         ].length;
 

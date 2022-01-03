@@ -5,7 +5,7 @@ export function asQueryParams(params) {
           .map(
             ([key, value]) =>
               ![null, undefined, ''].includes(value) &&
-              [key, value].map(encodeURIComponent).join('='),
+              [key, value].map(encodeURIComponent).join('=')
           )
           .filter(Boolean)
           .join('&')

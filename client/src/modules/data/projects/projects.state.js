@@ -48,7 +48,7 @@ export const selectedRow = selector({
     if (!selectedProject) return false;
 
     const data = get(methylscapeData).filter(
-      ({ project }) => project == selectedProject,
+      ({ project }) => project == selectedProject
     );
 
     const getMethylationClasses = () => {

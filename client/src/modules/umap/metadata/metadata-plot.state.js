@@ -40,7 +40,7 @@ export const plotState = selector({
       data = data.filter(
         (r) =>
           r.class?.toLowerCase().includes(search.toLowerCase()) ||
-          r.label?.toLowerCase().includes(search.toLowerCase()),
+          r.label?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -51,7 +51,7 @@ export const plotState = selector({
     // use mean x/y values for annotation positions
     const labelAnnotations = dataGroupedByLabel
       .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name)),
+        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
       )
       .map(([name, value]) => ({
         text: name,
@@ -61,7 +61,7 @@ export const plotState = selector({
 
     const classAnnotations = dataGroupedByClass
       .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name)),
+        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
       )
       .map(([name, value]) => ({
         text: name,
@@ -77,7 +77,7 @@ export const plotState = selector({
           ? -1
           : b[0] == 'No_match'
           ? 1
-          : a[0].localeCompare(b[0]),
+          : a[0].localeCompare(b[0])
       )
       .map(([name, data]) => ({
         name,
@@ -95,7 +95,7 @@ export const plotState = selector({
     // try using webgl to display calss annotations to improve performance
     const classAnnotationTrace = dataGroupedByClass
       .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name)),
+        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
       )
       .map(([name, value]) => ({
         text: name,
@@ -118,7 +118,7 @@ export const plotState = selector({
           textfont: {
             size: 10,
           },
-        },
+        }
       );
 
     function plotTitle(organSystem) {

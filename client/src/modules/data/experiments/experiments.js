@@ -100,7 +100,7 @@ export default function Experiments() {
       const response = await fetch(`api/getFile`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
