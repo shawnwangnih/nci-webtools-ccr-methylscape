@@ -18,7 +18,7 @@ export default function MetadataForm({ className, onSelect }) {
   return (
     <Form className={className}>
       <Row>
-        <Col md={4}>
+        <Col md="auto">
           <Form.Group id="organSystem" className="mb-3">
             <Form.Label>Organ System</Form.Label>
             <Form.Select
@@ -35,7 +35,7 @@ export default function MetadataForm({ className, onSelect }) {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md="auto">
           <Form.Group id="embedding" className="mb-3">
             <Form.Label>Embedding</Form.Label>
             <Form.Select
@@ -48,7 +48,7 @@ export default function MetadataForm({ className, onSelect }) {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md="3">
           <Form.Group id="search" className="mb-3">
             <Form.Label>Search</Form.Label>
             <Form.Control
@@ -58,7 +58,19 @@ export default function MetadataForm({ className, onSelect }) {
             />
           </Form.Group>
         </Col>
-        <Col md={4}>
+        <Col md="auto">
+          <Form.Group id="color" className="mb-3">
+            <Form.Label>Color By</Form.Label>
+            <Form.Select
+              name="color"
+              value={form.methylClass}
+              onChange={handleChange}
+            >
+              <option>No_match</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+        <Col md="auto">
           <Form.Group controlId="showAnnotations" className="mb-3">
             <Form.Check
               label="Show Annotations"

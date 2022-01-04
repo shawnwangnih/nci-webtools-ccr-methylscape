@@ -2,12 +2,14 @@ import { atom, selector } from 'recoil';
 import { query } from '../../../services/query';
 import groupBy from 'lodash/groupBy';
 import meanBy from 'lodash/meanBy';
+import colors from './colors.json';
 
 export const defaultFormState = {
   organSystem: 'centralNervousSystem',
   embedding: 'umap',
   search: '',
   showAnnotations: true,
+  methylClass: '',
 };
 
 export const formState = atom({
@@ -24,7 +26,8 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'metadataPlot.plotState',
   get: async ({ get }) => {
-    const { organSystem, embedding, search, showAnnotations } = get(formState);
+    const { organSystem, embedding, search, showAnnotations, methylClass } =
+      get(formState);
 
     if (!organSystem || !embedding) return defaultPlotState;
 
@@ -90,6 +93,9 @@ export const plotState = selector({
         mode: 'markers',
         hovertemplate: 'Class: %{customdata.class}<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',
+        marker: {
+          color: '%{customdata.class}',
+        },
       }));
 
     // try using webgl to display calss annotations to improve performance
@@ -146,6 +152,7 @@ export const plotState = selector({
         : [],
       uirevision: organSystem + embedding + search,
       legend: { title: { text: 'Methylation Class' } },
+      colorway: colors,
     };
 
     const config = {
