@@ -49,6 +49,33 @@ export const overviewState = selector({
       ),
     ].length;
 
-    return { samples: samples.length, studies, institutions };
+    const reducer = (prev, curr, i, arr) => {
+      if (prev[curr]) {
+        return { ...prev, [curr]: prev[curr] + 1 };
+      } else {
+        return { ...prev, [curr]: 1 };
+      }
+    };
+
+    const catCount = Object.fromEntries(
+      Object.entries(
+        samples.map(({ category }) => category).reduce(reducer, {})
+      ).sort(([, a], [, b]) => a - b)
+    );
+    const plotData = [
+      {
+        x: Object.values(catCount),
+        y: Object.keys(catCount),
+        type: 'bar',
+        orientation: 'h',
+      },
+    ];
+
+    return {
+      samples: samples.length,
+      studies,
+      institutions,
+      plot: { data: plotData, layout: {}, config: {} },
+    };
   },
 });

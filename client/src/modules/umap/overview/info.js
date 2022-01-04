@@ -7,12 +7,13 @@ import { useRecoilValue } from 'recoil';
 import { overviewState } from './overview.state';
 
 export default function Info() {
-  let { samples, studies, institutions } = useRecoilValue(overviewState);
+  let { samples, studies, institutions, plot } = useRecoilValue(overviewState);
+  const { data, layout, config } = plot;
 
   return (
     <div>
       <Row>
-        <Col sm="4">
+        <Col sm="4" className="my-auto">
           <Card bg="light" className="d-flex flex-row">
             <div className="bg-primary p-2">
               <PieChart color="white" size="3rem" />
@@ -41,7 +42,16 @@ export default function Info() {
             </div>
           </Card>
         </Col>
-        <Col sm="8"></Col>
+        <Col sm="8">
+          <Plot
+            data={[...data]}
+            layout={{ ...layout }}
+            config={{ ...config }}
+            className="w-100"
+            // style={{ height: '600px' }}
+            useResizeHandler
+          />
+        </Col>
       </Row>
     </div>
   );
