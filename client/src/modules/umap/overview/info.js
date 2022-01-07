@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Plot from 'react-plotly.js';
 import { useRecoilValue } from 'recoil';
 import { overviewState } from './overview.state';
+import cloneDeep from 'lodash/cloneDeep';
 
 export default function Info() {
   let { samples, studies, institutions, plot } = useRecoilValue(overviewState);
@@ -45,8 +46,8 @@ export default function Info() {
         <Col sm="8">
           <Plot
             data={[...data]}
-            layout={{ ...layout }}
-            config={{ ...config }}
+            layout={cloneDeep(layout)}
+            config={cloneDeep(config)}
             className="w-100"
             // style={{ height: '600px' }}
             useResizeHandler
