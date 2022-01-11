@@ -130,7 +130,7 @@ export const plotState = selector({
           posEndNew: segPosOffset[chr] + parseInt(e['loc.end']),
         };
       });
-      console.log(segments);
+
       // group bins by chromosome
       const dataGroupedByChr = Object.entries(
         groupBy(
