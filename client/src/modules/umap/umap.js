@@ -43,6 +43,9 @@ export default function UMAP() {
               <Tab eventKey="copyNumber" title="Copy number">
                 <CopyNumber className="px-3" />
               </Tab>
+              <Tab eventKey="Table" title="Table">
+                <Table className="px-3" />
+              </Tab>
               {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
                 <PromoterMethylation className="px-3" />
               </Tab>
@@ -51,9 +54,6 @@ export default function UMAP() {
               </Tab>
               <Tab eventKey="survival" title="Survival">
                 <Survival className="px-3" />
-              </Tab>
-              <Tab eventKey="Table" title="Table">
-                <Table className="px-3" />
               </Tab>
               <Tab eventKey="subgroupAnalysis" title="Subgroup analysis">
                 <SubgroupAnalysis className="px-3" />
