@@ -1,17 +1,17 @@
-const fs = require("fs");
-const fsp = require("fs/promises");
-const path = require("path");
-const { importTable } = require("./utils");
-const sqlite = require("better-sqlite3");
-const sources = require("./sources.json");
-const args = require("minimist")(process.argv.slice(2));
+const fs = require('fs');
+const fsp = require('fs/promises');
+const path = require('path');
+const { importTable } = require('./utils');
+const sqlite = require('better-sqlite3');
+const sources = require('./sources.json');
+const args = require('minimist')(process.argv.slice(2));
 
 (async function main() {
-  const databaseFilePath = args.db || "data.sqlite";
+  const databaseFilePath = args.db || 'data.sqlite';
 
   if (fs.existsSync(databaseFilePath)) fs.unlinkSync(databaseFilePath);
 
-  const mainSql = await fsp.readFile("schema/tables.sql", "utf-8");
+  const mainSql = await fsp.readFile('schema/tables.sql', 'utf-8');
 
   // create schema
   const database = sqlite(databaseFilePath);
@@ -26,21 +26,23 @@ const args = require("minimist")(process.argv.slice(2));
       .map((row) => row.name);
 
     // import global tables and proceed with study-specific imports
-    if (type === "annotation") {
+    if (type === 'annotation') {
       const { organSystem, embeddings } = source;
 
       for (const embedding of embeddings) {
         console.log(`Importing ${organSystem}: ${embedding}`);
 
         const columns = {
-          class: "Combined_class_match_dkfz",
-          label: "NIH_labels",
+          class: 'Combined_class_match_dkfz',
+          label: 'NIH_labels',
           x: `${embedding}_x`,
           y: `${embedding}_y`,
-          study: "Primary_study",
-          institution: "Center_methy",
-          category: "Primary_category",
-          matched: "matched_cases",
+          study: 'Primary_study',
+          institution: 'Center_methy',
+          category: 'Primary_category',
+          matched: 'matched_cases',
+          order: 'order',
+          idatFile: 'idat_filename',
         };
 
         if (
@@ -51,7 +53,9 @@ const args = require("minimist")(process.argv.slice(2));
           stageTableColums.includes(columns.study) &&
           stageTableColums.includes(columns.institution) &&
           stageTableColums.includes(columns.category) &&
-          stageTableColums.includes(columns.matched)
+          stageTableColums.includes(columns.matched) &&
+          stageTableColums.includes(columns.order) &&
+          stageTableColums.includes(columns.idatFile)
         ) {
           database.exec(
             `insert into annotation 
@@ -65,7 +69,9 @@ const args = require("minimist")(process.argv.slice(2));
               "study",
               "institution",
               "category",
-              "matched"
+              "matched",
+              "order",
+              "idatFile"
             )
             select
               '${organSystem}',
@@ -77,7 +83,9 @@ const args = require("minimist")(process.argv.slice(2));
               "${columns.study}",
               "${columns.institution}",
               "${columns.category}",
-              "${columns.matched}"
+              "${columns.matched}",
+              "${columns.order}",
+              "${columns.idatFile}"
             from "${stageTable}"`,
           );
         }
@@ -85,9 +93,9 @@ const args = require("minimist")(process.argv.slice(2));
     }
   }
 
-  console.log("Generating indexes");
-  database.exec(await fsp.readFile("schema/indexes.sql", "utf-8"));
+  console.log('Generating indexes');
+  database.exec(await fsp.readFile('schema/indexes.sql', 'utf-8'));
   database.close();
 
-  console.log("Done");
+  console.log('Done');
 })();

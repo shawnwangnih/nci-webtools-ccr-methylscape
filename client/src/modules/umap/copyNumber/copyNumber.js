@@ -1,16 +1,13 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { copynumberState, plotState } from './copyNumber.state';
+import { Suspense } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import Loader from '../../components/loader';
+import ErrorBoundary from '../../components/error-boundary';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Plot from 'react-plotly.js';
-import cloneDeep from 'lodash/cloneDeep';
+import CopyNumberPlot from './cnPlot';
 
 export default function CopyNumber() {
-  const { data, config, layout } = useRecoilValue(plotState);
-  console.log(data);
-  console.log(layout);
-
   return (
     <div className="px-3">
       <b>Genome-wide Copy Number</b>
@@ -22,13 +19,18 @@ export default function CopyNumber() {
         intensities. It is important to assess both sample and probe quality
         prior to interpretatin of a case.
       </p>
-      <Plot
-        data={[...data]}
-        layout={cloneDeep(layout)}
-        config={cloneDeep(config)}
-        className="w-100"
-        useResizeHandler
-      />
+      <ErrorBoundary
+        fallback={
+          <Alert variant="danger">
+            An internal error prevented plots from loading. Please contact the
+            website administrator if this problem persists.
+          </Alert>
+        }
+      >
+        <Suspense fallback={<Loader message="Loading CN" />}>
+          <CopyNumberPlot />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

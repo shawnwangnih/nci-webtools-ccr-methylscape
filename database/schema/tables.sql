@@ -9,5 +9,7 @@ create table annotation (
     "study" text,
     "institution" text,
     "category" text,
-    "matched" text
+    "matched" text,
+    "order" integer,
+    "idatFile" text
 );

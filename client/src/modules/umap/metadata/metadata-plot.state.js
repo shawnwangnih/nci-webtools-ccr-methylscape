@@ -36,7 +36,15 @@ export const plotState = selector({
       _organSystem: organSystem,
       _embedding: embedding,
       limit: -1,
-      columns: ['organSystem', 'embedding', 'class', 'label', 'x', 'y'],
+      columns: [
+        'organSystem',
+        'embedding',
+        'class',
+        'label',
+        'x',
+        'y',
+        'idatFile',
+      ],
     });
 
     if (search && search.length) {
@@ -89,6 +97,7 @@ export const plotState = selector({
         customdata: data.map((e) => ({
           class: e.class || '',
           label: e.label || '',
+          idatFile: e.idatFile,
         })),
         mode: 'markers',
         hovertemplate: 'Class: %{customdata.class}<extra></extra>',

@@ -1,11 +1,14 @@
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const {
   DynamoDBDocumentClient,
   ScanCommand,
-} = require("@aws-sdk/lib-dynamodb");
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-
-const { aws: config } = require("../config");
+} = require('@aws-sdk/lib-dynamodb');
+const {
+  S3Client,
+  GetObjectCommand,
+  ListObjectsV2Command,
+} = require('@aws-sdk/client-s3');
+const { aws: config } = require('../config');
 
 async function scanTable() {
   const client = new DynamoDBClient({ region: config.region });
@@ -31,7 +34,17 @@ async function getFile(key) {
   return await s3Client.send(new GetObjectCommand(bucketParams));
 }
 
+async function getKey(prefix) {
+  const s3Client = new S3Client({ region: config.region });
+  const params = { Bucket: config.s3Bucket, Prefix: prefix };
+  console.log(params);
+  // Get the object} from the Amazon S3 bucket. It is returned as a ReadableStream.
+  const objects = await s3Client.send(new ListObjectsV2Command(params));
+  return objects;
+}
+
 module.exports = {
   scanTable,
   getFile,
+  getKey,
 };

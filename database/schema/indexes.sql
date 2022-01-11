@@ -8,5 +8,7 @@ create index "index_annotation_query" on "annotation"(
     "study",
     "institution",
     "category",
-    "matched"
+    "matched",
+    "order",
+    "idatFile"
 );
