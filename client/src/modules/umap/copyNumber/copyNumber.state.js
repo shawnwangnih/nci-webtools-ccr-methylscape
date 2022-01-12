@@ -143,16 +143,16 @@ export const plotState = selector({
         )
       );
 
+      // hsl hue - degress of a color wheel
+      const getHue = (i) => {
+        if (i > 7) return 45 * (i % 8);
+        else return 45 * i;
+      };
+
       // transform data to traces
       const dataTraces = dataGroupedByChr
-        .sort((a, b) =>
-          a[0] == 'No_match'
-            ? -1
-            : b[0] == 'No_match'
-            ? 1
-            : a[0].localeCompare(b[0])
-        )
-        .map(([chr, data]) => ({
+        .sort(([chrA], [chrB]) => parseInt(chrA) - parseInt(chrB))
+        .map(([chr, data], i) => ({
           chr,
           x: data.map((e) => e.position),
           y: data.map((e) => e.log2ratio),
@@ -164,6 +164,19 @@ export const plotState = selector({
           type: 'scattergl',
           hovertemplate:
             'Log<sub>2</sub> Ratio: %{customdata.ratio}<br>Position: %{x}<extra></extra>',
+          marker: {
+            color: data.map((e) => e.log2ratio),
+            colorscale: [
+              ['0.0', `hsl(${getHue(i)}, 100%, 50%)`],
+              ['0.25', `hsl(${getHue(i)}, 100%, 60%)`],
+              ['0.5', `hsl(${getHue(i)}, 50%, 90%)`],
+              ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
+              ['1.0', `hsl(${getHue(i)}, 100%, 50%)`],
+            ],
+            cmax: 0.7,
+            cmid: 0,
+            cmin: -0.7,
+          },
         }));
 
       const ratios = bins.map(({ log2ratio }) => log2ratio);
@@ -182,7 +195,6 @@ export const plotState = selector({
           tickvals: chrLines.map(({ center }) => center),
           ticktext: chrLines.map(({ chr }) => chr),
           tickangle: 0,
-          // fixedrange: true,
         },
         yaxis: {
           title: 'log<sub>2</sub> ratio',
