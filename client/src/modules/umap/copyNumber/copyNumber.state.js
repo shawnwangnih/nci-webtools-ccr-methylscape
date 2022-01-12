@@ -198,7 +198,7 @@ export const plotState = selector({
         },
         yaxis: {
           title: 'log<sub>2</sub> ratio',
-          zeroline: false,
+          zeroline: true,
           // zerolinecolor: '#eee',
           dtick: 0.5,
           ticks: 'outside',
@@ -212,6 +212,7 @@ export const plotState = selector({
             x1: e['pos.start'],
             y0: yMin,
             y1: yMax,
+            line: { width: 1 },
           })),
           // chromosome segment divider
           ...chrLines.map((e) => ({
@@ -220,7 +221,7 @@ export const plotState = selector({
             x1: e['pq'],
             y0: yMin,
             y1: yMax,
-            line: { dash: 'dot' },
+            line: { dash: 'dot', width: 1 },
           })),
           // chromosome segments
           ...segments.map((e) => ({
