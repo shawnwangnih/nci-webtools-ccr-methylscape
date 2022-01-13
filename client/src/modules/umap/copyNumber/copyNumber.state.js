@@ -24,6 +24,7 @@ export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
     const { idatFile } = get(copyNumberState);
+    if (!idatFile) return defaultPlotState;
 
     try {
       const options = {
