@@ -24,7 +24,6 @@ export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
     const { idatFile } = get(copyNumberState);
-    if (!idatFile) return defaultPlotState;
 
     try {
       const options = {
@@ -37,7 +36,7 @@ export const plotState = selector({
           id: idatFile,
         }),
       };
-      // prototype - use static data if idatfile is unavailable
+      // temporary - use static data if idatfile is unavailable
       const { bin, seg } = idatFile
         ? await (await fetch('api/getCopyNumber', options)).json()
         : { bin: binStatic, seg: segStatic };
