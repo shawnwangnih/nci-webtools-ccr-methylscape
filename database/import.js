@@ -33,6 +33,9 @@ const args = require('minimist')(process.argv.slice(2));
         console.log(`Importing ${organSystem}: ${embedding}`);
 
         const columns = {
+          order: 'order',
+          sample: 'Sample',
+          idatFile: 'idat_filename',
           class: 'Combined_class_match_dkfz',
           label: 'NIH_labels',
           x: `${embedding}_x`,
@@ -41,11 +44,12 @@ const args = require('minimist')(process.argv.slice(2));
           institution: 'Center_methy',
           category: 'Primary_category',
           matched: 'matched_cases',
-          order: 'order',
-          idatFile: 'idat_filename',
         };
 
         if (
+          stageTableColums.includes(columns.order) &&
+          stageTableColums.includes(columns.sample) &&
+          stageTableColums.includes(columns.idatFile) &&
           stageTableColums.includes(columns.class) &&
           stageTableColums.includes(columns.label) &&
           stageTableColums.includes(columns.x) &&
@@ -53,13 +57,14 @@ const args = require('minimist')(process.argv.slice(2));
           stageTableColums.includes(columns.study) &&
           stageTableColums.includes(columns.institution) &&
           stageTableColums.includes(columns.category) &&
-          stageTableColums.includes(columns.matched) &&
-          stageTableColums.includes(columns.order) &&
-          stageTableColums.includes(columns.idatFile)
+          stageTableColums.includes(columns.matched)
         ) {
           database.exec(
             `insert into annotation 
             (
+              "order",
+              "sample",
+              "idatFile",
               "organSystem",
               "embedding",
               "class",
@@ -69,11 +74,12 @@ const args = require('minimist')(process.argv.slice(2));
               "study",
               "institution",
               "category",
-              "matched",
-              "order",
-              "idatFile"
+              "matched"
             )
             select
+              "${columns.order}",
+              "${columns.sample}",
+              "${columns.idatFile}",
               '${organSystem}',
               '${embedding}',
               "${columns.class}",
@@ -83,10 +89,8 @@ const args = require('minimist')(process.argv.slice(2));
               "${columns.study}",
               "${columns.institution}",
               "${columns.category}",
-              "${columns.matched}",
-              "${columns.order}",
-              "${columns.idatFile}"
-            from "${stageTable}"`,
+              "${columns.matched}"
+            from "${stageTable}"`
           );
         }
       }

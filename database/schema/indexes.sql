@@ -1,4 +1,7 @@
 create index "index_annotation_query" on "annotation"(
+    "order",
+    "sample",
+    "idatFile",
     "organSystem",
     "embedding",
     "class",
@@ -8,7 +11,5 @@ create index "index_annotation_query" on "annotation"(
     "study",
     "institution",
     "category",
-    "matched",
-    "order",
-    "idatFile"
+    "matched"
 );

@@ -17,7 +17,7 @@ export default function Table() {
     : [];
 
   const data = points.map((e) => e.customdata);
-  
+
   return (
     <Container fluid>
       <ReactTable data={data} columns={cols} />

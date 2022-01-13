@@ -3,6 +3,7 @@ import { formState } from './metadata-plot.state';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import CreatableSelect from 'react-select/creatable';
 
 export default function MetadataForm({ className, onSelect }) {
   const [form, setForm] = useRecoilState(formState);
@@ -13,6 +14,10 @@ export default function MetadataForm({ className, onSelect }) {
     mergeForm({
       [name]: type === 'checkbox' ? checked : value,
     });
+  }
+
+  function handleSearch(e) {
+    mergeForm({ search: e });
   }
 
   return (
@@ -51,10 +56,18 @@ export default function MetadataForm({ className, onSelect }) {
         <Col md="3">
           <Form.Group id="search" className="mb-3">
             <Form.Label>Search</Form.Label>
-            <Form.Control
+            <CreatableSelect
               name="search"
+              noOptionsMessage={() => null}
+              components={{
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+              }}
+              formatCreateLabel={(userInput) => `Search: ${userInput}`}
+              isMulti
+              placeholder="Sample"
               value={form.search}
-              onChange={handleChange}
+              onChange={handleSearch}
             />
           </Form.Group>
         </Col>

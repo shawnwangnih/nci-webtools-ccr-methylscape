@@ -1,5 +1,8 @@
 create table annotation (
     "id" integer primary key,
+    "order" integer,
+    "sample" text,
+    "idatFile" text,
     "organSystem" text,
     "embedding" text,
     "class" text,
@@ -9,7 +12,5 @@ create table annotation (
     "study" text,
     "institution" text,
     "category" text,
-    "matched" text,
-    "order" integer,
-    "idatFile" text
+    "matched" text
 );

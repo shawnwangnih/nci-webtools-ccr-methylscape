@@ -7,7 +7,7 @@ import colors from './colors.json';
 export const defaultFormState = {
   organSystem: 'centralNervousSystem',
   embedding: 'umap',
-  search: '',
+  search: [],
   showAnnotations: true,
   methylClass: '',
 };
@@ -44,16 +44,17 @@ export const plotState = selector({
         'x',
         'y',
         'idatFile',
+        'sample',
       ],
     });
 
-    if (search && search.length) {
-      data = data.filter(
-        (r) =>
-          r.class?.toLowerCase().includes(search.toLowerCase()) ||
-          r.label?.toLowerCase().includes(search.toLowerCase())
-      );
-    }
+    // if (search && search.length) {
+    //   data = data.filter(
+    //     (r) =>
+    //       r.class?.toLowerCase().includes(search.toLowerCase()) ||
+    //       r.label?.toLowerCase().includes(search.toLowerCase())
+    //   );
+    // }
 
     const useWebGl = data.length > 1000;
     const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.class));
@@ -68,6 +69,7 @@ export const plotState = selector({
         text: name,
         x: meanBy(value, (e) => e.x),
         y: meanBy(value, (e) => e.y),
+        showarrow: false,
       }));
 
     const classAnnotations = dataGroupedByClass
@@ -80,6 +82,29 @@ export const plotState = selector({
         y: meanBy(value, (e) => e.y),
         showarrow: false,
       }));
+
+    // add annotations from search filter
+    const searchQueries = search.map(({ value }) => value.toLowerCase());
+    const sampleAnnotations = searchQueries.length
+      ? data
+          .filter(
+            ({ sample, idatFile }) =>
+              (sample &&
+                searchQueries.some((query) =>
+                  sample.toLowerCase().includes(query)
+                )) ||
+              (idatFile &&
+                searchQueries.some((query) =>
+                  idatFile.toLowerCase().includes(query)
+                ))
+          )
+          .map((e) => ({
+            text: e.sample || e.idatFile,
+            x: e.x,
+            y: e.y,
+            // showarrow: false,
+          }))
+      : [];
 
     // transform data to traces
     const dataTraces = dataGroupedByClass
@@ -156,9 +181,10 @@ export const plotState = selector({
       annotations: showAnnotations
         ? [
             ...labelAnnotations,
+            ...sampleAnnotations,
             // ...classAnnotations
           ]
-        : [],
+        : [...sampleAnnotations],
       uirevision: organSystem + embedding + search,
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
