@@ -184,7 +184,7 @@ export const plotState = selector({
             ...sampleAnnotations,
             // ...classAnnotations
           ]
-        : [...sampleAnnotations],
+        : [],
       uirevision: organSystem + embedding + search,
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
