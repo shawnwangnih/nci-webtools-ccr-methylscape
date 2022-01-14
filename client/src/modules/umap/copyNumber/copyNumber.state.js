@@ -200,7 +200,7 @@ export const plotState = selector({
           title: 'log<sub>2</sub> ratio',
           zeroline: true,
           // zerolinecolor: '#eee',
-          dtick: 0.5,
+          dtick: 0.25,
           ticks: 'outside',
           fixedrange: true,
         },
@@ -239,6 +239,7 @@ export const plotState = selector({
             line: { dash: 'dot' },
           },
         ],
+        autosize: true,
       };
       const config = { scrollZoom: true };
 
