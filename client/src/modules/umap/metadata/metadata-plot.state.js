@@ -48,13 +48,21 @@ export const plotState = selector({
       ],
     });
 
-    // if (search && search.length) {
-    //   data = data.filter(
-    //     (r) =>
-    //       r.class?.toLowerCase().includes(search.toLowerCase()) ||
-    //       r.label?.toLowerCase().includes(search.toLowerCase())
-    //   );
-    // }
+    // filter plot by search if show annotations is toggled false
+    const searchQueries = search.map(({ value }) => value.toLowerCase());
+    if (!showAnnotations && searchQueries.length) {
+      data = data.filter(
+        ({ sample, idatFile }) =>
+          (sample &&
+            searchQueries.some((query) =>
+              sample.toLowerCase().includes(query)
+            )) ||
+          (idatFile &&
+            searchQueries.some((query) =>
+              idatFile.toLowerCase().includes(query)
+            ))
+      );
+    }
 
     const useWebGl = data.length > 1000;
     const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.class));
@@ -84,27 +92,27 @@ export const plotState = selector({
       }));
 
     // add annotations from search filter
-    const searchQueries = search.map(({ value }) => value.toLowerCase());
-    const sampleAnnotations = searchQueries.length
-      ? data
-          .filter(
-            ({ sample, idatFile }) =>
-              (sample &&
-                searchQueries.some((query) =>
-                  sample.toLowerCase().includes(query)
-                )) ||
-              (idatFile &&
-                searchQueries.some((query) =>
-                  idatFile.toLowerCase().includes(query)
-                ))
-          )
-          .map((e) => ({
-            text: e.sample || e.idatFile,
-            x: e.x,
-            y: e.y,
-            // showarrow: false,
-          }))
-      : [];
+    const sampleAnnotations =
+      showAnnotations && searchQueries.length
+        ? data
+            .filter(
+              ({ sample, idatFile }) =>
+                (sample &&
+                  searchQueries.some((query) =>
+                    sample.toLowerCase().includes(query)
+                  )) ||
+                (idatFile &&
+                  searchQueries.some((query) =>
+                    idatFile.toLowerCase().includes(query)
+                  ))
+            )
+            .map((e) => ({
+              text: e.sample || e.idatFile,
+              x: e.x,
+              y: e.y,
+              // showarrow: false,
+            }))
+        : [];
 
     // transform data to traces
     const dataTraces = dataGroupedByClass
@@ -185,7 +193,7 @@ export const plotState = selector({
             // ...classAnnotations
           ]
         : [],
-      uirevision: organSystem + embedding + search,
+      uirevision: organSystem + embedding + search + showAnnotations,
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
     };
