@@ -71,7 +71,7 @@ export default function MetadataForm({ className, onSelect }) {
             />
           </Form.Group>
         </Col>
-        <Col md="auto">
+        {/* <Col md="auto">
           <Form.Group id="color" className="mb-3">
             <Form.Label>Color By</Form.Label>
             <Form.Select
@@ -82,7 +82,7 @@ export default function MetadataForm({ className, onSelect }) {
               <option>No_match</option>
             </Form.Select>
           </Form.Group>
-        </Col>
+        </Col> */}
         <Col md="auto">
           <Form.Group controlId="showAnnotations" className="mb-3">
             <Form.Check

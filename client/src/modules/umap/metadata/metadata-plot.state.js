@@ -50,19 +50,19 @@ export const plotState = selector({
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());
-    if (!showAnnotations && searchQueries.length) {
-      data = data.filter(
-        ({ sample, idatFile }) =>
-          (sample &&
-            searchQueries.some((query) =>
-              sample.toLowerCase().includes(query)
-            )) ||
-          (idatFile &&
-            searchQueries.some((query) =>
-              idatFile.toLowerCase().includes(query)
-            ))
-      );
-    }
+    // if (!showAnnotations && searchQueries.length) {
+    //   data = data.filter(
+    //     ({ sample, idatFile }) =>
+    //       (sample &&
+    //         searchQueries.some((query) =>
+    //           sample.toLowerCase().includes(query)
+    //         )) ||
+    //       (idatFile &&
+    //         searchQueries.some((query) =>
+    //           idatFile.toLowerCase().includes(query)
+    //         ))
+    //   );
+    // }
 
     const useWebGl = data.length > 1000;
     const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.class));
