@@ -2,7 +2,8 @@ import { Suspense } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Loader from '../../components/loader';
 import ErrorBoundary from '../../components/error-boundary';
-import CopyNumberPlot from './cnPlot';
+import CopyNumberForm from './cn-form';
+import CopyNumberPlot from './cn-plot';
 
 export default function CopyNumber({ className }) {
   return (
@@ -16,6 +17,7 @@ export default function CopyNumber({ className }) {
         intensities. It is important to assess both sample and probe quality
         prior to interpretatin of a case.
       </p>
+      <CopyNumberForm />
       <ErrorBoundary
         fallback={
           <Alert variant="danger">

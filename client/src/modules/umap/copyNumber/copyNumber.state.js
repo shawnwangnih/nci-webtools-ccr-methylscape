@@ -5,6 +5,15 @@ import binStatic from './bin.json';
 import segStatic from './seg.json';
 import chrLines from './lines.json';
 
+export const defaultFormState = {
+  annotation: 'none',
+};
+
+export const formState = atom({
+  key: 'copynumber.formState',
+  default: defaultFormState,
+});
+
 export const defaultCopyNumberState = {
   idatFile: '',
 };
@@ -24,6 +33,7 @@ export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
     const { idatFile } = get(copyNumberState);
+    const { annotation: annoToggle } = get(formState);
 
     try {
       const options = {
@@ -186,7 +196,7 @@ export const plotState = selector({
       const layout = {
         showlegend: false,
         dragmode: 'pan',
-        uirevision: idatFile,
+        uirevision: idatFile + annoToggle,
         xaxis: {
           title: 'Chromosome',
           showgrid: false,
