@@ -166,13 +166,13 @@ export const plotState = selector({
             'Log<sub>2</sub> Ratio: %{customdata.ratio}<br>Position: %{x}<extra></extra>',
           marker: {
             color: data.map((e) => e.log2ratio),
-            colorscale: [
-              ['0.0', `hsl(${getHue(i)}, 100%, 40%)`],
-              ['0.25', `hsl(${getHue(i)}, 100%, 60%)`],
-              ['0.5', `hsl(${getHue(i)}, 50%, 90%)`],
-              ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
-              ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
-            ],
+            // colorscale: [
+            //   ['0.0', `hsl(${getHue(i)}, 100%, 40%)`],
+            //   ['0.25', `hsl(${getHue(i)}, 100%, 60%)`],
+            //   ['0.5', `hsl(${getHue(i)}, 50%, 90%)`],
+            //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
+            //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
+            // ],
             cmax: 0.7,
             cmid: 0,
             cmin: -0.7,
