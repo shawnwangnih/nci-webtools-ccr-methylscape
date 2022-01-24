@@ -92,27 +92,26 @@ export const plotState = selector({
       }));
 
     // add annotations from search filter
-    const sampleAnnotations =
-      showAnnotations && searchQueries.length
-        ? data
-            .filter(
-              ({ sample, idatFile }) =>
-                (sample &&
-                  searchQueries.some((query) =>
-                    sample.toLowerCase().includes(query)
-                  )) ||
-                (idatFile &&
-                  searchQueries.some((query) =>
-                    idatFile.toLowerCase().includes(query)
-                  ))
-            )
-            .map((e) => ({
-              text: e.sample || e.idatFile,
-              x: e.x,
-              y: e.y,
-              // showarrow: false,
-            }))
-        : [];
+    const sampleAnnotations = searchQueries.length
+      ? data
+          .filter(
+            ({ sample, idatFile }) =>
+              (sample &&
+                searchQueries.some((query) =>
+                  sample.toLowerCase().includes(query)
+                )) ||
+              (idatFile &&
+                searchQueries.some((query) =>
+                  idatFile.toLowerCase().includes(query)
+                ))
+          )
+          .map((e) => ({
+            text: e.sample || e.idatFile,
+            x: e.x,
+            y: e.y,
+            // showarrow: false,
+          }))
+      : [];
 
     // transform data to traces
     const dataTraces = dataGroupedByClass
@@ -192,7 +191,7 @@ export const plotState = selector({
             ...sampleAnnotations,
             // ...classAnnotations
           ]
-        : [],
+        : [...sampleAnnotations],
       uirevision: organSystem + embedding + search + showAnnotations,
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
