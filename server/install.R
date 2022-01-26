@@ -7,7 +7,8 @@ Sys.setenv(
 install.packages(
   c(
     'jsonlite',
-    'remotes'
+    'remotes',
+    'survival'
   ), 
   repos='https://cloud.r-project.org/'
 )

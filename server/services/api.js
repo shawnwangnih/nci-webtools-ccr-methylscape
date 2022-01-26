@@ -7,6 +7,7 @@ const config = require('../config');
 const { getSchema, query } = require('./query');
 const { scanTable, getFile, getKey } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
+const { wrapper: r } = require('./R/r');
 const Papa = require('papaparse');
 
 const apiRouter = express.Router();
@@ -109,6 +110,15 @@ apiRouter.post(
     const seg = await parseTSV(segFile.Body);
 
     response.json({ bin, seg });
+  })
+);
+
+// call r wrapper
+apiRouter.post(
+  '/r',
+  withAsync(async (request, response) => {
+    const results = r(request.body.args);
+    response.json(results);
   })
 );
 
