@@ -44,6 +44,8 @@ const args = require('minimist')(process.argv.slice(2));
           institution: 'Center_methy',
           category: 'Primary_category',
           matched: 'matched_cases',
+          os_months: 'OS_months',
+          os_status: 'OS_status',
         };
 
         if (
@@ -57,7 +59,9 @@ const args = require('minimist')(process.argv.slice(2));
           stageTableColums.includes(columns.study) &&
           stageTableColums.includes(columns.institution) &&
           stageTableColums.includes(columns.category) &&
-          stageTableColums.includes(columns.matched)
+          stageTableColums.includes(columns.matched) &&
+          stageTableColums.includes(columns.os_months) &&
+          stageTableColums.includes(columns.os_status)
         ) {
           database.exec(
             `insert into annotation 
@@ -74,7 +78,9 @@ const args = require('minimist')(process.argv.slice(2));
               "study",
               "institution",
               "category",
-              "matched"
+              "matched",
+              "os_months",
+              "os_status"
             )
             select
               "${columns.order}",
@@ -89,7 +95,9 @@ const args = require('minimist')(process.argv.slice(2));
               "${columns.study}",
               "${columns.institution}",
               "${columns.category}",
-              "${columns.matched}"
+              "${columns.matched}",
+              "${columns.os_months}",
+              "${columns.os_status}"
             from "${stageTable}"`
           );
         }

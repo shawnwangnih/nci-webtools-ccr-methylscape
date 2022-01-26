@@ -12,5 +12,7 @@ create table annotation (
     "study" text,
     "institution" text,
     "category" text,
-    "matched" text
+    "matched" text,
+    "os_months" float,
+    "os_status" integer
 );

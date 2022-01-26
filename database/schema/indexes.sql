@@ -11,5 +11,7 @@ create index "index_annotation_query" on "annotation"(
     "study",
     "institution",
     "category",
-    "matched"
+    "matched",
+    "os_months",
+    "os_status"
 );
