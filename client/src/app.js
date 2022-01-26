@@ -9,7 +9,7 @@ import Projects from './modules/data/projects/projects';
 import Experiments from './modules/data/experiments/experiments';
 import Samples from './modules/data/samples/samples';
 import QCI from './modules/qciReport/qci';
-import Admin from './modules/components/admin/admin';
+import Admin from './modules/admin/admin';
 
 export default function App() {
   const navbarLinks = [

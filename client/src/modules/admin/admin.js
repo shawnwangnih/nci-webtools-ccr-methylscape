@@ -1,5 +1,5 @@
 import { Container, Button } from 'react-bootstrap';
-import Table from '../table';
+import Table from '../components/table';
 
 export default function Admin() {
   const users = [
