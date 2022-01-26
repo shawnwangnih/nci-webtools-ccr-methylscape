@@ -20,7 +20,17 @@ export default function Table() {
 
   return (
     <Container fluid>
-      <ReactTable data={data} columns={cols} />
+      <p>
+        Use Box or Lasso Select in the UMAP plot to view details for multiple
+        samples.
+      </p>
+      {data.length > 0 && (
+        <ReactTable
+          data={data}
+          columns={cols}
+          useHooks={{ hideColumns: true }}
+        />
+      )}
     </Container>
   );
 }

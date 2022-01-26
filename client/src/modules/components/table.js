@@ -1,8 +1,13 @@
 import { useMemo, forwardRef, useRef, useEffect, Fragment } from 'react';
 import BootstrapTable from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Pagination from 'react-bootstrap/Pagination';
+import {
+  Form,
+  InputGroup,
+  Pagination,
+  Row,
+  Col,
+  Dropdown,
+} from 'react-bootstrap';
 import {
   useTable,
   useFilters,
@@ -70,6 +75,7 @@ export default function Table({
   options = {},
   useHooks = {},
   renderRowSubComponent = false,
+  hiddenColumns,
 }) {
   const {
     getTableProps,
@@ -86,6 +92,7 @@ export default function Table({
     nextPage,
     previousPage,
     setPageSize,
+    allColumns,
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -125,9 +132,38 @@ export default function Table({
       }
     }
   );
-
   return (
     <>
+      <Row>
+        <Col>
+          <Dropdown>
+            <Dropdown.Toggle
+              variant="secondary"
+              size="sm"
+              id={`toggle-umap-columns`}
+            >
+              Columns
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Form>
+                {allColumns.map((column) => (
+                  <Form.Group
+                    key={`${column.id}-visible`}
+                    controlId={`${column.id}-visible`}
+                    className="my-1 px-2"
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      label={column.Header}
+                      {...column.getToggleHiddenProps()}
+                    />
+                  </Form.Group>
+                ))}
+              </Form>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
       <div className="table-responsive">
         <BootstrapTable {...getTableProps()} hover size="sm">
           <thead>
