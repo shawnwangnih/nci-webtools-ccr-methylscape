@@ -136,32 +136,34 @@ export default function Table({
     <>
       <Row>
         <Col>
-          <Dropdown>
-            <Dropdown.Toggle
-              variant="secondary"
-              size="sm"
-              id={`toggle-umap-columns`}
-            >
-              Columns
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Form>
-                {allColumns.map((column) => (
-                  <Form.Group
-                    key={`${column.id}-visible`}
-                    controlId={`${column.id}-visible`}
-                    className="my-1 px-2"
-                  >
-                    <Form.Check
-                      type="checkbox"
-                      label={column.Header}
-                      {...column.getToggleHiddenProps()}
-                    />
-                  </Form.Group>
-                ))}
-              </Form>
-            </Dropdown.Menu>
-          </Dropdown>
+          {useHooks.hideColumns && (
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="secondary"
+                size="sm"
+                id={`toggle-umap-columns`}
+              >
+                Columns
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Form>
+                  {allColumns.map((column) => (
+                    <Form.Group
+                      key={`${column.id}-visible`}
+                      controlId={`${column.id}-visible`}
+                      className="my-1 px-2"
+                    >
+                      <Form.Check
+                        type="checkbox"
+                        label={column.Header}
+                        {...column.getToggleHiddenProps()}
+                      />
+                    </Form.Group>
+                  ))}
+                </Form>
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
         </Col>
       </Row>
       <div className="table-responsive">
