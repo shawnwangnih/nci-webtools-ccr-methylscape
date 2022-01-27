@@ -206,7 +206,7 @@ export default function Table({
             {page.map((row) => {
               prepareRow(row);
               return (
-                <Fragment {...row.getRowProps()}>
+                <Fragment key={row.getRowProps().key}>
                   <tr
                     onClick={() => {
                       if (useHooks.rowSelectRadio) {
