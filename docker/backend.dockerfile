@@ -13,6 +13,10 @@ RUN dnf -y update \
     nodejs \
     python3-devel \
     R \
+    cmake \
+    libxml2-devel \
+    libjpeg-turbo-devel \
+    libcurl-devel \
  && dnf clean all
 
 RUN mkdir -p /app/server
