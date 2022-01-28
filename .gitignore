@@ -3,3 +3,4 @@ config.json
 database/data
 server/logs
 .DS_Store
+tmp

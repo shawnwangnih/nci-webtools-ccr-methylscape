@@ -1,20 +1,22 @@
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 function publicCacheControl(maxAge) {
   return (request, response, next) => {
-    if (request.method === "GET")
-      response.set("Cache-Control", `public, max-age=${maxAge}`);
+    if (request.method === 'GET')
+      response.set('Cache-Control', `public, max-age=${maxAge}`);
     next();
   };
 }
 
-function logRequests(formatter = request => [request.path, request.query]) {
+function logRequests(
+  formatter = (request) => [request.path, { ...request.query, ...request.body }]
+) {
   return (request, response, next) => {
     const { logger } = request.app.locals;
     request.startTime = new Date().getTime();
     logger.info(formatter(request));
     next();
-  }
+  };
 }
 
 function logErrors(error, request, response, next) {

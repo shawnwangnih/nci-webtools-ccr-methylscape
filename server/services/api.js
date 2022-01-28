@@ -26,6 +26,16 @@ apiRouter.use(logRequests());
 // add public cache-control headers to responses for GET requests
 apiRouter.use(publicCacheControl(60 * 60));
 
+// serve static results
+apiRouter.use(
+  '/results',
+  express.static(config.results_folder, {
+    setHeaders: (res, path, stat) => {
+      res.set('Cache-Control', 'max-age=0, must-revalidate');
+    },
+  })
+);
+
 // healthcheck route
 apiRouter.get('/ping', (request, response) => {
   response.json(1 === database.prepare('select 1').pluck().get());
@@ -117,8 +127,9 @@ apiRouter.post(
 apiRouter.post(
   '/r',
   withAsync(async (request, response) => {
-    const results = r(request.body.args);
-    response.json(results);
+    const { stdout, output } = JSON.parse(await r(request.body));
+    console.log(stdout);
+    response.json(output);
   })
 );
 

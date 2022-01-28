@@ -45,6 +45,8 @@ export const plotState = selector({
         'y',
         'idatFile',
         'sample',
+        'os_months',
+        'os_status',
       ],
     });
 
@@ -127,12 +129,15 @@ export const plotState = selector({
         x: data.map((e) => e.x),
         y: data.map((e) => e.y),
         customdata: data.map((e) => ({
+          sample: e.sample || '',
           class: e.class || '',
           label: e.label || '',
           idatFile: e.idatFile,
+          os_months: e.os_months ? Math.round(e.os_months) : null,
+          os_status: e.os_status,
         })),
         mode: 'markers',
-        hovertemplate: 'Class: %{customdata.class}<extra></extra>',
+        hovertemplate: 'Sample: %{customdata.sample}<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',
         marker: {
           color: '%{customdata.class}',

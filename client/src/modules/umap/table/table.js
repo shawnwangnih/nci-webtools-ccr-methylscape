@@ -1,22 +1,15 @@
-import { Container, Row, Col } from 'react-bootstrap';
-import { useRecoilState } from 'recoil';
-import { tableState } from './table.state';
+import { Container } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
+import { tableData } from './table.state';
 import ReactTable from '../../components/table';
-import React from 'react';
+import { Suspense } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import Loader from '../../components/loader';
+import ErrorBoundary from '../../components/error-boundary';
+import SurvivalPlot from './survivalPlot';
 
 export default function Table() {
-  const [umapTableState, setTableState] = useRecoilState(tableState);
-  const { points } = umapTableState;
-
-  const cols = points.length
-    ? Object.keys(points[0].customdata).map((e) => ({
-        id: e,
-        accessor: e,
-        Header: e,
-      }))
-    : [];
-
-  const data = points.map((e) => e.customdata);
+  const { data, cols } = useRecoilValue(tableData);
 
   return (
     <Container fluid>
@@ -24,6 +17,7 @@ export default function Table() {
         Use Box or Lasso Select in the UMAP plot to view details for multiple
         samples.
       </p>
+
       {data.length > 0 && (
         <ReactTable
           data={data}
@@ -31,6 +25,19 @@ export default function Table() {
           useHooks={{ hideColumns: true }}
         />
       )}
+
+      <ErrorBoundary
+        fallback={
+          <Alert variant="danger">
+            An internal error prevented plots from loading. Please contact the
+            website administrator if this problem persists.
+          </Alert>
+        }
+      >
+        <Suspense fallback={<Loader message="Loading Survival Plot" />}>
+          <SurvivalPlot />
+        </Suspense>
+      </ErrorBoundary>
     </Container>
   );
 }
