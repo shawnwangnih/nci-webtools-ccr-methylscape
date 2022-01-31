@@ -42,7 +42,8 @@ survival <- function(args, paths) {
     xlab = "Overall survival (months)",
     palette = c("red", "blue", "green"),
     ggtheme = theme_bw(base_size = 20,
-    base_family = "Arial"))
+    # base_family = "Arial"
+    ))
 
   file = paste0(paths$id, '/', 'survival_os.png')
   path = file.path(paths$save, file)
