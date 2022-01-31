@@ -127,9 +127,8 @@ apiRouter.post(
 apiRouter.post(
   '/r',
   withAsync(async (request, response) => {
-    const { stdout, output } = JSON.parse(await r(request.body));
-    console.log(stdout);
-    response.json(output);
+    const result = JSON.parse(await r(request.body));
+    response.json(result);
   })
 );
 

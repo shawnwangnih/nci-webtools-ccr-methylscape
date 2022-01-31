@@ -51,7 +51,7 @@ export const survivalPlot = selector({
         args: { os_months, os_status },
       });
 
-      return response.data;
+      return response.data.output;
     } catch (error) {
       console.log(error);
       return '';

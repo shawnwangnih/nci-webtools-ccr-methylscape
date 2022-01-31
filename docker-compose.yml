@@ -8,6 +8,7 @@ services:
             - './database/data.sqlite:/app/database/data.sqlite:ro'
             - './server/config.json:/app/server/config.json:ro'
             - './server/logs:/app/server/logs'
+            - './tmp:/app/tmp'
 
     frontend:
         build: 
