@@ -40,7 +40,7 @@ export const survivalPlot = selector({
     const survivalData = points
       .map((e) => e.customdata)
       .filter(
-        ({ os_months, os_status }) => os_months && os_status && os_status > -1
+        ({ os_months, os_status }) => os_months && (os_status || os_status == 0)
       );
     const os_months = survivalData.map(({ os_months }) => os_months);
     const os_status = survivalData.map(({ os_status }) => os_status);
