@@ -45,9 +45,15 @@ survival <- function(args, paths) {
   # base_family = "Arial"
     ))
 
-  file = paste0(paths$id, '/', 'survival_os.png')
+  file = file.path(paths$id, 'survival_os.png')
   path = file.path(paths$save, file)
-  ggsave(filename = path, plot = print(plot))
 
-  return(list(path = file.path(paths$id, 'survival_os.png')))
+  # ggsave issue with survminer - https://github.com/kassambara/survminer/issues/544
+  # ggsave(filename = path, plot = print(plot))
+  p1 = plot$plot
+  p2 = plot$table
+  plotp = cowplot::plot_grid(p1, p2, align = "v", ncol = 1, rel_heights = c(3, 1))
+  ggsave(filename = path, plot = plotp)
+
+  return(list(path = file))
 }

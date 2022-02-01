@@ -9,7 +9,8 @@ install.packages(
     'jsonlite',
     'remotes',
     'survival',
-    'survminer'
+    'survminer',
+    'cowplot'
   ),
   repos = 'https://cloud.r-project.org/'
 )
