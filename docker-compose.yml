@@ -22,3 +22,11 @@ services:
         ports: 
             - '8100:80'
 
+    database:
+        image: postgres
+        environment:
+            POSTGRES_USER: methylscape
+            POSTGRES_PASSWORD: methylscape
+            POSTGRES_DB: methylscape
+        ports:
+          - '5432:5432'
