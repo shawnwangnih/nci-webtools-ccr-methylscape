@@ -1,4 +1,5 @@
-export class UserManager {
+
+class UserManager {
   database = null;
 
   constructor(database) {
@@ -51,3 +52,5 @@ export class UserManager {
       .where({'user.id': userId});
   }
 }
+
+module.exports = UserManager;

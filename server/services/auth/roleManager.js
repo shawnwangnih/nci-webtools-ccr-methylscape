@@ -1,4 +1,4 @@
-export class RoleManager {
+class RoleManager {
   database = null;
 
   constructor(database) {
@@ -60,3 +60,5 @@ export class RoleManager {
       .delete();
   }
 }
+
+module.exports = RoleManager;
