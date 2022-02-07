@@ -1,0 +1,7 @@
+load("anno_tumors6sets1.RData")
+write.csv(anno_base, file="anno_base.csv", na="", row.names=F)
+write.csv(anno_hemepath, file="anno_hemepath.csv", na="", row.names=F)
+write.csv(anno_neuro, file="anno_neuro.csv", na="", row.names=F)
+write.csv(anno_pan, file="anno_pan.csv", na="", row.names=F)
+write.csv(anno_renal, file="anno_renal.csv", na="", row.names=F)
+write.csv(anno_sarcoma, file="anno_sarcoma.csv", na="", row.names=F)
