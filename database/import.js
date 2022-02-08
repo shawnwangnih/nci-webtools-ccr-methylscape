@@ -6,11 +6,13 @@ import knex from "knex";
 import { createSchema } from "./schema.js";
 import minimist from "minimist";
 
-const require = createRequire(import.meta.url);
 const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
+const require = createRequire(import.meta.url);
+const sources = require("./sources.json");
 
 if (isMainModule) {
   const args = minimist(process.argv.slice(2));
+
   const connection = knex({
     client: "pg",
     connection: {
@@ -22,9 +24,10 @@ if (isMainModule) {
     },
   });
 
-  main(connection)
-    .then(() => {
+  importDatabase(connection, sources)
+    .then(async () => {
       console.log("done");
+      await connection.destroy();
       process.exit(0);
     })
     .catch((error) => {
@@ -33,8 +36,7 @@ if (isMainModule) {
     });
 }
 
-async function main(connection) {
-  const sources = require("./sources.json");
+export async function importDatabase(connection, sources = sources) {
 
   // create schema
   await createSchema(connection);
@@ -45,6 +47,7 @@ async function main(connection) {
 
     const parseOptions = {
       columns: true,
+      skip_empty_lines: true,
       cast: (column) => {
         if (column === "") {
           return null;
@@ -54,7 +57,6 @@ async function main(connection) {
           return column;
         }
       },
-      skip_empty_lines: true,
       on_record: (record) => {
         let row = {};
         for (const { sourceName, name, defaultValue } of columns) {
@@ -81,8 +83,4 @@ async function main(connection) {
 
     console.log(`Imported ${index} rows`);
   }
-
-  connection.destroy();
 }
-
-export default { main };
