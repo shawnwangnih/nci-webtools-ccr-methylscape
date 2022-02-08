@@ -1,8 +1,8 @@
 import { createReadStream } from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { parse } from "csv-parse";
 import knex from "knex";
-import parse from "csv-parse";
 import { createSchema } from "./schema.js";
 import minimist from "minimist";
 
