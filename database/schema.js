@@ -44,7 +44,7 @@ export async function createSchema(database) {
    */
   await database.schema.createTable("sampleCoordinates", function (table) {
     table.increments("id");
-    table.integer("sampleId").references("sample.id");;
+    table.integer("sampleId").references("sample.id");
     table.string("organSystem");
     table.string("embedding");
     table.double("x");

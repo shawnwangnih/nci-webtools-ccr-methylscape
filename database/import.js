@@ -72,7 +72,7 @@ async function main(connection) {
         await connection.insert(record).into(table);
       } catch (error) {
         console.log(record);
-        throw(error);
+        throw error;
       }
       if (++index % 1000 === 0) {
         console.log(`Imported ${index} rows`);
