@@ -17,6 +17,15 @@ export const formState = atom({
   default: defaultFormState,
 });
 
+export const defaultSelectedPoints = {
+  points: {},
+};
+
+export const selectedPoints = atom({
+  key: 'metadataPlot.selected',
+  default: defaultSelectedPoints,
+});
+
 export const defaultPlotState = {
   data: [],
   layout: {},

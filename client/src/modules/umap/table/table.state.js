@@ -1,18 +1,14 @@
 import { atom, selector } from 'recoil';
 import axios from 'axios';
+import { selectedPoints } from '../metadata/metadata-plot.state';
 
-export const defaultSelectedPoints = {
+export const defaultTableForm = {
   selectedGroup: 'group_1',
-  points: {
-    group_1: [],
-    group_2: [],
-    group_3: [],
-  },
 };
 
-export const selectedPoints = atom({
-  key: 'umapSelectedPoints',
-  default: defaultSelectedPoints,
+export const tableForm = atom({
+  key: 'umapTableForm',
+  default: defaultTableForm,
 });
 
 export const tableData = selector({
@@ -22,15 +18,16 @@ export const tableData = selector({
 
     if (Object.values(points).every((v) => !v.length)) return [];
 
-    const tables = Object.values(points).map((group) => ({
-      cols: group.length
-        ? Object.keys(group[0].customdata).map((e) => ({
+    const tables = Object.entries(points).map(([group, data]) => ({
+      cols: data.length
+        ? Object.keys(data[0].customdata).map((e) => ({
             id: e,
             accessor: e,
             Header: e,
           }))
         : [],
-      data: group.map((e) => e.customdata),
+      data: data.map((e) => e.customdata),
+      name: group,
     }));
 
     return tables;
