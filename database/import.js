@@ -1,113 +1,88 @@
-const fs = require('fs');
-const fsp = require('fs/promises');
-const path = require('path');
-const { importTable } = require('./utils');
-const sqlite = require('better-sqlite3');
-const sources = require('./sources.json');
-const args = require('minimist')(process.argv.slice(2));
+import { createReadStream } from "fs";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
+import knex from "knex";
+import parse from "csv-parse";
+import { createSchema } from "./schema.js";
+import minimist from "minimist";
 
-(async function main() {
-  const databaseFilePath = args.db || 'data.sqlite';
+const require = createRequire(import.meta.url);
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 
-  if (fs.existsSync(databaseFilePath)) fs.unlinkSync(databaseFilePath);
+if (isMainModule) {
+  const args = minimist(process.argv.slice(2));
+  const connection = knex({
+    client: "pg",
+    connection: {
+      host: args.host || "localhost",
+      port: args.port || 5432,
+      user: args.user || "methylscape",
+      password: args.password || "methylscape",
+      database: args.database || "methylscape",
+    },
+  });
 
-  const mainSql = await fsp.readFile('schema/tables.sql', 'utf-8');
+  main(connection)
+    .then(() => {
+      console.log("done");
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    });
+}
+
+async function main(connection) {
+  const sources = require("./sources.json");
 
   // create schema
-  const database = sqlite(databaseFilePath);
-  database.exec(mainSql);
+  await createSchema(connection);
 
   // import all sources into staging tables
-  for (const source of sources) {
-    const { type, sourcePath, stageTable } = source;
-    await importTable(database, sourcePath, stageTable);
-    const stageTableColums = database
-      .pragma(`table_info("${stageTable}")`)
-      .map((row) => row.name);
+  for (const { sourcePath, description, table, columns } of sources) {
+    console.log(`Importing ${table}: ${description}`);
 
-    // import global tables and proceed with study-specific imports
-    if (type === 'annotation') {
-      const { organSystem, embeddings } = source;
-
-      for (const embedding of embeddings) {
-        console.log(`Importing ${organSystem}: ${embedding}`);
-
-        const columns = {
-          order: 'order',
-          sample: 'Sample',
-          idatFile: 'idat_filename',
-          class: 'Combined_class_match_dkfz',
-          label: 'NIH_labels',
-          x: `${embedding}_x`,
-          y: `${embedding}_y`,
-          study: 'Primary_study',
-          institution: 'Center_methy',
-          category: 'Primary_category',
-          matched: 'matched_cases',
-          os_months: 'OS_months',
-          os_status: 'OS_status',
-        };
-
-        if (
-          stageTableColums.includes(columns.order) &&
-          stageTableColums.includes(columns.sample) &&
-          stageTableColums.includes(columns.idatFile) &&
-          stageTableColums.includes(columns.class) &&
-          stageTableColums.includes(columns.label) &&
-          stageTableColums.includes(columns.x) &&
-          stageTableColums.includes(columns.y) &&
-          stageTableColums.includes(columns.study) &&
-          stageTableColums.includes(columns.institution) &&
-          stageTableColums.includes(columns.category) &&
-          stageTableColums.includes(columns.matched) &&
-          stageTableColums.includes(columns.os_months) &&
-          stageTableColums.includes(columns.os_status)
-        ) {
-          database.exec(
-            `insert into annotation 
-            (
-              "order",
-              "sample",
-              "idatFile",
-              "organSystem",
-              "embedding",
-              "class",
-              "label",
-              "x",
-              "y",
-              "study",
-              "institution",
-              "category",
-              "matched",
-              "os_months",
-              "os_status"
-            )
-            select
-              "${columns.order}",
-              "${columns.sample}",
-              "${columns.idatFile}",
-              '${organSystem}',
-              '${embedding}',
-              "${columns.class}",
-              "${columns.label}",
-              "${columns.x}",
-              "${columns.y}",
-              "${columns.study}",
-              "${columns.institution}",
-              "${columns.category}",
-              "${columns.matched}",
-              "${columns.os_months}",
-              "${columns.os_status}"
-            from "${stageTable}"`
-          );
+    const parseOptions = {
+      columns: true,
+      cast: (column) => {
+        if (column === "") {
+          return null;
+        } else if (!isNaN(column)) {
+          return parseFloat(column);
+        } else {
+          return column;
         }
+      },
+      skip_empty_lines: true,
+      on_record: (record) => {
+        let row = {};
+        for (const { sourceName, name, defaultValue } of columns) {
+          row[name] = record[sourceName] ?? defaultValue ?? null;
+        }
+        return row;
+      },
+    };
+
+    const parser = createReadStream(sourcePath).pipe(parse(parseOptions));
+
+    let index = 0;
+    for await (const record of parser) {
+      try {
+        await connection.insert(record).into(table);
+      } catch (error) {
+        console.log(record);
+        throw(error);
+      }
+      if (++index % 1000 === 0) {
+        console.log(`Imported ${index} rows`);
       }
     }
+
+    console.log(`Imported ${index} rows`);
   }
 
-  console.log('Generating indexes');
-  database.exec(await fsp.readFile('schema/indexes.sql', 'utf-8'));
-  database.close();
+  connection.destroy();
+}
 
-  console.log('Done');
-})();
+export default { main };
