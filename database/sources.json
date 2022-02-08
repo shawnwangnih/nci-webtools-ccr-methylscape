@@ -1,30 +1,148 @@
 [
   {
-    "type": "annotation",
-    "sourcePath": "./data/anno_neuro.tsv",
-    "stageTable": "stageNeuro",
-    "organSystem": "centralNervousSystem",
-    "embeddings": ["umap", "densmap"]
+    "sourcePath": "./data/sample_sheet_master.csv",
+    "table": "sample",
+    "description": "master sample metadata",
+    "columns": [
+      { "sourceName": "order", "name": "id" },
+      { "sourceName": "Sample", "name": "sample" },
+      { "sourceName": "idat_filename", "name": "idatFilename" },
+      { "sourceName": "Primary_category", "name": "primaryCategory" },
+      { "sourceName": "Primary_study", "name": "primaryStudy" },
+      { "sourceName": "Center_methy", "name": "centerMethylation" },
+      { "sourceName": "NIH_labels", "name": "nihLabels" },
+      { "sourceName": "NCI_METRIC", "name": "nciMetric" },
+      { "sourceName": "Age", "name": "age" },
+      { "sourceName": "Sex_congruency", "name": "sexCongruency" },
+      { "sourceName": null, "name": "histology", "defaultValue": null },
+      { "sourceName": "Location_general", "name": "locationGeneral" },
+      { "sourceName": "Location_specific", "name": "locationSpecific" },
+      { "sourceName": "Subtype/pattern", "name": "subtypeOrPattern" },
+      { "sourceName": "Details", "name": "details" },
+      { "sourceName": "H3K27me3", "name": "h3k27me3" },
+      { "sourceName": "Variants", "name": "variants" },
+      { "sourceName": "Fusions/translocations", "name": "fusionsOrTranslocations" },
+      { "sourceName": "Variants_report", "name": "variantsReport" },
+      { "sourceName": "Fusions/translocations_report", "name": "fusionsOrTranslocationsReport" },
+      { "sourceName": "OS_months", "name": "overallSurvivalMonths" },
+      { "sourceName": "OS_status", "name": "overallSurvivalStatus" }
+    ]
   },
+
   {
-    "type": "annotation",
-    "sourcePath": "./data/anno_neuro_sarcoma.tsv",
-    "stageTable": "stageNeuroSarcoma",
-    "organSystem": "centralNervousSystemSarcoma",
-    "embeddings": ["umap", "densmap"]
+    "sourcePath": "./data/anno_neuro.csv",
+    "table": "sampleCoordinates",
+    "description": "umap coordinates for organSystem: centralNervousSystem",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "centralNervousSystem" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
+      { "sourceName": "umap_x", "name": "x" },
+      { "sourceName": "umap_y", "name": "y" }
+    ]
   },
+
   {
-    "type": "annotation",
-    "sourcePath": "./data/anno_sarcoma.tsv",
-    "stageTable": "stageSarcoma",
-    "organSystem": "boneAndSoftTissue",
-    "embeddings": ["umap", "densmap"]
+    "sourcePath": "./data/anno_neuro.csv",
+    "table": "sampleCoordinates",
+    "description": "semisupervised_umap coordinates for organSystem: centralNervousSystem",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "centralNervousSystem" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "semisupervisedUmap" },
+      { "sourceName": "semisupervised_umap_x", "name": "x" },
+      { "sourceName": "semisupervised_umap_y", "name": "y" }
+    ]
   },
+
   {
-    "type": "annotation",
-    "sourcePath": "./data/anno_hemepath.tsv",
-    "stageTable": "stageHemepath",
-    "organSystem": "hematopoietic",
-    "embeddings": ["umap", "densmap"]
+    "sourcePath": "./data/anno_neuro.csv",
+    "table": "sampleCoordinates",
+    "description": "densmap coordinates for organSystem: centralNervousSystem",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "centralNervousSystem" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
+      { "sourceName": "densmap_x", "name": "x" },
+      { "sourceName": "densmap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_sarcoma.csv",
+    "table": "sampleCoordinates",
+    "description": "umap coordinates for organSystem: boneAndSoftTissue",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "boneAndSoftTissue" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
+      { "sourceName": "umap_x", "name": "x" },
+      { "sourceName": "umap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_sarcoma.csv",
+    "table": "sampleCoordinates",
+    "description": "semisupervised_umap coordinates for organSystem: boneAndSoftTissue",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "boneAndSoftTissue" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "semisupervisedUmap" },
+      { "sourceName": "semisupervised_umap_x", "name": "x" },
+      { "sourceName": "semisupervised_umap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_sarcoma.csv",
+    "table": "sampleCoordinates",
+    "description": "densmap coordinates for organSystem: boneAndSoftTissue",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "boneAndSoftTissue" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
+      { "sourceName": "densmap_x", "name": "x" },
+      { "sourceName": "densmap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_hemepath.csv",
+    "table": "sampleCoordinates",
+    "description": "umap coordinates for organSystem: hematopoietic",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "hematopoietic" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
+      { "sourceName": "umap_x", "name": "x" },
+      { "sourceName": "umap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_hemepath.csv",
+    "table": "sampleCoordinates",
+    "description": "semisupervised_umap coordinates for organSystem: hematopoietic",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "hematopoietic" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "semisupervisedUmap" },
+      { "sourceName": "semisupervised_umap_x", "name": "x" },
+      { "sourceName": "semisupervised_umap_y", "name": "y" }
+    ]
+  },
+
+  {
+    "sourcePath": "./data/anno_hemepath.csv",
+    "table": "sampleCoordinates",
+    "description": "densmap coordinates for organSystem: hematopoietic",
+    "columns": [
+      { "sourceName": "order", "name": "sampleId" },
+      { "sourceName": null, "name": "organSystem", "defaultValue": "hematopoietic" },
+      { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
+      { "sourceName": "densmap_x", "name": "x" },
+      { "sourceName": "densmap_y", "name": "y" }
+    ]
   }
 ]
