@@ -24,11 +24,7 @@ survival <- function(args, paths) {
   require(survival)
   require(survminer)
 
-  # convert data to numeric
-  args$os_months = as.numeric(unlist(args$os_months))
-  args$os_status = as.numeric(unlist(args$os_status))
-
-  fit = survfit(Surv(os_months, os_status) ~ 1, data = args)
+  fit = survfit(Surv(os_months, os_status) ~ group, data = args)
   plot = ggsurvplot(fit, data = args,
     censor.size = 1, size = 1,
     conf.int = FALSE,
