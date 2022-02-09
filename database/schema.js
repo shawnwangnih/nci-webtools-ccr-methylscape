@@ -20,6 +20,8 @@ export async function createSchema(database) {
     table.string("primaryCategory");
     table.string("primaryStudy");
     table.string("centerMethylation");
+    table.string("matchedCases");
+    table.string("v11b6");
     table.string("nihLabels");
     table.string("nciMetric");
     table.double("age");

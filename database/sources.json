@@ -10,6 +10,8 @@
       { "sourceName": "Primary_category", "name": "primaryCategory" },
       { "sourceName": "Primary_study", "name": "primaryStudy" },
       { "sourceName": "Center_methy", "name": "centerMethylation" },
+      { "sourceName": "matched_cases", "name": "matchedCases" },
+      { "sourceName": "v11b6", "name": "v11b6" },
       { "sourceName": "NIH_labels", "name": "nihLabels" },
       { "sourceName": "NCI_METRIC", "name": "nciMetric" },
       { "sourceName": "Age", "name": "age" },
