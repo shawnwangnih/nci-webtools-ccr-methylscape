@@ -1,5 +1,19 @@
 import { createReadStream } from "fs";
 import { parse } from "csv-parse";
+import knex from "knex";
+
+export function createConnection(args) {
+    return knex({
+        client: "pg",
+        connection: {
+            host: args.host || "localhost",
+            port: args.port || 5432,
+            user: args.user || "methylscape",
+            password: args.password || "methylscape",
+            database: args.database || "methylscape",
+        },
+    });
+}
 
 export function createCsvRecordIterator(filename, columns) {
     const parseOptions = {
@@ -9,11 +23,11 @@ export function createCsvRecordIterator(filename, columns) {
         on_record: createRecordParser(columns),
     };
 
-    return createReadStream(sourcePath)
+    return createReadStream(filename)
         .pipe(parse(parseOptions));
 }
 
-export async function importTable(iterable, tableName) {
+export async function importTable(connection, iterable, tableName) {
     let index = 0;
     for await (const record of iterable) {
         try {
