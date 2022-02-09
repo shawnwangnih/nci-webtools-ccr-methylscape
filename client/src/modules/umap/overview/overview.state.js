@@ -16,36 +16,19 @@ export const overviewState = selector({
 
     if (!organSystem || !embedding) return defaultOverviewState;
 
-    const { records: data } = await query('api/query', {
-      table: 'annotation',
-      _organSystem: organSystem,
-      _embedding: embedding,
-      limit: -1,
-      columns: [
-        'organSystem',
-        'embedding',
-        'class',
-        'label',
-        'x',
-        'y',
-        'study',
-        'institution',
-        'category',
-        'matched',
-      ],
-    });
+    let data = await query('api/samples', { embedding, organSystem });
 
-    const samples = data.filter((v) => v.category && v.matched != 'Duplicate');
+    const samples = data.filter((v) => v.primaryCategory && v.matchedCases != 'Duplicate');
     const studies = [
       ...new Set(
-        samples.filter(({ study }) => study).map(({ study }) => study)
+        samples.filter(({ primaryStudy }) => primaryStudy).map(({ primaryStudy }) => primaryStudy)
       ),
     ].length;
     const institutions = [
       ...new Set(
         samples
-          .filter(({ institution }) => institution)
-          .map(({ institution }) => institution)
+          .filter(({ centerMethylation }) => centerMethylation)
+          .map(({ centerMethylation }) => centerMethylation)
       ),
     ].length;
 
@@ -59,7 +42,7 @@ export const overviewState = selector({
 
     const catCount = Object.fromEntries(
       Object.entries(
-        samples.map(({ category }) => category).reduce(reducer, {})
+        samples.map(({ primaryCategory }) => primaryCategory).reduce(reducer, {})
       ).sort(([, a], [, b]) => a - b)
     );
     const plotData = [

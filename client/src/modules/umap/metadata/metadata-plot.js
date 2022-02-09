@@ -19,7 +19,7 @@ export default function MetadataPlot({ onSelect }) {
       config={cloneDeep(config)}
       onClick={(e) => {
         const point = e.points[0];
-        setCnState({ ...cnState, idatFile: point.customdata.idatFile });
+        setCnState({ ...cnState, idatFilename: point.customdata.idatFilename });
       }}
       onSelected={(e) => setSelectedPoints({ points: e.points })}
       useResizeHandler

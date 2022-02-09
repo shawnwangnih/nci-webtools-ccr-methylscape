@@ -15,7 +15,7 @@ export const formState = atom({
 });
 
 export const defaultCopyNumberState = {
-  idatFile: '',
+  idatFilename: '',
 };
 
 export const copyNumberState = atom({
@@ -32,7 +32,7 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
-    const { idatFile } = get(copyNumberState);
+    const { idatFilename } = get(copyNumberState);
     const { annotation: annoToggle } = get(formState);
 
     try {
@@ -43,11 +43,11 @@ export const plotState = selector({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: idatFile,
+          id: idatFilename,
         }),
       };
-      // temporary - use static data if idatfile is unavailable
-      const { bin, seg } = idatFile
+      // temporary - use static data if idatFilename is unavailable
+      const { bin, seg } = idatFilename
         ? await (await fetch('api/getCopyNumber', options)).json()
         : { bin: binStatic, seg: segStatic };
 
@@ -196,7 +196,7 @@ export const plotState = selector({
       const layout = {
         showlegend: false,
         dragmode: 'pan',
-        uirevision: idatFile + annoToggle,
+        uirevision: idatFilename + annoToggle,
         xaxis: {
           title: 'Chromosome',
           showgrid: false,

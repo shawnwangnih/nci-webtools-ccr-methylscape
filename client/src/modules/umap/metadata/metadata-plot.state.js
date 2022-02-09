@@ -31,44 +31,27 @@ export const plotState = selector({
 
     if (!organSystem || !embedding) return defaultPlotState;
 
-    let { records: data } = await query('api/query', {
-      table: 'annotation',
-      _organSystem: organSystem,
-      _embedding: embedding,
-      limit: -1,
-      columns: [
-        'organSystem',
-        'embedding',
-        'class',
-        'label',
-        'x',
-        'y',
-        'idatFile',
-        'sample',
-        'os_months',
-        'os_status',
-      ],
-    });
+    let data = await query('api/samples', { embedding, organSystem });
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());
     // if (!showAnnotations && searchQueries.length) {
     //   data = data.filter(
-    //     ({ sample, idatFile }) =>
+    //     ({ sample, idatFilename }) =>
     //       (sample &&
     //         searchQueries.some((query) =>
     //           sample.toLowerCase().includes(query)
     //         )) ||
-    //       (idatFile &&
+    //       (idatFilename &&
     //         searchQueries.some((query) =>
-    //           idatFile.toLowerCase().includes(query)
+    //           idatFilename.toLowerCase().includes(query)
     //         ))
     //   );
     // }
 
     const useWebGl = data.length > 1000;
-    const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.class));
-    const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.label));
+    const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
+    const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
 
     // use mean x/y values for annotation positions
     const labelAnnotations = dataGroupedByLabel
@@ -97,18 +80,18 @@ export const plotState = selector({
     const sampleAnnotations = searchQueries.length
       ? data
           .filter(
-            ({ sample, idatFile }) =>
+            ({ sample, idatFilename }) =>
               (sample &&
                 searchQueries.some((query) =>
                   sample.toLowerCase().includes(query)
                 )) ||
-              (idatFile &&
+              (idatFilename &&
                 searchQueries.some((query) =>
-                  idatFile.toLowerCase().includes(query)
+                idatFilename.toLowerCase().includes(query)
                 ))
           )
           .map((e) => ({
-            text: e.sample || e.idatFile,
+            text: e.sample || e.idatFilename,
             x: e.x,
             y: e.y,
             // showarrow: false,
@@ -132,9 +115,9 @@ export const plotState = selector({
           sample: e.sample || '',
           class: e.class || '',
           label: e.label || '',
-          idatFile: e.idatFile,
-          os_months: e.os_months ? Math.round(e.os_months) : null,
-          os_status: e.os_status,
+          idatFilename: e.idatFilename,
+          os_months: e.overallSurvivalMonths ? Math.round(e.overallSurvivalMonths) : null,
+          os_status: e.overallSurvivalStatus,
         })),
         mode: 'markers',
         hovertemplate: 'Sample: %{customdata.sample}<extra></extra>',
@@ -144,7 +127,7 @@ export const plotState = selector({
         },
       }));
 
-    // try using webgl to display calss annotations to improve performance
+    // try using webgl to display class annotations to improve performance
     const classAnnotationTrace = dataGroupedByClass
       .filter(
         ([name, value]) => !['null', 'undefined', ''].includes(String(name))
@@ -185,10 +168,10 @@ export const plotState = selector({
     const layout = {
       title: `${plotTitle(organSystem)} (n=${data.length})`,
       xaxis: {
-        title: `${embedding}_x`,
+        title: `${embedding} x`,
       },
       yaxis: {
-        title: `${embedding}_y`,
+        title: `${embedding} y`,
       },
       annotations: showAnnotations
         ? [
