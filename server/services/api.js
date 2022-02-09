@@ -4,15 +4,13 @@ const sqlite = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 const config = require('../config');
-const { getSchema, query } = require('./query');
+const { getSchema, query, getSamples } = require('./query');
 const { scanTable, getFile, getKey } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r } = require('./R/r');
 const Papa = require('papaparse');
 
 const apiRouter = express.Router();
-const database = new sqlite(config.database);
-const schema = getSchema(database);
 
 // parse json requests
 apiRouter.use(express.json());
@@ -38,24 +36,15 @@ apiRouter.use(
 
 // healthcheck route
 apiRouter.get('/ping', (request, response) => {
-  response.json(1 === database.prepare('select 1').pluck().get());
+  response.json(true);
 });
 
-// retrieves schema for all tables
-apiRouter.get('/schema', (request, response) => {
-  response.json(schema);
-});
-
-// handle query submission
-apiRouter.get('/query', (request, response) => {
-  const { logger } = request.app.locals;
-  const results = query(database, request.query);
+apiRouter.get('/samples', withAsync(async (request, response) => {
+  const { connection } = request.app.locals;
+  const { embedding, organSystem } = request.query;
+  const results = await getSamples(connection, { embedding, organSystem });
   response.json(results);
-  logger.info({
-    count: results.records.length,
-    time: new Date().getTime() - request.startTime,
-  });
-});
+}));
 
 // get entire dynamoDB table
 apiRouter.get(

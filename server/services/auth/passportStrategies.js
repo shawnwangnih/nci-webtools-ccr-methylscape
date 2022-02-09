@@ -1,7 +1,7 @@
-const { Issuer, Strategy, generators } = require("openid-client");
+const { Issuer, Strategy, generators } = require('openid-client');
 const { codeVerifier, codeChallenge, nonce } = generators;
 
-async function createPkceStrategy({baseUrl, clientId, redirectUris, params}) {
+async function createPkceStrategy({ baseUrl, clientId, redirectUris, params }) {
   const { Client } = await Issuer.discover(baseUrl);
 
   const client = new Client({
@@ -11,20 +11,17 @@ async function createPkceStrategy({baseUrl, clientId, redirectUris, params}) {
     token_endpoint_auth_method: 'none',
   });
 
-  params = { 
+  params = {
     code_challenge: codeChallenge(codeVerifier()),
     code_challenge_method: 'S256',
     nonce: nonce(),
-    ...params
+    ...params,
   };
 
-  return new Strategy(
-    {client, params},
-    (tokenSet, done) => {
-      console.log('tokenSet', tokenSet);
-      done(null, tokenSet.claims())
-    }
-  );
+  return new Strategy({ client, params }, (tokenSet, done) => {
+    console.log('tokenSet', tokenSet);
+    done(null, tokenSet.claims());
+  });
 }
 
 async function createLoginGovStrategy() {
@@ -34,8 +31,8 @@ async function createLoginGovStrategy() {
     redirectUris: [process.env.LOGIN_GOV_REDIRECT_URI],
     params: {
       scope: 'openid email',
-      acr_values: process.env.LOGIN_GOV_ACR_VALUES
-    }
+      acr_values: process.env.LOGIN_GOV_ACR_VALUES,
+    },
   });
 }
 
