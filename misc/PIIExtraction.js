@@ -1,14 +1,14 @@
-const fs = require('fs');
-let text = '';
+const fs = require("fs");
+let text = "";
 //This filters everything that I think is pii
 const listToFilter = [
-  'age',
-  'patientName',
-  'dateOfBirth',
-  'orderingPhysicianFacilityName',
-  'orderingPhysicianName',
-  'pathologistName',
-  'orderingPhysicianClient',
+  "age",
+  "patientName",
+  "dateOfBirth",
+  "orderingPhysicianFacilityName",
+  "orderingPhysicianName",
+  "pathologistName",
+  "orderingPhysicianClient",
 ];
 
 function recurse(directory) {
@@ -16,22 +16,20 @@ function recurse(directory) {
     files.forEach(function (file) {
       fs.stat(file, function (err, stat) {
         if (stat && stat.isDirectory()) {
-          recurse(directory + '/' + file);
-          console.log('folder: ' + file);
+          recurse(directory + "/" + file);
+          console.log("folder: " + file);
         } else {
-          if (file.indexOf('xml_report.txt') != -1) {
-            fs.readFile(directory + '/' + file, 'utf-8', (err, data) => {
+          if (file.indexOf("xml_report.txt") != -1) {
+            fs.readFile(directory + "/" + file, "utf-8", (err, data) => {
               if (err) throw err;
               text = data;
               for (let i = 0; i < listToFilter.length; i++) {
                 var tag = listToFilter[i];
-                var startIndex = text.indexOf('<' + tag + '>');
-                var endIndex = text.indexOf('</' + tag + '>');
-                text =
-                  text.substring(0, startIndex + tag.length + 2) +
-                  text.substring(endIndex);
+                var startIndex = text.indexOf("<" + tag + ">");
+                var endIndex = text.indexOf("</" + tag + ">");
+                text = text.substring(0, startIndex + tag.length + 2) + text.substring(endIndex);
               }
-              fs.writeFileSync(directory + '/' + file, text);
+              fs.writeFileSync(directory + "/" + file, text);
               console.log(file);
             });
           }
@@ -40,7 +38,7 @@ function recurse(directory) {
     });
   });
 }
-recurse('.');
+recurse(".");
 
 // Instructions
 
