@@ -17,9 +17,12 @@ export default function TableTabs() {
   }
 
   function addTab() {
-    const points = umapPoints.points;
-    if (points.length < 3)
-      setUmapPoints({ ...umapPoints, points: [...points, []] });
+    let points = umapPoints.points.slice();
+    if (points.length < 3) {
+      points = [...points, []];
+      setUmapPoints({ ...umapPoints, points });
+      setForm({ group: points.length - 1 });
+    }
   }
 
   function removeTab(index) {
@@ -27,6 +30,7 @@ export default function TableTabs() {
     if (points.length > 1) {
       points.splice(index, 1);
       setUmapPoints({ ...umapPoints, points });
+      setForm({ group: points.length - 1 });
     }
   }
 
