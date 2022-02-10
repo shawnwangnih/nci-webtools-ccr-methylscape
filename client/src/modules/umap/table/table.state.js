@@ -3,7 +3,7 @@ import axios from 'axios';
 import { selectedPoints } from '../metadata/metadata-plot.state';
 
 export const defaultTableForm = {
-  selectedGroup: 'group_1',
+  group: 0,
 };
 
 export const tableForm = atom({
@@ -16,19 +16,22 @@ export const tableData = selector({
   get: ({ get }) => {
     const { points } = get(selectedPoints);
 
-    if (Object.values(points).every((v) => !v.length)) return [];
-
-    const tables = Object.entries(points).map(([group, data]) => ({
-      cols: data.length
-        ? Object.keys(data[0].customdata).map((e) => ({
-            id: e,
-            accessor: e,
-            Header: e,
-          }))
-        : [],
-      data: data.map((e) => e.customdata),
-      name: group,
-    }));
+    const tables = points.reduce(
+      (prev, data, i) => ({
+        ...prev,
+        [i]: {
+          cols: data.length
+            ? Object.keys(data[0].customdata).map((e) => ({
+                id: e,
+                accessor: e,
+                Header: e,
+              }))
+            : [],
+          data: data.length ? data.map((e) => e.customdata) : [],
+        },
+      }),
+      {}
+    );
 
     return tables;
   },

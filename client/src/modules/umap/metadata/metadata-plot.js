@@ -20,7 +20,7 @@ export default function MetadataPlot({ onSelect }) {
   const selectedGroup = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        const state = snapshot.getLoadable(tableForm).contents.selectedGroup;
+        const state = snapshot.getLoadable(tableForm).contents.group;
         return state;
       },
     []
@@ -28,10 +28,14 @@ export default function MetadataPlot({ onSelect }) {
 
   function handleSelect(e) {
     if (e) {
-      setSelectedPoints((state) => ({
-        ...state,
-        points: { ...state.points, [selectedGroup()]: e.points },
-      }));
+      setSelectedPoints((state) => {
+        let points = state.points.slice();
+        points[selectedGroup()] = e.points;
+        return {
+          ...state,
+          points,
+        };
+      });
     }
   }
 
