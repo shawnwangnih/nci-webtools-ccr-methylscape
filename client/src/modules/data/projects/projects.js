@@ -77,7 +77,7 @@ export default function Projects() {
               data={tableData}
               columns={columns}
               options={options}
-              useHooks={{ rowSelectRadio: true }}
+              customOptions={{ rowSelectRadio: true }}
             />
           )}
         </Col>

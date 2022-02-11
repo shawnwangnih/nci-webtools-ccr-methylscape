@@ -1,14 +1,52 @@
-import { useRecoilValue, useRecoilState } from 'recoil';
+import {
+  useRecoilValue,
+  useSetRecoilState,
+  useRecoilCallback,
+  useRecoilState,
+} from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
-import { plotState } from './metadata-plot.state';
+import { plotState, selectedPoints } from './metadata-plot.state';
 import { copyNumberState } from '../copyNumber/copyNumber.state';
-import { selectedPoints } from '../table/table.state';
+import { tableForm } from '../table/table.state';
 import Plot from 'react-plotly.js';
 
 export default function MetadataPlot({ onSelect }) {
   let { data, layout, config } = useRecoilValue(plotState);
-  const [cnState, setCnState] = useRecoilState(copyNumberState);
+  const setCnState = useSetRecoilState(copyNumberState);
+  // const setSelectedPoints = useSetRecoilState(selectedPoints);
   const [_, setSelectedPoints] = useRecoilState(selectedPoints);
+  // const { selectedGroup } = useRecoilValue(tableForm);
+
+  const selectedGroup = useRecoilCallback(
+    ({ snapshot }) =>
+      () => {
+        const state = snapshot.getLoadable(tableForm).contents.group;
+        return state;
+      },
+    []
+  );
+
+  function handleSelect(e) {
+    if (e) {
+      setSelectedPoints((state) => {
+        let points = state.points.slice();
+        points[selectedGroup()] = e.points;
+        return {
+          ...state,
+          points,
+        };
+      });
+    }
+  }
+
+  function handleClick(e) {
+    if (e) {
+      setCnState((state) => ({
+        ...state,
+        idatFile: e.points[0].customdata.idatFile,
+      }));
+    }
+  }
 
   return (
     <Plot
@@ -17,11 +55,8 @@ export default function MetadataPlot({ onSelect }) {
       style={{ height: '800px' }}
       layout={cloneDeep(layout)}
       config={cloneDeep(config)}
-      onClick={(e) => {
-        const point = e.points[0];
-        setCnState({ ...cnState, idatFilename: point.customdata.idatFilename });
-      }}
-      onSelected={(e) => setSelectedPoints({ points: e.points })}
+      onClick={handleClick}
+      onSelected={handleSelect}
       useResizeHandler
     />
   );

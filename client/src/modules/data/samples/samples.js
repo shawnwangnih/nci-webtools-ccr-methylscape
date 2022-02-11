@@ -248,7 +248,7 @@ export default function Samples() {
               data={tableData}
               columns={columns}
               options={options}
-              useHooks={{ expanded: true }}
+              customOptions={{ expanded: true }}
               renderRowSubComponent={renderRowSubComponent}
             />
           )}

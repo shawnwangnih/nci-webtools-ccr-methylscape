@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   Dropdown,
+  Button,
 } from 'react-bootstrap';
 import {
   useTable,
@@ -17,6 +18,7 @@ import {
   useExpanded,
 } from 'react-table';
 import { ChevronUp, ChevronDown, ChevronExpand } from 'react-bootstrap-icons';
+import Papa from 'papaparse';
 
 export function TextFilter({
   column: { filterValue, setFilter, placeholder, aria },
@@ -69,13 +71,30 @@ const IndeterminateRadio = forwardRef(({ indeterminate, ...rest }, ref) => {
   return <input type="radio" ref={resolvedRef} {...rest} />;
 });
 
+function handleSaveCSV(data, filename) {
+  const csv = Papa.unparse(data);
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  // Create an anchor element and dispatch a click event on it
+  // to trigger a download
+  const a = document.createElement('a');
+  a.download = filename;
+  a.href = window.URL.createObjectURL(blob);
+  const clickEvt = new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+  });
+  a.dispatchEvent(clickEvt);
+  a.remove();
+}
+
 export default function Table({
   columns,
   data,
   options = {},
-  useHooks = {},
+  customOptions = {},
   renderRowSubComponent = false,
-  hiddenColumns,
 }) {
   const {
     getTableProps,
@@ -109,11 +128,11 @@ export default function Table({
     },
     useFilters,
     useSortBy,
-    useHooks.expanded ? useExpanded : () => {},
+    customOptions.expanded ? useExpanded : () => {},
     usePagination,
-    useHooks.rowSelectRadio ? useRowSelect : () => {},
+    customOptions.rowSelectRadio ? useRowSelect : () => {},
     (hooks) => {
-      if (useHooks.rowSelectRadio) {
+      if (customOptions.rowSelectRadio) {
         hooks.visibleColumns.push((columns) => [
           {
             id: 'selection',
@@ -134,9 +153,19 @@ export default function Table({
   );
   return (
     <>
-      <Row>
-        <Col>
-          {useHooks.hideColumns && (
+      <Row className="justify-content-end">
+        {customOptions.download && (
+          <Col sm="auto">
+            <Button
+              variant="link"
+              onClick={() => handleSaveCSV(data, customOptions.download)}
+            >
+              Save CSV
+            </Button>
+          </Col>
+        )}
+        <Col sm="auto">
+          {customOptions.hideColumns && (
             <Dropdown>
               <Dropdown.Toggle
                 variant="secondary"
@@ -209,11 +238,11 @@ export default function Table({
                 <Fragment key={row.getRowProps().key}>
                   <tr
                     onClick={() => {
-                      if (useHooks.rowSelectRadio) {
+                      if (customOptions.rowSelectRadio) {
                         const { toggleRowSelected } = row;
                         toggleRowSelected(true);
                       }
-                      if (useHooks.expanded) {
+                      if (customOptions.expanded) {
                         const { toggleRowExpanded, isExpanded } = row;
                         toggleRowExpanded(!isExpanded);
                       }

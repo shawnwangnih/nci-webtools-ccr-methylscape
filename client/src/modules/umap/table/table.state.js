@@ -1,54 +1,91 @@
 import { atom, selector } from 'recoil';
 import axios from 'axios';
+import { selectedPoints } from '../metadata/metadata-plot.state';
 
-export const defaultSelectedPoints = {
-  points: [],
+export const defaultTableForm = {
+  group: 0,
 };
 
-export const selectedPoints = atom({
-  key: 'umapSelectedPoints',
-  default: defaultSelectedPoints,
+export const tableForm = atom({
+  key: 'umapTableForm',
+  default: defaultTableForm,
 });
 
 export const tableData = selector({
   key: 'umapSelectedTable',
   get: ({ get }) => {
     const { points } = get(selectedPoints);
-    if (!points.length) return { data: [], cols: [] };
 
-    const cols = points.length
-      ? Object.keys(points[0].customdata).map((e) => ({
-          id: e,
-          accessor: e,
-          Header: e,
-        }))
-      : [];
+    const tables = points.reduce(
+      (prev, data, i) => ({
+        ...prev,
+        [i]: {
+          cols: data.length
+            ? Object.keys(data[0].customdata).map((e) => ({
+                id: e,
+                accessor: e,
+                Header: e,
+              }))
+            : [],
+          data: data.length ? data.map((e) => e.customdata) : [],
+        },
+      }),
+      {}
+    );
 
-    const data = points.map((e) => e.customdata);
+    return tables;
+  },
+});
 
-    return { data, cols };
+const selectedPoints_intermediate = selector({
+  key: 'selectedPoints_intermediate',
+  get: ({ get }) => {
+    const { points } = get(selectedPoints);
+    const filterPoints = points.filter((v) => v.length);
+
+    if (!filterPoints.length) return '';
+
+    const survivalData = filterPoints
+      .map((data, i) => ({
+        [parseInt(i) + 1]: data
+          .map((e) => e.customdata)
+          .filter(
+            ({ os_months, os_status }) =>
+              os_months && (os_status || os_status == 0)
+          )
+          .map(({ os_months, os_status }) => ({ os_months, os_status })),
+      }))
+      .reduce((prev, curr) => {
+        const groupName = Object.keys(curr)[0];
+        return [
+          ...prev,
+          ...curr[groupName].map((d) =>
+            JSON.stringify({
+              group: groupName,
+              os_months: d.os_months,
+              os_status: d.os_status,
+            })
+          ),
+        ];
+      }, []);
+
+    return JSON.stringify(survivalData);
   },
 });
 
 export const survivalPlot = selector({
   key: 'survivalPlot',
   get: async ({ get }) => {
-    const { points } = get(selectedPoints);
+    const data = get(selectedPoints_intermediate);
 
-    if (!points.length) return '';
+    if (!data.length) return '';
 
-    const survivalData = points
-      .map((e) => e.customdata)
-      .filter(
-        ({ os_months, os_status }) => os_months && (os_status || os_status == 0)
-      );
-    const os_months = survivalData.map(({ os_months }) => os_months);
-    const os_status = survivalData.map(({ os_status }) => os_status);
+    const parseData = JSON.parse(data).map(JSON.parse);
 
     try {
       const response = await axios.post('api/r', {
         fn: 'survival',
-        args: { os_months, os_status },
+        args: parseData,
       });
 
       return response.data.output;
