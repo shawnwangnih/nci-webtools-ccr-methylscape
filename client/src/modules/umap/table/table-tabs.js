@@ -50,7 +50,16 @@ export default function TableTabs() {
       >
         Reset
       </Button>
-
+      {formState.group != 0 && (
+        <Button
+          size="sm"
+          variant="danger"
+          onClick={() => removeTab(formState.group)}
+          className="ms-3"
+        >
+          - Group
+        </Button>
+      )}
       <Tabs
         id="controlled-tab-example"
         activeKey={formState.group}
@@ -66,18 +75,6 @@ export default function TableTabs() {
               eventKey={`${i}`}
               title={`Group ${i + 1}`}
             >
-              {i > 0 && (
-                <div className="d-flex">
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => removeTab(i)}
-                    className="ms-auto mb-3"
-                  >
-                    - Group
-                  </Button>
-                </div>
-              )}
               {data.length ? (
                 <ReactTable
                   data={data}
