@@ -61,7 +61,7 @@ const selectedPoints_intermediate = selector({
           ...prev,
           ...curr[groupName].map((d) =>
             JSON.stringify({
-              group: parseInt(groupName) + 1,
+              group: groupName,
               os_months: d.os_months,
               os_status: d.os_status,
             })
