@@ -41,26 +41,11 @@ const selectedPoints_intermediate = selector({
   key: 'selectedPoints_intermediate',
   get: ({ get }) => {
     const { points } = get(selectedPoints);
-    const data = points.filter((v) => v.length).map((v) => JSON.stringify(v));
+    const filterPoints = points.filter((v) => v.length);
 
-    return data;
-  },
-});
+    if (!filterPoints.length) return '';
 
-export const survivalPlot = selector({
-  key: 'survivalPlot',
-  get: async ({ get }) => {
-    // const points = get(selectedPoints_intermediate);
-
-    // const filterPoints = Object.fromEntries(
-    //   Object.entries(points).filter(([group, points]) => points.length)
-    // );
-    // const groups = Object.keys(filterPoints);
-    const { points } = get(selectedPoints);
-
-    if (!points.length) return '';
-
-    const survivalData = points
+    const survivalData = filterPoints
       .map((data, i) => ({
         [parseInt(i) + 1]: data
           .map((e) => e.customdata)
@@ -74,18 +59,56 @@ export const survivalPlot = selector({
         const groupName = Object.keys(curr)[0];
         return [
           ...prev,
-          ...curr[groupName].map((d) => ({
-            group: parseInt(groupName) + 1,
-            os_months: d.os_months,
-            os_status: d.os_status,
-          })),
+          ...curr[groupName].map((d) =>
+            JSON.stringify({
+              group: parseInt(groupName) + 1,
+              os_months: d.os_months,
+              os_status: d.os_status,
+            })
+          ),
         ];
       }, []);
+
+    return JSON.stringify(survivalData);
+  },
+});
+
+export const survivalPlot = selector({
+  key: 'survivalPlot',
+  get: async ({ get }) => {
+    const data = get(selectedPoints_intermediate);
+
+    // const { points } = get(selectedPoints);
+
+    if (!data.length) return '';
+
+    // const survivalData = points
+    //   .map((data, i) => ({
+    //     [parseInt(i) + 1]: data
+    //       .map((e) => e.customdata)
+    //       .filter(
+    //         ({ os_months, os_status }) =>
+    //           os_months && (os_status || os_status == 0)
+    //       )
+    //       .map(({ os_months, os_status }) => ({ os_months, os_status })),
+    //   }))
+    //   .reduce((prev, curr) => {
+    //     const groupName = Object.keys(curr)[0];
+    //     return [
+    //       ...prev,
+    //       ...curr[groupName].map((d) => ({
+    //         group: parseInt(groupName) + 1,
+    //         os_months: d.os_months,
+    //         os_status: d.os_status,
+    //       })),
+    //     ];
+    //   }, []);
+    const parseData = JSON.parse(data).map(JSON.parse);
 
     try {
       const response = await axios.post('api/r', {
         fn: 'survival',
-        args: survivalData,
+        args: parseData,
       });
 
       return response.data.output;
