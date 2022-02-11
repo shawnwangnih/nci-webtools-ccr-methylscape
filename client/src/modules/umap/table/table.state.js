@@ -78,31 +78,8 @@ export const survivalPlot = selector({
   get: async ({ get }) => {
     const data = get(selectedPoints_intermediate);
 
-    // const { points } = get(selectedPoints);
-
     if (!data.length) return '';
 
-    // const survivalData = points
-    //   .map((data, i) => ({
-    //     [parseInt(i) + 1]: data
-    //       .map((e) => e.customdata)
-    //       .filter(
-    //         ({ os_months, os_status }) =>
-    //           os_months && (os_status || os_status == 0)
-    //       )
-    //       .map(({ os_months, os_status }) => ({ os_months, os_status })),
-    //   }))
-    //   .reduce((prev, curr) => {
-    //     const groupName = Object.keys(curr)[0];
-    //     return [
-    //       ...prev,
-    //       ...curr[groupName].map((d) => ({
-    //         group: parseInt(groupName) + 1,
-    //         os_months: d.os_months,
-    //         os_status: d.os_status,
-    //       })),
-    //     ];
-    //   }, []);
     const parseData = JSON.parse(data).map(JSON.parse);
 
     try {

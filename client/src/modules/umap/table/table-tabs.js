@@ -88,10 +88,12 @@ export default function TableTabs() {
                   }}
                 />
               ) : (
-                <p style={{ minHeight: '100px' }}>
-                  Use Box or Lasso Select in the UMAP plot to view details for
-                  multiple samples.
-                </p>
+                <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
+                  <p className="mx-auto my-auto">
+                    Use Box or Lasso Select in the UMAP plot to view details for
+                    multiple samples.
+                  </p>
+                </div>
               )}
             </Tab>
           );
