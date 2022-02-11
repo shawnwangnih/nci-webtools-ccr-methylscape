@@ -61,7 +61,11 @@ export default function TableTabs() {
           const { data, cols } = tables[i];
 
           return (
-            <Tab eventKey={`${i}`} title={`Group ${i + 1}`}>
+            <Tab
+              key={`table_tab_${i}`}
+              eventKey={`${i}`}
+              title={`Group ${i + 1}`}
+            >
               {i > 0 && (
                 <div className="d-flex">
                   <Button
@@ -78,10 +82,13 @@ export default function TableTabs() {
                 <ReactTable
                   data={data}
                   columns={cols}
-                  useHooks={{ hideColumns: true }}
+                  customOptions={{
+                    hideColumns: true,
+                    download: `Group_${i + 1}_data.csv`,
+                  }}
                 />
               ) : (
-                <p>
+                <p style={{ minHeight: '100px' }}>
                   Use Box or Lasso Select in the UMAP plot to view details for
                   multiple samples.
                 </p>

@@ -37,20 +37,32 @@ export const tableData = selector({
   },
 });
 
+const selectedPoints_intermediate = selector({
+  key: 'selectedPoints_intermediate',
+  get: ({ get }) => {
+    const { points } = get(selectedPoints);
+    const data = points.filter((v) => v.length).map((v) => JSON.stringify(v));
+
+    return data;
+  },
+});
+
 export const survivalPlot = selector({
   key: 'survivalPlot',
   get: async ({ get }) => {
+    // const points = get(selectedPoints_intermediate);
+
+    // const filterPoints = Object.fromEntries(
+    //   Object.entries(points).filter(([group, points]) => points.length)
+    // );
+    // const groups = Object.keys(filterPoints);
     const { points } = get(selectedPoints);
 
-    const filterPoints = Object.fromEntries(
-      Object.entries(points).filter(([group, points]) => points.length)
-    );
-    const groups = Object.keys(filterPoints);
-    if (!groups.length) return '';
+    if (!points.length) return '';
 
-    const survivalData = Object.entries(filterPoints)
-      .map(([group, points]) => ({
-        [group]: points
+    const survivalData = points
+      .map((data, i) => ({
+        [parseInt(i) + 1]: data
           .map((e) => e.customdata)
           .filter(
             ({ os_months, os_status }) =>
@@ -58,13 +70,12 @@ export const survivalPlot = selector({
           )
           .map(({ os_months, os_status }) => ({ os_months, os_status })),
       }))
-
       .reduce((prev, curr) => {
         const groupName = Object.keys(curr)[0];
         return [
           ...prev,
           ...curr[groupName].map((d) => ({
-            group: groupName,
+            group: parseInt(groupName) + 1,
             os_months: d.os_months,
             os_status: d.os_status,
           })),

@@ -18,7 +18,7 @@ export const formState = atom({
 });
 
 export const defaultSelectedPoints = {
-  points: [{}],
+  points: [[]],
 };
 
 export const selectedPoints = atom({
