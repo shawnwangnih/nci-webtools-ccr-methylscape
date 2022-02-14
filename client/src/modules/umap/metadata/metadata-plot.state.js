@@ -96,7 +96,7 @@ export const plotState = selector({
                 )) ||
               (idatFilename &&
                 searchQueries.some((query) =>
-                idatFilename.toLowerCase().includes(query)
+                  idatFilename.toLowerCase().includes(query)
                 ))
           )
           .map((e) => ({
@@ -120,14 +120,7 @@ export const plotState = selector({
         name,
         x: data.map((e) => e.x),
         y: data.map((e) => e.y),
-        customdata: data.map((e) => ({
-          sample: e.sample || '',
-          class: e.class || '',
-          label: e.label || '',
-          idatFilename: e.idatFilename,
-          os_months: e.overallSurvivalMonths ? Math.round(e.overallSurvivalMonths) : null,
-          os_status: e.overallSurvivalStatus,
-        })),
+        customdata: data,
         mode: 'markers',
         hovertemplate: 'Sample: %{customdata.sample}<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',

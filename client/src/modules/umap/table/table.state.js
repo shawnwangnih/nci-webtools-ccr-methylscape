@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import axios from 'axios';
 import { selectedPoints } from '../metadata/metadata-plot.state';
+import pick from 'lodash/pick';
 
 export const defaultTableForm = {
   group: 0,
@@ -16,18 +17,29 @@ export const tableData = selector({
   get: ({ get }) => {
     const { points } = get(selectedPoints);
 
+    const columns = [
+      'sample',
+      'age',
+      'sexPrediction',
+      // 'histology',
+      'subtypeOrPattern',
+      'WHO_2007_grade',
+      // 'molecular',
+      'locationGeneral',
+      'locationSpecific',
+      'sampling',
+      'samplingTreatment',
+      'idatFilename',
+    ];
+
     const tables = points.reduce(
       (prev, data, i) => ({
         ...prev,
         [i]: {
           cols: data.length
-            ? Object.keys(data[0].customdata).map((e) => ({
-                id: e,
-                accessor: e,
-                Header: e,
-              }))
+            ? columns.map((e) => ({ id: e, accessor: e, Header: e }))
             : [],
-          data: data.length ? data.map((e) => e.customdata) : [],
+          data: data.length ? data.map((e) => pick(e.customdata, columns)) : [],
         },
       }),
       {}
@@ -50,10 +62,14 @@ const selectedPoints_intermediate = selector({
         [parseInt(i) + 1]: data
           .map((e) => e.customdata)
           .filter(
-            ({ os_months, os_status }) =>
-              os_months && (os_status || os_status == 0)
+            ({ overallSurvivalMonths, overallSurvivalStatus }) =>
+              overallSurvivalMonths &&
+              (overallSurvivalStatus || overallSurvivalStatus == 0)
           )
-          .map(({ os_months, os_status }) => ({ os_months, os_status })),
+          .map(({ overallSurvivalMonths, overallSurvivalStatus }) => ({
+            overallSurvivalMonths,
+            overallSurvivalStatus,
+          })),
       }))
       .reduce((prev, curr) => {
         const groupName = Object.keys(curr)[0];
@@ -62,8 +78,8 @@ const selectedPoints_intermediate = selector({
           ...curr[groupName].map((d) =>
             JSON.stringify({
               group: groupName,
-              os_months: d.os_months,
-              os_status: d.os_status,
+              overallSurvivalMonths: d.overallSurvivalMonths,
+              overallSurvivalStatus: d.overallSurvivalStatus,
             })
           ),
         ];

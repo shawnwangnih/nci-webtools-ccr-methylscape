@@ -24,7 +24,7 @@ survival <- function(args, paths) {
   require(survival)
   require(survminer)
 
-  fit = survfit(Surv(os_months, os_status) ~ group, data = args)
+  fit = survfit(Surv(overallSurvivalMonths, overallSurvivalStatus) ~ group, data = args)
   plot = ggsurvplot(fit, data = args,
     censor.size = 1, size = 1,
     conf.int = FALSE,

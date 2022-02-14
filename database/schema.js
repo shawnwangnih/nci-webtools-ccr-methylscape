@@ -26,6 +26,7 @@ export async function createSchema(database) {
     table.string("nciMetric");
     table.double("age");
     table.string("sexCongruency");
+    table.string("sexPrediction");
     table.string("histology");
     table.string("locationGeneral");
     table.string("locationSpecific");
@@ -38,6 +39,9 @@ export async function createSchema(database) {
     table.string("fusionsOrTranslocationsReport");
     table.double("overallSurvivalMonths");
     table.integer("overallSurvivalStatus");
+    table.string('WHO_2007_grade');
+    table.string('sampling');
+    table.string('samplingTreatment');
   });
 
   /**

@@ -16,6 +16,7 @@
       { "sourceName": "NCI_METRIC", "name": "nciMetric" },
       { "sourceName": "Age", "name": "age" },
       { "sourceName": "Sex_congruency", "name": "sexCongruency" },
+      { "sourceName": "Sex_prediction_minfi", "name": "sexPrediction" },
       { "sourceName": null, "name": "histology", "defaultValue": null },
       { "sourceName": "Location_general", "name": "locationGeneral" },
       { "sourceName": "Location_specific", "name": "locationSpecific" },
@@ -27,7 +28,10 @@
       { "sourceName": "Variants_report", "name": "variantsReport" },
       { "sourceName": "Fusions/translocations_report", "name": "fusionsOrTranslocationsReport" },
       { "sourceName": "OS_months", "name": "overallSurvivalMonths" },
-      { "sourceName": "OS_status", "name": "overallSurvivalStatus" }
+      { "sourceName": "OS_status", "name": "overallSurvivalStatus" },
+      { "sourceName": "WHO_2007_grade", "name": "WHO_2007_grade" },
+      { "sourceName": "Sampling", "name": "sampling" },
+      { "sourceName": "Sampling_treatment", "name": "samplingTreatment" }
     ]
   },
 
