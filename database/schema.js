@@ -8,6 +8,7 @@ export async function createSchema(database) {
   await database.schema.dropTableIfExists("userRole");
   await database.schema.dropTableIfExists("role");
   await database.schema.dropTableIfExists("user");
+  await database.schema.dropTableIfExists("annotations");
 
   /**
    * Derived from Sample_sheet_master.xlsx
@@ -114,5 +115,21 @@ export async function createSchema(database) {
     table.string("resource");
     table.timestamp("createdAt").defaultTo(database.fn.now());
     table.timestamp("updatedAt").defaultTo(database.fn.now());
+  });
+
+  /**
+   * Creates the annotations table.
+   * Source: annotations.csv (infinium-methylationepic-v-1-0-b5-manifest-file.csv)
+   * Genome references for copy number
+   */
+  await database.schema.createTable("annotations", function (table) {
+    table.increments("id");
+    table.string("name");
+    table.string("chr");
+    table.integer("mapInfo");
+    table.text("UCSC_RefGene_Name");
+    table.text("GencodeBasicV12_NAME");
+    table.text("GencodeBasicV12_Accession");
+    table.string("Relation_to_UCSC_CpG_Island");
   });
 }

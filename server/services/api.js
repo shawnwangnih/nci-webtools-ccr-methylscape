@@ -39,12 +39,15 @@ apiRouter.get('/ping', (request, response) => {
   response.json(true);
 });
 
-apiRouter.get('/samples', withAsync(async (request, response) => {
-  const { connection } = request.app.locals;
-  const { embedding, organSystem } = request.query;
-  const results = await getSamples(connection, { embedding, organSystem });
-  response.json(results);
-}));
+apiRouter.get(
+  '/samples',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const { embedding, organSystem } = request.query;
+    const results = await getSamples(connection, { embedding, organSystem });
+    response.json(results);
+  })
+);
 
 // get entire dynamoDB table
 apiRouter.get(
@@ -94,12 +97,10 @@ apiRouter.post(
 
     const { id } = request.body;
 
-    const binFind = await getKey('methylscapeShiny/Bins/BAF.bins_ ' + id);
+    const binFind = await getKey('methylscape/Bins/BAF.bins_ ' + id);
     const binKey = binFind.Contents[0].Key;
 
-    const segFind = await getKey(
-      'methylscapeShiny/Segments/BAF.segments_ ' + id
-    );
+    const segFind = await getKey('methylscape/CNV/segments/' + id);
     const segKey = segFind.Contents[0].Key;
 
     const binFile = await getFile(binKey);

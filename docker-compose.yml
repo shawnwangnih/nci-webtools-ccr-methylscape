@@ -9,6 +9,7 @@ services:
             - './server/config.json:/app/server/config.json:ro'
             - './server/logs:/app/server/logs'
             - './tmp:/app/tmp'
+            - '~/.aws/nondceg:/root/.aws/credentials:ro'
 
     frontend:
         build: 

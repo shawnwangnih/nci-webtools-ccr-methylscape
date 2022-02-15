@@ -150,5 +150,20 @@
       { "sourceName": "densmap_x", "name": "x" },
       { "sourceName": "densmap_y", "name": "y" }
     ]
+  },
+
+  {
+    "sourcePath": "./data/annotations.csv",
+    "table": "annotations",
+    "description": "Gene annotations",
+    "columns": [
+      { "sourceName": "Name", "name": "name" },
+      { "sourceName": "CHR", "name": "chr" },
+      { "sourceName": "MAPINFO", "name": "mapInfo" },
+      { "sourceName": "UCSC_RefGene_Name", "name": "UCSC_RefGene_Name" },
+      { "sourceName": "GencodeBasicV12_NAME", "name": "GencodeBasicV12_NAME" },
+      { "sourceName": "GencodeBasicV12_Accession", "name": "GencodeBasicV12_Accession" },
+      { "sourceName": "Relation_to_UCSC_CpG_Island", "name": "Relation_to_UCSC_CpG_Island" }
+    ]
   }
 ]
