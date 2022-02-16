@@ -20,8 +20,8 @@ export default function Home() {
           </h1>
 
           <p className="lead">Application description</p>
-          <NavLink className="btn btn-outline-primary" to="umap">
-            UMAP
+          <NavLink className="btn btn-outline-primary" to="analysis">
+            Perform Analysis
           </NavLink>
         </Container>
       </div>

@@ -4,7 +4,7 @@ import Navbar from './modules/components/navbar';
 import Data from './modules/data/data';
 import About from './modules/about/about';
 import Home from './modules/home/home';
-import UMAP from './modules/umap/umap';
+import Analysis from './modules/analysis/analysis';
 import Projects from './modules/data/projects/projects';
 import Experiments from './modules/data/experiments/experiments';
 import Samples from './modules/data/samples/samples';
@@ -14,7 +14,7 @@ import Admin from './modules/admin/admin';
 export default function App() {
   const navbarLinks = [
     { path: '/', title: 'Home', exact: true },
-    { path: 'umap', title: 'UMAP' },
+    { path: 'analysis', title: 'Analysis' },
     { path: 'data/projects', title: 'Projects' },
     { path: 'data/experiments', title: 'Experiments' },
     { path: 'data/samples', title: 'Samples' },
@@ -27,7 +27,7 @@ export default function App() {
         <Navbar links={navbarLinks} className="shadow-sm" />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="umap" element={<UMAP />} />
+          <Route path="analysis" element={<Analysis />} />
           <Route path="data" element={<Data />}>
             <Route path="projects" element={<Projects />} />
             <Route path="experiments" element={<Experiments />} />

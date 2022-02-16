@@ -15,7 +15,7 @@ import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
 import Methodology from './methodology/methodology';
 import Metadata from './metadata/metadata';
 
-export default function UMAP() {
+export default function Analysis() {
   function handleSelect(event) {
     console.log(event);
   }
