@@ -14,7 +14,7 @@ export function getSurvivalPlot(data, includeCensors = true) {
     };
 
     if (!data) {
-        return {traces, layout};
+        return {data: traces, layout};
     }
 
     const xKey = 'time';
@@ -56,5 +56,5 @@ export function getSurvivalPlot(data, includeCensors = true) {
         }
     }
 
-    return {traces, layout};
+    return {data: traces, layout};
 }

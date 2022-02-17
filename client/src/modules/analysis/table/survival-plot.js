@@ -13,7 +13,7 @@ export default function SurvivalPlot() {
     'strata'
   ].map((e) => ({ 
     id: e, 
-    accessor: e, 
+    accessor: row => row[e],
     Header: e 
   }));
 
@@ -22,7 +22,7 @@ export default function SurvivalPlot() {
       <Plot {...survivalPlot} />
       {survivalData?.pValue && <div>
         <strong>p value: </strong>
-        {survivalData.pValue.pval}
+        {survivalData.pValue[0].pval}
       </div>}
       <ReactTable
         data={survivalData?.summary || []}
