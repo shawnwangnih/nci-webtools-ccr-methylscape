@@ -4,7 +4,7 @@ const sqlite = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 const config = require('../config');
-const { getSchema, query, getSamples } = require('./query');
+const { getSchema, query, getSamples, getAnnotations } = require('./query');
 const { scanTable, getFile, getKey } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r } = require('./R/r');
@@ -45,6 +45,15 @@ apiRouter.get(
     const { connection } = request.app.locals;
     const { embedding, organSystem } = request.query;
     const results = await getSamples(connection, { embedding, organSystem });
+    response.json(results);
+  })
+);
+
+apiRouter.get(
+  '/annotations',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const results = await getAnnotations(connection, request.query);
     response.json(results);
   })
 );

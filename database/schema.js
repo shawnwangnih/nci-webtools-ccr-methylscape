@@ -40,7 +40,7 @@ export async function createSchema(database) {
     table.string("fusionsOrTranslocationsReport");
     table.double("overallSurvivalMonths");
     table.integer("overallSurvivalStatus");
-    table.string('WHO_2007_grade');
+    table.string('who_2007_grade');
     table.string('sampling');
     table.string('samplingTreatment');
   });
@@ -127,9 +127,9 @@ export async function createSchema(database) {
     table.string("name");
     table.string("chr");
     table.integer("mapInfo");
-    table.text("UCSC_RefGene_Name");
-    table.text("GencodeBasicV12_NAME");
-    table.text("GencodeBasicV12_Accession");
-    table.string("Relation_to_UCSC_CpG_Island");
+    table.text("ucscName");
+    table.text("gencodeBasicV12Name");
+    table.text("gencodeBasicV12Accession");
+    table.string("relationTo_UCSC_CpG_Island");
   });
 }
