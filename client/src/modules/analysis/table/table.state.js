@@ -77,7 +77,7 @@ const selectedPoints_intermediate = selector({
         return [
           ...prev,
           ...curr[groupName].map((d) =>
-            JSON.stringify({
+            ({
               group: groupName,
               overallSurvivalMonths: d.overallSurvivalMonths,
               overallSurvivalStatus: d.overallSurvivalStatus,
