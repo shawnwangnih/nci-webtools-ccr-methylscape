@@ -7,7 +7,7 @@ const config = require('../config');
 const { getSchema, query, getSamples, getAnnotations } = require('./query');
 const { scanTable, getFile, getKey } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
-const { wrapper: r } = require('./R/r');
+const { wrapper: r, getSurvivalData } = require('./R/r');
 const Papa = require('papaparse');
 
 const apiRouter = express.Router();
@@ -128,6 +128,14 @@ apiRouter.post(
   withAsync(async (request, response) => {
     const result = JSON.parse(await r(request.body));
     response.json(result);
+  })
+);
+
+apiRouter.post(
+  '/survival',
+  withAsync(async (request, response) => {
+    const results = await getSurvivalData(request.body);
+    response.json(results);
   })
 );
 

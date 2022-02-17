@@ -20,36 +20,35 @@ wrapper <- function(fn, args, paths) {
   })
 }
 
-survival <- function(args, paths) {
-  require(survival)
-  require(survminer)
+getSurvivalData <- function(data) {
+    strata <- unique(data$group) 
+   
+    survivalFormula <- survival::Surv(overallSurvivalMonths, overallSurvivalStatus) ~ group
+    survivalCurves <- survminer::surv_fit(survivalFormula, data = data)
+    survivalDataTable <- survminer::surv_summary(survivalCurves, data)
 
-  fit = survfit(Surv(overallSurvivalMonths, overallSurvivalStatus) ~ group, data = args)
-  plot = ggsurvplot(fit, data = args,
-    censor.size = 1, size = 1,
-    conf.int = FALSE,
-    conf.int.style = "ribbon",
-    risk.table = TRUE,
-    tables.height = 0.25,
-    pval = TRUE,
-    pval.size = 10,
-    legend = "none",
-    legend.title = "",
-    xlab = "Overall survival (months)",
-    palette = c("red", "blue", "green"),
-    ggtheme = theme_bw(base_size = 20,
-  # base_family = "Arial"
-    ))
+    if (is.null(survivalDataTable$strata)) {
+      survivalDataTable$strata <- strata
+    }
+    
+    survivalSummaryTimes <- survminer:::.get_default_breaks(survivalCurves$time)
+    survivalSummary <- summary(survivalCurves, times = survivalSummaryTimes, extend = T)
+    survivalSummaryTable <- data.frame(
+        time = survivalSummary$time,
+        n.risk = survivalSummary$n.risk
+    )
 
-  file = file.path(paths$id, 'survival_os.png')
-  path = file.path(paths$save, file)
-
-  # ggsave issue with survminer - https://github.com/kassambara/survminer/issues/544
-  # ggsave(filename = path, plot = print(plot))
-  p1 = plot$plot
-  p2 = plot$table
-  plotp = cowplot::plot_grid(p1, p2, align = "v", ncol = 1, rel_heights = c(3, 1))
-  ggsave(filename = path, plot = plotp)
-
-  return(list(path = file))
+    if (is.null(survivalSummary$strata)) {
+        survivalSummaryTable$strata <- strata
+    } else {
+        survivalSummaryTable$strata <- survivalSummary$strata
+    }
+    
+    pValue <- survminer::surv_pvalue(survivalCurves)
+    
+    list(
+        data = survivalDataTable, 
+        summary = survivalSummaryTable, 
+        pValue = pValue
+    )
 }

@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import axios from 'axios';
 import { selectedPoints } from '../metadata/metadata-plot.state';
+import { getSummaryDataTable, getSurvivalPlot } from './survival-plot.utils';
 import pick from 'lodash/pick';
 
 export const defaultTableForm = {
@@ -55,7 +56,7 @@ const selectedPoints_intermediate = selector({
     const { points } = get(selectedPoints);
     const filterPoints = points.filter((v) => v.length);
 
-    if (!filterPoints.length) return '';
+    if (!filterPoints.length) return [];
 
     const survivalData = filterPoints
       .map((data, i) => ({
@@ -76,7 +77,7 @@ const selectedPoints_intermediate = selector({
         return [
           ...prev,
           ...curr[groupName].map((d) =>
-            JSON.stringify({
+            ({
               group: groupName,
               overallSurvivalMonths: d.overallSurvivalMonths,
               overallSurvivalStatus: d.overallSurvivalStatus,
@@ -85,29 +86,19 @@ const selectedPoints_intermediate = selector({
         ];
       }, []);
 
-    return JSON.stringify(survivalData);
+    return survivalData;
   },
 });
 
-export const survivalPlot = selector({
-  key: 'survivalPlot',
+export const survivalDataSelector = selector({
+  key: 'survivalDataSelector',
   get: async ({ get }) => {
     const data = get(selectedPoints_intermediate);
-
-    if (!data.length) return '';
-
-    const parseData = JSON.parse(data).map(JSON.parse);
-
-    try {
-      const response = await axios.post('api/r', {
-        fn: 'survival',
-        args: parseData,
-      });
-
-      return response.data.output;
-    } catch (error) {
-      console.log(error);
-      return '';
+    if (data?.length) {
+      const response = await axios.post('api/survival', data);
+      return response.data;
+    } else {
+      return null;
     }
-  },
+  }
 });
