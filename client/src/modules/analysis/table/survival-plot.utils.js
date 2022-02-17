@@ -11,6 +11,7 @@ export function getSurvivalPlot(data, includeCensors = true) {
             title: 'Survival Probability',
         },
         hovermode: 'x',
+        autosize: true
     };
 
     if (!data) {
