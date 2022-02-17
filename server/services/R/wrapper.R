@@ -21,17 +21,28 @@ wrapper <- function(fn, args, paths) {
 }
 
 getSurvivalData <- function(data) {
+    strata <- unique(data$group) 
+   
     survivalFormula <- survival::Surv(overallSurvivalMonths, overallSurvivalStatus) ~ group
     survivalCurves <- survminer::surv_fit(survivalFormula, data = data)
     survivalDataTable <- survminer::surv_summary(survivalCurves, data)
+
+    if (is.null(survivalDataTable$strata)) {
+      survivalDataTable$strata <- strata
+    }
     
     survivalSummaryTimes <- survminer:::.get_default_breaks(survivalCurves$time)
     survivalSummary <- summary(survivalCurves, times = survivalSummaryTimes, extend = T)
     survivalSummaryTable <- data.frame(
         time = survivalSummary$time,
-        n.risk = survivalSummary$n.risk,
-        strata = survivalSummary$strata
+        n.risk = survivalSummary$n.risk
     )
+
+    if (is.null(survivalSummary$strata)) {
+        survivalSummaryTable$strata <- strata
+    } else {
+        survivalSummaryTable$strata <- survivalSummary$strata
+    }
     
     pValue <- survminer::surv_pvalue(survivalCurves)
     
