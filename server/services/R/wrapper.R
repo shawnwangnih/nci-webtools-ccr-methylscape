@@ -21,7 +21,7 @@ wrapper <- function(fn, args, paths) {
 }
 
 getSurvivalData <- function(data) {
-    survivalFormula <- survival::Surv(OS_months, OS_status) ~ group
+    survivalFormula <- survival::Surv(overallSurvivalMonths, overallSurvivalStatus) ~ group
     survivalCurves <- survminer::surv_fit(survivalFormula, data = data)
     survivalDataTable <- survminer::surv_summary(survivalCurves, data)
     
