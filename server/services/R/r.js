@@ -16,4 +16,8 @@ async function wrapper(args) {
   return results;
 }
 
-module.exports = { wrapper };
+async function getSurvivalData(data) {
+  await r(__dirname + 'wrapper.R', 'getSurvivalData', [data]);
+}
+
+module.exports = { wrapper, getSurvivalData };
