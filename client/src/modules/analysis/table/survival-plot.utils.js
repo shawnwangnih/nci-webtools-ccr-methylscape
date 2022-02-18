@@ -1,5 +1,17 @@
 import { groupBy } from 'lodash';
 
+export function getSummaryColumns(summary) {
+    if (!summary || !summary.length) 
+        return [];
+
+    const columnNames = Object.keys(summary[0]);
+    return columnNames.map((name) => ({
+        Header: name,
+        id: name,
+        accessor: row => row[name],
+    }));
+}
+
 export function getSurvivalPlot(data, includeCensors = true) {
     let traces = [];
     let layout = {
@@ -9,6 +21,7 @@ export function getSurvivalPlot(data, includeCensors = true) {
         },
         yaxis: {
             title: 'Survival Probability',
+            range: [0, 1.1], // [0, 1] will cut off the top of the graph
         },
         hovermode: 'x',
     };
@@ -24,15 +37,17 @@ export function getSurvivalPlot(data, includeCensors = true) {
     const groups = groupBy(data, 'strata');
 
     for (let name in groups) {
-        let rows = groups[name];
+        const rows = groups[name];
+        const isUndefined = name === 'undefined';
 
         const curve = {
-            name,
+            name: isUndefined ? 'group=1' : name,
             x: rows.map((row) => row[xKey]),
             y: rows.map((row) => row[yKey]),
             line: { shape: 'hv' },
             mode: 'lines',
             type: 'scatter',
+            showlegend: !isUndefined,
         };
 
         traces.push(curve);
