@@ -29,7 +29,7 @@
       { "sourceName": "Fusions/translocations_report", "name": "fusionsOrTranslocationsReport" },
       { "sourceName": "OS_months", "name": "overallSurvivalMonths" },
       { "sourceName": "OS_status", "name": "overallSurvivalStatus" },
-      { "sourceName": "WHO_2007_grade", "name": "WHO_2007_grade" },
+      { "sourceName": "WHO_2007_grade", "name": "who_2007_grade" },
       { "sourceName": "Sampling", "name": "sampling" },
       { "sourceName": "Sampling_treatment", "name": "samplingTreatment" }
     ]
@@ -160,10 +160,10 @@
       { "sourceName": "Name", "name": "name" },
       { "sourceName": "CHR", "name": "chr" },
       { "sourceName": "MAPINFO", "name": "mapInfo" },
-      { "sourceName": "UCSC_RefGene_Name", "name": "UCSC_RefGene_Name" },
-      { "sourceName": "GencodeBasicV12_NAME", "name": "GencodeBasicV12_NAME" },
-      { "sourceName": "GencodeBasicV12_Accession", "name": "GencodeBasicV12_Accession" },
-      { "sourceName": "Relation_to_UCSC_CpG_Island", "name": "Relation_to_UCSC_CpG_Island" }
+      { "sourceName": "UCSC_RefGene_Name", "name": "ucscName" },
+      { "sourceName": "GencodeBasicV12_NAME", "name": "gencodeBasicV12Name" },
+      { "sourceName": "GencodeBasicV12_Accession", "name": "gencodeBasicV12Accession" },
+      { "sourceName": "Relation_to_UCSC_CpG_Island", "name": "relationTo_UCSC_CpG_Island" }
     ]
   }
 ]

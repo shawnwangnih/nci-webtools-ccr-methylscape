@@ -24,6 +24,7 @@ export function getSurvivalPlot(data, includeCensors = true) {
             range: [0, 1.1], // [0, 1] will cut off the top of the graph
         },
         hovermode: 'x',
+        autosize: true
     };
 
     if (!data) {

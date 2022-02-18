@@ -1,4 +1,4 @@
-async function getSamples(connection, {embedding, organSystem}) {
+async function getSamples(connection, { embedding, organSystem }) {
   if (embedding && organSystem) {
     return await connection('sample')
       .join('sampleCoordinates', 'sample.id', 'sampleCoordinates.sampleId')
@@ -9,6 +9,11 @@ async function getSamples(connection, {embedding, organSystem}) {
   }
 }
 
+async function getAnnotations(connection, query) {
+  return await connection('annotations').select('*').limit(30);
+}
+
 module.exports = {
   getSamples,
+  getAnnotations,
 };
