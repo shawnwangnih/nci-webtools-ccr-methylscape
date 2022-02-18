@@ -12,7 +12,7 @@ export default function SurvivalPlot() {
   return (
     <>
       <Plot {...survivalPlot} />
-      {survivalData?.pValue?.pval && <div>
+      {survivalData?.pValue[0]?.pval && <div className="mb-2">
         <strong>p-value: </strong>
         {survivalData.pValue[0].pval}
       </div>}
