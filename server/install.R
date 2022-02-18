@@ -10,7 +10,7 @@ install.packages(
     'remotes',
     'survival',
     'survminer',
-    'cowplot'
+    'tidyverse'
   ),
   repos = 'https://cloud.r-project.org/'
 )
