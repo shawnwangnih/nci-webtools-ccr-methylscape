@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const config = require('../config');
 const { getSchema, query, getSamples, getAnnotations } = require('./query');
-const { scanTable, getFile, getKey } = require('./aws');
+const { scanTable, getFile, getKey, getDataFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
 const Papa = require('papaparse');
@@ -112,8 +112,8 @@ apiRouter.post(
     const segFind = await getKey('methylscape/CNV/segments/' + id);
     const segKey = segFind.Contents[0].Key;
 
-    const binFile = await getFile(binKey);
-    const segFile = await getFile(segKey);
+    const binFile = await getDataFile(binKey);
+    const segFile = await getDataFile(segKey);
 
     const bin = await parseTSV(binFile.Body);
     const seg = await parseTSV(segFile.Body);
