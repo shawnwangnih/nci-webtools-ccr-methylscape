@@ -44,7 +44,7 @@ async function getDataFile(key) {
 
 async function getKey(prefix) {
   const s3Client = new S3Client({ region: config.region });
-  const params = { Bucket: config.s3Bucket, Prefix: prefix };
+  const params = { Bucket: config.s3DataBucket, Prefix: prefix };
   console.log(params);
   // Get the object} from the Amazon S3 bucket. It is returned as a ReadableStream.
   const objects = await s3Client.send(new ListObjectsV2Command(params));
