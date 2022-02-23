@@ -11,7 +11,11 @@ export default function CopyNumberPlot() {
       {error ? (
         error
       ) : !data.length ? (
-        <div className="text-center">Please select a sample</div>
+        <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
+          <p className="mx-auto my-auto">
+            Please select a sample in the UMAP plot
+          </p>
+        </div>
       ) : (
         <Plot
           data={cloneDeep(data)}

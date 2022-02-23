@@ -12,7 +12,7 @@ export default function CopyNumberForm() {
   ];
 
   return (
-    <ButtonGroup>
+    <ButtonGroup className="mb-3">
       {radios.map((radio, idx) => (
         <ToggleButton
           key={idx}

@@ -1,8 +1,5 @@
 import { atom, selector } from 'recoil';
 import groupBy from 'lodash/groupBy';
-import meanBy from 'lodash/meanBy';
-import binStatic from './bin.json';
-import segStatic from './seg.json';
 import chrLines from './lines.json';
 
 export const defaultFormState = {
@@ -35,6 +32,7 @@ export const plotState = selector({
     const { idatFilename } = get(copyNumberState);
     const { annotation: annoToggle } = get(formState);
 
+    if (!idatFilename) return defaultPlotState;
     try {
       const options = {
         method: 'POST',
@@ -47,9 +45,9 @@ export const plotState = selector({
         }),
       };
       // temporary - use static data if idatFilename is unavailable
-      const { bin, seg } = idatFilename
-        ? await (await fetch('api/getCopyNumber', options)).json()
-        : { bin: binStatic, seg: segStatic };
+      const { bin, seg } = await (
+        await fetch('api/getCopyNumber', options)
+      ).json();
 
       // get chromosome as index from string
       function getChr(chr) {
