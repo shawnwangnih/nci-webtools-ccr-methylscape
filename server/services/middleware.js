@@ -24,7 +24,8 @@ function logErrors(error, request, response, next) {
   request.app.locals.logger.error(error);
 
   // return less descriptive errors in production
-  response.status(500).json(isProduction ? name : `${name}: ${message}`);
+  // response.status(500).json(isProduction ? name : `${name}: ${message}`);
+  response.status(500).json(`${name}: ${message}`);
 }
 
 function withAsync(fn) {
