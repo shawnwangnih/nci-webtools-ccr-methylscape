@@ -10,6 +10,8 @@ services:
             - './server/logs:/app/server/logs'
             - './tmp:/app/tmp'
             - '~/.aws/nondceg:/root/.aws/credentials:ro'
+        ports: 
+            - '10000:10000'
 
     frontend:
         build: 
