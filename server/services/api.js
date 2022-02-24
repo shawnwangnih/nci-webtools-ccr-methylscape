@@ -5,10 +5,10 @@ const path = require('path');
 const fs = require('fs');
 const config = require('../config');
 const { getSchema, query, getSamples, getAnnotations } = require('./query');
-const { scanTable, getFile, getKey, getDataFile } = require('./aws');
+const { scanTable, getFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
-const Papa = require('papaparse');
+const { getCopyNumber } = require('./analysis/copyNumber/copyNumber');
 
 const apiRouter = express.Router();
 
@@ -86,39 +86,11 @@ apiRouter.post(
 apiRouter.post(
   '/getCopyNumber',
   withAsync(async (request, response) => {
-    async function parseTSV(stream) {
-      return new Promise((resolve, reject) => {
-        let data = [];
-        const options = { header: true };
-        const parseStream = Papa.parse(Papa.NODE_STREAM_INPUT, options);
-        stream.pipe(parseStream);
-        parseStream.on('error', (e) => {
-          reject(e);
-        });
-        parseStream.on('data', (d) => {
-          data.push(d);
-        });
-        parseStream.on('end', () => {
-          resolve(data);
-        });
-      });
-    }
-
     const { id } = request.body;
 
-    const binFind = await getKey('methylscape/Bins/BAF.bins_ ' + id);
-    const binKey = binFind.Contents[0].Key;
+    const data = await getCopyNumber(id);
 
-    const segFind = await getKey('methylscape/CNV/segments/' + id);
-    const segKey = segFind.Contents[0].Key;
-
-    const binFile = await getDataFile(binKey);
-    const segFile = await getDataFile(segKey);
-
-    const bin = await parseTSV(binFile.Body);
-    const seg = await parseTSV(segFile.Body);
-
-    response.json({ bin, seg });
+    response.json(data);
   })
 );
 

@@ -10,7 +10,7 @@ export default function CopyNumberPlot() {
     <div>
       {error ? (
         error
-      ) : !data.length ? (
+      ) : !data || !data.length ? (
         <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
           <p className="mx-auto my-auto">
             Please select a sample in the UMAP plot
@@ -23,6 +23,7 @@ export default function CopyNumberPlot() {
           config={cloneDeep(config)}
           className="w-100"
           useResizeHandler
+          style={{ height: '800px' }}
         />
       )}
     </div>
