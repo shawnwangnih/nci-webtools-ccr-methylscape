@@ -60,7 +60,7 @@ async function getCopyNumber(id) {
     position: (parseInt(e.Start) + parseInt(e.End)) / 2,
     log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
     chr: getChr(e.Chromosome),
-    id: e.Feature,
+    probe: e.Feature,
   }));
 
   // get range of position per chromosome
@@ -137,6 +137,7 @@ async function getCopyNumber(id) {
         chr: d.chr,
         position: d.position + probePosOffset[d.chr],
         log2ratio: d.log2ratio,
+        probe: d.probe,
       })),
       (e) => e.chr
     )
@@ -155,11 +156,11 @@ async function getCopyNumber(id) {
       chr,
       x: data.map((e) => e.position),
       y: data.map((e) => e.log2ratio),
-      customdata: data.map((e) => ({ id: e.id })),
+      customdata: data.map((e) => ({ probe: e.probe })),
       mode: 'markers',
       type: 'scattergl',
       hovertemplate:
-        'Probe: %{customdata.id}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
+        'Probe: %{customdata.probe}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
       marker: {
         color: data.map((e) => e.log2ratio),
         // colorscale: [
