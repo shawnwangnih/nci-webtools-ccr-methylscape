@@ -23,7 +23,7 @@ async function parseTSV(stream, options) {
   });
 }
 
-async function getCopyNumber(id) {
+async function getCopyNumber({ id, search }) {
   // find and parse files
   const probeFind = await getKey('methylscape/CNV/probes/' + id);
   const probeKey = probeFind.Contents[0].Key;
@@ -130,6 +130,22 @@ async function getCopyNumber(id) {
     };
   });
 
+  // annotate probes by search query
+  const searchQueries = search.map(({ value }) => value.toLowerCase());
+  const searchAnnotations = searchQueries.length
+    ? probes
+        .filter(
+          ({ probe }) =>
+            probe &&
+            searchQueries.some((query) => probe.toLowerCase().includes(query))
+        )
+        .map((e) => ({
+          text: e.probe,
+          x: e.position,
+          y: e.log2ratio,
+        }))
+    : [];
+
   // group probes by chromosome
   const dataGroupedByChr = Object.entries(
     groupBy(
@@ -190,7 +206,6 @@ async function getCopyNumber(id) {
   const layout = {
     showlegend: false,
     dragmode: 'pan',
-    // uirevision: idatFilename + annoToggle,
     xaxis: {
       title: 'Chromosome',
       showgrid: false,
@@ -208,6 +223,7 @@ async function getCopyNumber(id) {
       ticks: 'outside',
       fixedrange: true,
     },
+    annotations: [...searchAnnotations],
     shapes: [
       // chromosome dividers
       ...chrLines.map((e) => ({

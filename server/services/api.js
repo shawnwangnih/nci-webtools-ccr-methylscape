@@ -86,9 +86,7 @@ apiRouter.post(
 apiRouter.post(
   '/getCopyNumber',
   withAsync(async (request, response) => {
-    const { id } = request.body;
-
-    const data = await getCopyNumber(id);
+    const data = await getCopyNumber(request.body);
 
     response.json(data);
   })

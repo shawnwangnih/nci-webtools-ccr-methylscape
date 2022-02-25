@@ -3,6 +3,7 @@ import { query } from '../../../services/query';
 
 export const defaultFormState = {
   annotation: 'none',
+  search: [],
 };
 
 export const formState = atom({
@@ -29,7 +30,7 @@ export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
     const { idatFilename } = get(copyNumberState);
-    const { annotation: annoToggle } = get(formState);
+    const { annotation: annoToggle, search } = get(formState);
 
     if (!idatFilename) return defaultPlotState;
     try {
@@ -41,14 +42,19 @@ export const plotState = selector({
         },
         body: JSON.stringify({
           id: idatFilename,
+          search,
         }),
       };
 
-      const tableProps = await (
+      const { data, layout, config } = await (
         await fetch('api/getCopyNumber', options)
       ).json();
 
-      return tableProps;
+      return {
+        data,
+        config,
+        layout: { ...layout, uirevision: idatFilename + annoToggle + search },
+      };
     } catch (error) {
       console.log(error);
       return { error: 'Unavailable' };
