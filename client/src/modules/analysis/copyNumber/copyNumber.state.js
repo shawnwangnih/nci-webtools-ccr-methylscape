@@ -30,7 +30,7 @@ export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
     const { idatFilename } = get(copyNumberState);
-    const { annotation: annoToggle, search } = get(formState);
+    const { annotation, search } = get(formState);
 
     if (!idatFilename) return defaultPlotState;
     try {
@@ -43,6 +43,7 @@ export const plotState = selector({
         body: JSON.stringify({
           id: idatFilename,
           search,
+          annotation,
         }),
       };
 
@@ -53,7 +54,7 @@ export const plotState = selector({
       return {
         data,
         config,
-        layout: { ...layout, uirevision: idatFilename + annoToggle + search },
+        layout: { ...layout, uirevision: idatFilename + annotation + search },
       };
     } catch (error) {
       console.log(error);

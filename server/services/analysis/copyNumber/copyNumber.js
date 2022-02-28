@@ -2,6 +2,7 @@ const { getKey, getDataFile } = require('../../aws');
 const { groupBy } = require('lodash');
 const Papa = require('papaparse');
 const chrLines = require('./lines.json');
+const { getAnnotations } = require('../../query');
 
 async function parseTSV(stream, options) {
   return new Promise((resolve, reject) => {
@@ -23,7 +24,10 @@ async function parseTSV(stream, options) {
   });
 }
 
-async function getCopyNumber({ id, search }) {
+async function getCopyNumber(request) {
+  const { id, search, annotation } = request.body;
+  const { connection } = request.app.locals;
+
   // find and parse files
   const probeFind = await getKey('methylscape/CNV/probes/' + id);
   const probeKey = probeFind.Contents[0].Key;
@@ -146,6 +150,17 @@ async function getCopyNumber({ id, search }) {
         }))
     : [];
 
+  // annotate probes with common gene names
+  // const query = probes.map(({ probe }) => `${probe}`);
+
+  // let chunkSize = 10000;
+  // let genes = [];
+  // for (let i = 0; i < query.length; i += chunkSize) {
+  //   genes = genes.concat(
+  //     await getAnnotations(connection, query.slice(i, i + chunkSize))
+  //   );
+  // }
+
   // group probes by chromosome
   const dataGroupedByChr = Object.entries(
     groupBy(
@@ -201,8 +216,6 @@ async function getCopyNumber({ id, search }) {
       prev > curr.log2ratio ? prev : curr.log2ratio
     ) + 1.5;
 
-  // let annotations = await query('api/annotations', {});
-  // console.log(annotations);
   const layout = {
     showlegend: false,
     dragmode: 'pan',

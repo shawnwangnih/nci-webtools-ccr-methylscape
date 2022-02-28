@@ -49,15 +49,6 @@ apiRouter.get(
   })
 );
 
-apiRouter.get(
-  '/annotations',
-  withAsync(async (request, response) => {
-    const { connection } = request.app.locals;
-    const results = await getAnnotations(connection, request.query);
-    response.json(results);
-  })
-);
-
 // get entire dynamoDB table
 apiRouter.get(
   '/scanDynamoDB',
@@ -86,7 +77,7 @@ apiRouter.post(
 apiRouter.post(
   '/getCopyNumber',
   withAsync(async (request, response) => {
-    const data = await getCopyNumber(request.body);
+    const data = await getCopyNumber(request);
 
     response.json(data);
   })

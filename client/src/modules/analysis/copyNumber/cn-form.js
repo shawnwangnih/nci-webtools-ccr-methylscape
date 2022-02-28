@@ -12,8 +12,7 @@ export default function CopyNumberForm() {
 
   const radios = [
     { name: 'None', value: 'none' },
-    { name: 'Breakpoint Genes', value: 'breakpoint' },
-    { name: 'Amp/Del', value: 'ampdel' },
+    { name: 'Genes', value: 'genes' },
   ];
 
   function handleToggle(e) {
