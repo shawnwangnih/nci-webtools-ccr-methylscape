@@ -12,7 +12,7 @@ export default function CopyNumberForm() {
 
   const radios = [
     { name: 'None', value: 'none' },
-    { name: 'Genes', value: 'genes' },
+    { name: 'Annotations', value: 'annotations' },
   ];
 
   function handleToggle(e) {
