@@ -1,7 +1,6 @@
 import { atom, selector } from 'recoil';
 import axios from 'axios';
 import { selectedPoints } from '../metadata/metadata-plot.state';
-import { getSummaryDataTable, getSurvivalPlot } from './survival-plot.utils';
 import pick from 'lodash/pick';
 
 export const defaultTableForm = {
@@ -93,9 +92,9 @@ const selectedPoints_intermediate = selector({
 export const survivalDataSelector = selector({
   key: 'survivalDataSelector',
   get: async ({ get }) => {
-    const data = get(selectedPoints_intermediate);
-    if (data?.length) {
-      const response = await axios.post('api/survival', data);
+    const selectedPoints = get(selectedPoints_intermediate);
+    if (selectedPoints?.length) {
+      const response = await axios.post('api/survival', selectedPoints);
       return response.data;
     } else {
       return null;
