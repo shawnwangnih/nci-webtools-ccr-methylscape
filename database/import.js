@@ -4,8 +4,9 @@ import minimist from "minimist";
 import { createSchema } from "./schema.js";
 import { 
   createConnection, 
-  createCsvRecordIterator, 
-  importTable 
+  createRecordIterator, 
+  importTable, 
+  withDuration
 } from "./utils.js";
 
 // determine if this script was launched from the command line
@@ -21,10 +22,16 @@ if (isMainModule) {
 }
 
 export async function importDatabase(connection, sources = sources) {
-  await createSchema(connection);
-  for (const { sourcePath, description, table, columns } of sources) {
-    console.log(`Importing ${table}: ${description}`);
-    const csvRecordIterator = createCsvRecordIterator(sourcePath, columns);
-    await importTable(connection, csvRecordIterator, table);
-  }
+  return await connection.transaction(async transaction => {
+    await createSchema(transaction);
+    for (const { sourcePath, description, table, columns } of sources) {
+      console.log(`Importing ${table} table (${description})`);
+      const { results, duration } = await withDuration(async () => {
+        const records = createRecordIterator(sourcePath, columns);
+        return await importTable(transaction, records, table);
+      });
+      console.log(`Finished importing ${table} table in ${Math.round(duration)}s (${Math.round(results / duration)} rows/s)`);
+    }
+    return true;
+  });
 }
