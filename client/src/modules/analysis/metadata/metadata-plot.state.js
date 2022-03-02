@@ -129,46 +129,17 @@ export const plotState = selector({
         },
       }));
 
-    // try using webgl to display class annotations to improve performance
-    const classAnnotationTrace = dataGroupedByClass
-      .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
-      )
-      .map(([name, value]) => ({
-        text: name,
-        x: meanBy(value, (e) => e.x),
-        y: meanBy(value, (e) => e.y),
-      }))
-      .reduce(
-        (acc, curr) => {
-          acc.x.push(curr.x);
-          acc.y.push(curr.y);
-          acc.text.push(curr.text);
-          return acc;
-        },
-        {
-          x: [],
-          y: [],
-          text: [],
-          mode: 'text',
-          type: useWebGl ? 'scattergl' : 'scatter',
-          textfont: {
-            size: 10,
-          },
-        }
-      );
-
-    function plotTitle(organSystem) {
-      if (organSystem == 'centralNervousSystem')
-        return 'Central Nervous System';
-      if (organSystem == 'centralNervousSystemSarcoma') return 'CNS Sarcoma';
-      if (organSystem == 'boneAndSoftTissue') return 'Bone and Soft Tissue';
-      if (organSystem == 'hematopoietic') return 'Hematopoietic';
-    }
+    const plotTitles = {
+      centralNervousSystem: 'Central Nervous System',
+      boneAndSoftTissue: 'Bone and Soft Tissue',
+      hematopoietic: 'Hematopoietic',
+      renal: 'Renal',
+      panCancer: 'Pan-Cancer',
+    };
 
     // set layout
     const layout = {
-      title: `${plotTitle(organSystem)} (n=${data.length})`,
+      title: `${plotTitles[organSystem] || organSystem} (n=${data.length})`,
       xaxis: {
         title: `${embedding} x`,
       },

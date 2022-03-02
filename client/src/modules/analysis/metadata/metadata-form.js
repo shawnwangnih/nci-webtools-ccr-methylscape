@@ -31,12 +31,11 @@ export default function MetadataForm({ className, onSelect }) {
               value={form.organSystem}
               onChange={handleChange}
             >
-              <option value="centralNervousSystem">
-                Central Nervous System
-              </option>
-              <option value="centralNervousSystemSarcoma">CNS/Sarcoma</option>
+              <option value="centralNervousSystem">Central Nervous System</option>
               <option value="boneAndSoftTissue">Bone and Soft Tissue</option>
               <option value="hematopoietic">Hematopoietic</option>
+              <option value="renal">Renal</option>
+              <option value="panCancer">Pan-Cancer</option>
             </Form.Select>
           </Form.Group>
         </Col>
