@@ -9,9 +9,9 @@ export default function SurvivalPlot() {
   const survivalPlot = getSurvivalPlot(survivalData?.data);
   const summaryTableColumns = getSummaryColumns(survivalData?.summary);
   
-  return (
-    <>
-      <Plot {...survivalPlot} />
+  return survivalData?.data?.length ? (
+    <div className="my-4">
+      <Plot {...survivalPlot} className="mw-100 w-100 h-100" useResizeHandler />
       {survivalData?.pValue[0]?.pval && <div className="mb-2">
         <strong>p-value: </strong>
         {survivalData.pValue[0].pval}
@@ -22,6 +22,6 @@ export default function SurvivalPlot() {
         data={survivalData?.summary || []}
         columns={summaryTableColumns}
       />
-    </>
-  );
+    </div>
+  ) : null;
 }
