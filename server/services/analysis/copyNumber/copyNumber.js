@@ -4,7 +4,7 @@ const Papa = require('papaparse');
 const chrLines = require('./lines.json');
 const { getAnnotations } = require('../../query');
 
-async function parseTSV(stream, options) {
+async function parseTSV(stream, options = {}) {
   return new Promise((resolve, reject) => {
     let data = [];
     const parseStream = Papa.parse(Papa.NODE_STREAM_INPUT, {
@@ -29,29 +29,31 @@ async function getCopyNumber(request) {
   const { connection } = request.app.locals;
 
   // find and parse files
+  const binFind = await getKey('methylscape/Bins/BAF.bins_ ' + id);
+  const binKey = binFind.Contents[0].Key;
+
   const probeFind = await getKey('methylscape/CNV/probes/' + id);
   const probeKey = probeFind.Contents[0].Key;
 
   const segFind = await getKey('methylscape/CNV/segments/' + id);
   const segKey = segFind.Contents[0].Key;
 
+  const binFile = await getDataFile(binKey);
   const probeFile = await getDataFile(probeKey);
   const segFile = await getDataFile(segKey);
 
-  const probe = await parseTSV(probeFile.Body, {
+  const parseFixDimensions = {
     beforeFirstChunk: (chunk) => {
       let lines = chunk.split(/\r\n|\r|\n/);
       lines[0] = 'row\t' + lines[0];
       return lines.join('\n');
     },
-  });
-  const seg = await parseTSV(segFile.Body, {
-    beforeFirstChunk: (chunk) => {
-      let lines = chunk.split(/\r\n|\r|\n/);
-      lines[0] = 'row\t' + lines[0];
-      return lines.join('\n');
-    },
-  });
+  };
+
+  const bin = await parseTSV(binFile.Body);
+  const probe = await parseTSV(probeFile.Body, parseFixDimensions);
+  const seg = await parseTSV(segFile.Body, parseFixDimensions);
+
   // get chromosome as index from string
   function getChr(chr) {
     return parseInt(
@@ -59,17 +61,23 @@ async function getCopyNumber(request) {
     );
   }
 
-  // parse probes
-  const probes = probe.map((e) => ({
+  // hash probes by start + end as key
+  const probes = probe.reduce(
+    (a, c) => ((a[c.Start + c.End] = c.Feature), a),
+    {}
+  );
+
+  // parse bins
+  const bins = bin.map((e) => ({
     position: (parseInt(e.Start) + parseInt(e.End)) / 2,
     log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
     chr: getChr(e.Chromosome),
-    probe: e.Feature,
+    probe: probes[e.Start + e.End],
   }));
 
   // get range of position per chromosome
-  const probePosOffset = Object.values(
-    probes.reduce((prev, curr) => {
+  const binPosOffset = Object.values(
+    bins.reduce((prev, curr) => {
       if (curr.chr != 24) {
         if (prev[curr.chr]) {
           return {
@@ -121,23 +129,23 @@ async function getCopyNumber(request) {
     const chr = getChr(e.chrom);
 
     return {
-      chr: chr,
-      posStart: parseInt(e['loc.start']),
-      posEnd: parseInt(e['loc.end']),
+      // chr: chr,
+      // posStart: parseInt(e['loc.start']),
+      // posEnd: parseInt(e['loc.end']),
       medianLog2Ratio: parseFloat(e['seg.median']),
-      CNV: cnv(parseFloat(e['seg.median'])),
-      x1: probePosOffset[chr] + parseInt(e['loc.start']),
-      x2: probePosOffset[chr] + parseInt(e['loc.end']),
-      width: e['loc.end'] - parseInt(e['loc.start']),
-      posStartNew: segPosOffset[chr] + parseInt(e['loc.start']),
-      posEndNew: segPosOffset[chr] + parseInt(e['loc.end']),
+      // CNV: cnv(parseFloat(e['seg.median'])),
+      x1: binPosOffset[chr] + parseInt(e['loc.start']),
+      x2: binPosOffset[chr] + parseInt(e['loc.end']),
+      // width: e['loc.end'] - parseInt(e['loc.start']),
+      // posStartNew: segPosOffset[chr] + parseInt(e['loc.start']),
+      // posEndNew: segPosOffset[chr] + parseInt(e['loc.end']),
     };
   });
 
-  // annotate probes by search query
+  // annotate bins by search query
   const searchQueries = search.map(({ value }) => value.toLowerCase());
   const searchAnnotations = searchQueries.length
-    ? probes
+    ? bins
         .filter(
           ({ probe }) =>
             probe &&
@@ -150,8 +158,8 @@ async function getCopyNumber(request) {
         }))
     : [];
 
-  // annotate probes with common gene names
-  // const query = probes.map(({ probe }) => `${probe}`);
+  // annotate bins with common gene names
+  // const query = bins.map(({ probe }) => `${probe}`);
 
   // let chunkSize = 10000;
   // let genes = [];
@@ -161,14 +169,12 @@ async function getCopyNumber(request) {
   //   );
   // }
 
-  // group probes by chromosome
+  // group bins by chromosome
   const dataGroupedByChr = Object.entries(
     groupBy(
-      probes.map((d) => ({
-        chr: d.chr,
-        position: d.position + probePosOffset[d.chr],
-        log2ratio: d.log2ratio,
-        probe: d.probe,
+      bins.map((d) => ({
+        ...d,
+        position: d.position + binPosOffset[d.chr],
       })),
       (e) => e.chr
     )
@@ -201,20 +207,20 @@ async function getCopyNumber(request) {
         //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
         //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
         // ],
-        cmax: 3,
+        cmax: 0.7,
         cmid: 0,
-        cmin: -3,
+        cmin: -0.7,
       },
     }));
 
   const yMin =
-    probes.reduce((prev, curr) =>
+    bins.reduce((prev, curr) =>
       prev < curr.log2ratio ? prev : curr.log2ratio
-    ) - 1.5;
+    ) - 0.25;
   const yMax =
-    probes.reduce((prev, curr) =>
+    bins.reduce((prev, curr) =>
       prev > curr.log2ratio ? prev : curr.log2ratio
-    ) + 1.5;
+    ) + 0.25;
 
   const layout = {
     showlegend: false,
