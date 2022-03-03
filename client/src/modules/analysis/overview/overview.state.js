@@ -54,11 +54,17 @@ export const overviewState = selector({
       },
     ];
 
+    const layout = {
+      yaxis: {
+        automargin: true,
+      }
+    }
+
     return {
       samples: samples.length,
       studies,
       institutions,
-      plot: { data: plotData, layout: {}, config: {} },
+      plot: { data: plotData, layout, config: {} },
     };
   },
 });
