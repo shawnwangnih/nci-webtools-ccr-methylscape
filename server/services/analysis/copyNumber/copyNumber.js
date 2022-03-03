@@ -238,7 +238,7 @@ async function getCopyNumber(request) {
       title: 'log<sub>2</sub> ratio',
       zeroline: true,
       // zerolinecolor: '#eee',
-      dtick: 0.5,
+      dtick: 0.25,
       ticks: 'outside',
       fixedrange: true,
     },

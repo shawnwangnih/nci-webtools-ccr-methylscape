@@ -44,6 +44,7 @@ export default function MetadataPlot({ onSelect }) {
       setCnState((state) => ({
         ...state,
         idatFilename: e.points[0].customdata.idatFilename,
+        sample: e.points[0].customdata.sample,
       }));
     }
   }

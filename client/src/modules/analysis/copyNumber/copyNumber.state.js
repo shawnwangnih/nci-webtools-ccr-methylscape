@@ -13,6 +13,7 @@ export const formState = atom({
 
 export const defaultCopyNumberState = {
   idatFilename: '',
+  sample: '',
 };
 
 export const copyNumberState = atom({
@@ -29,7 +30,7 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'cnaPlot',
   get: async ({ get }) => {
-    const { idatFilename } = get(copyNumberState);
+    const { idatFilename, sample } = get(copyNumberState);
     const { annotation, search } = get(formState);
 
     if (!idatFilename) return defaultPlotState;
@@ -54,7 +55,11 @@ export const plotState = selector({
       return {
         data,
         config,
-        layout: { ...layout, uirevision: idatFilename + annotation + search },
+        layout: {
+          ...layout,
+          uirevision: idatFilename + annotation + search,
+          title: `${sample} (${idatFilename})`,
+        },
       };
     } catch (error) {
       console.log(error);
