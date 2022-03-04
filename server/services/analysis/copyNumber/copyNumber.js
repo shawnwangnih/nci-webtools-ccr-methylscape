@@ -161,10 +161,10 @@ async function getCopyNumber(request) {
   // annotate bins with common gene names
   // const queryProbes = bins.map(({ probe }) => `${probe}`);
 
-  let annotations = [];
-  for (const items of chunk(queryProbes, 10000)) {
-    annotations = annotations.concat(await getAnnotations(connection, items));
-  }
+  // let annotations = [];
+  // for (const items of chunk(queryProbes, 10000)) {
+  //   annotations = annotations.concat(await getAnnotations(connection, items));
+  // }
 
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
