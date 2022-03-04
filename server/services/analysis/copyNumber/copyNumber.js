@@ -1,5 +1,5 @@
 const { getKey, getDataFile } = require('../../aws');
-const { groupBy } = require('lodash');
+const { groupBy, chunk } = require('lodash');
 const Papa = require('papaparse');
 const chrLines = require('./lines.json');
 const { getAnnotations } = require('../../query');
@@ -159,15 +159,12 @@ async function getCopyNumber(request) {
     : [];
 
   // annotate bins with common gene names
-  // const query = bins.map(({ probe }) => `${probe}`);
+  // const queryProbes = bins.map(({ probe }) => `${probe}`);
 
-  // let chunkSize = 10000;
-  // let genes = [];
-  // for (let i = 0; i < query.length; i += chunkSize) {
-  //   genes = genes.concat(
-  //     await getAnnotations(connection, query.slice(i, i + chunkSize))
-  //   );
-  // }
+  let annotations = [];
+  for (const items of chunk(queryProbes, 10000)) {
+    annotations = annotations.concat(await getAnnotations(connection, items));
+  }
 
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
