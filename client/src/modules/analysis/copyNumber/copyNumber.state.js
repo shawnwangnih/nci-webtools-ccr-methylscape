@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { query } from '../../../services/query';
+import axios from 'axios';
 
 export const defaultFormState = {
   annotation: 'none',
@@ -35,22 +36,13 @@ export const plotState = selector({
 
     if (!idatFilename) return defaultPlotState;
     try {
-      const options = {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: idatFilename,
-          search,
-          annotation,
-        }),
-      };
+      const response = await axios.post('api/getCopyNumber', {
+        id: idatFilename,
+        search,
+        annotation,
+      });
 
-      const { data, layout, config } = await (
-        await fetch('api/getCopyNumber', options)
-      ).json();
+      const { data, layout, config } = response.data;
 
       return {
         data,
@@ -63,7 +55,7 @@ export const plotState = selector({
       };
     } catch (error) {
       console.log(error);
-      return { error: 'Unavailable' };
+      return { error: 'Copy Number not found' };
     }
   },
 });

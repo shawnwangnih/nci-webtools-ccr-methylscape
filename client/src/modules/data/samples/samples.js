@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import axios from 'axios';
+import { saveAs } from 'file-saver';
 import { samplesTableData } from './samples.state';
 import { PlusSquare, DashSquare } from 'react-bootstrap-icons';
 import Table from '../../components/table';
@@ -216,25 +218,16 @@ export default function Samples() {
 
   async function download(id, file) {
     try {
-      const response = await fetch(`api/getFile`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `api/getFile`,
+        {
           sample: id + '/' + file,
-        }),
-      });
-
-      if (!response.ok) {
-        window.alert('File is unavailable');
-      } else {
-        const url = URL.createObjectURL(await response.blob());
-        window.open(url, '_blank');
-        URL.revokeObjectURL(url);
-      }
+        },
+        { responseType: 'blob' }
+      );
+      saveAs(response.data, file);
     } catch (err) {
+      window.alert('File is unavailable');
       console.log(err);
     }
   }

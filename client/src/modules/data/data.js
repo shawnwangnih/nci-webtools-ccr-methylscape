@@ -6,6 +6,7 @@ import { dataState } from './data.state';
 import { NavLink } from 'react-router-dom';
 import { PieChartFill, ClipboardData, PeopleFill } from 'react-bootstrap-icons';
 import { Outlet } from 'react-router-dom';
+import axios from 'axios';
 import './data.scss';
 
 export default function Data() {
@@ -15,7 +16,8 @@ export default function Data() {
   useEffect(() => {
     async function scanTable() {
       try {
-        const data = await (await fetch('api/scanDynamoDB')).json();
+        const response = await axios.get('api/scanDynamoDB');
+        const data = response.data;
 
         const projectsCount = [
           ...new Set(

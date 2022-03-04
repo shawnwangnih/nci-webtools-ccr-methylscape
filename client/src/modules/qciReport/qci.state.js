@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { json2xml, xml2js } from 'xml-js';
+import axios from 'axios';
 
 export const defaultQCIState = {
   id: '',
@@ -18,24 +19,16 @@ export const qciData = selector({
 
     async function downloadFile(id, file) {
       try {
-        let response = await fetch(`api/getFile`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        const response = await axios.post(
+          `api/getFile`,
+          {
             sample: id + '/' + file,
-          }),
-        });
-        if (!response.ok) {
-          return false;
-        } else {
-          let xml = await response.text();
-          return xml;
-        }
+          },
+          { responseType: 'text' }
+        );
+        return response.data;
       } catch (e) {
-        console.log(e);
+        return false;
       }
     }
 
@@ -143,7 +136,7 @@ export const qciData = selector({
     const xml = id && file ? await downloadFile(id, file) : false;
     const data = xml ? parseVariants(xml) : false;
 
-    if (!data) return null;
+    if (!data) return {};
 
     const snvTable = {
       columns: [

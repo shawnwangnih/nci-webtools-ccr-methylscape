@@ -5,14 +5,16 @@ import Table from '../components/table';
 import './qci.css';
 
 export default function Report() {
-  const { snvTable, cnvTable, fusionTable, unkTable } = useRecoilValue(qciData);
+  const tables = useRecoilValue(qciData);
+  const { snvTable, cnvTable, fusionTable, unkTable } = tables;
 
   return (
     <Container fluid="xxl">
-      {snvTable.data.length ||
-      cnvTable.data.length ||
-      fusionTable.data.length ||
-      unkTable.data.length ? (
+      {Object.keys(tables).length &&
+      (snvTable.data.length ||
+        cnvTable.data.length ||
+        fusionTable.data.length ||
+        unkTable.data.length) ? (
         <div>
           <div id="significantTables">
             <h2>VARIANTS OF CLINICAL OR PATHOGENIC SIGNIFICANCE</h2>
@@ -72,7 +74,7 @@ export default function Report() {
           </div>
         </div>
       ) : (
-        <h2>No Report Available</h2>
+        <h4>No Report Available</h4>
       )}
     </Container>
   );

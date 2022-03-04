@@ -1,5 +1,7 @@
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useRecoilValue } from 'recoil';
+import axios from 'axios';
+import { saveAs } from 'file-saver';
 import { Link, useSearchParams } from 'react-router-dom';
 import { experimentsTableData } from './experiments.state';
 import Table from '../../components/table';
@@ -97,25 +99,16 @@ export default function Experiments() {
 
   async function download(experiment, file) {
     try {
-      const response = await fetch(`api/getFile`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `api/getFile`,
+        {
           qc: experiment + '/' + file,
-        }),
-      });
-
-      if (!response.ok) {
-        window.alert('File is unavailable');
-      } else {
-        const url = URL.createObjectURL(await response.blob());
-        window.open(url, '_blank');
-        URL.revokeObjectURL(url);
-      }
+        },
+        { responseType: 'blob' }
+      );
+      saveAs(response.data, file);
     } catch (err) {
+      window.alert('File is unavailable');
       console.log(err);
     }
   }

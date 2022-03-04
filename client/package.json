@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.25.0",
     "bootstrap": "^5.0.2",
+    "file-saver": "^2.0.5",
     "html-react-parser": "^1.4.0",
     "lodash": "^4.17.21",
     "papaparse": "^5.3.1",

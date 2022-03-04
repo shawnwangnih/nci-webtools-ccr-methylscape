@@ -26,7 +26,7 @@ export default function CopyNumber({ className }) {
           </Alert>
         }
       >
-        <Suspense fallback={<Loader message="Loading CN" />}>
+        <Suspense fallback={<Loader message="Loading Copy Number" />}>
           <CopyNumberPlot />
         </Suspense>
       </ErrorBoundary>
