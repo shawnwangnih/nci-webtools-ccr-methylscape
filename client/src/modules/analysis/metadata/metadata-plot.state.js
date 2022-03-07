@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { query } from '../../../services/query';
+import axios from 'axios';
 import groupBy from 'lodash/groupBy';
 import meanBy from 'lodash/meanBy';
 import colors from './colors.json';
@@ -40,7 +40,8 @@ export const plotState = selector({
 
     if (!organSystem || !embedding) return defaultPlotState;
 
-    let data = await query('api/samples', { embedding, organSystem });
+    const params = { embedding, organSystem };
+    const { data } = await axios.get('api/samples', { params });
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());

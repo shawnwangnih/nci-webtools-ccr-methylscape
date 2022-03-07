@@ -1,5 +1,6 @@
 import { selector } from 'recoil';
 import { formState } from '../metadata/metadata-plot.state';
+import axios from 'axios';
 import { query } from '../../../services/query';
 
 export const defaultOverviewState = {
@@ -16,7 +17,8 @@ export const overviewState = selector({
 
     if (!organSystem || !embedding) return defaultOverviewState;
 
-    let data = await query('api/samples', { embedding, organSystem });
+    const params = { embedding, organSystem };
+    const { data } = await axios.get('api/samples', { params });
 
     const samples = data.filter((v) => v.primaryCategory && v.matchedCases != 'Duplicate');
     const studies = [
