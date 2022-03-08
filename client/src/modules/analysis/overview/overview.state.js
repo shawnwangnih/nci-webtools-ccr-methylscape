@@ -1,7 +1,6 @@
 import { selector } from 'recoil';
 import { formState } from '../metadata/metadata-plot.state';
 import axios from 'axios';
-import { query } from '../../../services/query';
 
 export const defaultOverviewState = {
   samples: 0,
