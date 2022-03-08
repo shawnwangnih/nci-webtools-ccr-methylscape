@@ -9,6 +9,7 @@ const { scanTable, getFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
 const { getCopyNumber } = require('./analysis/copyNumber/copyNumber');
+const { createImportRequest, getImportLog } = require('./database/utils');
 
 const apiRouter = express.Router();
 
@@ -38,6 +39,25 @@ apiRouter.use(
 apiRouter.get('/ping', (request, response) => {
   response.json(true);
 });
+
+apiRouter.get(
+  '/admin/importLog',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const results = await getImportLog(connection);
+    response.json(results);
+  })
+);
+
+apiRouter.post(
+  '/admin/importData',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const { sqsName } = config.aws;
+    const results = await createImportRequest(connection, sqsName);
+    response.json(results);
+  })
+);
 
 apiRouter.get(
   '/samples',
