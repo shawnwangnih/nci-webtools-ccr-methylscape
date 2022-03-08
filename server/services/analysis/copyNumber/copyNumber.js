@@ -3,6 +3,7 @@ const { groupBy, chunk } = require('lodash');
 const Papa = require('papaparse');
 const chrLines = require('./lines.json');
 const { getAnnotations } = require('../../query');
+const config = require('../../../config');
 
 async function parseTSV(stream, options = {}) {
   return new Promise((resolve, reject) => {
@@ -27,15 +28,16 @@ async function parseTSV(stream, options = {}) {
 async function getCopyNumber(request) {
   const { id, search, annotation } = request.body;
   const { connection } = request.app.locals;
+  const keyPrefix = config.aws.s3DataKey || 'methylscape/';
 
   // find and parse files
-  const binFind = await getKey('methylscape/Bins/BAF.bins_ ' + id);
+  const binFind = await getKey(keyPrefix + 'Bins/BAF.bins_ ' + id);
   const binKey = binFind.Contents[0].Key;
 
-  const probeFind = await getKey('methylscape/CNV/probes/' + id);
+  const probeFind = await getKey(keyPrefix + 'CNV/probes/' + id);
   const probeKey = probeFind.Contents[0].Key;
 
-  const segFind = await getKey('methylscape/CNV/segments/' + id);
+  const segFind = await getKey(keyPrefix + 'CNV/segments/' + id);
   const segKey = segFind.Contents[0].Key;
 
   const binFile = await getDataFile(binKey);
