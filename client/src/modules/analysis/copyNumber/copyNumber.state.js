@@ -1,5 +1,4 @@
 import { atom, selector } from 'recoil';
-import { query } from '../../../services/query';
 import axios from 'axios';
 
 export const defaultFormState = {
