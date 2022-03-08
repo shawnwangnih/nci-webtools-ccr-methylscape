@@ -7,25 +7,30 @@
   "description": "",
   "scripts": {
     "start": "node server.js --production",
-    "start:dev": "node server.js"
+    "start:dev": "node server.js",
+    "start:queue-worker": "node queue-worker.js"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.44.0",
     "@aws-sdk/client-s3": "^3.44.0",
+    "@aws-sdk/client-sqs": "^3.53.0",
     "@aws-sdk/lib-dynamodb": "^3.44.0",
     "better-sqlite3": "^7.4.5",
     "compression": "^1.7.4",
+    "csv-parse": "^5.0.4",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.1",
     "helmet": "^4.6.0",
     "knex": "^1.0.2",
+    "lodash": "^4.17.21",
     "minimist": "^1.2.5",
     "papaparse": "^5.3.1",
     "pg": "^8.7.3",
     "r-wrapper": "^1.1.2",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston-daily-rotate-file": "^4.5.5",
+    "xlsx": "^0.18.3"
   },
   "prettier": {
     "singleQuote": true
