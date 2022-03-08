@@ -39,7 +39,7 @@ async function getCopyNumber(request) {
   const segKey = segFind.Contents[0].Key;
 
   const binFile = await getDataFile(binKey);
-  const probeFile = await getDataFile(probeKey);
+  // const probeFile = await getDataFile(probeKey);
   const segFile = await getDataFile(segKey);
 
   const parseFixDimensions = {
@@ -51,7 +51,7 @@ async function getCopyNumber(request) {
   };
 
   const bin = await parseTSV(binFile.Body);
-  const probe = await parseTSV(probeFile.Body, parseFixDimensions);
+  // const probe = await parseTSV(probeFile.Body, parseFixDimensions);
   const seg = await parseTSV(segFile.Body, parseFixDimensions);
 
   // get chromosome as index from string
@@ -62,17 +62,17 @@ async function getCopyNumber(request) {
   }
 
   // hash probes by start + end as key
-  const probes = probe.reduce(
-    (a, c) => ((a[c.Start + c.End] = c.Feature), a),
-    {}
-  );
+  // const probes = probe.reduce(
+  //   (a, c) => ((a[c.Start + c.End] = c.Feature), a),
+  //   {}
+  // );
 
   // parse bins
   const bins = bin.map((e) => ({
     position: (parseInt(e.Start) + parseInt(e.End)) / 2,
     log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
     chr: getChr(e.Chromosome),
-    probe: probes[e.Start + e.End],
+    // probe: probes[e.Start + e.End],
   }));
 
   // get range of position per chromosome
