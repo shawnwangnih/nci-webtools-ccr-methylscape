@@ -1,5 +1,8 @@
+import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import Loader from './modules/components/loader';
 import Navbar from './modules/components/navbar';
 import Data from './modules/data/data';
 import About from './modules/about/about';
@@ -10,6 +13,9 @@ import Experiments from './modules/data/experiments/experiments';
 import Samples from './modules/data/samples/samples';
 import QCI from './modules/qciReport/qci';
 import Admin from './modules/admin/admin';
+import DataImport from './modules/admin/data-import/data-import';
+import UserManagement from './modules/admin/user-management/user-management';
+import ErrorBoundary from './modules/components/error-boundary';
 
 export default function App() {
   const navbarLinks = [
@@ -25,18 +31,31 @@ export default function App() {
     <RecoilRoot>
       <Router>
         <Navbar links={navbarLinks} className="shadow-sm" />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="analysis" element={<Analysis />} />
-          <Route path="data" element={<Data />}>
-            <Route path="projects" element={<Projects />} />
-            <Route path="experiments" element={<Experiments />} />
-            <Route path="samples" element={<Samples />} />
-          </Route>
-          <Route path="about/*" element={<About />} />
-          <Route path="qci/*" element={<QCI />} />
-          <Route path="admin/*" element={<Admin />} />
-        </Routes>
+        <ErrorBoundary
+          fallback={
+            <Alert variant="danger" className="m-5">
+              An internal error prevented this page from loading. Please contact the
+              website administrator if this problem persists.
+            </Alert>
+          }
+        >
+          <Suspense fallback={<Loader message="Loading Page" />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="analysis" element={<Analysis />} />
+              <Route path="data" element={<Data />}>
+                <Route path="projects" element={<Projects />} />
+                <Route path="experiments" element={<Experiments />} />
+                <Route path="samples" element={<Samples />} />
+              </Route>
+              <Route path="about/*" element={<About />} />
+              <Route path="qci/*" element={<QCI />} />
+              <Route path="admin" element={<Admin />} />
+              <Route path="admin/user-management" element={<UserManagement />} />
+              <Route path="admin/data-import" element={<DataImport />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </Router>
     </RecoilRoot>
   );
