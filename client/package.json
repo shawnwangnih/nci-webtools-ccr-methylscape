@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.25.0",
     "bootstrap": "^5.0.2",
+    "bootstrap-icons": "^1.8.1",
     "file-saver": "^2.0.5",
     "html-react-parser": "^1.4.0",
     "lodash": "^4.17.21",
@@ -20,7 +21,7 @@
     "react-router-dom": "^6.1.0",
     "react-select": "^5.2.2",
     "react-table": "^7.7.0",
-    "recoil": "^0.5.2",
+    "recoil": "^0.6.1",
     "web-vitals": "^1.1.2",
     "xml-js": "^1.6.11"
   },
