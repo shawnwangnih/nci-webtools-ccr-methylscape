@@ -9,6 +9,7 @@ export async function createSchema(database) {
   await database.schema.dropTableIfExists("role");
   await database.schema.dropTableIfExists("user");
   await database.schema.dropTableIfExists("annotations");
+  await database.schema.dropTableIfExists("importLog");
 
   /**
    * Derived from Sample_sheet_master.xlsx
@@ -131,5 +132,16 @@ export async function createSchema(database) {
     table.text("gencodeBasicV12Name");
     table.text("gencodeBasicV12Accession");
     table.string("relationTo_UCSC_CpG_Island");
+  });
+
+  /**
+   * Creates the importLog table.
+   */
+   await database.schema.createTable("importLog", function (table) {
+    table.increments("id");
+    table.string("status");
+    table.text("log");
+    table.timestamp("createdAt").defaultTo(database.fn.now());
+    table.timestamp("updatedAt").defaultTo(database.fn.now());
   });
 }
