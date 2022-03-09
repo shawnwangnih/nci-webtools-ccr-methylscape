@@ -71,7 +71,7 @@ async function getCopyNumber(request) {
 
   // parse bins
   const bins = bin.map((e) => ({
-    position: (parseInt(e.Start) + parseInt(e.End)) / 2,
+    position: Math.round((parseInt(e.Start) + parseInt(e.End)) / 2),
     log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
     chr: getChr(e.Chromosome),
     // probe: probes[e.Start + e.End],
@@ -79,45 +79,45 @@ async function getCopyNumber(request) {
 
   // get range of position per chromosome
   const binPosOffset = Object.values(
-    bins.reduce((prev, curr) => {
-      if (curr.chr != 24) {
-        if (prev[curr.chr]) {
+    bins.reduce((a, c) => {
+      if (c.chr != 24) {
+        if (a[c.chr]) {
           return {
-            ...prev,
-            [curr.chr]: Math.max(prev[curr.chr], curr.position),
+            ...a,
+            [c.chr]: Math.max(a[c.chr], c.position),
           };
         } else {
           return {
-            ...prev,
-            [curr.chr]: curr.position || 0,
+            ...a,
+            [c.chr]: c.position || 0,
           };
         }
-      } else return prev;
+      } else return a;
     }, {})
   )
-    .reduce((prev, curr, i) => [...prev, curr + (prev[i - 1] || 0)], [])
-    .reduce((prev, curr, i) => ({ ...prev, [i + 2]: curr }), { 1: 0 });
+    .reduce((a, c, i) => [...a, c + (a[i - 1] || 0)], [])
+    .reduce((a, c, i) => ({ ...a, [i + 2]: c }), { 1: 0 });
 
   const segPosOffset = Object.values(
-    seg.reduce((prev, curr) => {
-      const chr = getChr(curr.chrom);
+    seg.reduce((a, c) => {
+      const chr = getChr(c.chrom);
       if (chr != 24) {
-        if (prev[chr]) {
+        if (a[chr]) {
           return {
-            ...prev,
-            [chr]: Math.max(prev[chr], parseInt(curr['loc.start'])),
+            ...a,
+            [chr]: Math.max(a[chr], parseInt(c['loc.start'])),
           };
         } else {
           return {
-            ...prev,
-            [chr]: parseInt(curr['loc.start']),
+            ...a,
+            [chr]: parseInt(c['loc.start']),
           };
         }
-      } else return prev;
+      } else return a;
     }, {})
   )
-    .reduce((prev, curr, i) => [...prev, curr + (prev[i - 1] || 0)], [])
-    .reduce((prev, curr, i) => ({ ...prev, [i + 2]: curr }), { 1: 0 });
+    .reduce((a, c, i) => [...a, c + (a[i - 1] || 0)], [])
+    .reduce((a, c, i) => ({ ...a, [i + 2]: c }), { 1: 0 });
 
   // parse segments
   const segments = seg.map((e) => {
@@ -161,12 +161,13 @@ async function getCopyNumber(request) {
     : [];
 
   // annotate bins with common gene names
-  // const queryProbes = bins.map(({ probe }) => `${probe}`);
+  // const queryProbes = bins.map((e) => e.position);
 
   // let annotations = [];
   // for (const items of chunk(queryProbes, 10000)) {
   //   annotations = annotations.concat(await getAnnotations(connection, items));
   // }
+  // console.log(annotation);
 
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
@@ -213,13 +214,9 @@ async function getCopyNumber(request) {
     }));
 
   const yMin =
-    bins.reduce((prev, curr) =>
-      prev < curr.log2ratio ? prev : curr.log2ratio
-    ) - 0.25;
+    bins.reduce((a, c) => (a < c.log2ratio ? a : c.log2ratio)) - 0.25;
   const yMax =
-    bins.reduce((prev, curr) =>
-      prev > curr.log2ratio ? prev : curr.log2ratio
-    ) + 0.25;
+    bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio)) + 0.25;
 
   const layout = {
     showlegend: false,
