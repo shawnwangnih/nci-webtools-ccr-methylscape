@@ -3,7 +3,7 @@ const { groupBy, chunk } = require('lodash');
 const Papa = require('papaparse');
 const chrLines = require('./lines.json');
 const { getAnnotations } = require('../../query');
-const config = require('../../../config');
+const { aws: awsConfig } = require('../../../config');
 
 async function parseTSV(stream, options = {}) {
   return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ async function parseTSV(stream, options = {}) {
 async function getCopyNumber(request) {
   const { id, search, annotation } = request.body;
   const { connection } = request.app.locals;
-  const keyPrefix = config.aws.s3DataKey || 'methylscape/';
+  const keyPrefix = awsConfig.s3DataKey || 'methylscape/';
 
   // find and parse files
   const binFind = await getKey(keyPrefix + 'Bins/BAF.bins_ ' + id);
