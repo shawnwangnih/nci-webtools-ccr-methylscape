@@ -7,6 +7,7 @@ const {
   SendMessageCommand,
   SQSClient,
 } = require("@aws-sdk/client-sqs");
+const config = require('../config');
 
 /**
  * Helper function to enqueue a message given a queue name
@@ -15,7 +16,7 @@ const {
  * @returns
  */
 async function enqueue(queueName, message) {
-  const sqs = new SQSClient();
+  const sqs = new SQSClient({region: config.aws.region});
   const id = randomBytes(16).toString("hex");
 
   const { QueueUrl: queueUrl } = await sqs.send(
@@ -48,7 +49,7 @@ async function processMessages({
   messageHandler,
   errorHandler = console.error,
 }) {
-  const sqs = new SQSClient();
+  const sqs = new SQSClient({region: config.aws.region});
 
   try {
     const { QueueUrl: queueUrl } = await sqs.send(
