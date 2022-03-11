@@ -119,19 +119,16 @@ export async function createSchema(database) {
   });
 
   /**
-   * Creates the annotations table.
-   * Source: annotations.csv (infinium-methylationepic-v-1-0-b5-manifest-file.csv)
+   * Creates the genes table.
+   * Source: genes.csv
    * Genome references for copy number
    */
-  await database.schema.createTable("annotations", function (table) {
-    table.increments("id");
-    table.string("name");
-    table.string("chr");
-    table.integer("mapInfo");
-    table.text("ucscName");
-    table.text("gencodeBasicV12Name");
-    table.text("gencodeBasicV12Accession");
-    table.string("relationTo_UCSC_CpG_Island");
+   await database.schema.createTable('genes', function (table) {
+    table.increments('id');
+    table.string('chr').index('');
+    table.integer('start').index('');
+    table.integer('end').index('');
+    table.string('geneID');
   });
 
   /**

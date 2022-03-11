@@ -24,9 +24,15 @@
       { "sourceName": "Additional.info", "name": "details" },
       { "sourceName": "H3K27me3", "name": "h3k27me3" },
       { "sourceName": "Variants", "name": "variants" },
-      { "sourceName": "Fusions/translocations", "name": "fusionsOrTranslocations" },
+      {
+        "sourceName": "Fusions/translocations",
+        "name": "fusionsOrTranslocations"
+      },
       { "sourceName": "Variants_report", "name": "variantsReport" },
-      { "sourceName": "Fusions/translocations_report", "name": "fusionsOrTranslocationsReport" },
+      {
+        "sourceName": "Fusions/translocations_report",
+        "name": "fusionsOrTranslocationsReport"
+      },
       { "sourceName": "OS_months", "name": "overallSurvivalMonths" },
       { "sourceName": "OS_status", "name": "overallSurvivalStatus" },
       { "sourceName": "WHO_2007_grade", "name": "who_2007_grade" },
@@ -41,7 +47,11 @@
     "description": "umap coordinates - centralNervousSystem",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "centralNervousSystem" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "centralNervousSystem"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
       { "sourceName": "umap_x", "name": "x" },
       { "sourceName": "umap_y", "name": "y" }
@@ -54,7 +64,11 @@
     "description": "densmap coordinates - centralNervousSystem",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "centralNervousSystem" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "centralNervousSystem"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
       { "sourceName": "densmap_x", "name": "x" },
       { "sourceName": "densmap_y", "name": "y" }
@@ -67,7 +81,11 @@
     "description": "umap coordinates - boneAndSoftTissue",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "boneAndSoftTissue" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "boneAndSoftTissue"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
       { "sourceName": "umap_x", "name": "x" },
       { "sourceName": "umap_y", "name": "y" }
@@ -80,7 +98,11 @@
     "description": "densmap coordinates - boneAndSoftTissue",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "boneAndSoftTissue" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "boneAndSoftTissue"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
       { "sourceName": "densmap_x", "name": "x" },
       { "sourceName": "densmap_y", "name": "y" }
@@ -93,7 +115,11 @@
     "description": "umap coordinates - hematopoietic",
     "columns": [
       { "sourceName": "order", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "hematopoietic" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "hematopoietic"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
       { "sourceName": "umap_x", "name": "x" },
       { "sourceName": "umap_y", "name": "y" }
@@ -106,7 +132,11 @@
     "description": "densmap coordinates - hematopoietic",
     "columns": [
       { "sourceName": "order", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "hematopoietic" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "hematopoietic"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
       { "sourceName": "densmap_x", "name": "x" },
       { "sourceName": "densmap_y", "name": "y" }
@@ -145,7 +175,11 @@
     "description": "umap coordinates - panCancer",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "panCancer" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "panCancer"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "umap" },
       { "sourceName": "umap_x", "name": "x" },
       { "sourceName": "umap_y", "name": "y" }
@@ -158,7 +192,11 @@
     "description": "densmap coordinates - panCancer",
     "columns": [
       { "sourceName": "nn", "name": "sampleId" },
-      { "sourceName": null, "name": "organSystem", "defaultValue": "panCancer" },
+      {
+        "sourceName": null,
+        "name": "organSystem",
+        "defaultValue": "panCancer"
+      },
       { "sourceName": null, "name": "embedding", "defaultValue": "densmap" },
       { "sourceName": "densmap_x", "name": "x" },
       { "sourceName": "densmap_y", "name": "y" }
@@ -166,17 +204,14 @@
   },
 
   {
-    "sourcePath": "./data/annotations.csv",
-    "table": "annotations",
-    "description": "Gene annotations",
+    "sourcePath": "./data/gencode.v19.annotation.csv",
+    "table": "genes",
+    "description": "GenCode annotations",
     "columns": [
-      { "sourceName": "Name", "name": "name" },
-      { "sourceName": "CHR", "name": "chr" },
-      { "sourceName": "MAPINFO", "name": "mapInfo" },
-      { "sourceName": "UCSC_RefGene_Name", "name": "ucscName" },
-      { "sourceName": "GencodeBasicV12_NAME", "name": "gencodeBasicV12Name" },
-      { "sourceName": "GencodeBasicV12_Accession", "name": "gencodeBasicV12Accession" },
-      { "sourceName": "Relation_to_UCSC_CpG_Island", "name": "relationTo_UCSC_CpG_Island" }
+      { "sourceName": "seqname", "name": "chr" },
+      { "sourceName": "start", "name": "start" },
+      { "sourceName": "end", "name": "end" },
+      { "sourceName": "gene_id", "name": "geneID" }
     ]
   }
 ]

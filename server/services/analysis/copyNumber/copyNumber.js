@@ -2,7 +2,6 @@ const { getKey, getDataFile } = require('../../aws');
 const { groupBy, chunk } = require('lodash');
 const Papa = require('papaparse');
 const chrLines = require('./lines.json');
-const { getAnnotations } = require('../../query');
 const { aws: awsConfig } = require('../../../config');
 
 async function parseTSV(stream, options = {}) {
@@ -31,11 +30,11 @@ async function getCopyNumber(request) {
   const keyPrefix = awsConfig.s3DataKey || 'methylscape/';
 
   // find and parse files
-  const binFind = await getKey(keyPrefix + 'Bins/BAF.bins_ ' + id);
+  const binFind = await getKey(keyPrefix + 'CNV/bins/' + id);
   const binKey = binFind.Contents[0].Key;
 
-  const probeFind = await getKey(keyPrefix + 'CNV/probes/' + id);
-  const probeKey = probeFind.Contents[0].Key;
+  // const probeFind = await getKey(keyPrefix + 'CNV/probes/' + id);
+  // const probeKey = probeFind.Contents[0].Key;
 
   const segFind = await getKey(keyPrefix + 'CNV/segments/' + id);
   const segKey = segFind.Contents[0].Key;
@@ -44,6 +43,7 @@ async function getCopyNumber(request) {
   // const probeFile = await getDataFile(probeKey);
   const segFile = await getDataFile(segKey);
 
+  // fix for files that contain an extra column that is not defined
   const parseFixDimensions = {
     beforeFirstChunk: (chunk) => {
       let lines = chunk.split(/\r\n|\r|\n/);
@@ -52,7 +52,7 @@ async function getCopyNumber(request) {
     },
   };
 
-  const bin = await parseTSV(binFile.Body);
+  const bin = await parseTSV(binFile.Body, parseFixDimensions);
   // const probe = await parseTSV(probeFile.Body, parseFixDimensions);
   const seg = await parseTSV(segFile.Body, parseFixDimensions);
 
@@ -63,19 +63,49 @@ async function getCopyNumber(request) {
     );
   }
 
-  // hash probes by start + end as key
-  // const probes = probe.reduce(
-  //   (a, c) => ((a[c.Start + c.End] = c.Feature), a),
-  //   {}
+  // const probesByChr = groupBy(
+  //   probe.map((d) => ({
+  //     start: d.Start,
+  //     end: d.End,
+  //     feature: d.Feature,
+  //     chr: d.Chromosome,
+  //   })),
+  //   (e) => e.chr
   // );
 
+  // function getProbes(chr, start, end) {
+  //   const probes = probesByChr[chr]
+  //     .filter((e) => e.start >= start && e.end <= end)
+  //     .map((e) => e.feature);
+
+  //   console.log(probes.length);
+
+  //   return probes;
+  // }
+
+  async function getGenes(chr, start, end) {
+    const query = await connection('genes')
+      .select('*')
+      .where({ chr })
+      .andWhere((e) => {
+        e.whereBetween('start', [start, end]).orWhereBetween('end', [
+          start,
+          end,
+        ]);
+      });
+    return query.map((e) => e.geneID);
+  }
+
   // parse bins
-  const bins = bin.map((e) => ({
-    position: Math.round((parseInt(e.Start) + parseInt(e.End)) / 2),
-    log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
-    chr: getChr(e.Chromosome),
-    // probe: probes[e.Start + e.End],
-  }));
+  const bins = await Promise.all(
+    bin.map(async (e) => ({
+      position: Math.round((parseInt(e.Start) + parseInt(e.End)) / 2),
+      log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
+      chr: getChr(e.Chromosome),
+      genes: await getGenes(e.Chromosome, e.Start, e.End),
+      // probes: getProbes(e.Chromosome, e.Start, e.End),
+    }))
+  );
 
   // get range of position per chromosome
   const binPosOffset = Object.values(
@@ -98,26 +128,26 @@ async function getCopyNumber(request) {
     .reduce((a, c, i) => [...a, c + (a[i - 1] || 0)], [])
     .reduce((a, c, i) => ({ ...a, [i + 2]: c }), { 1: 0 });
 
-  const segPosOffset = Object.values(
-    seg.reduce((a, c) => {
-      const chr = getChr(c.chrom);
-      if (chr != 24) {
-        if (a[chr]) {
-          return {
-            ...a,
-            [chr]: Math.max(a[chr], parseInt(c['loc.start'])),
-          };
-        } else {
-          return {
-            ...a,
-            [chr]: parseInt(c['loc.start']),
-          };
-        }
-      } else return a;
-    }, {})
-  )
-    .reduce((a, c, i) => [...a, c + (a[i - 1] || 0)], [])
-    .reduce((a, c, i) => ({ ...a, [i + 2]: c }), { 1: 0 });
+  // const segPosOffset = Object.values(
+  //   seg.reduce((a, c) => {
+  //     const chr = getChr(c.chrom);
+  //     if (chr != 24) {
+  //       if (a[chr]) {
+  //         return {
+  //           ...a,
+  //           [chr]: Math.max(a[chr], parseInt(c['loc.start'])),
+  //         };
+  //       } else {
+  //         return {
+  //           ...a,
+  //           [chr]: parseInt(c['loc.start']),
+  //         };
+  //       }
+  //     } else return a;
+  //   }, {})
+  // )
+  //   .reduce((a, c, i) => [...a, c + (a[i - 1] || 0)], [])
+  //   .reduce((a, c, i) => ({ ...a, [i + 2]: c }), { 1: 0 });
 
   // parse segments
   const segments = seg.map((e) => {
@@ -149,25 +179,15 @@ async function getCopyNumber(request) {
   const searchAnnotations = searchQueries.length
     ? bins
         .filter(
-          ({ probe }) =>
-            probe &&
-            searchQueries.some((query) => probe.toLowerCase().includes(query))
+          ({ probe }) => probe
+          // &&searchQueries.some((query) => probe.toLowerCase().includes(query))
         )
         .map((e) => ({
           text: e.probe,
-          x: e.position,
+          x: binPosOffset[e.chr] + e.position,
           y: e.log2ratio,
         }))
     : [];
-
-  // annotate bins with common gene names
-  // const queryProbes = bins.map((e) => e.position);
-
-  // let annotations = [];
-  // for (const items of chunk(queryProbes, 10000)) {
-  //   annotations = annotations.concat(await getAnnotations(connection, items));
-  // }
-  // console.log(annotation);
 
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
@@ -193,11 +213,11 @@ async function getCopyNumber(request) {
       chr,
       x: data.map((e) => e.position),
       y: data.map((e) => e.log2ratio),
-      customdata: data.map((e) => ({ probe: e.probe })),
+      customdata: data.map(({ genes }) => ({ genes })),
       mode: 'markers',
       type: 'scattergl',
       hovertemplate:
-        'Probe: %{customdata.probe}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
+        'Genes: %{customdata.genes}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
       marker: {
         color: data.map((e) => e.log2ratio),
         // colorscale: [

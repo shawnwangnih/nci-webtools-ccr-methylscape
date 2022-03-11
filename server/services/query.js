@@ -9,11 +9,6 @@ async function getSamples(connection, { embedding, organSystem }) {
   }
 }
 
-async function getAnnotations(connection, query) {
-  return await connection('annotations').select('*').whereIn('mapInfo', query);
-}
-
 module.exports = {
   getSamples,
-  getAnnotations,
 };

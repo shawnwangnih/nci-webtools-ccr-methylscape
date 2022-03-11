@@ -178,5 +178,17 @@
       { "sourceName": "GencodeBasicV12_Accession", "name": "gencodeBasicV12Accession" },
       { "sourceName": "Relation_to_UCSC_CpG_Island", "name": "relationTo_UCSC_CpG_Island" }
     ]
+  },
+
+  {
+    "sourcePath": "gencode.v19.annotation.csv",
+    "table": "genes",
+    "description": "GenCode annotations",
+    "columns": [
+      { "sourceName": "seqname", "name": "chr" },
+      { "sourceName": "start", "name": "start" },
+      { "sourceName": "end", "name": "end" },
+      { "sourceName": "gene_id", "name": "geneID" }
+    ]
   }
 ]
