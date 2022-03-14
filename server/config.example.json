@@ -19,8 +19,7 @@
     "dynamoDBTable": "",
     "s3Bucket": "",
     "s3DataBucket": "",
-    "S3Key": "",
-    "S3QCReportsKey": ""
+    "sqsName": ""
   },
   "results_folder": "../tmp/"
 }

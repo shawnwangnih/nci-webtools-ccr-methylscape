@@ -84,7 +84,7 @@ apiRouter.post(
   withAsync(async (request, response) => {
     const { qc, sample } = request.body;
     const key = path.join(
-      qc ? config.aws.S3QCReportsKey : config.aws.S3Key,
+      qc ? 'methylscape/QCReports' : 'methylscape/ClassifierReports',
       qc || sample
     );
 
