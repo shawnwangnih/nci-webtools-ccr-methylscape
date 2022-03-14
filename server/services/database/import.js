@@ -8,7 +8,7 @@ const {
 const tables = [
   "sampleCoordinates", 
   "sample", 
-  "annotations"
+  "genes"
 ];
 
 async function importData(connection, logger, sources) {
