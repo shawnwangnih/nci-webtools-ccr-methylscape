@@ -9,6 +9,7 @@ export async function createSchema(database) {
   await database.schema.dropTableIfExists("role");
   await database.schema.dropTableIfExists("user");
   await database.schema.dropTableIfExists("annotations");
+  await database.schema.dropTableIfExists("genes");
   await database.schema.dropTableIfExists("importLog");
 
   /**
