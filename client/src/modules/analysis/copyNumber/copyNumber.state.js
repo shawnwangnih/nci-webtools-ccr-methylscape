@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export const defaultFormState = {
   annotation: 'none',
+  extreme: false,
   search: [],
 };
 
@@ -28,10 +29,10 @@ export const defaultPlotState = {
 };
 
 export const plotState = selector({
-  key: 'cnaPlot',
+  key: 'copyNumberPlotState',
   get: async ({ get }) => {
     const { idatFilename, sample } = get(copyNumberState);
-    const { annotation, search } = get(formState);
+    const { annotation, search, extreme } = get(formState);
 
     if (!idatFilename) return defaultPlotState;
     try {
@@ -39,18 +40,20 @@ export const plotState = selector({
         id: idatFilename,
         search,
         annotation,
+        extreme,
       });
 
-      const { data, layout, config } = response.data;
+      const { data, layout, config, ...rest } = response.data;
 
       return {
         data,
         config,
         layout: {
           ...layout,
-          uirevision: idatFilename + annotation + search,
+          uirevision: idatFilename + annotation + search + extreme,
           title: `${sample} (${idatFilename})`,
         },
+        ...rest,
       };
     } catch (error) {
       console.log(error);

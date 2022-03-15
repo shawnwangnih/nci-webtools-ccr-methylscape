@@ -25,7 +25,7 @@ async function parseTSV(stream, options = {}) {
 }
 
 async function getCopyNumber(request) {
-  const { id, search, annotation } = request.body;
+  const { id, search, annotation, extreme } = request.body;
   const { connection } = request.app.locals;
   const keyPrefix = awsConfig.s3DataKey || 'methylscape/';
 
@@ -106,6 +106,9 @@ async function getCopyNumber(request) {
       // probes: getProbes(e.Chromosome, e.Start, e.End),
     }))
   );
+  // min max bin values
+  const yMin = bins.reduce((a, c) => (a < c.log2ratio ? a : c.log2ratio));
+  const yMax = bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio));
 
   // get range of position per chromosome
   const binPosOffset = Object.values(
@@ -192,10 +195,19 @@ async function getCopyNumber(request) {
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
     groupBy(
-      bins.map((d) => ({
-        ...d,
-        position: d.position + binPosOffset[d.chr],
-      })),
+      extreme
+        ? bins
+            .filter(
+              (d) => d.log2ratio > yMax * 0.75 || d.log2ratio < yMin * 0.75
+            )
+            .map((d) => ({
+              ...d,
+              position: d.position + binPosOffset[d.chr],
+            }))
+        : bins.map((d) => ({
+            ...d,
+            position: d.position + binPosOffset[d.chr],
+          })),
       (e) => e.chr
     )
   );
@@ -233,10 +245,7 @@ async function getCopyNumber(request) {
       },
     }));
 
-  const yMin =
-    bins.reduce((a, c) => (a < c.log2ratio ? a : c.log2ratio)) - 0.25;
-  const yMax =
-    bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio)) + 0.25;
+  const bufferMargin = 0.25;
 
   const layout = {
     showlegend: false,
@@ -265,8 +274,8 @@ async function getCopyNumber(request) {
         type: 'line',
         x0: e['pos.start'],
         x1: e['pos.start'],
-        y0: yMin,
-        y1: yMax,
+        y0: yMin - bufferMargin,
+        y1: yMax + bufferMargin,
         line: { width: 1 },
       })),
       // chromosome segment divider
@@ -274,8 +283,8 @@ async function getCopyNumber(request) {
         type: 'line',
         x0: e['pq'],
         x1: e['pq'],
-        y0: yMin,
-        y1: yMax,
+        y0: yMin - bufferMargin,
+        y1: yMax + bufferMargin,
         line: { dash: 'dot', width: 1 },
       })),
       // chromosome segments

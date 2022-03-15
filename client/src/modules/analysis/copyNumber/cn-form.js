@@ -1,4 +1,4 @@
-import { ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -17,6 +17,10 @@ export default function CopyNumberForm() {
 
   function handleToggle(e) {
     mergeForm({ annotation: e });
+  }
+
+  function handleExtreme(e) {
+    mergeForm({ extreme: !form.extreme });
   }
 
   function handleSearch(e) {
@@ -42,6 +46,17 @@ export default function CopyNumberForm() {
             </ToggleButton>
           ))}
         </ButtonGroup>
+      </Col>
+      <Col sm="auto" className="d-flex">
+        <Form.Group controlId="plotExtreme" className="mb-3">
+          <Form.Check
+            label="Extreme"
+            type="switch"
+            name="plotExtreme"
+            checked={form.extreme}
+            onChange={handleExtreme}
+          />
+        </Form.Group>
       </Col>
       <Col>
         <Form.Group id="copy-number-search" className="mb-3">
