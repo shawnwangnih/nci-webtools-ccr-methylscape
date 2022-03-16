@@ -41,7 +41,7 @@ apiRouter.get('/ping', (request, response) => {
 
 apiRouter.get(
   '/login',
-  passport.authenticate('loginGov', 
+  passport.authenticate(config.auth[0].name, 
     { 
       successRedirect: '/', 
       failureRedirect: '/api/login' 
