@@ -11,19 +11,10 @@ async function createOAuthStrategy({ baseUrl, clientId, clientSecret, redirectUr
     response_types: ['code'],
   });
 
-  params = {
-    code_challenge: codeChallenge(codeVerifier()),
-    code_challenge_method: 'S256',
-    nonce: nonce(),
-    ...params,
-  };
-
   return new Strategy({ client, params }, (tokenSet, done) => {
-    console.log('tokenSet', tokenSet);
     done(null, tokenSet.claims());
   });
 }
-
 
 async function createPkceStrategy({ baseUrl, clientId, redirectUris, params }) {
   const { Client } = await Issuer.discover(baseUrl);
@@ -43,7 +34,6 @@ async function createPkceStrategy({ baseUrl, clientId, redirectUris, params }) {
   };
 
   return new Strategy({ client, params }, (tokenSet, done) => {
-    console.log('tokenSet', tokenSet);
     done(null, tokenSet.claims());
   });
 }
