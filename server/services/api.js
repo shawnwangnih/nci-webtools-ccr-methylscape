@@ -1,15 +1,14 @@
+const path = require('path');
 const express = require('express');
 const compression = require('compression');
-const sqlite = require('better-sqlite3');
-const path = require('path');
-const fs = require('fs');
-const config = require('../config');
-const { getSchema, query, getSamples, getAnnotations } = require('./query');
+const passport = require('passport');
+const { getSamples } = require('./query');
 const { scanTable, getFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
 const { getCopyNumber } = require('./analysis/copyNumber/copyNumber');
 const { createImportRequest, getImportLog } = require('./database/utils');
+const config = require('../config');
 
 const apiRouter = express.Router();
 
@@ -23,7 +22,7 @@ apiRouter.use(compression());
 apiRouter.use(logRequests());
 
 // add public cache-control headers to responses for GET requests
-apiRouter.use(publicCacheControl(60 * 60));
+// apiRouter.use(publicCacheControl(60 * 60));
 
 // serve static results
 apiRouter.use(
@@ -38,6 +37,31 @@ apiRouter.use(
 // healthcheck route
 apiRouter.get('/ping', (request, response) => {
   response.json(true);
+});
+
+apiRouter.get(
+  '/login',
+  passport.authenticate('loginGov', 
+    { 
+      successRedirect: '/', 
+      failureRedirect: '/api/login' 
+    }
+  )
+);
+
+apiRouter.get('/logout', (request, response) => {
+  request.logout();
+  response.redirect('/');
+})
+
+apiRouter.get('/session', (request, response) => {
+  const { cookie, passport } = request.session;
+  const { expires } = cookie;
+  const user = (passport && passport.user)
+    ? { email: passport.user.email, authenticated: true, permissions: [] }
+    : { authenticated: false, permissions: [] };
+
+  response.json({ expires, ...user });
 });
 
 apiRouter.get(
