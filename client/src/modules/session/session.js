@@ -6,7 +6,6 @@ import { sessionState } from './session.state';
 
 export default function Session({children}) {
     
-  const location = useLocation();
   const setSession = useSetRecoilState(sessionState);
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export default function Session({children}) {
         }
     }
     updateSession();
-  }, [location, setSession]);
+  }, [setSession]);
 
   return children;
 }
