@@ -12,14 +12,14 @@ export const formState = atom({
   default: defaultFormState,
 });
 
-export const defaultCopyNumberState = {
+export const defaultSelectSample = {
   idatFilename: '',
   sample: '',
 };
 
-export const copyNumberState = atom({
-  key: 'copyNumberState',
-  default: defaultCopyNumberState,
+export const selectSampleState = atom({
+  key: 'selectSampleState',
+  default: defaultSelectSample,
 });
 
 export const defaultPlotState = {
@@ -31,7 +31,7 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'copyNumberPlotState',
   get: async ({ get }) => {
-    const { idatFilename, sample } = get(copyNumberState);
+    const { idatFilename, sample } = get(selectSampleState);
     const { annotation, search, significant } = get(formState);
 
     if (!idatFilename) return defaultPlotState;
@@ -44,7 +44,7 @@ export const plotState = selector({
       });
 
       const { data, layout, config, ...rest } = response.data;
-
+      console.log(data, layout);
       return {
         data,
         config,

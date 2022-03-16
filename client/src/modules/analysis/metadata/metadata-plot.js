@@ -6,13 +6,13 @@ import {
 } from 'recoil';
 import cloneDeep from 'lodash/cloneDeep';
 import { plotState, selectedPoints } from './metadata-plot.state';
-import { copyNumberState } from '../copyNumber/copyNumber.state';
+import { selectSampleState } from '../copyNumber/copyNumber.state';
 import { tableForm } from '../table/table.state';
 import Plot from 'react-plotly.js';
 
 export default function MetadataPlot({ onSelect }) {
   let { data, layout, config } = useRecoilValue(plotState);
-  const setCnState = useSetRecoilState(copyNumberState);
+  const setSample = useSetRecoilState(selectSampleState);
   // const setSelectedPoints = useSetRecoilState(selectedPoints);
   const [_, setSelectedPoints] = useRecoilState(selectedPoints);
   // const { selectedGroup } = useRecoilValue(tableForm);
@@ -41,7 +41,7 @@ export default function MetadataPlot({ onSelect }) {
 
   function handleClick(e) {
     if (e) {
-      setCnState((state) => ({
+      setSample((state) => ({
         ...state,
         idatFilename: e.points[0].customdata.idatFilename,
         sample: e.points[0].customdata.sample,

@@ -177,10 +177,12 @@ async function getCopyNumber(request) {
 
   // filter for significant values: top/bottom 25%
   const range = 0.75;
+
   if (significant)
     bins = bins.filter(
       (e) => e.log2ratio > yMax * range || e.log2ratio < yMin * range
     );
+
   bins = await Promise.all(
     bins.map(async ({ position, log2ratio, chr, ...e }) => ({
       log2ratio,
