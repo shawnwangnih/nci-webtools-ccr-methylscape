@@ -19,8 +19,8 @@ export default function CopyNumberForm() {
     mergeForm({ annotation: e });
   }
 
-  function handleExtreme(e) {
-    mergeForm({ extreme: !form.extreme });
+  function handleSignificant(e) {
+    mergeForm({ significant: !form.significant });
   }
 
   function handleSearch(e) {
@@ -48,13 +48,13 @@ export default function CopyNumberForm() {
         </ButtonGroup>
       </Col>
       <Col sm="auto" className="d-flex">
-        <Form.Group controlId="plotExtreme" className="mb-3">
+        <Form.Group controlId="plotSignificant" className="my-auto">
           <Form.Check
-            label="Extreme"
+            label="Significant"
             type="switch"
-            name="plotExtreme"
-            checked={form.extreme}
-            onChange={handleExtreme}
+            name="plotSignificant"
+            checked={form.significant}
+            onChange={handleSignificant}
           />
         </Form.Group>
       </Col>
@@ -68,9 +68,9 @@ export default function CopyNumberForm() {
               DropdownIndicator: () => null,
               IndicatorSeparator: () => null,
             }}
-            formatCreateLabel={(userInput) => `Probe: ${userInput}`}
+            formatCreateLabel={(userInput) => `Gene(s): ${userInput}`}
             isMulti
-            placeholder="Probe"
+            placeholder="Gene(s)"
             value={form.search}
             onChange={handleSearch}
           />

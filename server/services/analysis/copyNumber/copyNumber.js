@@ -25,7 +25,7 @@ async function parseTSV(stream, options = {}) {
 }
 
 async function getCopyNumber(request) {
-  const { id, search, annotation, extreme } = request.body;
+  const { id, search, annotation, significant } = request.body;
   const { connection } = request.app.locals;
   const keyPrefix = awsConfig.s3DataKey || 'methylscape/';
 
@@ -97,18 +97,12 @@ async function getCopyNumber(request) {
   }
 
   // parse bins
-  const bins = await Promise.all(
-    bin.map(async (e) => ({
-      position: Math.round((parseInt(e.Start) + parseInt(e.End)) / 2),
-      log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
-      chr: getChr(e.Chromosome),
-      genes: await getGenes(e.Chromosome, e.Start, e.End),
-      // probes: getProbes(e.Chromosome, e.Start, e.End),
-    }))
-  );
-  // min max bin values
-  const yMin = bins.reduce((a, c) => (a < c.log2ratio ? a : c.log2ratio));
-  const yMax = bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio));
+  let bins = bin.map((e) => ({
+    ...e,
+    position: Math.round((parseInt(e.Start) + parseInt(e.End)) / 2),
+    log2ratio: parseFloat(e[Object.keys(e)[Object.keys(e).length - 1]]),
+    chr: getChr(e.Chromosome),
+  }));
 
   // get range of position per chromosome
   const binPosOffset = Object.values(
@@ -177,17 +171,41 @@ async function getCopyNumber(request) {
     };
   });
 
+  // find min max bin values
+  const yMin = bins.reduce((a, c) => (a < c.log2ratio ? a : c.log2ratio));
+  const yMax = bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio));
+
+  // filter for significant values: top/bottom 25%
+  const range = 0.75;
+  if (significant)
+    bins = bins.filter(
+      (e) => e.log2ratio > yMax * range || e.log2ratio < yMin * range
+    );
+  bins = await Promise.all(
+    bins.map(async ({ position, log2ratio, chr, ...e }) => ({
+      log2ratio,
+      chr,
+      position: position + binPosOffset[chr],
+      genes: await getGenes(e.Chromosome, e.Start, e.End),
+    }))
+  );
+
   // annotate bins by search query
   const searchQueries = search.map(({ value }) => value.toLowerCase());
   const searchAnnotations = searchQueries.length
     ? bins
-        .filter(
-          ({ probe }) => probe
-          // &&searchQueries.some((query) => probe.toLowerCase().includes(query))
+        .filter(({ genes }) =>
+          genes
+            .map((g) => g.toLowerCase())
+            .some((gene) => searchQueries.find((query) => gene.includes(query)))
         )
         .map((e) => ({
-          text: e.probe,
-          x: binPosOffset[e.chr] + e.position,
+          text: e.genes
+            .map((g) => g.toLowerCase())
+            .find((gene) =>
+              searchQueries.find((query) => gene.includes(query))
+            ),
+          x: e.position,
           y: e.log2ratio,
         }))
     : [];
@@ -195,19 +213,12 @@ async function getCopyNumber(request) {
   // group bins by chromosome
   const dataGroupedByChr = Object.entries(
     groupBy(
-      extreme
-        ? bins
-            .filter(
-              (d) => d.log2ratio > yMax * 0.75 || d.log2ratio < yMin * 0.75
-            )
-            .map((d) => ({
-              ...d,
-              position: d.position + binPosOffset[d.chr],
-            }))
-        : bins.map((d) => ({
-            ...d,
-            position: d.position + binPosOffset[d.chr],
-          })),
+      bins.map(({ position, log2ratio, chr, genes }) => ({
+        log2ratio,
+        chr,
+        position,
+        genes,
+      })),
       (e) => e.chr
     )
   );
@@ -225,11 +236,11 @@ async function getCopyNumber(request) {
       chr,
       x: data.map((e) => e.position),
       y: data.map((e) => e.log2ratio),
-      customdata: data.map(({ genes }) => ({ genes })),
+      customdata: data.map(({ genes }) => ({ genes, count: genes.length - 1 })),
       mode: 'markers',
       type: 'scattergl',
       hovertemplate:
-        'Genes: %{customdata.genes}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
+        'Genes: %{customdata.genes[0]} + %{customdata.count}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
       marker: {
         color: data.map((e) => e.log2ratio),
         // colorscale: [
@@ -239,9 +250,9 @@ async function getCopyNumber(request) {
         //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
         //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
         // ],
-        cmax: 0.7,
+        cmax: yMax * 0.5,
         cmid: 0,
-        cmin: -0.7,
+        cmin: yMin * 0.5,
       },
     }));
 
