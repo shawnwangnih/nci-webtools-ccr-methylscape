@@ -1,11 +1,15 @@
+import { useRecoilValue } from 'recoil';
 import { NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import HomeImage from './images/home.svg';
+import { sessionState } from '../session/session.state';
 import './home.scss';
 
 export default function Home() {
+  const session = useRecoilValue(sessionState);
+
   return (
     <>
       <div
@@ -20,9 +24,9 @@ export default function Home() {
           </h1>
 
           <p className="lead">Application description</p>
-          <NavLink className="btn btn-outline-primary" to="analysis">
+          {session.authenticated && <NavLink className="btn btn-outline-primary" to="analysis">
             Perform Analysis
-          </NavLink>
+          </NavLink>}
         </Container>
       </div>
 
