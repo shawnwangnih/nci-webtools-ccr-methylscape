@@ -1,5 +1,8 @@
 const express = require('express');
 const knex = require('knex');
+const passport = require("passport");
+const { registerUserSerializers, registerAuthStrategies } = require("./services/auth/passportUtils");
+const { createSession } = require("./services/session");
 const getLogger = require('./services/logger');
 const { apiRouter } = require('./services/api');
 const { forkCluster } = require('./services/cluster');
@@ -20,11 +23,17 @@ const connection = knex({
   connection: config.database
 });
 
+registerUserSerializers(passport, connection);
+registerAuthStrategies(passport, config.auth);
+
 app.locals.logger = getLogger('methylscape-analysis');
 app.locals.connection = connection;
 app.locals.userManager = new UserManager(connection);
 app.locals.roleManager = new RoleManager(connection);
 
+app.use(createSession());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/api', apiRouter);
 app.use(logErrors); // logErrors should always be last
 
