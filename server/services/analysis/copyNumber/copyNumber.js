@@ -176,7 +176,7 @@ async function getCopyNumber(request) {
   const yMax = bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio));
 
   // filter for significant values: top/bottom 25%
-  const range = 0.75;
+  const range = 0.5;
 
   if (significant)
     bins = bins.filter(
@@ -235,6 +235,8 @@ async function getCopyNumber(request) {
     else return 45 * i;
   };
 
+  const ex = Math.abs(yMin) > yMax ? Math.abs(yMin) : yMax;
+
   // transform data to traces
   const dataTraces = dataGroupedByChr
     .sort(([chrA], [chrB]) => parseInt(chrA) - parseInt(chrB))
@@ -262,9 +264,9 @@ async function getCopyNumber(request) {
         //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
         //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
         // ],
-        cmax: yMax * 0.5,
+        cmax: ex * range * 0.7,
         cmid: 0,
-        cmin: yMin * 0.5,
+        cmin: ex * range * -0.7,
       },
     }));
 
