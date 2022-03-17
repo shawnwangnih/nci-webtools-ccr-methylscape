@@ -235,7 +235,7 @@ async function getCopyNumber(request) {
     else return 45 * i;
   };
 
-  const ex = Math.abs(yMin) > yMax ? Math.abs(yMin) : yMax;
+  const colorMinMax = (Math.abs(yMin) > yMax ? Math.abs(yMin) : yMax) * range;
 
   // transform data to traces
   const dataTraces = dataGroupedByChr
@@ -264,9 +264,9 @@ async function getCopyNumber(request) {
         //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
         //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
         // ],
-        cmax: ex * range * 0.7,
+        cmax: colorMinMax,
         cmid: 0,
-        cmin: ex * range * -0.7,
+        cmin: colorMinMax * -1,
       },
     }));
 
