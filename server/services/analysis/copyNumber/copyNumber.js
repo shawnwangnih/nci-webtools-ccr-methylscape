@@ -210,21 +210,19 @@ async function getCopyNumber(request) {
   );
 
   // create annotation trace of bins by search query
-  const searchQueries = search.map(({ value }) => value.toLowerCase());
+  const searchQueries = search.map((value) => value.toLowerCase());
   const searchAnnotations = searchQueries.length
     ? bins
         .filter(({ genes }) =>
-          genes
-            .map((g) => g.toLowerCase())
-            .some((gene) => searchQueries.find((query) => gene.includes(query)))
+          genes.some((gene) =>
+            searchQueries.find((query) => gene.toLowerCase().includes(query))
+          )
         )
         .map((e) => ({
-          text: e.genes
-            .map((g) => g.toLowerCase())
-            .find((gene) =>
-              searchQueries.find((query) => gene.includes(query))
-            ),
-          x: e.position,
+          text: e.genes.find((gene) =>
+            searchQueries.find((query) => gene.toLowerCase().includes(query))
+          ),
+          x: e.position + binPosOffset[e.chr],
           y: e.log2ratio,
         }))
     : [];
