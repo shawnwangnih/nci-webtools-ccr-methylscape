@@ -183,16 +183,33 @@ async function getCopyNumber(request) {
       (e) => e.log2ratio > yMax * range || e.log2ratio < yMin * range
     );
 
+  // get annotated genes
   bins = await Promise.all(
-    bins.map(async ({ position, log2ratio, chr, ...e }) => ({
-      log2ratio,
-      chr,
-      position: position + binPosOffset[chr],
+    bins.map(async (e) => ({
+      ...e,
       genes: [...new Set(await getGenes(e.Chromosome, e.Start, e.End))],
     }))
   );
 
-  // annotate bins by search query
+  // group bins by chromosome
+  const dataGroupedByChr = Object.entries(
+    groupBy(
+      bins.map(
+        ({ position, log2ratio, chr, genes, Start, End, Chromosome }) => ({
+          position: position + binPosOffset[chr],
+          chr,
+          log2ratio,
+          genes,
+          chromosome: Chromosome,
+          start: Start,
+          end: End,
+        })
+      ),
+      (e) => e.chr
+    )
+  );
+
+  // create annotation trace of bins by search query
   const searchQueries = search.map(({ value }) => value.toLowerCase());
   const searchAnnotations = searchQueries.length
     ? bins
@@ -212,19 +229,6 @@ async function getCopyNumber(request) {
         }))
     : [];
 
-  // group bins by chromosome
-  const dataGroupedByChr = Object.entries(
-    groupBy(
-      bins.map(({ position, log2ratio, chr, genes }) => ({
-        log2ratio,
-        chr,
-        position,
-        genes,
-      })),
-      (e) => e.chr
-    )
-  );
-
   // hsl hue - degress of a color wheel
   const getHue = (i) => {
     if (i > 7) return 45 * (i % 8);
@@ -238,11 +242,17 @@ async function getCopyNumber(request) {
       chr,
       x: data.map((e) => e.position),
       y: data.map((e) => e.log2ratio),
-      customdata: data.map(({ genes }) => ({ genes, count: genes.length - 1 })),
+      customdata: data.map(({ genes, chromosome, start, end }) => ({
+        genes,
+        countMinus: genes.length - 1,
+        chromosome,
+        start,
+        end,
+      })),
       mode: 'markers',
       type: 'scattergl',
       hovertemplate:
-        'Genes: %{customdata.genes[0]} + %{customdata.count}<br>Log<sub>2</sub> Ratio: %{y}<br>Position: %{x}<extra></extra>',
+        'Genes: %{customdata.genes[0]} + %{customdata.countMinus}<br>Chromosome: %{customdata.chromosome}<br>log<sub>2</sub>ratio: %{y}<extra></extra>',
       marker: {
         color: data.map((e) => e.log2ratio),
         // colorscale: [

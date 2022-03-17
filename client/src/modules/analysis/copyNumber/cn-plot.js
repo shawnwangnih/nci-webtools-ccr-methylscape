@@ -16,9 +16,8 @@ export default function CopyNumberPlot() {
   function handleClick(e) {
     if (e) {
       setState({
-        location: e.points[0].x,
         ratio: e.points[0].y,
-        genes: e.points[0].customdata.genes,
+        data: e.points[0].customdata,
       });
     }
   }
@@ -39,7 +38,7 @@ export default function CopyNumberPlot() {
             data={cloneDeep(data)}
             layout={cloneDeep({
               ...layout,
-              uirevision: layout.uirevision + state.x,
+              uirevision: layout.uirevision + state.ratio,
             })}
             config={cloneDeep(config)}
             className="w-100"
@@ -47,19 +46,27 @@ export default function CopyNumberPlot() {
             style={{ height: '800px' }}
             onClick={handleClick}
           />
-          <div>
-            <h4>Bin Info</h4>
-            <div>Location: {state.location}</div>
-            <div>Ratio: {state.ratio}</div>
+          {state.ratio && (
             <div>
-              Genes:{' '}
-              <ul>
-                {state.genes.map((gene) => (
-                  <li>{gene}</li>
-                ))}
-              </ul>
+              <h4>Bin Info</h4>
+              <div>
+                Location: {state.data.chromosome} ({state.data.start}
+                {' - '}
+                {state.data.end})
+              </div>
+              <div>
+                log<sub>2</sub>ratio: {state.ratio}
+              </div>
+              <div>
+                Genes:{' '}
+                <ul>
+                  {state.data.genes.map((gene) => (
+                    <li>{gene}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
