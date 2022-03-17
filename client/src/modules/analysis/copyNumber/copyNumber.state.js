@@ -44,7 +44,7 @@ export const plotState = selector({
       });
 
       const { data, layout, config, ...rest } = response.data;
-      console.log(data, layout);
+
       return {
         data,
         config,

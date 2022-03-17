@@ -188,7 +188,7 @@ async function getCopyNumber(request) {
       log2ratio,
       chr,
       position: position + binPosOffset[chr],
-      genes: await getGenes(e.Chromosome, e.Start, e.End),
+      genes: [...new Set(await getGenes(e.Chromosome, e.Start, e.End))],
     }))
   );
 
