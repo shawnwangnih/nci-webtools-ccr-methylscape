@@ -14,36 +14,45 @@ const args = require('minimist')(process.argv.slice(2));
 const isProduction = process.env.NODE_ENV === 'production' || args.production;
 
 // fork to multiple processes
-if (forkCluster()) return;
+// note: this should not be enabled until session state is stored in the database
+// if (forkCluster()) return;
 
-// create app and register locals/middlware
-const app = express();
-const connection = knex({
-  client: "pg",
-  connection: config.database
-});
+if (require.main === module) {
+  createApp();
+}
 
-registerUserSerializers(passport, connection);
-registerAuthStrategies(passport, config.auth);
+async function createApp() {
+  // create app and register locals/middlware
+  const app = express();
+  const connection = knex({
+    client: "pg",
+    connection: config.database
+  });
 
-app.locals.logger = getLogger('methylscape-analysis');
-app.locals.connection = connection;
-app.locals.userManager = new UserManager(connection);
-app.locals.roleManager = new RoleManager(connection);
+  registerUserSerializers(passport, connection);
+  await registerAuthStrategies(passport, config.auth);
 
-app.use(createSession());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use('/api', apiRouter);
-app.use(logErrors); // logErrors should always be last
+  app.locals.logger = getLogger('methylscape-analysis');
+  app.locals.connection = connection;
+  app.locals.userManager = new UserManager(connection);
+  app.locals.roleManager = new RoleManager(connection);
 
-// serve static assets during local development
-if (!isProduction) app.use(express.static(config.server.client));
+  app.use(createSession());
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use('/api', apiRouter);
+  app.use(logErrors); // logErrors should always be last
 
-app.listen(config.server.port, () => {
-  app.locals.logger.info(
-    `Application is running on port: ${config.server.port}`
-  );
-});
+  // serve static assets during local development
+  if (!isProduction) app.use(express.static(config.server.client));
 
-module.exports = app;
+  app.listen(config.server.port, () => {
+    app.locals.logger.info(
+      `Application is running on port: ${config.server.port}`
+    );
+  });
+
+  return app;
+}
+
+module.exports = createApp;
