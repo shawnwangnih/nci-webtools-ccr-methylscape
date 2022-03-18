@@ -14,6 +14,15 @@ export default function CopyNumberForm() {
     mergeForm({ search: e });
   }
 
+  function handleAnnotations() {
+    setForm({ ...form, annotations: !form.annotations });
+  }
+
+  function handleSignificant() {
+    if (preForm.significant) setForm({ ...form, annotations: false });
+    setPreForm({ significant: !preForm.significant });
+  }
+
   return (
     <Row>
       <Col sm="auto" className="d-flex">
@@ -23,7 +32,7 @@ export default function CopyNumberForm() {
             type="switch"
             name="plotSignificant"
             checked={preForm.significant}
-            onChange={() => setPreForm({ significant: !preForm.significant })}
+            onChange={handleSignificant}
           />
         </Form.Group>
       </Col>
@@ -34,9 +43,8 @@ export default function CopyNumberForm() {
             type="switch"
             name="toggleAnnotations"
             checked={form.annotations}
-            onChange={() =>
-              setForm({ ...form, annotations: !form.annotations })
-            }
+            onChange={handleAnnotations}
+            disabled={!preForm.significant}
           />
         </Form.Group>
       </Col>
