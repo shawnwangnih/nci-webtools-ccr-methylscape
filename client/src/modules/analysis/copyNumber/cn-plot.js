@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { plotState, selectBinState } from './copyNumber.state';
+import { useRecoilValue } from 'recoil';
+import { plotState } from './copyNumber.state';
 import Plot from 'react-plotly.js';
 import cloneDeep from 'lodash/cloneDeep';
 import { plot } from 'plotly.js';

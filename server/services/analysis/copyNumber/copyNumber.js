@@ -1,7 +1,6 @@
 const { getKey, getDataFile } = require('../../aws');
 const { groupBy, chunk } = require('lodash');
 const Papa = require('papaparse');
-const chrLines = require('./lines.json');
 const { aws: awsConfig } = require('../../../config');
 
 async function parseTSV(stream, options = {}) {
@@ -176,11 +175,11 @@ async function getCopyNumber(request) {
   const yMax = bins.reduce((a, c) => (a > c.log2ratio ? a : c.log2ratio));
 
   // filter for significant values: top/bottom 25%
-  const range = 0.5;
+  const significantRange = 0.5;
 
   if (significant)
     bins = bins.filter(
-      (e) => e.log2ratio > yMax * range || e.log2ratio < yMin * range
+      (e) => e.log2ratio > yMax * significantRange || e.log2ratio < yMin * significantRange
     );
 
   // get annotated genes
@@ -191,150 +190,7 @@ async function getCopyNumber(request) {
     }))
   );
 
-  // group bins by chromosome
-  const dataGroupedByChr = Object.entries(
-    groupBy(
-      bins.map(
-        ({ position, log2ratio, chr, genes, Start, End, Chromosome }) => ({
-          position: position + binPosOffset[chr],
-          chr,
-          log2ratio,
-          genes,
-          chromosome: Chromosome,
-          start: Start,
-          end: End,
-        })
-      ),
-      (e) => e.chr
-    )
-  );
-
-  // create annotation trace of bins by search query
-  const searchQueries = search.map((value) => value.toLowerCase());
-  const searchAnnotations = searchQueries.length
-    ? bins
-        .filter(({ genes }) =>
-          genes.some((gene) =>
-            searchQueries.find((query) => gene.toLowerCase().includes(query))
-          )
-        )
-        .map((e) => ({
-          text: e.genes.find((gene) =>
-            searchQueries.find((query) => gene.toLowerCase().includes(query))
-          ),
-          x: e.position + binPosOffset[e.chr],
-          y: e.log2ratio,
-        }))
-    : [];
-
-  // hsl hue - degress of a color wheel
-  const getHue = (i) => {
-    if (i > 7) return 45 * (i % 8);
-    else return 45 * i;
-  };
-
-  const colorMinMax = (Math.abs(yMin) > yMax ? Math.abs(yMin) : yMax) * range;
-
-  // transform data to traces
-  const dataTraces = dataGroupedByChr
-    .sort(([chrA], [chrB]) => parseInt(chrA) - parseInt(chrB))
-    .map(([chr, data], i) => ({
-      chr,
-      x: data.map((e) => e.position),
-      y: data.map((e) => e.log2ratio),
-      customdata: data.map(({ genes, chromosome, start, end }) => ({
-        genes,
-        countMinus: genes.length - 1,
-        chromosome,
-        start,
-        end,
-      })),
-      mode: 'markers',
-      type: 'scattergl',
-      hovertemplate:
-        'Genes: %{customdata.genes[0]} + %{customdata.countMinus}<br>Chromosome: %{customdata.chromosome}<br>log<sub>2</sub>ratio: %{y}<extra></extra>',
-      marker: {
-        color: data.map((e) => e.log2ratio),
-        // colorscale: [
-        //   ['0.0', `hsl(${getHue(i)}, 100%, 40%)`],
-        //   ['0.25', `hsl(${getHue(i)}, 100%, 60%)`],
-        //   ['0.5', `hsl(${getHue(i)}, 50%, 90%)`],
-        //   ['0.75', `hsl(${getHue(i)}, 100%, 60%)`],
-        //   ['1.0', `hsl(${getHue(i)}, 100%, 40%)`],
-        // ],
-        cmax: colorMinMax,
-        cmid: 0,
-        cmin: colorMinMax * -1,
-      },
-    }));
-
-  const bufferMargin = 0.25;
-
-  const layout = {
-    showlegend: false,
-    dragmode: 'pan',
-    xaxis: {
-      title: 'Chromosome',
-      showgrid: false,
-      showline: true,
-      tickmode: 'array',
-      tickvals: chrLines.map(({ center }) => center),
-      ticktext: chrLines.map(({ chr }) => chr),
-      tickangle: 0,
-    },
-    yaxis: {
-      title: 'log<sub>2</sub> ratio',
-      zeroline: true,
-      // zerolinecolor: '#eee',
-      dtick: 0.25,
-      ticks: 'outside',
-      fixedrange: true,
-    },
-    annotations: [...searchAnnotations],
-    shapes: [
-      // chromosome dividers
-      ...chrLines.map((e) => ({
-        type: 'line',
-        x0: e['pos.start'],
-        x1: e['pos.start'],
-        y0: yMin - bufferMargin,
-        y1: yMax + bufferMargin,
-        line: { width: 1 },
-      })),
-      // chromosome segment divider
-      ...chrLines.map((e) => ({
-        type: 'line',
-        x0: e['pq'],
-        x1: e['pq'],
-        y0: yMin - bufferMargin,
-        y1: yMax + bufferMargin,
-        line: { dash: 'dot', width: 1 },
-      })),
-      // chromosome segments
-      ...segments.map((e) => ({
-        type: 'line',
-        x0: e['x1'],
-        x1: e['x2'],
-        y0: e['medianLog2Ratio'],
-        y1: e['medianLog2Ratio'],
-      })),
-      // y-axis zero line
-      {
-        type: 'line',
-        y0: 0,
-        y1: 0,
-        line: { dash: 'dot' },
-      },
-    ],
-    autosize: true,
-  };
-  const config = { scrollZoom: true };
-
-  return {
-    data: dataTraces,
-    layout,
-    config,
-  };
+  return { bins, segments, binPosOffset, yMin, yMax, significantRange };
 }
 
 module.exports = { getCopyNumber };
