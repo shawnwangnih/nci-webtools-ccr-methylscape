@@ -11,8 +11,6 @@ async function registerAuthStrategies(passport, providers) {
             ? await createOAuthStrategy(provider)
             : await createPkceStrategy(provider);
         passport.use(provider.name, strategy);
-
-        console.log(provider);
     }
   
     return passport;
