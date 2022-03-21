@@ -84,10 +84,7 @@ async function importTable(connection, iterable, tableName, logger) {
   let buffer = [];
 
   async function flushBuffer() {
-    await connection
-      .batchInsert(tableName, buffer)
-      .onConflict((e) => logger.error(e))
-      .ignore();
+    await connection.batchInsert(tableName, buffer);
     count += buffer.length;
     buffer = [];
     logger.info(`Imported ${count} rows`);
