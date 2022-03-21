@@ -5,7 +5,7 @@ const {
   resetTables,
 } = require('./utils');
 
-const tables = ['sampleCoordinates', 'sample', 'annotations', 'genes'];
+const tables = ['sampleCoordinates', 'sample', 'genes'];
 
 async function importData(connection, logger, sources) {
   await connection.transaction(async (transaction) => {

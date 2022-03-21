@@ -197,26 +197,26 @@ const sources = [
     ],
   },
 
-  {
-    sourcePath: 'infinium-methylationepic-v-1-0-b5-manifest-file.csv',
-    table: 'annotations',
-    description: 'Gene annotations',
-    columns: [
-      { sourceName: 'Name', name: 'name' },
-      { sourceName: 'CHR', name: 'chr' },
-      { sourceName: 'MAPINFO', name: 'mapInfo' },
-      { sourceName: 'UCSC_RefGene_Name', name: 'ucscName' },
-      { sourceName: 'GencodeBasicV12_NAME', name: 'gencodeBasicV12Name' },
-      {
-        sourceName: 'GencodeBasicV12_Accession',
-        name: 'gencodeBasicV12Accession',
-      },
-      {
-        sourceName: 'Relation_to_UCSC_CpG_Island',
-        name: 'relationTo_UCSC_CpG_Island',
-      },
-    ],
-  },
+  // {
+  //   sourcePath: 'infinium-methylationepic-v-1-0-b5-manifest-file.csv',
+  //   table: 'annotations',
+  //   description: 'Gene annotations',
+  //   columns: [
+  //     { sourceName: 'Name', name: 'name' },
+  //     { sourceName: 'CHR', name: 'chr' },
+  //     { sourceName: 'MAPINFO', name: 'mapInfo' },
+  //     { sourceName: 'UCSC_RefGene_Name', name: 'ucscName' },
+  //     { sourceName: 'GencodeBasicV12_NAME', name: 'gencodeBasicV12Name' },
+  //     {
+  //       sourceName: 'GencodeBasicV12_Accession',
+  //       name: 'gencodeBasicV12Accession',
+  //     },
+  //     {
+  //       sourceName: 'Relation_to_UCSC_CpG_Island',
+  //       name: 'relationTo_UCSC_CpG_Island',
+  //     },
+  //   ],
+  // },
 
   {
     sourcePath: 'gencode.v19.annotation.csv',
