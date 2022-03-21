@@ -1,18 +1,14 @@
-const { 
-  createRecordIterator, 
-  importTable, 
+const {
+  createRecordIterator,
+  importTable,
   withDuration,
-  resetTables
-} = require("./utils");
+  resetTables,
+} = require('./utils');
 
-const tables = [
-  "sampleCoordinates", 
-  "sample", 
-  "genes"
-];
+const tables = ['sampleCoordinates', 'sample', 'annotations', 'genes'];
 
 async function importData(connection, logger, sources) {
-  await connection.transaction(async transaction => {
+  await connection.transaction(async (transaction) => {
     logger.info('Initialized data import');
     for (const table of tables) {
       await connection.raw('TRUNCATE ?? RESTART IDENTITY CASCADE', [table]);
@@ -24,7 +20,11 @@ async function importData(connection, logger, sources) {
         const records = await createRecordIterator(sourcePath, columns);
         return await importTable(transaction, records, table, logger);
       });
-      logger.info(`Finished importing ${table} table in ${Math.round(duration)}s (${Math.round(results / duration)} rows/s)`);
+      logger.info(
+        `Finished importing ${table} table in ${Math.round(
+          duration
+        )}s (${Math.round(results / duration)} rows/s)`
+      );
     }
     return true;
   });
