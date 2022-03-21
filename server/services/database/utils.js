@@ -122,7 +122,7 @@ function castValue(value) {
 function createRecordParser(columns) {
   return function (record) {
     let row = {};
-    for (const { sourceName, name, defaultValue } of columns) {
+    for (const { sourceName, name, defaultValue, formatter } of columns) {
       let value = record[sourceName] ?? defaultValue ?? null;
       if (formatter) {
         value = formatter(value);
