@@ -124,7 +124,7 @@ function createRecordParser(columns) {
     let row = {};
     for (const { sourceName, name, defaultValue, formatter } of columns) {
       let value = record[sourceName] ?? defaultValue ?? null;
-      if (formatter) {
+      if (formatter != null) {
         value = formatter(value);
       }
       row[name] = value;
