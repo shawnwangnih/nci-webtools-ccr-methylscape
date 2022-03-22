@@ -2,48 +2,56 @@ import BootstrapNavbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import classNames from 'classnames';
 import { sessionState } from '../session/session.state';
+
+
+export function NavbarNativeLink({path, title}) {
+  return <a href={path} className="nav-link">{title}</a>
+}
+
+export function NavbarRouterLink({path, title, exact}) {
+  return <NavLink to={path} className={({ isActive }) => classNames('nav-link', isActive && 'active')} end={exact}>
+    {title}
+  </NavLink>
+}
+
+export function NavbarDropdown({title, childLinks, align = 'start'}) {
+  return <NavDropdown title={title} id={title} align={align}>
+    {childLinks.map(link => (
+      <NavDropdown.Item href={link.path}>
+        {link.title}
+      </NavDropdown.Item>
+    ))}
+  </NavDropdown>
+}
 
 export default function Navbar({ linkGroups = [[]], className, children }) {
   const session = useRecoilValue(sessionState);
 
-  console.log(session);
-
-  const shouldShowLink = link => {
-    console.log(link, session);
-    if (session && link.show) {
-      return link.show(session);
-    }
-    return true;
+  function shouldShowLink(link) {
+    return (session && link.show) ? link.show(session) : true;
   }
 
   return (
     <BootstrapNavbar bg="white" variant="light" className={className}>
-      <Container fluid>
+      <Container>
         {children}
         {linkGroups.map(links => (
           <Nav>
-            {links?.filter(shouldShowLink).map((link) => (
-              link.native ? (
-                <a href={link.path} className="nav-link">{link.title}</a>
-              ) : (
-                <NavLink
-                  to={link.path}
-                  key={link.path}
-                  className={({ isActive }) =>
-                    'nav-link' + (isActive ? ' active' : '')
-                  }
-                  end={link.exact}
-                >
-                  {link.title}
-                </NavLink>
-              )
-            ))}
+            {links?.filter(shouldShowLink).map((link) => 
+              <>
+              {link.childLinks && <NavbarDropdown {...link} />}
+              {!link.childLinks && (
+                link.native ? <NavbarNativeLink {...link} /> : <NavbarRouterLink {...link} />
+              )}
+              </>
+            )}
           </Nav>
         ))}
-
       </Container>
     </BootstrapNavbar>
   );

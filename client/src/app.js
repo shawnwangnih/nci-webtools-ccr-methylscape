@@ -31,8 +31,11 @@ export default function App() {
     ],
     [
       { path: 'admin', title: 'Admin', show: (session) => session.authenticated },
-      { path: '/api/login', title: 'Login', native: true, show: (session) => !session.authenticated },
       { path: '/api/logout', title: 'Logout', native: true, show: (session) => session.authenticated },
+      { title: 'Login', show: (session) => !session.authenticated, align: 'end', childLinks: [
+        { path: '/api/login', title: 'NIH Users', native: true, show: (session) => !session.authenticated },
+        { path: '/api/login/external', title: 'External Users', native: true, show: (session) => !session.authenticated },
+      ]}
     ]
   ];
 
