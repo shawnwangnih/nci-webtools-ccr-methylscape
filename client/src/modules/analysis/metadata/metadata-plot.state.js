@@ -86,6 +86,17 @@ export const plotState = selector({
         showarrow: false,
       }));
 
+    const weeklyThreshold = Date.now() - (1000 * 60 * 60 * 24 * 7);
+    const isWeeklyAnnotation = ({importDate}) => importDate && new Date(importDate).getTime() > weeklyThreshold;
+    const weeklyAnnotations = data
+      .filter(isWeeklyAnnotation)
+      .map(value => ({
+        text: `${value.sample} (${new Date(value.importDate).toLocaleDateString()})`,
+        x: value.x,
+        y: value.y,
+        showarrow: true,
+      }));
+
     // add annotations from search filter
     const sampleAnnotations = searchQueries.length
       ? data
@@ -149,9 +160,10 @@ export const plotState = selector({
       },
       annotations: showAnnotations
         ? [
-            ...labelAnnotations,
-            ...sampleAnnotations,
+            // ...labelAnnotations,
+            // ...sampleAnnotations,
             // ...classAnnotations
+            ...weeklyAnnotations,
           ]
         : [...sampleAnnotations],
       uirevision: organSystem + embedding + search + showAnnotations,
