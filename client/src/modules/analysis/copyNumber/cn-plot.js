@@ -3,10 +3,9 @@ import { useRecoilValue } from 'recoil';
 import { plotState } from './copyNumber.state';
 import Plot from 'react-plotly.js';
 import cloneDeep from 'lodash/cloneDeep';
-import { plot } from 'plotly.js';
 
 export default function CopyNumberPlot() {
-  const { data, config, layout, error } = useRecoilValue(plotState);
+  const { data, config, layout, error } = useRecoilValue(plotState) || {};
   const [state, setState] = useState({
     x: '',
     y: '',
