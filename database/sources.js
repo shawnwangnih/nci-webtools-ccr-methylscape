@@ -1,6 +1,6 @@
 export const sources = [
   {
-    sourcePath: './data/Sample_sheet_master.xlsx',
+    sourcePath: 'Sample_sheet_master.xlsx',
     table: 'sample',
     description: 'master sample metadata',
     columns: [
@@ -24,7 +24,7 @@ export const sources = [
             const monthMatches = value.match(/(\d+)m/i);
             return monthMatches ? +monthMatches[1] / 12 : null;
           } else {
-            return value;
+            return null;
           }
         },
       },
@@ -55,7 +55,7 @@ export const sources = [
   },
 
   {
-    sourcePath: './data/anno_neuro.txt',
+    sourcePath: 'anno_neuro.txt',
     table: 'sampleCoordinates',
     description: 'umap coordinates - centralNervousSystem',
     columns: [
@@ -68,11 +68,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
   {
-    sourcePath: './data/anno_neuro.txt',
+    sourcePath: 'anno_neuro.txt',
     table: 'sampleCoordinates',
     description: 'densmap coordinates - centralNervousSystem',
     columns: [
@@ -85,11 +86,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
   {
-    sourcePath: './data/anno_sarcoma.txt',
+    sourcePath: 'anno_sarcoma.txt',
     table: 'sampleCoordinates',
     description: 'umap coordinates - boneAndSoftTissue',
     columns: [
@@ -102,11 +104,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
   {
-    sourcePath: './data/anno_sarcoma.txt',
+    sourcePath: 'anno_sarcoma.txt',
     table: 'sampleCoordinates',
     description: 'densmap coordinates - boneAndSoftTissue',
     columns: [
@@ -119,11 +122,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
   {
-    sourcePath: './data/anno_heme.txt',
+    sourcePath: 'anno_heme.txt',
     table: 'sampleCoordinates',
     description: 'umap coordinates - hematopoietic',
     columns: [
@@ -136,11 +140,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/anno_heme.txt',
+    sourcePath: 'anno_heme.txt',
     table: 'sampleCoordinates',
     description: 'densmap coordinates - hematopoietic',
     columns: [
@@ -153,11 +158,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/anno_kidney.txt',
+    sourcePath: 'anno_kidney.txt',
     table: 'sampleCoordinates',
     description: 'umap coordinates - renal',
     columns: [
@@ -166,11 +172,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/anno_kidney.txt',
+    sourcePath: 'anno_kidney.txt',
     table: 'sampleCoordinates',
     description: 'densmap coordinates - renal',
     columns: [
@@ -179,11 +186,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/anno_pan.txt',
+    sourcePath: 'anno_pan.txt',
     table: 'sampleCoordinates',
     description: 'umap coordinates - panCancer',
     columns: [
@@ -196,11 +204,12 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/anno_pan.txt',
+    sourcePath: 'anno_pan.txt',
     table: 'sampleCoordinates',
     description: 'densmap coordinates - panCancer',
     columns: [
@@ -213,18 +222,19 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
+      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
   {
-    sourcePath: './data/gencode.v19.annotation.csv',
+    sourcePath: 'genes.txt',
     table: 'genes',
     description: 'GenCode annotations',
     columns: [
-      { sourceName: 'seqname', name: 'chr' },
-      { sourceName: 'start', name: 'start' },
-      { sourceName: 'end', name: 'end' },
-      { sourceName: 'gene_id', name: 'geneID' },
+      { sourceName: '#chrom', name: 'chr' },
+      { sourceName: 'chromStart', name: 'start' },
+      { sourceName: 'chromEnd', name: 'end' },
+      { sourceName: 'name', name: 'geneID' },
     ],
   },
 ];
