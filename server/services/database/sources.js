@@ -223,7 +223,7 @@ const sources = [
     table: 'genes',
     description: 'GenCode annotations',
     columns: [
-      { sourceName: 'chrom', name: 'chr' },
+      { sourceName: '#chrom', name: 'chr' },
       { sourceName: 'chromStart', name: 'start' },
       { sourceName: 'chromEnd', name: 'end' },
       { sourceName: 'geneName', name: 'geneId' },
