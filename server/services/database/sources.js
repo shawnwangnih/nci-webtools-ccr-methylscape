@@ -219,14 +219,14 @@ const sources = [
   // },
 
   {
-    sourcePath: 'gencode.v19.annotation.csv',
+    sourcePath: 'genes.txt',
     table: 'genes',
     description: 'GenCode annotations',
     columns: [
-      { sourceName: 'seqname', name: 'chr' },
-      { sourceName: 'start', name: 'start' },
-      { sourceName: 'end', name: 'end' },
-      { sourceName: 'gene_id', name: 'geneID' },
+      { sourceName: '#chrom', name: 'chr' },
+      { sourceName: 'chromStart', name: 'start' },
+      { sourceName: 'chromEnd', name: 'end' },
+      { sourceName: 'geneName', name: 'geneId' },
     ],
   },
 ];

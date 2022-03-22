@@ -234,7 +234,7 @@ export const sources = [
       { sourceName: '#chrom', name: 'chr' },
       { sourceName: 'chromStart', name: 'start' },
       { sourceName: 'chromEnd', name: 'end' },
-      { sourceName: 'name', name: 'geneID' },
+      { sourceName: 'geneName', name: 'geneId' },
     ],
   },
 ];

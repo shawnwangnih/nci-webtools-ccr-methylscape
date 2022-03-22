@@ -92,7 +92,7 @@ async function getCopyNumber(request) {
           end,
         ]);
       });
-    return query.map((e) => e.geneID);
+    return query.map((e) => e.geneId);
   }
 
   // parse bins

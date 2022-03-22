@@ -1,4 +1,4 @@
-import { PieChart, Building, CloudArrowDown } from 'react-bootstrap-icons';
+import { PieChart, Building, ClipboardData } from 'react-bootstrap-icons';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -26,7 +26,7 @@ export default function Info() {
           </Card>
           <Card bg="light" className="d-flex flex-row">
             <div className="p-2" style={{ background: 'rebeccapurple' }}>
-              <CloudArrowDown color="white" size="3rem" />
+              <ClipboardData color="white" size="3rem" />
             </div>
             <div className="w-100 my-auto text-center">
               <div className="fw-light">NUMBER OF STUDIES</div>
