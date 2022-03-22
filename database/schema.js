@@ -129,7 +129,7 @@ export async function createSchema(database) {
     table.string('chr').index('');
     table.integer('start').index('');
     table.integer('end').index('');
-    table.string('geneID');
+    table.string('geneId');
   });
 
   /**
