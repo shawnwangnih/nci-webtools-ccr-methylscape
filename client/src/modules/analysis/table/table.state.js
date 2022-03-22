@@ -55,7 +55,7 @@ const selectedPoints_intermediate = selector({
     const { points } = get(selectedPoints);
     const filterPoints = points.filter((v) => v.length);
 
-    if (!filterPoints.length) return [];
+    if (!filterPoints.length) return '[]';
 
     const survivalData = filterPoints
       .map((data, i) => ({
@@ -75,29 +75,27 @@ const selectedPoints_intermediate = selector({
         const groupName = Object.keys(curr)[0];
         return [
           ...prev,
-          ...curr[groupName].map((d) =>
-            ({
-              group: groupName,
-              overallSurvivalMonths: d.overallSurvivalMonths,
-              overallSurvivalStatus: d.overallSurvivalStatus,
-            })
-          ),
+          ...curr[groupName].map((d) => ({
+            group: groupName,
+            overallSurvivalMonths: d.overallSurvivalMonths,
+            overallSurvivalStatus: d.overallSurvivalStatus,
+          })),
         ];
       }, []);
 
-    return survivalData;
+    return JSON.stringify(survivalData);
   },
 });
 
 export const survivalDataSelector = selector({
   key: 'survivalDataSelector',
   get: async ({ get }) => {
-    const selectedPoints = get(selectedPoints_intermediate);
+    const selectedPoints = JSON.parse(get(selectedPoints_intermediate));
     if (selectedPoints?.length) {
       const response = await axios.post('api/survival', selectedPoints);
       return response.data;
     } else {
       return null;
     }
-  }
+  },
 });
