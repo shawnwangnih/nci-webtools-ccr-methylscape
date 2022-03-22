@@ -49,6 +49,16 @@ apiRouter.get(
   )
 );
 
+apiRouter.get(
+  '/login/external',
+  passport.authenticate(config.auth[1].name, 
+    { 
+      successRedirect: '/', 
+      failureRedirect: '/api/login/external' 
+    }
+  )
+);
+
 apiRouter.get('/logout', (request, response) => {
   request.logout();
   response.redirect('/');
