@@ -47,7 +47,7 @@ const sources = [
       { sourceName: 'MCF_v12.3_score', name: 'MCF_v12.3_score' },
       { sourceName: 'MCF_v12.5', name: 'MCF_v12.5' },
       { sourceName: 'MCF_v12.5_score', name: 'MCF_v12.5_score' },
-      { sourceName: 'GSM_accession', name: 'GSM_accession' },
+      // { sourceName: 'GSM_accession', name: 'GSM_accession' },
       { sourceName: 'dkfz_brain_tumor_classifier', name: 'dkfzBrainTumorClassifier' },
       { sourceName: 'Primary_study', name: 'primaryStudy' },
       { sourceName: 'Center_methy', name: 'centerMethylation' },
