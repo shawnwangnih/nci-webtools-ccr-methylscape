@@ -30,7 +30,6 @@ export const sources = [
       },
       { sourceName: 'Sex_congruency', name: 'sexCongruency' },
       { sourceName: 'Sex_prediction_minfi', name: 'sexPrediction' },
-      { sourceName: null, name: 'histology', defaultValue: null },
       { sourceName: 'Location_region', name: 'locationGeneral' },
       { sourceName: 'Location_site', name: 'locationSpecific' },
       { sourceName: 'Subtype/pattern', name: 'subtypeOrPattern' },
