@@ -24,16 +24,18 @@ export default function Home() {
           </h1>
 
           <p className="lead">Application description</p>
-          {session.authenticated && <NavLink className="btn btn-outline-primary" to="analysis">
-            Perform Analysis
-          </NavLink>}
+          {session.authenticated && (
+            <NavLink className="btn btn-outline-primary" to="analysis">
+              Perform Analysis
+            </NavLink>
+          )}
         </Container>
       </div>
 
-      <Container className="mb-4">
+      <Container className="mb-4 text-white">
         <Row>
           <Col md={4}>
-            <h2 className="text-primary">About Methylscape</h2>
+            <h2>About Methylscape</h2>
           </Col>
           <Col md={8}>
             <p>

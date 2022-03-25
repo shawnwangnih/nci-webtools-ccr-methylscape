@@ -1,5 +1,8 @@
 /** Colors */
-$blue: rgb(24, 83, 148);
+$blue: #48569e;
+$lightBlue: #1d5c87;
+$dark: rgb(42, 73, 111);
+$secondary: $lightBlue;
 
 /** Headings */
 $headings-font-weight: 700;
@@ -61,3 +64,7 @@ $spacers: (
   8: $spacer * 7.5,
   9: $spacer * 9,
 );
+
+// Border radius
+$btn-border-radius: 1rem;
+$input-border-radius: 1rem;

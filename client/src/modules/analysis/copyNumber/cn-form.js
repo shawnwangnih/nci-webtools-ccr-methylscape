@@ -63,6 +63,12 @@ export default function CopyNumberForm() {
             placeholder="Gene(s)"
             value={form.search}
             onChange={handleSearch}
+            styles={{
+              control: (provided, state) => ({
+                ...provided,
+                borderRadius: '1rem',
+              }),
+            }}
           />
         </Form.Group>
       </Col>

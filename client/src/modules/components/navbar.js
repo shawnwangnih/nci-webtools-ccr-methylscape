@@ -6,28 +6,32 @@ import { NavLink } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { sessionState } from '../session/session.state';
 
+import './navbar.scss';
+
 export default function Navbar({ linkGroups = [[]], className, children }) {
   const session = useRecoilValue(sessionState);
 
   console.log(session);
 
-  const shouldShowLink = link => {
+  const shouldShowLink = (link) => {
     console.log(link, session);
     if (session && link.show) {
       return link.show(session);
     }
     return true;
-  }
+  };
 
   return (
-    <BootstrapNavbar bg="white" variant="light" className={className}>
+    <BootstrapNavbar bg="dark" variant="dark" className={className}>
       <Container fluid>
         {children}
-        {linkGroups.map(links => (
+        {linkGroups.map((links) => (
           <Nav>
-            {links?.filter(shouldShowLink).map((link) => (
+            {links?.filter(shouldShowLink).map((link) =>
               link.native ? (
-                <a href={link.path} className="nav-link">{link.title}</a>
+                <a href={link.path} className="nav-link">
+                  {link.title}
+                </a>
               ) : (
                 <NavLink
                   to={link.path}
@@ -40,10 +44,9 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
                   {link.title}
                 </NavLink>
               )
-            ))}
+            )}
           </Nav>
         ))}
-
       </Container>
     </BootstrapNavbar>
   );

@@ -55,7 +55,7 @@ export default function Data() {
 
   return (
     <div>
-      <Container fluid="xxl" className="d-flex p-2">
+      <Container fluid="xxl" className="d-flex p-2 bg-light">
         <NavLink to={'projects'} className="text-decoration-none d-flex">
           <PieChartFill className="stat-icon" />
           {data.length ? (

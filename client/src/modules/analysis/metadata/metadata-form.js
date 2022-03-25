@@ -31,7 +31,9 @@ export default function MetadataForm({ className, onSelect }) {
               value={form.organSystem}
               onChange={handleChange}
             >
-              <option value="centralNervousSystem">Central Nervous System</option>
+              <option value="centralNervousSystem">
+                Central Nervous System
+              </option>
               <option value="boneAndSoftTissue">Bone and Soft Tissue</option>
               <option value="hematopoietic">Hematopoietic</option>
               <option value="renal">Renal</option>
@@ -67,6 +69,12 @@ export default function MetadataForm({ className, onSelect }) {
               placeholder="Sample"
               value={form.search}
               onChange={handleSearch}
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  borderRadius: '1rem',
+                }),
+              }}
             />
           </Form.Group>
         </Col>
