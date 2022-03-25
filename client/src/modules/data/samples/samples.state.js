@@ -4,9 +4,9 @@ import { methylscapeData } from '../data.state';
 export const samplesTableData = selector({
   key: 'samplesTableData',
   get: ({ get }) => {
-    const dbData = get(methylscapeData);
+    const { data } = get(methylscapeData);
 
-    if (!dbData.length) return [];
+    if (!data.length) return [];
 
     //returns the methylation family if it exists
     function getMF(data) {
@@ -44,7 +44,7 @@ export const samplesTableData = selector({
       }
     }
 
-    const samples = dbData
+    const samples = data
       .filter(({ sample_name }) => sample_name)
       .map((sample) => {
         const cp = sample.classifier_prediction;
