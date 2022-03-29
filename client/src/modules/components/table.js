@@ -123,7 +123,6 @@ export default function Table({
         }),
         []
       ),
-
       ...options,
     },
     useFilters,
@@ -178,8 +177,8 @@ export default function Table({
                 <Form>
                   {allColumns.map((column) => (
                     <Form.Group
-                      key={`${column.id}-visible`}
-                      controlId={`${column.id}-visible`}
+                      key={`${column.Header}-visible`}
+                      controlId={`${column.Header}-visible`}
                       className="my-1 px-2"
                     >
                       <Form.Check

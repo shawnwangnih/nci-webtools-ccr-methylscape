@@ -40,7 +40,7 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
     <BootstrapNavbar bg="white" variant="light" className={className}>
       <Container>
         {children}
-        {linkGroups.map(links => (
+        {linkGroups.map((links) => (
           <Nav>
             {links?.filter(shouldShowLink).map((link) => 
               <>

@@ -200,11 +200,7 @@ export const sources = [
     description: 'umap coordinates - panCancer',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
-      {
-        sourceName: null,
-        name: 'organSystem',
-        defaultValue: 'panCancer',
-      },
+      { sourceName: null, name: 'organSystem', defaultValue: 'panCancer' },
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
@@ -217,16 +213,33 @@ export const sources = [
     description: 'densmap coordinates - panCancer',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
-      {
-        sourceName: null,
-        name: 'organSystem',
-        defaultValue: 'panCancer',
-      },
+      { sourceName: null, name: 'organSystem', defaultValue: 'panCancer' },
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
     ],
   },
+
+  // {
+  //   sourcePath: 'infinium-methylationepic-v-1-0-b5-manifest-file.csv',
+  //   table: 'annotations',
+  //   description: 'Gene annotations',
+  //   columns: [
+  //     { sourceName: 'Name', name: 'name' },
+  //     { sourceName: 'CHR', name: 'chr' },
+  //     { sourceName: 'MAPINFO', name: 'mapInfo' },
+  //     { sourceName: 'UCSC_RefGene_Name', name: 'ucscName' },
+  //     { sourceName: 'GencodeBasicV12_NAME', name: 'gencodeBasicV12Name' },
+  //     {
+  //       sourceName: 'GencodeBasicV12_Accession',
+  //       name: 'gencodeBasicV12Accession',
+  //     },
+  //     {
+  //       sourceName: 'Relation_to_UCSC_CpG_Island',
+  //       name: 'relationTo_UCSC_CpG_Island',
+  //     },
+  //   ],
+  // },
 
   {
     sourcePath: 'genes.txt',
@@ -240,3 +253,4 @@ export const sources = [
     ],
   },
 ];
+

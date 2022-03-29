@@ -73,6 +73,7 @@ export const plotState = selector({
     if (!intermediateData) return defaultFormState;
     if (intermediateData.error) return defaultPlotState.error;
 
+    const { significant } = get(preFormState);
     const { annotations, search } = get(formState);
     const { data, idatFilename, sample } = intermediateData;
     const { bins, segments, binPosOffset, yMin, yMax, significantRange } = data;
@@ -89,6 +90,13 @@ export const plotState = selector({
             chromosome: Chromosome,
             start: Start,
             end: End,
+            hovertemplate: `${
+              genes.length
+                ? `Genes: ${genes[0]}${
+                    genes.length > 1 ? ` + ${genes.length - 1}` : ''
+                  }<br>`
+                : ''
+            }Chromosome: ${Chromosome}<br>log<sub>2</sub>ratio: ${log2ratio}<extra></extra>`,
           })
         ),
         (e) => e.chr
@@ -114,11 +122,13 @@ export const plotState = selector({
       : [];
 
     const allAnnotations = annotations
-      ? bins.map((e) => ({
-          text: e.genes[0],
-          x: e.position + binPosOffset[e.chr],
-          y: e.log2ratio,
-        }))
+      ? bins
+          .filter((e) => e.genes.length)
+          .map((e) => ({
+            text: e.genes[0],
+            x: e.position + binPosOffset[e.chr],
+            y: e.log2ratio,
+          }))
       : [];
     // hsl hue - degress of a color wheel
     // const getHue = (i) => {
@@ -138,15 +148,13 @@ export const plotState = selector({
         y: data.map((e) => e.log2ratio),
         customdata: data.map(({ genes, chromosome, start, end }) => ({
           genes,
-          countMinus: genes.length - 1,
           chromosome,
           start,
           end,
         })),
         mode: 'markers',
         type: 'scattergl',
-        hovertemplate:
-          'Genes: %{customdata.genes[0]} + %{customdata.countMinus}<br>Chromosome: %{customdata.chromosome}<br>log<sub>2</sub>ratio: %{y}<extra></extra>',
+        hovertemplate: data.map((e) => e.hovertemplate),
         marker: {
           color: data.map((e) => e.log2ratio),
           // colorscale: [
@@ -165,7 +173,7 @@ export const plotState = selector({
     const bufferMargin = 0.25;
 
     const layout = {
-      uirevision: idatFilename + annotations + search,
+      uirevision: idatFilename + annotations + search + significant,
       title: `${sample} (${idatFilename})`,
       showlegend: false,
       dragmode: 'pan',

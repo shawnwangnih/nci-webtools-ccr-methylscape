@@ -4,12 +4,12 @@ import { methylscapeData } from '../data.state';
 export const experimentsTableData = selector({
   key: 'experimentsTableData',
   get: ({ get }) => {
-    const dbData = get(methylscapeData);
+    const { data } = get(methylscapeData);
 
-    if (!dbData.length) return [];
+    if (!data.length) return [];
 
     let experiments = [];
-    dbData.forEach((sample) => {
+    data.forEach((sample) => {
       const curExperiment = sample.experiment;
       if (curExperiment) {
         if (curExperiment in experiments) {

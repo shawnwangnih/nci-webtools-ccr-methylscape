@@ -79,6 +79,13 @@ export default function TableTabs() {
                 <ReactTable
                   data={data}
                   columns={cols}
+                  options={{
+                    initialState: {
+                      hiddenColumns: cols
+                        .filter((col) => col.show === false)
+                        .map((col) => col.accessor),
+                    },
+                  }}
                   customOptions={{
                     hideColumns: true,
                     download: `Group_${i + 1}_data.csv`,

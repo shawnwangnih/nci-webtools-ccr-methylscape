@@ -134,7 +134,8 @@ export const plotState = selector({
         y: data.map((e) => e.y),
         customdata: data,
         mode: 'markers',
-        hovertemplate: 'Sample: %{customdata.sample}<extra></extra>',
+        hovertemplate:
+          'Sample: %{customdata.sample}<br>Metric: %{customdata.nciMetric}<br>Diagnosis: %{customdata.diagnosisProvided}<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',
         marker: {
           color: '%{customdata.class}',

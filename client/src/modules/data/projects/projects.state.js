@@ -13,12 +13,12 @@ export const projectState = atom({
 export const projectsTableData = selector({
   key: 'projectsTableData',
   get: ({ get }) => {
-    const dbData = get(methylscapeData);
+    const { data } = get(methylscapeData);
 
-    if (!dbData.length) return [];
+    if (!data.length) return [];
 
     const projectsTable = [];
-    dbData.forEach((sample) => {
+    data.forEach((sample) => {
       const curProject = sample.project;
       if (curProject && sample.experiment) {
         if (curProject in projectsTable) {
@@ -47,9 +47,9 @@ export const selectedRow = selector({
     const { selectedProject } = get(projectState);
     if (!selectedProject) return false;
 
-    const data = get(methylscapeData).filter(
-      ({ project }) => project == selectedProject
-    );
+    let { data } = get(methylscapeData);
+
+    data = data.filter(({ project }) => project == selectedProject);
 
     const getMethylationClasses = () => {
       let cur = {};
