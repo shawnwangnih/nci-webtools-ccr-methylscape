@@ -10,32 +10,52 @@ export const schema = [
     schema: (table) => {
       table.increments("id");
       table.string("sample");
-      table.string("idatFilename");
-      table.string("primaryCategory");
-      table.string("primaryStudy");
-      table.string("centerMethylation");
-      table.string("matchedCases");
-      table.string("v11b6");
+      table.string("idatFilename").unique();
       table.string("nihLabels");
       table.string("nciMetric");
+      table.string("nciGroup");
+      table.string("v11b6");
       table.double("age");
-      table.string("sexCongruency");
-      table.string("sexPrediction");
-      table.string("histology");
-      table.string("locationGeneral");
-      table.string("locationSpecific");
-      table.string("subtypeOrPattern");
-      table.string("details");
-      table.string("h3k27me3");
+      table.string("sex");
+      table.string("diagnosisProvided");
+      table.string("locationRegion");
+      table.string("locationSite");
+      table.string("additionalInfo");
       table.text("variants");
       table.string("fusionsOrTranslocations");
+      table.string("assay");
       table.string("variantsReport");
       table.string("fusionsOrTranslocationsReport");
+      table.string("outsideAssay");
+      table.text("variantsFormat");
+      table.string("fusionsOrTranslocationsFormat");
+      table.string("lpCpNumber");
+      table.string("subtypeOrPattern");
+      table.string("who2007Grade");
+      table.string("MCF1_v11b6");
+      table.string("MCF1_v11b6_score");
+      table.string("SC1_v11b6");
+      table.string("SC1_v11b6_score");
+      table.string("MCF_v12_3");
+      table.string("MCF_v12_3_score");
+      table.string("MCF_v12_5");
+      table.string("MCF_v12_5_score");
+      table.string("gsmAccession");
+      table.string("dkfzBrainTumorClassifier");
+      table.string("primaryStudy");
+      table.string("centerMethylation");
+      table.string("accessionMethylation");
+      table.string("samplingTreatment");
+      table.string("locationMetastasis");
+      table.string("type");
+      table.string("category");
+      table.string("diagnosisTier1");
+      table.string("diagnosisTier2");
+      table.string("diagnosisTier3");
+      table.string("whoDiagnosisTier4");
       table.double("overallSurvivalMonths");
       table.integer("overallSurvivalStatus");
-      table.string('who_2007_grade');
-      table.string('sampling');
-      table.string('samplingTreatment');
+      table.date("batchDate");
     }
   },
 
@@ -53,7 +73,6 @@ export const schema = [
       table.string("embedding");
       table.double("x");
       table.double("y");
-      table.date("importDate");
     }
   },
 
@@ -66,7 +85,7 @@ export const schema = [
     schema: (table) => {
       table.increments("id");
       table.integer("sampleId").references("sample.id");
-      table.string("sample");
+      table.string("sampleIdatFilename").references("sample.idatFilename");
       table.string("chromosome");
       table.integer("start").unsigned();
       table.integer("end").unsigned();
@@ -83,11 +102,11 @@ export const schema = [
     name: "genes",
     import: true,
     schema: (table) => {
-      table.increments('id');
-      table.string('chr').index();
-      table.integer('start').index();
-      table.integer('end').index();
-      table.string('geneId');
+      table.increments("id");
+      table.string("chr").index();
+      table.integer("start").index();
+      table.integer("end").index();
+      table.string("geneId");
     }
   },
 
@@ -128,7 +147,7 @@ export const schema = [
    * Defines policies for each role. 
    * Each policy defines an action and a resource
    * Example actions: CreateUser, ReadUser, UpdateUser, DeleteUser
-   * Example resources: *, 'user:1', etc
+   * Example resources: *, "user:1", etc
    * Application logic determines how to to enforce policies
    * and how to map resources to entities
    */

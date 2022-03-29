@@ -1,56 +1,68 @@
+export function ageFormatter(value) {
+  if (!isNaN(value)) {
+    return value;
+  } else if (value) {
+    const monthMatches = value.match(/(\d+)m/i);
+    return monthMatches ? +monthMatches[1] / 12 : null;
+  } else {
+    return null;
+  }
+}
+
 export const sources = [
   {
     sourcePath: 'Sample_sheet_master.xlsx',
     table: 'sample',
     description: 'master sample metadata',
     columns: [
-      { sourceName: 'nn', name: 'id' },
-      { sourceName: 'Sample', name: 'sample' },
-      { sourceName: 'idat_filename', name: 'idatFilename' },
-      { sourceName: 'Category', name: 'primaryCategory' },
-      { sourceName: 'Primary_study', name: 'primaryStudy' },
-      { sourceName: 'Center_methy', name: 'centerMethylation' },
-      { sourceName: 'matched_cases', name: 'matchedCases' },
-      { sourceName: 'v11b6', name: 'v11b6' },
-      { sourceName: 'NIH_labels', name: 'nihLabels' },
-      { sourceName: 'NCI_METRIC', name: 'nciMetric' },
-      {
-        sourceName: 'Age',
-        name: 'age',
-        formatter: (value) => {
-          if (!isNaN(value)) {
-            return value;
-          } else if (value) {
-            const monthMatches = value.match(/(\d+)m/i);
-            return monthMatches ? +monthMatches[1] / 12 : null;
-          } else {
-            return null;
-          }
-        },
-      },
-      { sourceName: 'Sex_congruency', name: 'sexCongruency' },
-      { sourceName: 'Sex_prediction_minfi', name: 'sexPrediction' },
-      { sourceName: null, name: 'histology', defaultValue: null },
-      { sourceName: 'Location_region', name: 'locationGeneral' },
-      { sourceName: 'Location_site', name: 'locationSpecific' },
-      { sourceName: 'Subtype/pattern', name: 'subtypeOrPattern' },
-      { sourceName: 'Additional.info', name: 'details' },
-      { sourceName: 'H3K27me3', name: 'h3k27me3' },
-      { sourceName: 'Variants', name: 'variants' },
-      {
-        sourceName: 'Fusions/translocations',
-        name: 'fusionsOrTranslocations',
-      },
-      { sourceName: 'Variants_report', name: 'variantsReport' },
-      {
-        sourceName: 'Fusions/translocations_report',
-        name: 'fusionsOrTranslocationsReport',
-      },
-      { sourceName: 'OS_months', name: 'overallSurvivalMonths' },
-      { sourceName: 'OS_status', name: 'overallSurvivalStatus' },
-      { sourceName: 'WHO_2007_grade', name: 'who_2007_grade' },
-      { sourceName: 'Sampling', name: 'sampling' },
-      { sourceName: 'Sampling_treatment', name: 'samplingTreatment' },
+      { sourceName: "nn", name: "id" },
+      { sourceName: "Sample", name: "sample" },
+      { sourceName: "idat_filename", name: "idatFilename" },
+      { sourceName: "NIH_labels", name: "nihLabels" },
+      { sourceName: "NCI_METRIC", name: "nciMetric" },
+      { sourceName: "NCI_GROUP", name: "nciGroup" },
+      { sourceName: "v11b6", name: "v11b6" },
+      { sourceName: "Age", formatter: ageFormatter, name: "age" },
+      { sourceName: "Sex", name: "sex" },
+      { sourceName: "Diagnosis.provided", name: "diagnosisProvided" },
+      { sourceName: "Location_region", name: "locationRegion" },
+      { sourceName: "Location_site", name: "locationSite" },
+      { sourceName: "Additional.info", name: "additionalInfo" },
+      { sourceName: "Variants", name: "variants" },
+      { sourceName: "Fusions/translocations", name: "fusionsOrTranslocations" },
+      { sourceName: "Assay", name: "assay" },
+      { sourceName: "Variants_report", name: "variantsReport" },
+      { sourceName: "Fusions/translocations_report", name: "fusionsOrTranslocationsReport" },
+      { sourceName: "Outside.assay", name: "outsideAssay" },
+      { sourceName: "Variants_format", name: "variantsFormat" },
+      { sourceName: "Fuions/tranlocations_format", name: "fusionsOrTranslocationsFormat" },
+      { sourceName: "LP.CP.Number", name: "lpCpNumber" },
+      { sourceName: "Subtype/pattern", name: "subtypeOrPattern" },
+      { sourceName: "WHO_2007_grade", name: "who2007Grade" },
+      { sourceName: "MCF1_v11b6", name: "MCF1_v11b6" },
+      { sourceName: "MCF1_v11b6_score", name: "MCF1_v11b6_score" },
+      { sourceName: "SC1_v11b6", name: "SC1_v11b6" },
+      { sourceName: "SC1_v11b6_score", name: "SC1_v11b6_score" },
+      { sourceName: "MCF_v12.3", name: "MCF_v12_3" },
+      { sourceName: "MCF_v12.3_score", name: "MCF_v12_3_score" },
+      { sourceName: "MCF_v12.5", name: "MCF_v12_5" },
+      { sourceName: "MCF_v12.5_score", name: "MCF_v12_5_score" },
+      { sourceName: "GSM_accession", name: "gsmAccession" },
+      { sourceName: "dkfz_brain_tumor_classifier", name: "dkfzBrainTumorClassifier" },
+      { sourceName: "Primary_study", name: "primaryStudy" },
+      { sourceName: "Center_methy", name: "centerMethylation" },
+      { sourceName: "Accession_methy", name: "accessionMethylation" },
+      { sourceName: "Sampling_treatment", name: "samplingTreatment" },
+      { sourceName: "Location_metastasis", name: "locationMetastasis" },
+      { sourceName: "Type", name: "type" },
+      { sourceName: "Category", name: "category" },
+      { sourceName: "Diagnosis.(tier.1)", name: "diagnosisTier1" },
+      { sourceName: "Diagnosis.(tier.2)", name: "diagnosisTier2" },
+      { sourceName: "Diagnosis.(tier.3)", name: "diagnosisTier3" },
+      { sourceName: "WHO.diagnosis.(tier.4)", name: "whoDiagnosisTier4" },
+      { sourceName: "OS_months", name: "overallSurvivalMonths" },
+      { sourceName: "OS_status", name: "overallSurvivalStatus" },
+      { sourceName: "Batch_date", name: "batchDate" },
     ],
   },
 
@@ -68,7 +80,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
@@ -86,7 +97,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
@@ -104,7 +114,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
@@ -122,7 +131,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate' },
     ],
   },
 
@@ -131,7 +139,7 @@ export const sources = [
     table: 'sampleCoordinates',
     description: 'umap coordinates - hematopoietic',
     columns: [
-      { sourceName: 'order', name: 'sampleId' },
+      { sourceName: 'nn', name: 'sampleId' },
       {
         sourceName: null,
         name: 'organSystem',
@@ -140,7 +148,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
@@ -149,7 +156,7 @@ export const sources = [
     table: 'sampleCoordinates',
     description: 'densmap coordinates - hematopoietic',
     columns: [
-      { sourceName: 'order', name: 'sampleId' },
+      { sourceName: 'nn', name: 'sampleId' },
       {
         sourceName: null,
         name: 'organSystem',
@@ -158,7 +165,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
@@ -172,7 +178,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
@@ -186,7 +191,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
@@ -204,7 +208,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
@@ -222,7 +225,6 @@ export const sources = [
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
       { sourceName: 'densmap_y', name: 'y' },
-      { sourceName: 'Batch_date', name: 'importDate', defaultValue: null },
     ],
   },
 
