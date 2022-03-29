@@ -123,19 +123,30 @@ export async function importTable(connection, iterable, tableName, logger) {
   let buffer = [];
 
   async function flushBuffer() {
-    await connection.batchInsert(tableName, buffer);
-    count += buffer.length;
-    buffer = [];
-    logger.info(`Imported ${count} rows`);
+    try {
+      await connection.batchInsert(tableName, buffer);
+      count += buffer.length;
+      buffer = [];
+      logger.info(`Imported ${count} rows`);
+    } catch (error) {
+      // batchInsert exceptions do not return the specific records that failed
+      // so we need to check each record individually
+      for (let record of buffer) {
+        try {
+          await connection(tableName).insert(record);
+        } catch(error) {
+          logger.error(record);
+          throw error;
+        }
+      }
+      throw error;
+    }
   }
 
   for await (const record of iterable) {
-    try {
-      buffer.push(record);
-      if (buffer.length >= bufferSize) await flushBuffer();
-    } catch (error) {
-      logger.error(error);
-      throw error;
+    buffer.push(record);
+    if (buffer.length >= bufferSize) {
+      await flushBuffer();
     }
   }
 
