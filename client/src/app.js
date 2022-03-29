@@ -17,35 +17,58 @@ import DataImport from './modules/admin/data-import/data-import';
 import UserManagement from './modules/admin/user-management/user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
+import Header from './header';
 
 export default function App() {
-
   const navbarLinks = [
     [
       { path: '/', title: 'Home', exact: true },
-      { path: 'analysis', title: 'Analysis', show: (session) => session.authenticated  },
+      {
+        path: 'analysis',
+        title: 'Analysis',
+        show: (session) => session.authenticated,
+      },
       // { path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
-      { path: 'data/samples', title: 'Samples', show: (session) => session.authenticated  },
+      {
+        path: 'data/samples',
+        title: 'Samples',
+        show: (session) => session.authenticated,
+      },
       { path: 'about', title: 'About' },
     ],
     [
-      { path: 'admin', title: 'Admin', show: (session) => session.authenticated },
-      { path: '/api/login', title: 'Login', native: true, show: (session) => !session.authenticated },
-      { path: '/api/logout', title: 'Logout', native: true, show: (session) => session.authenticated },
-    ]
+      {
+        path: 'admin',
+        title: 'Admin',
+        show: (session) => session.authenticated,
+      },
+      {
+        path: '/api/login',
+        title: 'Login',
+        native: true,
+        show: (session) => !session.authenticated,
+      },
+      {
+        path: '/api/logout',
+        title: 'Logout',
+        native: true,
+        show: (session) => session.authenticated,
+      },
+    ],
   ];
 
   return (
     <RecoilRoot>
       <Router>
         <Session>
+          <Header />
           <Navbar linkGroups={navbarLinks} className="shadow-sm" />
           <ErrorBoundary
             fallback={
               <Alert variant="danger" className="m-5">
-                An internal error prevented this page from loading. Please contact the
-                website administrator if this problem persists.
+                An internal error prevented this page from loading. Please
+                contact the website administrator if this problem persists.
               </Alert>
             }
           >
@@ -61,7 +84,10 @@ export default function App() {
                 <Route path="about/*" element={<About />} />
                 <Route path="qci/*" element={<QCI />} />
                 <Route path="admin" element={<Admin />} />
-                <Route path="admin/user-management" element={<UserManagement />} />
+                <Route
+                  path="admin/user-management"
+                  element={<UserManagement />}
+                />
                 <Route path="admin/data-import" element={<DataImport />} />
               </Routes>
             </Suspense>
