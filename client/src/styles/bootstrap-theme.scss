@@ -39,6 +39,12 @@ a,
   }
 }
 
+.navbar-dark {
+  .navbar-nav .nav-link.active {
+    background-color: $teal-600;
+  }
+}
+
 .nav-tabs .nav-link {
   @include nav-link;
 }
