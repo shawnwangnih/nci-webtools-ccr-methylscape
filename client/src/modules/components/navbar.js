@@ -37,8 +37,8 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
   }
 
   return (
-    <BootstrapNavbar bg="white" variant="light" className={className}>
-      <Container>
+    <BootstrapNavbar bg="dark" variant="dark" className={className}>
+      <Container fluid>
         {children}
         {linkGroups.map((links) => (
           <Nav>
