@@ -23,7 +23,7 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="lead">Application description</p>
+          <p className="lead">Application Description</p>
           {session.authenticated && (
             <NavLink className="btn btn-outline-primary" to="analysis">
               Perform Analysis
