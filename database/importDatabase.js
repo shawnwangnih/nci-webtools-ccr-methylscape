@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-import minimist from 'minimist';
 import { schema } from './schema.js';
 import {
   createConnection,
@@ -18,10 +17,9 @@ const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 const require = createRequire(import.meta.url);
 
 if (isMainModule) {
-  const args = minimist(process.argv.slice(2));
-  const logger = getLogger("import");
-  const connection = createConnection(args);
   const config = require('./config.json');
+  const logger = getLogger("import");
+  const connection = createConnection(config.database);
   await importDatabase(connection, sources, logger, config.aws);
   process.exit(0);
 }
