@@ -19,7 +19,7 @@ export const overviewState = selector({
     const params = { embedding, organSystem };
     const { data } = await axios.get('api/samples', { params });
 
-    const samples = data.filter((v) => v.primaryCategory && v.matchedCases != 'Duplicate');
+    const samples = data.filter((v) => v.category) // && v.matchedCases != 'Duplicate');
     const studies = [
       ...new Set(
         samples.filter(({ primaryStudy }) => primaryStudy).map(({ primaryStudy }) => primaryStudy)
@@ -43,7 +43,7 @@ export const overviewState = selector({
 
     const catCount = Object.fromEntries(
       Object.entries(
-        samples.map(({ primaryCategory }) => primaryCategory).reduce(reducer, {})
+        samples.map(({ category }) => category).reduce(reducer, {})
       ).sort(([, a], [, b]) => a - b)
     );
     const plotData = [
