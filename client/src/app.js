@@ -28,7 +28,7 @@ export default function App() {
         title: 'Analysis',
         show: (session) => session.authenticated,
       },
-      // { path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
+      //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
         path: 'data/samples',

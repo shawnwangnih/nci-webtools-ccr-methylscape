@@ -35,7 +35,7 @@ export default function Home() {
       <Container className="mb-4 text-white">
         <Row>
           <Col md={4}>
-            <h2>About Methylscape</h2>
+            <h2>Methylscape</h2>
           </Col>
           <Col md={8}>
             <p>
