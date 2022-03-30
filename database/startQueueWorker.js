@@ -27,7 +27,7 @@ export async function startQueueWorker(config) {
   const customTransport = new CustomTransport();
   logger.add(customTransport);
   logger.info('Started methylscape queue worker');
-  
+
   processMessages({
     sqs,
     queueName: config.aws.sqsName,
@@ -37,25 +37,25 @@ export async function startQueueWorker(config) {
       logger.info('Retrieved message from SQS queue');
       const { type, importLogId } = message;
       let logBuffer = '';
-  
+
       customTransport.setHandler(async (info) => {
         const logMessage = `${info.timestamp} ${info.message}`;
         logBuffer += logMessage + '\n';
-  
+
         await connection('importLog')
           .where({ id: importLogId })
           .update({ log: logBuffer, updatedAt: new Date() });
       });
-  
+
       try {
         if (type === 'importData') {
           await connection('importLog')
             .where({ id: importLogId })
             .update({ status: 'RUNNING', updatedAt: new Date() });
-  
-          await importDatabase(connection, logger, sources, config.aws);
+
+          await importDatabase(connection, sources, logger, config.aws);
           logger.info('Finished importing data');
-  
+
           await connection('importLog')
             .where({ id: importLogId })
             .update({ status: 'COMPLETE', updatedAt: new Date() });
