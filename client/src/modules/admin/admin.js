@@ -16,7 +16,7 @@ export default function Admin() {
   ]
 
   return (
-    <Container fluid="xxl" className="my-4">
+    <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
       <h1 className="h3 mb-4 text-primary">Administrative Tasks</h1>
       <hr className="mb-4 mb-4 border-info" />
 

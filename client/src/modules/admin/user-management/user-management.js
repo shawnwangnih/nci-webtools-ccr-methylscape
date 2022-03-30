@@ -27,7 +27,7 @@ export default function UserManagement() {
     },
   ];
   return (
-    <Container fluid="xxl" className="my-4">
+    <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
        <h1 className="h4 mb-3 text-primary">User Management</h1>
       <Table data={users} columns={cols} options={{ disableFilters: true }} />
     </Container>

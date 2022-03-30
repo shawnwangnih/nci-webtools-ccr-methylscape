@@ -66,7 +66,7 @@ export default function DataImport() {
 
     return (
         <>
-            <Container className="my-4">
+            <Container className="my-4 p-3 rounded bg-white">
                 <h1 className="h4 mb-3 text-primary d-flex justify-content-between">
                     Data Import
                     <Button size="sm" onClick={runImport}>Run Import</Button>
