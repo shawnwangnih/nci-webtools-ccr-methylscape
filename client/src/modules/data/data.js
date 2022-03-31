@@ -11,6 +11,11 @@ import Alert from 'react-bootstrap/Alert';
 import Loader from '../components/loader';
 import ErrorBoundary from '../components/error-boundary';
 import './data.scss';
+import ProjectImg from '../home/images/AnalysisStudies_icon.svg'
+import ExperimentImg from '../home/images/AnalysisInstitutions_icon.svg'
+import SampleImg from '../home/images/AnalysisSamples_icon.svg'
+
+
 
 export default function Data() {
   const { data, projectsCount, experimentsCount, samplesCount } =
@@ -30,7 +35,8 @@ export default function Data() {
         >
           <Suspense fallback={<Loader message="Loading Samples" />}>
             <NavLink to={'projects'} className="text-decoration-none d-flex">
-              <PieChartFill className="stat-icon" />
+              {/* <PieChartFill className="stat-icon" /> */}
+              <img src={ProjectImg} className="stat-icon" alt="Project" />
               {data.length ? (
                 <CountUp
                   className="countup"
@@ -47,7 +53,8 @@ export default function Data() {
               to={'experiments'}
               className="text-decoration-none d-flex ms-4"
             >
-              <ClipboardData className="stat-icon" />
+              {/* <ClipboardData className="stat-icon" /> */}
+              <img src={ExperimentImg} className="stat-icon" alt="Project" />
               {data.length ? (
                 <CountUp
                   className="countup"
@@ -64,7 +71,8 @@ export default function Data() {
               to={'samples'}
               className="text-decoration-none d-flex ms-4"
             >
-              <PeopleFill className="stat-icon" />
+              {/* <PeopleFill className="stat-icon" /> */}
+              <img src={SampleImg} className="stat-icon" alt="Project" />
               {data.length ? (
                 <CountUp
                   className="countup"
@@ -80,7 +88,7 @@ export default function Data() {
           </Suspense>
         </ErrorBoundary>
       </Container>
-      <Container fluid="xxl" className="bg-white">
+      <Container fluid="xxl" className="bg-white mb-6">
         <Outlet />
       </Container>
     </div>
