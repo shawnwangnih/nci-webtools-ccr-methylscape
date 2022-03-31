@@ -26,14 +26,14 @@ export default function App() {
       {
         path: 'analysis',
         title: 'Analysis',
-        //show: (session) => session.authenticated,
+        show: (session) => session.authenticated,
       },
       //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
         path: 'data/samples',
         title: 'Samples',
-        //show: (session) => session.authenticated,
+        show: (session) => session.authenticated,
       },
       { path: 'about', title: 'About' },
       

@@ -10,10 +10,10 @@ export default function About() {
         <Card.Body>
           <Container className="my-4">
             <Row> 
-              <Col md={4} className="text-wrap text-end">
+              <Col md lg={{ span: 2, offset: 2 }} className="text-wrap text-end">
                 <h2>About Methylscape Analysis</h2>
               </Col>
-              <Col md={8}>
+              <Col lg={6}>
                 <div>
                   <p>
                     The NCI Laboratory of Pathology has implemented a novel
