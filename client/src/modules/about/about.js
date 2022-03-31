@@ -9,9 +9,9 @@ export default function About() {
       <Card className="my-4 bg-primary text-white border-0">
         <Card.Body>
           <Container className="mb-4">
-            <Row>
-              <Col md={4}>
-                <h2 className="mb-3 text-right">About Methylscape Analysis</h2>
+            <Row> 
+              <Col md={4} class="text-left">
+                <h2 className="mb-3">About Methylscape Analysis</h2>
               </Col>
               <Col md={8}>
                 <p>
@@ -49,7 +49,7 @@ export default function About() {
                 </p>
               </Col>
               
-            </Row>   
+            </Row>
           </Container>                
         </Card.Body>
       </Card>
