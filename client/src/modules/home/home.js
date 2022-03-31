@@ -36,10 +36,10 @@ export default function Home() {
       <div>
         <Container className="my-9 text-white">
           <Row md={2}>
-            <Col md={{ span: 3, offset: 3 }} className="">
+            <Col md={{ span: 3, offset: 3 }} className="text-end">
               <h1>Methylscape</h1>
-              <h3>Analysis</h3>
-              <p className="text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
+              <h2>Analysis</h2>
+              <p className="my-4 text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
               <Button variant="outline-light" size="lg" className="btn-home">Perform Analysis</Button>{' '}
             </Col>
             <Col>

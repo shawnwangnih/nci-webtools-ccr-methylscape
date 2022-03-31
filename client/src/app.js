@@ -26,16 +26,17 @@ export default function App() {
       {
         path: 'analysis',
         title: 'Analysis',
-        show: (session) => session.authenticated,
+        //show: (session) => session.authenticated,
       },
       //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
         path: 'data/samples',
         title: 'Samples',
-        show: (session) => session.authenticated,
+        //show: (session) => session.authenticated,
       },
       { path: 'about', title: 'About' },
+      
     ],
     [
       { path: 'admin', title: 'Admin', show: (session) => session.authenticated },
@@ -52,7 +53,7 @@ export default function App() {
       <Router>
         <Session>
           <Header />
-          <Navbar linkGroups={navbarLinks} className="shadow-sm" />
+          <Navbar linkGroups={navbarLinks} className="shadow-sm navbar-bottom-line" />
           <ErrorBoundary
             fallback={
               <Alert variant="danger" className="m-5">
