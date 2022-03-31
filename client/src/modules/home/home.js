@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 import HomeImage from './images/home.svg';
 import { sessionState } from '../session/session.state';
 import './home.scss';
+import backgroundImage from './images/Main_Graphic.png'
 
 export default function Home() {
   const session = useRecoilValue(sessionState);
@@ -33,24 +34,22 @@ export default function Home() {
         </Container>
       </div> */}
 
-      <div>
-        <Container className="my-9 text-white">
+      {/* <div className="h-100"> */}
+        <div className="text-white p-0 m-0  vw-100 img-fluid" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <Row md={2}>
-            <Col md={{ span: 3, offset: 3 }} className="text-end">
+            <Col md={{ span: 3, offset: 2}} className="py-9 text-end">
               <h1>Methylscape</h1>
               <h2>Analysis</h2>
               <p className="my-4 text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
               <Button variant="outline-light" size="lg" className="btn-home">Perform Analysis</Button>{' '}
             </Col>
-            <Col>
-              
-            </Col>
+            
             
           </Row>
           
           
-      </Container>
       </div>
+      {/* </div> */}
       
     </>
   );

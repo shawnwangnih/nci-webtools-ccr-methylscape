@@ -152,6 +152,7 @@ export default function Table({
   );
   return (
     <>
+      
       <Row className="justify-content-end">
         {customOptions.download && (
           <Col sm="auto">
@@ -265,12 +266,12 @@ export default function Table({
         </BootstrapTable>
       </div>
 
-      <div className="d-flex flex-wrap align-items-center justify-content-between p-3">
-        <div>
+      <div className="d-flex flex-wrap align-items-center justify-content-end p-3">
+        {/* <div>
           Showing rows {(1 + pageIndex * pageSize).toLocaleString()}-
           {Math.min(rows.length, (pageIndex + 1) * pageSize).toLocaleString()}{' '}
           of {rows.length.toLocaleString()}
-        </div>
+        </div> */}
 
         <div className="d-flex">
           <Form.Control
@@ -288,29 +289,41 @@ export default function Table({
             ))}
           </Form.Control>
 
+          
+            <div>
+            {(1 + pageIndex * pageSize).toLocaleString()}
+            </div>
+          
+
           <Pagination className="mb-0">
-            <Pagination.First
+            {/*<Pagination.First
               onClick={() => gotoPage(0)}
               disabled={!canPreviousPage}
             >
               First
-            </Pagination.First>
+            </Pagination.First> */}
             <Pagination.Prev
               onClick={() => previousPage()}
               disabled={!canPreviousPage}
             >
-              Previous
+              &#60; Previous
             </Pagination.Prev>
             <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
-              Next
+              Next &#62;
             </Pagination.Next>
-            <Pagination.Last
+            {/* <Pagination.Last
               onClick={() => gotoPage(pageCount - 1)}
               disabled={!canNextPage}
             >
               Last
-            </Pagination.Last>
+            </Pagination.Last> */}
           </Pagination>
+
+          
+            <div className='text'>
+            {rows.length.toLocaleString()}
+            </div>
+          
         </div>
       </div>
     </>

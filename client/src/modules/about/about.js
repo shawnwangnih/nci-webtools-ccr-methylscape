@@ -2,11 +2,12 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import aboutImage from '../home/images/About.Background-image.png'
 
 export default function About() {
   return (
-    <Container>
-      <Card className="my-4 bg-primary text-white border-0">
+    <div className="m-0">
+      <Card className="py-4 bg-primary text-white border-0" style={{ backgroundImage: `url(${aboutImage})` }}>
         <Card.Body>
           <Container className="my-4">
             <Row> 
@@ -56,6 +57,6 @@ export default function About() {
           </Container>                
         </Card.Body>
       </Card>
-    </Container>
+    </div>
   );
 }

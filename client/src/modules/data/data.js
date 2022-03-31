@@ -18,7 +18,8 @@ export default function Data() {
 
   return (
     <div>
-      <Container fluid="xxl" className="d-flex p-2 bg-light">
+    <h3 className='text-white p-4'>Samples</h3>
+      <Container fluid="xxl" className="d-flex p-4 bg-light justify-content-center">
         <ErrorBoundary
           fallback={
             <Alert variant="danger">
