@@ -13,43 +13,59 @@ export default function Info() {
 
   return (
     <div>
-      <Row>
-        <Col sm="4" className="my-auto">
-          <Card bg="light" className="d-flex flex-row">
-            <div className="bg-primary p-2">
-              <PieChart color="white" size="3rem" />
-            </div>
-            <div className="w-100 my-auto text-center">
-              <div className="fw-light">TOTAL SAMPLES</div>
-              <b>{samples}</b>
-            </div>
-          </Card>
-          <Card bg="light" className="d-flex flex-row">
-            <div className="p-2" style={{ background: 'rebeccapurple' }}>
-              <ClipboardData color="white" size="3rem" />
-            </div>
-            <div className="w-100 my-auto text-center">
-              <div className="fw-light">NUMBER OF STUDIES</div>
-              <b>{studies}</b>
-            </div>
-          </Card>
-          <Card bg="light" className="d-flex flex-row">
-            <div className="bg-dark p-2">
-              <Building color="white" size="3rem" />
-            </div>
-            <div className="w-100 my-auto text-center">
-              <div className="fw-light">NUMBER OF INSTITUTIONS</div>
-              <b>{institutions}</b>
-            </div>
-          </Card>
+      <Row className="justify-content-center">
+        <Col sm="auto" className="text-center">
+          <div className="p-2">
+            <img
+              src="assets/images/samples-icon.svg"
+              alt="samples icon"
+              height="125px"
+              width="125px"
+            />
+          </div>
+          <div>
+            <b className="text-primary">{samples.toLocaleString()}</b>
+            <div className="fw-light text-muted">Samples</div>
+          </div>
         </Col>
-        <Col sm="8">
+        <Col sm="auto" className="text-center">
+          <div className="p-2">
+            <img
+              src="assets/images/studies-icon.svg"
+              alt="studies icon"
+              height="125px"
+              width="125px"
+            />
+          </div>
+          <div>
+            <b className="text-primary">{studies.toLocaleString()}</b>
+            <div className="fw-light text-muted">Studies</div>
+          </div>
+        </Col>
+        <Col sm="auto" className="text-center">
+          <div className="p-2">
+            <img
+              src="assets/images/institutions-icon.svg"
+              alt="institutions icon"
+              height="125px"
+              width="125px"
+            />
+          </div>
+          <div>
+            <b className="text-primary">{institutions.toLocaleString()}</b>
+            <div className="fw-light text-muted">Institutions</div>
+          </div>
+        </Col>
+      </Row>
+      <hr />
+      <Row className="justify-content-center">
+        <Col sm="auto">
           <Plot
             data={[...data]}
             layout={cloneDeep(layout)}
             config={cloneDeep(config)}
             className="w-100"
-            // style={{ height: '600px' }}
+            style={{ height: '600px' }}
             useResizeHandler
           />
         </Col>
