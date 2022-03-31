@@ -19,8 +19,8 @@ export default function Info() {
             <img
               src="assets/images/samples-icon.svg"
               alt="samples icon"
-              height="125px"
-              width="125px"
+              height="100px"
+              width="100px"
             />
           </div>
           <div>
@@ -33,8 +33,8 @@ export default function Info() {
             <img
               src="assets/images/studies-icon.svg"
               alt="studies icon"
-              height="125px"
-              width="125px"
+              height="100px"
+              width="100px"
             />
           </div>
           <div>
@@ -47,8 +47,8 @@ export default function Info() {
             <img
               src="assets/images/institutions-icon.svg"
               alt="institutions icon"
-              height="125px"
-              width="125px"
+              height="100px"
+              width="100px"
             />
           </div>
           <div>
