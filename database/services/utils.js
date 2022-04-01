@@ -18,6 +18,23 @@ export function createConnection(args) {
   });
 }
 
+export function loadAwsCredentials(config) {
+  const { region, accessKeyId, secretAccessKey } = config;
+
+  if (region) {
+    process.env.AWS_REGION = region;
+    process.env.AWS_DEFAULT_REGION = region;
+  }
+
+  if (accessKeyId) {
+    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+  }
+
+  if (secretAccessKey) {
+    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+  }
+}
+
 export async function initializeTables(connection, tables) {
   // drop tables in reverse order to avoid foreign key constraints
   for (const { name } of [...tables].reverse()) {
