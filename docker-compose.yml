@@ -5,7 +5,7 @@ services:
             context: '.'
             dockerfile: './docker/backend.dockerfile'
         volumes:
-            - './server/config.json:/app/server/config.json:ro'
+            - './server/docker.config.json:/app/server/config.json:ro'
             - './server/logs:/app/server/logs'
         ports: 
             - '10000:10000'
@@ -27,7 +27,7 @@ services:
             context: '.'
             dockerfile: './docker/database.dockerfile'
         volumes:
-            - './database/config.json:/app/database/config.json:ro'
+            - './server/docker.config.json:/app/database/config.json:ro'
             - './database/logs:/app/database/logs'
 
     database:
