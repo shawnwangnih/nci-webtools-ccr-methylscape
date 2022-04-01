@@ -1,9 +1,9 @@
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CreatableSelect from 'react-select/creatable';
 import { useRecoilState } from 'recoil';
 import { formState, preFormState } from './copyNumber.state';
+import MultiSearch from '../../components/multi-search';
 
 export default function CopyNumberForm() {
   const [form, setForm] = useRecoilState(formState);
@@ -51,24 +51,11 @@ export default function CopyNumberForm() {
       <Col>
         <Form.Group id="copy-number-search" className="mb-3">
           <Form.Label>Search</Form.Label>
-          <CreatableSelect
+          <MultiSearch
             name="copy-number-search"
-            noOptionsMessage={() => null}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null,
-            }}
-            formatCreateLabel={(userInput) => `Gene(s): ${userInput}`}
-            isMulti
             placeholder="Gene(s)"
             value={form.search}
             onChange={handleSearch}
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                borderRadius: '1rem',
-              }),
-            }}
           />
         </Form.Group>
       </Col>
