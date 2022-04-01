@@ -1,12 +1,13 @@
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
+import { SQSClient } from '@aws-sdk/client-sqs';
 import knex from 'knex';
 import { processMessages } from './services/queue.js';
 import { getLogger } from './services/logger.js';
 import { CustomTransport } from './services/transports.js';
+import { loadAwsCredentials } from './services/utils.js';
 import { importDatabase } from './importDatabase.js';
 import { sources } from './sources.js';
-import { SQSClient } from '@aws-sdk/client-sqs';
 
 // determine if this script was launched from the command line
 const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
@@ -14,6 +15,7 @@ const require = createRequire(import.meta.url);
 
 if (isMainModule) {
   const config = require('./config.json');
+  loadAwsCredentials(config.aws);
   await startQueueWorker(config);
 }
 
