@@ -6,8 +6,8 @@ import aboutImage from '../home/images/About.Background-image.png'
 
 export default function About() {
   return (
-    <div className="m-0">
-      <Card className="py-4 bg-primary text-white border-0" style={{ backgroundImage: `url(${aboutImage})` }}>
+    
+      <Card className="py-4 bg-primary text-white border-0 vh-100" style={{ backgroundImage: `url(${aboutImage})` }}>
         <Card.Body>
           <Container className="my-4">
             <Row> 
@@ -57,6 +57,6 @@ export default function About() {
           </Container>                
         </Card.Body>
       </Card>
-    </div>
+    
   );
 }

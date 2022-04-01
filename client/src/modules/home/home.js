@@ -35,16 +35,14 @@ export default function Home() {
       </div> */}
 
       {/* <div className="h-100"> */}
-        <div className="text-white p-0 m-0  vw-100 img-fluid homepage-img-bg" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="text-white img-fluid homepage-img-bg float-left" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <Row md={2}>
             <Col md={{ span: 3, offset: 2}} className="py-9 text-end">
               <h1>Methylscape</h1>
               <h2>Analysis</h2>
               <p className="my-4 text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
               <Button variant="outline-light" size="lg" className="btn-home">Perform Analysis</Button>{' '}
-            </Col>
-            
-            
+            </Col>           
           </Row>
           
           

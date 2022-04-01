@@ -1,6 +1,6 @@
 /** Colors */
-//$blue: #48569e;
-$blue: rgb(42, 73, 111);
+$blue: #48569e;
+//$blue: rgb(42, 73, 111);
 $lightBlue: #1d5c87;
 $dark: rgb(42, 73, 111);
 $secondary: $lightBlue;
@@ -69,3 +69,7 @@ $spacers: (
 // Border radius
 $btn-border-radius: 1rem;
 $input-border-radius: 1rem;
+
+#root{
+  height: 990px;
+}

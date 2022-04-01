@@ -18,6 +18,7 @@ import UserManagement from './modules/admin/user-management/user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
+import backgroundImage from './modules/home/images/Main_Graphic.png'
 
 export default function App() {
   const navbarLinks = [
@@ -53,35 +54,38 @@ export default function App() {
       <Router>
         <Session>
           <Header />
-          <Navbar linkGroups={navbarLinks} className="shadow-sm navbar-bottom-line" />
-          <ErrorBoundary
-            fallback={
-              <Alert variant="danger" className="m-5">
-                An internal error prevented this page from loading. Please
-                contact the website administrator if this problem persists.
-              </Alert>
-            }
-          >
-            <Suspense fallback={<Loader message="Loading Page" />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="analysis" element={<Analysis />} />
-                <Route path="data" element={<Data />}>
-                  <Route path="projects" element={<Projects />} />
-                  <Route path="experiments" element={<Experiments />} />
-                  <Route path="samples" element={<Samples />} />
-                </Route>
-                <Route path="about/*" element={<About />} />
-                <Route path="qci/*" element={<QCI />} />
-                <Route path="admin" element={<Admin />} />
-                <Route
-                  path="admin/user-management"
-                  element={<UserManagement />}
-                />
-                <Route path="admin/data-import" element={<DataImport />} />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
+          
+            <Navbar linkGroups={navbarLinks} className="shadow-sm navbar-bottom-line" />
+            <ErrorBoundary
+              fallback={
+                <Alert variant="danger" className="m-5">
+                  An internal error prevented this page from loading. Please
+                  contact the website administrator if this problem persists.
+                </Alert>
+              }
+            >
+              <Suspense fallback={<Loader message="Loading Page" />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="analysis" element={<Analysis />} />
+                  <Route path="data" element={<Data />}>
+                    <Route path="projects" element={<Projects />} />
+                    <Route path="experiments" element={<Experiments />} />
+                    <Route path="samples" element={<Samples />} />
+                  </Route>
+                  <Route path="about/*" element={<About />} />
+                  <Route path="qci/*" element={<QCI />} />
+                  <Route path="admin" element={<Admin />} />
+                  <Route
+                    path="admin/user-management"
+                    element={<UserManagement />}
+                  />
+                  <Route path="admin/data-import" element={<DataImport />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          
+          
         </Session>
       </Router>
     </RecoilRoot>
