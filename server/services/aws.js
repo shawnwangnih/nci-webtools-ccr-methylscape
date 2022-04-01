@@ -10,6 +10,23 @@ const {
 } = require('@aws-sdk/client-s3');
 const { aws: config } = require('../config');
 
+function loadAwsCredentials(config) {
+  const { region, accessKeyId, secretAccessKey } = config;
+
+  if (region) {
+    process.env.AWS_REGION = region;
+    process.env.AWS_DEFAULT_REGION = region;
+  }
+
+  if (accessKeyId) {
+    process.env.AWS_ACCESS_KEY_ID = accessKeyId;
+  }
+
+  if (secretAccessKey) {
+    process.env.AWS_SECRET_ACCESS_KEY = secretAccessKey;
+  }
+}
+
 async function scanTable() {
   const client = new DynamoDBClient({ region: config.region });
   const ddbDocClient = DynamoDBDocumentClient.from(client);
@@ -51,6 +68,7 @@ async function getKey(prefix) {
 }
 
 module.exports = {
+  loadAwsCredentials,
   scanTable,
   getFile,
   getDataFile,
