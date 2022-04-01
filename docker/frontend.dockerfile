@@ -1,11 +1,8 @@
-FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream9}
 
 RUN dnf -y update \
- && dnf -y module enable nodejs:14 \
  && dnf -y install \
-    gcc-c++ \
     httpd \
-    make \
     nodejs \
     npm \
  && dnf clean all
@@ -35,4 +32,4 @@ EXPOSE 80
 EXPOSE 443
 
 CMD rm -rf /run/httpd/* /tmp/httpd* \
- && exec /usr/sbin/apachectl -DFOREGROUND
+ && exec /usr/sbin/httpd -DFOREGROUND

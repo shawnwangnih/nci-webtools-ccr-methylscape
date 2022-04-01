@@ -1,12 +1,10 @@
-FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream9}
 
 RUN dnf -y update \
  && dnf -y install \
     dnf-plugins-core \
     epel-release \
-    glibc-langpack-en \
- && dnf config-manager --set-enabled powertools \
- && dnf -y module enable nodejs:14 \
+ && dnf config-manager --set-enabled crb \
  && dnf -y install \
     make \
     gcc-c++ \
