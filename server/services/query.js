@@ -9,6 +9,11 @@ async function getSamples(connection, { embedding, organSystem }) {
   }
 }
 
+async function getImportLog(connection) {
+  return await connection('importLog').select('*').orderBy('createdAt', 'desc');
+}
+
 module.exports = {
   getSamples,
+  getImportLog,
 };

@@ -2,12 +2,12 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const passport = require('passport');
-const { getSamples } = require('./query');
+const { getSamples, getImportLog } = require('./query');
 const { scanTable, getFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
 const { getCopyNumber } = require('./analysis/copyNumber/copyNumber');
-const { createImportRequest, getImportLog } = require('./database/utils');
+const { createImportRequest } = require('./database');
 const config = require('../config');
 
 const apiRouter = express.Router();
