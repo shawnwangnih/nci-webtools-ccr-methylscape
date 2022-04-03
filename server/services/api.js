@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const passport = require('passport');
-const { getSamples, getImportLog } = require('./query');
+const { getSamples, getImportLogs, getCnvSegments, getCnvBins, getGenes } = require('./query');
 const { scanTable, getFile } = require('./aws');
 const { logRequests, publicCacheControl, withAsync } = require('./middleware');
 const { wrapper: r, getSurvivalData } = require('./R/r');
@@ -75,10 +75,10 @@ apiRouter.get('/session', (request, response) => {
 });
 
 apiRouter.get(
-  '/admin/importLog',
+  '/admin/importLogs',
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
-    const results = await getImportLog(connection);
+    const results = await getImportLogs(connection);
     response.json(results);
   })
 );
@@ -102,6 +102,36 @@ apiRouter.get(
     response.json(results);
   })
 );
+
+apiRouter.get(
+  '/genes',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const results = await getGenes(connection);
+    response.json(results);
+  })
+);
+
+apiRouter.get(
+  '/cnv/segments',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const { idatFilename } = request.query;
+    const results = await getCnvSegments(connection, { idatFilename });
+    response.json(results);
+  })
+);
+
+apiRouter.get(
+  '/cnv/bins',
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const { idatFilename } = request.query;
+    const results = await getCnvBins(connection, { idatFilename });
+    response.json(results);
+  })
+);
+
 
 // get entire dynamoDB table
 apiRouter.get(
@@ -137,14 +167,14 @@ apiRouter.post(
   })
 );
 
-// call r wrapper
-apiRouter.post(
-  '/r',
-  withAsync(async (request, response) => {
-    const result = JSON.parse(await r(request.body));
-    response.json(result);
-  })
-);
+// call r wrapper (note: this is disabled for now because of injection issues)
+// apiRouter.post(
+//   '/r',
+//   withAsync(async (request, response) => {
+//     const result = JSON.parse(await r(request.body));
+//     response.json(result);
+//   })
+// );
 
 apiRouter.post(
   '/survival',
