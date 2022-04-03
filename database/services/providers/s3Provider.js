@@ -26,7 +26,7 @@ export class S3Provider {
             keys = keys.concat(items);
         }
         
-        return keys;
+        return keys.filter(key => !key.endsWith('/'));
     }
 
     async readFile(path) {
