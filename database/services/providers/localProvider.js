@@ -6,6 +6,9 @@ export class LocalProvider {
 
     constructor(basePath) {
         this.basePath = basePath || '';
+        this.listFiles = this.listFiles.bind(this);
+        this.readFile = this.readFile.bind(this);
+        this.readFileMetadata = this.readFileMetadata.bind(this);
     }
 
     /**
@@ -14,7 +17,7 @@ export class LocalProvider {
      * @returns 
      */
     async listFiles(path) {
-        const targetPath = resolve(path);
+        const targetPath = resolve(this.basePath, path);
         const metadata = await stat(targetPath);
         if (!metadata.isDirectory()) {
             return [];
@@ -22,9 +25,10 @@ export class LocalProvider {
 
         let filePaths = [];
         for (const filePath of await readdir(targetPath)) {
-            const metadata = await stat(filePath);
+            const absolutePath = resolve(targetPath, filePath);
+            const metadata = await stat(absolutePath);
             if (metadata.isFile()) {
-                filePaths.push(filePath);
+                filePaths.push(absolutePath);
             }
             else if (metadata.isDirectory()) {
                 const subFilePaths = await this.listFiles(filePath);
@@ -35,10 +39,12 @@ export class LocalProvider {
     }
 
     async readFile(path) {
-        return createReadStream(path);
+        const targetPath = resolve(this.basePath, path);
+        return createReadStream(targetPath);
     }
 
     async readFileMetadata(path) {
-        return await stat(path);
+        const targetPath = resolve(this.basePath, path);
+        return await stat(targetPath);
     }
 }
