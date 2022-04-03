@@ -218,7 +218,7 @@ export const sources = [
     ],
   },
   {
-    sourcePath: 'CNV2/bins/',
+    sourcePath: 'CNV/bins/',
     type: 'folder',
     table: 'cnvBin',
     description: 'CNV bins (conumee output)',
@@ -266,7 +266,7 @@ export const sources = [
     },
   },
   {
-    sourcePath: 'CNV2/segments/',
+    sourcePath: 'CNV/segments/',
     type: 'folder',
     table: 'cnvSegment',
     description: 'CNV segments (conumee output)',
