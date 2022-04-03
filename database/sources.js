@@ -1,13 +1,4 @@
-export function ageFormatter(value) {
-  if (!isNaN(value)) {
-    return value;
-  } else if (value) {
-    const monthMatches = value.match(/(\d+)m/i);
-    return monthMatches ? +monthMatches[1] / 12 : null;
-  } else {
-    return null;
-  }
-}
+import { ageFormatter, chromosomeFormatter, patternExtractionFormatter } from './services/formatters.js';
 
 export const sources = [
   {
@@ -68,15 +59,11 @@ export const sources = [
 
   {
     sourcePath: 'anno_neuro.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'umap coordinates - centralNervousSystem',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
-      {
-        sourceName: null,
-        name: 'organSystem',
-        defaultValue: 'centralNervousSystem',
-      },
+      { sourceName: null, name: 'organSystem', defaultValue: 'centralNervousSystem'},
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
       { sourceName: 'umap_y', name: 'y' },
@@ -85,7 +72,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_neuro.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'densmap coordinates - centralNervousSystem',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -102,7 +89,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_sarcoma.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'umap coordinates - boneAndSoftTissue',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -119,7 +106,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_sarcoma.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'densmap coordinates - boneAndSoftTissue',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -136,7 +123,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_heme.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'umap coordinates - hematopoietic',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -153,7 +140,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_heme.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'densmap coordinates - hematopoietic',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -170,7 +157,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_kidney.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'umap coordinates - renal',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -183,7 +170,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_kidney.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'densmap coordinates - renal',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -196,7 +183,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_pan.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'umap coordinates - panCancer',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -209,7 +196,7 @@ export const sources = [
 
   {
     sourcePath: 'anno_pan.txt',
-    table: 'sampleCoordinates',
+    table: 'sampleCoordinate',
     description: 'densmap coordinates - panCancer',
     columns: [
       { sourceName: 'nn', name: 'sampleId' },
@@ -219,38 +206,85 @@ export const sources = [
       { sourceName: 'densmap_y', name: 'y' },
     ],
   },
-
-  // {
-  //   sourcePath: 'infinium-methylationepic-v-1-0-b5-manifest-file.csv',
-  //   table: 'annotations',
-  //   description: 'Gene annotations',
-  //   columns: [
-  //     { sourceName: 'Name', name: 'name' },
-  //     { sourceName: 'CHR', name: 'chr' },
-  //     { sourceName: 'MAPINFO', name: 'mapInfo' },
-  //     { sourceName: 'UCSC_RefGene_Name', name: 'ucscName' },
-  //     { sourceName: 'GencodeBasicV12_NAME', name: 'gencodeBasicV12Name' },
-  //     {
-  //       sourceName: 'GencodeBasicV12_Accession',
-  //       name: 'gencodeBasicV12Accession',
-  //     },
-  //     {
-  //       sourceName: 'Relation_to_UCSC_CpG_Island',
-  //       name: 'relationTo_UCSC_CpG_Island',
-  //     },
-  //   ],
-  // },
-
   {
-    sourcePath: 'genes.txt',
-    table: 'genes',
-    description: 'GenCode annotations',
+    sourcePath: 'genes.csv',
+    table: 'gene',
+    description: 'Genes',
     columns: [
-      { sourceName: '#chrom', name: 'chr' },
-      { sourceName: 'chromStart', name: 'start' },
-      { sourceName: 'chromEnd', name: 'end' },
-      { sourceName: 'geneName', name: 'geneId' },
+      { sourceName: "name", name: "name" },
+      { sourceName: "chromosome", name: "chromosome" },
+      { sourceName: "start", name: "start" },
+      { sourceName: "end", name: "end" },
     ],
   },
+  {
+    sourcePath: 'CNV2/bins/',
+    type: 'folder',
+    table: 'cnvBin',
+    description: 'CNV bins (conumee output)',
+    parseConfig: {
+      columns: ["Index", "Chromosome", "Start", "End", "Feature", "MedianLogIntensity"],
+      from_line: 2,
+    },
+    columns: [
+      { sourceMetadataName: "filename", name: "sampleIdatFilename", formatter: patternExtractionFormatter(/^(.*)\.bins\.txt$/) },
+      { sourceName: "Chromosome", name: "chromosome", formatter: chromosomeFormatter },
+      { sourceName: "Start", name: "start" },
+      { sourceName: "End", name: "end" },
+      { sourceName: "Feature", name: "feature" },
+      { sourceName: "MedianLogIntensity", name: "medianLogIntensity" },
+    ],
+    temporarySchema: (table) => {
+      table.increments("id");
+      table.string("sampleIdatFilename").index();
+      table.integer("chromosome");
+      table.integer("start").unsigned();
+      table.integer("end").unsigned();
+      table.string("feature");
+      table.double("medianLogIntensity");
+      table.index(["chromosome", "start"]);
+    },
+    importScript: () => {
+      // fast range-overlap join
+      // source: https://doi.org/10.1007/s00778-021-00692-3
+      return `with results as (
+          select c.*, g.name as gene from :temporaryTable: c
+              join gene g on
+                  c.chromosome = g.chromosome and
+                  c.start <= g.start and
+                  g.start < c.end
+          union
+          select c.*, g.name as gene from :temporaryTable: c
+          join gene g on
+              c.chromosome = g.chromosome and
+              g.start < c.start and
+              c.start < g."end"
+      ) insert into "cnvBin"("sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity", "gene")
+      select "sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity", string_agg(distinct gene, ';') as "gene"
+      from results
+      group by "sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity"`
+    },
+  },
+  {
+    sourcePath: 'CNV2/segments/',
+    type: 'folder',
+    table: 'cnvSegment',
+    description: 'CNV segments (conumee output)',
+    parseConfig: {
+      columns: ["Index", "ID", "chrom", "loc.start", "loc.end", "num.mark", "bstat", "pval", "seg.mean", "seg.median"],
+      from_line: 2,
+    },
+    columns: [
+      { sourceName: "ID", name: "sampleIdatFilename" },
+      { sourceName: "chrom", name: "chromosome", formatter: chromosomeFormatter },
+      { sourceName: "loc.start", name: "start" },
+      { sourceName: "loc.end", name: "end" },
+      { sourceName: "num.mark", name: "numberOfMarkers" },
+      { sourceName: "bstat", name: "bStatistic" },
+      { sourceName: "pval", name: "pValue" },
+      { sourceName: "seg.mean", name: "meanValue" },
+      { sourceName: "seg.median", name: "medianValue" },
+    ],
+  }
 ];
 
