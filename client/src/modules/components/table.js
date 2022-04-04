@@ -19,6 +19,7 @@ import {
 } from 'react-table';
 import { ChevronUp, ChevronDown, ChevronExpand } from 'react-bootstrap-icons';
 import Papa from 'papaparse';
+import './table.scss';
 
 export function TextFilter({
   column: { filterValue, setFilter, placeholder, aria },
@@ -273,10 +274,11 @@ export default function Table({
           of {rows.length.toLocaleString()}
         </div> */}
 
-        <div className="d-flex">
-          <Form.Control
+        <div className="d-flex flex-row justify-content-end my-auto mb-4">
+          <div>
+            <Form.Control
             as="select"
-            className="mr-2"
+            className=""
             name="select-page-size"
             aria-label="Select page size"
             value={pageSize}
@@ -288,42 +290,39 @@ export default function Table({
               </option>
             ))}
           </Form.Control>
-
+          </div>
           
-            <div>
+          <div className="mx-3 align-items-center">
             {(1 + pageIndex * pageSize).toLocaleString()}
             </div>
-          
-
-          <Pagination className="mb-0">
-            {/*<Pagination.First
-              onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}
-            >
-              First
-            </Pagination.First> */}
-            <Pagination.Prev
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-            >
-              &#60; Previous
-            </Pagination.Prev>
-            <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
-              Next &#62;
-            </Pagination.Next>
-            {/* <Pagination.Last
-              onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}
-            >
-              Last
-            </Pagination.Last> */}
-          </Pagination>
-
-          
-            <div className='text'>
+          <div>
+            <Pagination className="mb-0 border border-0" aria-label="Previous">
+              {/*<Pagination.First
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+              >
+                First
+              </Pagination.First> */}
+              <Pagination.Prev
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+              >
+                &#60; Previous
+              </Pagination.Prev>
+              <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
+                Next &#62;
+              </Pagination.Next>
+              {/* <Pagination.Last
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+              >
+                Last
+              </Pagination.Last> */}
+            </Pagination>
+          </div>
+          <div className="px-3 align-items-center">
             {rows.length.toLocaleString()}
-            </div>
-          
+          </div>
         </div>
       </div>
     </>

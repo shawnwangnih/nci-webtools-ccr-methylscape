@@ -14,6 +14,7 @@ import './data.scss';
 import ProjectImg from '../home/images/AnalysisStudies_icon.svg'
 import ExperimentImg from '../home/images/AnalysisInstitutions_icon.svg'
 import SampleImg from '../home/images/AnalysisSamples_icon.svg'
+import { Row, Col, Button } from 'react-bootstrap';
 
 
 
@@ -22,9 +23,9 @@ export default function Data() {
     useRecoilValue(methylscapeData);
 
   return (
-    <div>
-    <h3 className='text-white p-4'>Samples</h3>
-      <Container fluid="xxl" className="d-flex p-4 bg-light justify-content-center">
+    <div className="vh-100">
+    <h3 className='text-white p-4 ml-6'>Samples</h3>
+      <Container fluid="xxl" className="d-flex py-4 bg-light justify-content-center">
         <ErrorBoundary
           fallback={
             <Alert variant="danger">
@@ -34,45 +35,58 @@ export default function Data() {
           }
         >
           <Suspense fallback={<Loader message="Loading Samples" />}>
-            <NavLink to={'projects'} className="text-decoration-none d-flex">
+          <Row className="vw-100 border-bottom justify-content-md-center">
+            <Col md={2} className="pb-3 border-end">
+              <NavLink to={'projects'} className="text-decoration-none d-flex">
               {/* <PieChartFill className="stat-icon" /> */}
               <img src={ProjectImg} className="stat-icon" alt="Project" />
-              {data.length ? (
-                <CountUp
-                  className="countup"
-                  start={projectsCount / 2}
-                  end={projectsCount}
-                  duration={1}
-                />
-              ) : (
-                <span className="countup">0</span>
-              )}
-              <h3 className="fw-light text-black">Projects</h3>
-            </NavLink>
+              <div>
+                {data.length ? (
+                    <CountUp
+                      className="countup"
+                      start={projectsCount / 2}
+                      end={projectsCount}
+                      duration={1}
+                    />
+                  ) : (
+                    <span className="countup">0</span>
+                  )}
+                  <h5 className="fw-light text-black">Projects</h5>
+                </div>
+                
+              </NavLink>
+            </Col>
+            <Col md={2} className="pb-3 border-end">
             <NavLink
-              to={'experiments'}
-              className="text-decoration-none d-flex ms-4"
-            >
-              {/* <ClipboardData className="stat-icon" /> */}
-              <img src={ExperimentImg} className="stat-icon" alt="Project" />
-              {data.length ? (
-                <CountUp
-                  className="countup"
-                  start={experimentsCount / 2}
-                  end={experimentsCount}
-                  duration={1}
-                />
-              ) : (
-                <span className="countup">0</span>
-              )}
-              <h3 className="fw-light text-black">Experiments</h3>
-            </NavLink>
+                to={'experiments'}
+                className="text-decoration-none d-flex ms-4 border-left"
+              >
+                {/* <ClipboardData className="stat-icon" /> */}
+                <img src={ExperimentImg} className="stat-icon" alt="Project" />
+                <div> 
+                {data.length ? (
+                  <CountUp
+                    className="countup"
+                    start={experimentsCount / 2}
+                    end={experimentsCount}
+                    duration={1}
+                  />
+                ) : (
+                  <span className="countup">0</span>
+                )}
+                <h5 className="fw-light text-black">Experiments</h5>
+                </div>
+                
+              </NavLink>
+            </Col>
+            <Col md={2}>
             <NavLink
               to={'samples'}
               className="text-decoration-none d-flex ms-4"
             >
               {/* <PeopleFill className="stat-icon" /> */}
               <img src={SampleImg} className="stat-icon" alt="Project" />
+              <div>
               {data.length ? (
                 <CountUp
                   className="countup"
@@ -83,8 +97,13 @@ export default function Data() {
               ) : (
                 <span className="countup">0</span>
               )}
-              <h3 className="fw-light text-black">Samples</h3>
+              <h5 className="fw-light text-black">Samples</h5>
+              </div>
+              
             </NavLink>
+            </Col>
+          </Row>
+            
           </Suspense>
         </ErrorBoundary>
       </Container>
