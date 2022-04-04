@@ -11,9 +11,9 @@ import Alert from 'react-bootstrap/Alert';
 import Loader from '../components/loader';
 import ErrorBoundary from '../components/error-boundary';
 import './data.scss';
-import ProjectImg from '../home/images/AnalysisStudies_icon.svg'
-import ExperimentImg from '../home/images/AnalysisInstitutions_icon.svg'
-import SampleImg from '../home/images/AnalysisSamples_icon.svg'
+import ProjectImg from '../home/images/ProjectImage.png';
+import ExperimentImg from '../home/images/ExperimentImage.png';
+import SampleImg from '../home/images/SampleImage.png';
 import { Row, Col, Button } from 'react-bootstrap';
 
 
@@ -36,11 +36,11 @@ export default function Data() {
         >
           <Suspense fallback={<Loader message="Loading Samples" />}>
           <Row className="vw-100 border-bottom justify-content-md-center">
-            <Col md={2} className="pb-3 border-end">
+            <Col md={2} className="pb-3 border-end header-img">
               <NavLink to={'projects'} className="text-decoration-none d-flex">
               {/* <PieChartFill className="stat-icon" /> */}
               <img src={ProjectImg} className="stat-icon" alt="Project" />
-              <div>
+              <div className="data-text">
                 {data.length ? (
                     <CountUp
                       className="countup"
