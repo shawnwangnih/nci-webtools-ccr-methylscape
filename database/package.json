@@ -1,7 +1,9 @@
 {
   "type": "module",
   "scripts": {
-    "start": "node startQueueWorker.js"
+    "start": "node startQueueWorker.js",
+    "createDatabase": "node createDatabase.js",
+    "importDatabase": "node importDatabase.js -- "
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.58.0",

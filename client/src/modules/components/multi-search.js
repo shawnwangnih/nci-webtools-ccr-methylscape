@@ -1,4 +1,5 @@
-import CreatableSelect from 'react-select/creatable';
+// import CreatableSelect from 'react-select/creatable';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
 export default function MultiSearch({
   name,
@@ -25,7 +26,7 @@ export default function MultiSearch({
   };
 
   return (
-    <CreatableSelect
+    <AsyncCreatableSelect
       name={name}
       placeholder={placeholder}
       value={value}

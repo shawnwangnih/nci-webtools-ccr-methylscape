@@ -22,7 +22,7 @@ export function NavbarRouterLink({path, title, exact}) {
 export function NavbarDropdown({title, childLinks, align = 'start'}) {
   return <NavDropdown title={title} id={title} align={align}>
     {childLinks.map(link => (
-      <NavDropdown.Item href={link.path}>
+      <NavDropdown.Item key={`navbar-dropdown-${link.path}`} href={link.path}>
         {link.title}
       </NavDropdown.Item>
     ))}
@@ -40,13 +40,15 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
     <BootstrapNavbar bg="dark" variant="dark" className={className}>
       <Container fluid>
         {children}
-        {linkGroups.map((links) => (
-          <Nav>
-            {links?.filter(shouldShowLink).map((link) => 
+        {linkGroups.map((links, index) => (
+          <Nav key={`navbar-nav-${index}`}>
+            {links?.filter(shouldShowLink).map((link, linkIndex) => 
               <>
-              {link.childLinks && <NavbarDropdown {...link} />}
+              {link.childLinks && <NavbarDropdown key={`navbar-nav-dropdown-${index}-${linkIndex}`} {...link} />}
               {!link.childLinks && (
-                link.native ? <NavbarNativeLink {...link} /> : <NavbarRouterLink {...link} />
+                link.native 
+                  ? <NavbarNativeLink key={`navbar-nav-native-link-${index}-${linkIndex}`} {...link} /> 
+                  : <NavbarRouterLink key={`navbar-nav-link-${index}-${linkIndex}`} {...link} />
               )}
               </>
             )}
