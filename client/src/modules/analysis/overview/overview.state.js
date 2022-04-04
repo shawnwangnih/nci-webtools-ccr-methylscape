@@ -19,10 +19,12 @@ export const overviewState = selector({
     const params = { embedding, organSystem };
     const { data } = await axios.get('api/samples', { params });
 
-    const samples = data.filter((v) => v.category) // && v.matchedCases != 'Duplicate');
+    const samples = data.filter((v) => v.category); // && v.matchedCases != 'Duplicate');
     const studies = [
       ...new Set(
-        samples.filter(({ primaryStudy }) => primaryStudy).map(({ primaryStudy }) => primaryStudy)
+        samples
+          .filter(({ primaryStudy }) => primaryStudy)
+          .map(({ primaryStudy }) => primaryStudy)
       ),
     ].length;
     const institutions = [
@@ -56,10 +58,14 @@ export const overviewState = selector({
     ];
 
     const layout = {
-      yaxis: {
-        automargin: true,
-      }
-    }
+      margin: {
+        b: 50,
+        t: 50,
+        pad: 4,
+      },
+      yaxis: { automargin: true },
+      autosize: true,
+    };
 
     return {
       samples: samples.length,

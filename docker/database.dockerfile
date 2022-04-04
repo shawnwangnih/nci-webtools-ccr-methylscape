@@ -1,10 +1,7 @@
-FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream9}
 
 RUN dnf -y update \
- && dnf -y module enable nodejs:14 \
  && dnf -y install \
-    gcc-c++ \
-    make \
     nodejs \
     npm \
  && dnf clean all

@@ -64,15 +64,29 @@ export const schema = [
    * Contains coordinates for various dimension reduction plots (umap, densmap, etc.)
    */
   {
-    name: "sampleCoordinates",
+    name: "sampleCoordinate",
     import: true,
     schema: (table) => {
       table.increments("id");
       table.integer("sampleId").references("sample.id");
-      table.string("organSystem");
-      table.string("embedding");
+      table.string("organSystem").index();
+      table.string("embedding").index();
       table.double("x");
       table.double("y");
+    }
+  },
+
+ /**
+   * Source: chromosome.csv
+   */
+  {
+    name: "chromosome",
+    import: true,
+    schema: (table) => {
+      table.increments("id");
+      table.string("name");
+      table.integer("start").index();
+      table.integer("centromere");
     }
   },
 
@@ -80,17 +94,39 @@ export const schema = [
    * Sources: Bins/BAF.bins_ <sample>.txt 
    */
   {
-    name: "bins",
+    name: "cnvBin",
     import: true,
     schema: (table) => {
       table.increments("id");
-      table.integer("sampleId").references("sample.id");
-      table.string("sampleIdatFilename").references("sample.idatFilename");
-      table.string("chromosome");
+      table.string("sampleIdatFilename").index();
+      table.integer("chromosome");
       table.integer("start").unsigned();
       table.integer("end").unsigned();
       table.string("feature");
-      table.double("value");
+      table.double("medianLogIntensity");
+      table.text("gene");
+    },
+    Notriggers: [
+      `create or replace trigger updateCnvBinGene 
+      before insert or update on "cnvBin" 
+      for each row execute procedure updateGeneForRange();`
+    ],
+  },
+
+  {
+    name: "cnvSegment",
+    import: true,
+    schema: (table) => {
+      table.increments("id");
+      table.string("sampleIdatFilename").index();
+      table.integer("chromosome");
+      table.integer("start").unsigned();
+      table.integer("end").unsigned();
+      table.integer("numberOfMarkers");
+      table.double("bStatistic");
+      table.double("pValue");
+      table.double("meanValue");
+      table.double("medianValue");
     }
   },
 
@@ -99,15 +135,16 @@ export const schema = [
    * Genome references for copy number
    */
   {
-    name: "genes",
+    name: "gene",
     import: true,
     schema: (table) => {
       table.increments("id");
-      table.string("chr").index();
-      table.integer("start").index();
-      table.integer("end").index();
-      table.string("geneId");
-    }
+      table.string("name");
+      table.integer("chromosome");
+      table.integer("start");
+      table.integer("end");
+      table.index(['chromosome', 'start']);
+    },
   },
 
   /**
@@ -183,5 +220,67 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
     }
   },
+
+  {
+    name: 'updateGeneForRange',
+    import: false,
+    type: 'function',
+    schema: () => {
+      return `create or replace function updateGeneForRange()
+      returns trigger as $$
+      begin
+      new.gene := (
+          select string_agg(distinct name::text, ';')
+          from gene g
+          where g.chromosome = new.chromosome and (
+            (g.start between new."start" and new."end") or
+            (g.end between new."start" and new."end") or
+            (new.start between g."start" and g."end") or
+            (new."end" between g."start" and g."end")
+          )
+      );
+      return new;
+      end;
+      $$ language 'plpgsql';`;
+    }
+  },
+
+  {
+    name: 'getChromosomeOffset',
+    import: false,
+    type: 'function',
+    schema: () => {
+      return `create or replace function getChromosomeOffset (chromosome numeric)
+          returns numeric immutable as $$
+          select case
+              when $1 = 1 then 0
+              when $1 = 2 then 249250621
+              when $1 = 3 then 492449994
+              when $1 = 4 then 690472424
+              when $1 = 5 then 881626700
+              when $1 = 6 then 1062541960
+              when $1 = 7 then 1233657027
+              when $1 = 8 then 1392795690
+              when $1 = 9 then 1539159712
+              when $1 = 10 then 1680373143
+              when $1 = 11 then 1815907890
+              when $1 = 12 then 1950914406
+              when $1 = 13 then 2084766301
+              when $1 = 14 then 2199936179
+              when $1 = 15 then 2307285719
+              when $1 = 16 then 2409817111
+              when $1 = 17 then 2500171864
+              when $1 = 18 then 2581367074
+              when $1 = 19 then 2659444322
+              when $1 = 20 then 2718573305
+              when $1 = 21 then 2781598825
+              when $1 = 22 then 2829728720
+              when $1 = 23 then 2881033286
+              when $1 = 24 then 3036303846
+              else 0
+              END
+      $$ language sql;`
+    }
+  }
 ];
 

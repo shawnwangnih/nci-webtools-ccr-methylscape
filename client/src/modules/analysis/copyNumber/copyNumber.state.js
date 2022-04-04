@@ -3,6 +3,30 @@ import axios from 'axios';
 import { groupBy } from 'lodash';
 const chrLines = require('./lines.json');
 
+function getRange(array) {
+  let min = array[0];
+  let max = array[0];
+  for (let item of array) {
+    if (item < min)
+      min = item;
+    if (item > max)
+      max = item;
+  }
+  return [min, max];
+}
+
+function createScale(inputRange, outputRange, clamp = false) {
+  return function(value) {
+    const [min, max] = inputRange;
+    const [outMin, outMax] = outputRange;
+    const scale = (value - min) / (max - min);
+    const scaledValue = outMin + (outMax - outMin) * scale;
+    return clamp 
+      ? Math.max(outMin, Math.min(outMax, scaledValue)) 
+      : scaledValue;
+  };
+}
+
 export const defaultPreFormState = {
   significant: true,
 };
@@ -32,31 +56,59 @@ export const selectSampleState = atom({
   default: defaultSelectSample,
 });
 
+export const geneSelector = selector({
+  key: 'copyNumber.geneSelector',
+  get: async () => {
+    const response = await axios.get('api/genes');
+    return response.data;
+  },
+  default: [],
+});
+
+export const geneOptionsSelector = selector({
+  key: 'copyNumber.geneOptionsSelector',
+  get: async ({get}) => {
+    const genes = await get(geneSelector);
+    return genes
+      .map(gene => gene.name)
+      .sort()
+      .map(name => ({ value: name, label: name }));
+  }
+})
+
 export const defaultPlotState = {
   data: [],
   layout: {},
   config: {},
 };
 
-export const plotState_intermediate = selector({
-  key: 'cnPlotState_intermediate',
+export const copyNumberPlotDataSelector = selector({
+  key: 'copyNumber.copyNumberPlotDataSelector',
   get: async ({ get }) => {
-    const { idatFilename, sample } = get(selectSampleState);
-    const { significant } = get(preFormState);
+    const { idatFilename } = get(selectSampleState);
 
     if (!idatFilename) return false;
     try {
-      const response = await axios.post('api/getCopyNumber', {
-        id: idatFilename,
-        significant,
-      });
 
-      const data = response.data;
+      const segmentsResponse = await axios.get('api/cnv/segments', { params: { idatFilename } });
+      const binsResponse = await axios.get('api/cnv/bins', { params: { idatFilename } });
+      let binGeneMap = {};
+
+      // map bins to each gene
+      for (let bin of binsResponse.data) {
+        for (let gene of bin.gene) {
+          if (!binGeneMap[gene]) {
+            binGeneMap[gene] = [];
+          }
+          binGeneMap[gene].push(bin);
+        }
+      }
 
       return {
-        data,
         idatFilename,
-        sample,
+        segments: segmentsResponse.data,
+        bins: binsResponse.data,
+        binGeneMap,
       };
     } catch (error) {
       console.log(error);
@@ -68,10 +120,132 @@ export const plotState_intermediate = selector({
 export const plotState = selector({
   key: 'cnPlotState',
   get: async ({ get }) => {
-    const intermediateData = get(plotState_intermediate);
+    const copyNumberPlotData = get(copyNumberPlotDataSelector);
 
-    if (!intermediateData) return defaultFormState;
-    if (intermediateData.error) return defaultPlotState.error;
+    if (!copyNumberPlotData) return defaultFormState;
+    if (copyNumberPlotData.error) return defaultPlotState.error;
+
+    const { annotations, search } = get(formState);
+    const { idatFilename, segments, bins, binGeneMap } = get(copyNumberPlotDataSelector);
+
+    // determine x coordinates for each bin
+    const xOffsets = [0, ...chrLines.map(c => c['pos.start'])];
+    const xCoordinates = bins.map(bin => {
+      const offset = xOffsets[bin.chromosome]
+      const midpoint = (bin.start + bin.end) / 2;
+      return offset + midpoint;
+    });
+
+    // determine y coordinates for each bin
+    const yCoordinates = bins.map(bin => bin.medianLogIntensity);
+    const [yMin, yMax] = getRange(yCoordinates);
+    const yAbsMax = Math.max(Math.abs(yMin), Math.abs(yMax));
+    const yClamped = yAbsMax * 0.2; // approximates the majority of points
+    const colorScale = createScale([-yClamped, yClamped], [0, 1], true);
+      
+    const data = [{
+      x: xCoordinates,
+      y: yCoordinates,
+      customdata: bins,
+      text: bins.map(bin => [
+        `Genes: ${bin.gene[0] || 'N/A'} ${bin.gene.length > 1 ? ` + ${bin.gene.length - 1}` : ''}`,
+        `Chromosome: ${bin.chromosome}`,
+        `Log<sub>2</sub>ratio: ${bin.medianLogIntensity.toFixed(2)}`,
+      ].join('<br>')),
+      hovertemplate: '%{text}<extra></extra>',
+      mode: 'markers',
+      type: 'scattergl',
+      marker: {
+        color: yCoordinates.map(colorScale),
+        colorscale: [
+          [0, 'rgb(255, 0, 0)'],
+          [0.5, 'rgb(180, 180, 180)'],
+          [1, 'rgb(0, 255, 0)'],
+        ]
+      },
+    }];
+
+    const searchAnnotations = (search || [])
+      .map(search => search.value)
+      .map(query => (binGeneMap[query] || []).map(e => ({...e, query})))
+      .flat()
+      .map(bin => ({
+        text: bin.query,
+        x: xOffsets[bin.chromosome] + bin.start,
+        y: bin.medianLogIntensity,
+      }));
+
+    const bufferMargin = 0.25;
+    const layout = {
+      uirevision: idatFilename + annotations + search,
+      title: `${idatFilename}`,
+      showlegend: false,
+      dragmode: 'pan',
+      xaxis: {
+        title: 'Chromosome',
+        showgrid: false,
+        showline: true,
+        tickmode: 'array',
+        tickvals: chrLines.map(({ center }) => center),
+        ticktext: chrLines.map(({ chr }) => chr),
+        tickangle: 0,
+      },
+      yaxis: {
+        title: 'log<sub>2</sub> ratio',
+        zeroline: true,
+        // zerolinecolor: '#eee',
+        dtick: 0.25,
+        ticks: 'outside',
+        fixedrange: true,
+      },
+      annotations: [...searchAnnotations],
+      shapes: [
+        // chromosome dividers
+        ...chrLines.map((e) => ({
+          type: 'line',
+          x0: e['pos.start'],
+          x1: e['pos.start'],
+          y0: yMin - bufferMargin,
+          y1: yMax + bufferMargin,
+          line: { width: 1 },
+        })),
+        // chromosome segment divider
+        ...chrLines.map((e) => ({
+          type: 'line',
+          x0: e['pq'],
+          x1: e['pq'],
+          y0: yMin - bufferMargin,
+          y1: yMax + bufferMargin,
+          line: { dash: 'dot', width: 1 },
+        })),
+        // chromosome segments
+        ...segments.map((e) => ({
+          type: 'line',
+          x0: xOffsets[e.chromosome] + e.start,
+          x1: xOffsets[e.chromosome] + e.end,
+          y0: e.medianValue,
+          y1: e.medianValue,
+        })),
+        // y-axis zero line
+        {
+          type: 'line',
+          y0: 0,
+          y1: 0,
+          line: { dash: 'dot' },
+        },
+      ],
+      autosize: true,
+    };
+
+    const config = { scrollZoom: true };
+
+    return {
+      data,
+      config,
+      layout,
+    };
+
+    /*
 
     const { significant } = get(preFormState);
     const { annotations, search } = get(formState);
@@ -234,10 +408,12 @@ export const plotState = selector({
     };
     const config = { scrollZoom: true };
 
+
     return {
       data: dataTraces,
       config,
       layout,
     };
+    */
   },
 });

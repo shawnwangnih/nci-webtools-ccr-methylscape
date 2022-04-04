@@ -54,12 +54,12 @@ export default function CopyNumberPlot() {
                 {state.data.end})
               </div>
               <div>
-                log<sub>2</sub>ratio: {state.ratio}
+                log<sub>2</sub>ratio: {state.data.medianLogIntensity}
               </div>
               <div>
                 Genes:{' '}
                 <ul>
-                  {state.data.genes.map((gene) => (
+                  {state.data.gene.map((gene) => (
                     <li>{gene}</li>
                   ))}
                 </ul>

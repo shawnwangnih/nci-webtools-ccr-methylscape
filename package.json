@@ -5,17 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
+    "format": "prettier --write --ignore-unknown '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.3.1"
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.1"
   },
   "prettier": {
-    "singleQuote": true
+    "printWidth": 120,
+    "quoteProps": "consistent",
+    "bracketSameLine": true
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

@@ -1,10 +1,12 @@
 /** Colors */
 $blue: #48569e;
+
 //$blue: rgb(42, 73, 111);
 $lightBlue: #1d5c87;
 $dark: rgb(42, 73, 111);
 $secondary: $lightBlue;
 $sample-blue: #B0CFEA;
+
 
 /** Headings */
 $headings-font-weight: 700;
@@ -28,6 +30,7 @@ $table-cell-padding-y: 0.75rem;
 
 /** Forms */
 $form-label-font-weight: 500;
+$form-label-color: $blue;
 $form-text-color: #595959;
 
 /** Responsive Breakpoints */
@@ -67,6 +70,7 @@ $spacers: (
   9: $spacer * 9,
 );
 
+<<<<<<< HEAD
 // Border radius
 $btn-border-radius: 1rem;
 $input-border-radius: 1rem;
@@ -74,3 +78,10 @@ $input-border-radius: 1rem;
 #root{
   height: 990px;
 }
+=======
+// Borders
+$btn-border-radius: 2rem;
+$input-border-radius: 2rem;
+$input-border-color: $secondary;
+$component-active-bg: $secondary;
+>>>>>>> methylscape-1.0.0-dev

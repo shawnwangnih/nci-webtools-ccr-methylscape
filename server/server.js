@@ -6,11 +6,12 @@ const { createSession } = require("./services/session");
 const getLogger = require('./services/logger');
 const { apiRouter } = require('./services/api');
 const { forkCluster } = require('./services/cluster');
-const config = require('./config.json');
 const { logErrors } = require('./services/middleware');
 const UserManager = require('./services/auth/userManager');
 const RoleManager = require('./services/auth/roleManager');
+const { loadAwsCredentials } = require('./services/aws');
 const args = require('minimist')(process.argv.slice(2));
+const config = require('./config.json');
 const isProduction = process.env.NODE_ENV === 'production' || args.production;
 
 // fork to multiple processes
@@ -18,10 +19,13 @@ const isProduction = process.env.NODE_ENV === 'production' || args.production;
 // if (forkCluster()) return;
 
 if (require.main === module) {
-  createApp();
+  createApp(config).then(app => {
+    const { port } = config.server
+    app.listen(port, () => app.locals.logger.info(`Application is running on port: ${port}`));
+  });
 }
 
-async function createApp() {
+async function createApp(config) {
   // create app and register locals/middlware
   const app = express();
   const connection = knex({
@@ -29,9 +33,11 @@ async function createApp() {
     connection: config.database
   });
 
+  loadAwsCredentials(config.aws);
   registerUserSerializers(passport, connection);
   await registerAuthStrategies(passport, config.auth);
 
+  app.locals.config = config;
   app.locals.logger = getLogger('methylscape-analysis');
   app.locals.connection = connection;
   app.locals.userManager = new UserManager(connection);
@@ -42,15 +48,6 @@ async function createApp() {
   app.use(passport.session());
   app.use('/api', apiRouter);
   app.use(logErrors); // logErrors should always be last
-
-  // serve static assets during local development
-  if (!isProduction) app.use(express.static(config.server.client));
-
-  app.listen(config.server.port, () => {
-    app.locals.logger.info(
-      `Application is running on port: ${config.server.port}`
-    );
-  });
 
   return app;
 }

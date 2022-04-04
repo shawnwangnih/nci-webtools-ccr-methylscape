@@ -138,7 +138,7 @@ export const plotState = selector({
           'Sample: %{customdata.sample}<br>Metric: %{customdata.nciMetric}<br>Diagnosis: %{customdata.diagnosisProvided}<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',
         marker: {
-          color: '%{customdata.class}',
+          color: '%{customdata.nciMetric}',
         },
       }));
 

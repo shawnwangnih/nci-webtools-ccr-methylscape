@@ -5,11 +5,8 @@ services:
             context: '.'
             dockerfile: './docker/backend.dockerfile'
         volumes:
-            - './database/data.sqlite:/app/database/data.sqlite:ro'
-            - './server/config.json:/app/server/config.json:ro'
+            - './server/docker.config.json:/app/server/config.json:ro'
             - './server/logs:/app/server/logs'
-            - './tmp:/app/tmp'
-            - '~/.aws/nondceg:/root/.aws/credentials:ro'
         ports: 
             - '10000:10000'
 
@@ -18,12 +15,20 @@ services:
             context: '.'
             dockerfile: './docker/frontend.dockerfile'
             args:
-                APP_PATH: /methylscape
+                APP_PATH: /
         environment:
             API_BASE_URL: http://backend:10000
-            APP_PATH: /methylscape
+            APP_PATH: /
         ports: 
-            - '8100:80'
+            - '3000:80'
+
+    database-import:
+        build:
+            context: '.'
+            dockerfile: './docker/database.dockerfile'
+        volumes:
+            - './server/docker.config.json:/app/database/config.json:ro'
+            - './database/logs:/app/database/logs'
 
     database:
         image: postgres

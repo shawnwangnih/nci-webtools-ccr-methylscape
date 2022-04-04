@@ -1,13 +1,15 @@
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CreatableSelect from 'react-select/creatable';
-import { useRecoilState } from 'recoil';
-import { formState, preFormState } from './copyNumber.state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { formState, geneOptionsSelector, preFormState } from './copyNumber.state';
+import MultiSearch from '../../components/multi-search';
+import { debounce } from 'lodash';
 
 export default function CopyNumberForm() {
   const [form, setForm] = useRecoilState(formState);
   const [preForm, setPreForm] = useRecoilState(preFormState);
+  const geneOptions = useRecoilValue(geneOptionsSelector);
   const mergeForm = (state) => setForm({ ...form, ...state });
 
   function handleSearch(e) {
@@ -22,10 +24,21 @@ export default function CopyNumberForm() {
     if (preForm.significant) setForm({ ...form, annotations: false });
     setPreForm({ significant: !preForm.significant });
   }
+    
+  function filterGenes(inputValue = '', limit = 100) {
+    console.log(inputValue);
+    return geneOptions
+      .filter((g) => !inputValue || g.label.toLowerCase().startsWith(inputValue.toLowerCase()))
+      .slice(0, limit);
+  }
+
+  async function handleSearchGene(inputValue) {
+    return filterGenes(inputValue, 40);
+  }
 
   return (
     <Row>
-      <Col sm="auto" className="d-flex">
+      {/* <Col sm="auto" className="d-flex">
         <Form.Group controlId="plotSignificant" className="my-auto">
           <Form.Check
             label="Significant"
@@ -47,28 +60,17 @@ export default function CopyNumberForm() {
             disabled={!preForm.significant}
           />
         </Form.Group>
-      </Col>
-      <Col>
+      </Col> */}
+      <Col md={6}>
         <Form.Group id="copy-number-search" className="mb-3">
           <Form.Label>Search</Form.Label>
-          <CreatableSelect
+          <MultiSearch
             name="copy-number-search"
-            noOptionsMessage={() => null}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null,
-            }}
-            formatCreateLabel={(userInput) => `Gene(s): ${userInput}`}
-            isMulti
             placeholder="Gene(s)"
             value={form.search}
+            defaultOptions={filterGenes()}
+            loadOptions={handleSearchGene}
             onChange={handleSearch}
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                borderRadius: '1rem',
-              }),
-            }}
           />
         </Form.Group>
       </Col>
