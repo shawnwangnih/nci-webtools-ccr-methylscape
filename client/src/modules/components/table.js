@@ -278,7 +278,7 @@ export default function Table({
           <div>
             <Form.Control
             as="select"
-            className=""
+            className="rounded-0 btn-border-sample-blue"
             name="select-page-size"
             aria-label="Select page size"
             value={pageSize}

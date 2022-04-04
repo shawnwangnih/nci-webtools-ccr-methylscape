@@ -38,7 +38,7 @@ export default function Home() {
         <div className="text-white img-fluid homepage-img-bg float-left" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <Row md={2}>
           <Col md={1}></Col>
-            <Col md={{ span: 3, offset: 2}} className="py-9 text-end">
+            <Col md={{ span: 3, offset:1}} className="py-9 text-end">
               <h1 className="homepage-title">Methylscape</h1>
               <h2 className="homepage-title-small">Analysis</h2>
               <p className="my-4 text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
