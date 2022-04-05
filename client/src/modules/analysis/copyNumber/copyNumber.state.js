@@ -85,8 +85,8 @@ export const defaultPlotState = {
 export const copyNumberPlotDataSelector = selector({
   key: 'copyNumber.copyNumberPlotDataSelector',
   get: async ({ get }) => {
-    // const { idatFilename } = get(selectSampleState);
-    const idatFilename = '10003886259_R01C02'
+    const { idatFilename } = get(selectSampleState);
+    // const idatFilename = '10003886259_R01C02'
 
     if (!idatFilename) return false;
     try {
