@@ -88,9 +88,9 @@ export default function Samples() {
   const renderRowSubComponent = useCallback(({ row }) => {
     const { original } = row;
     return (
-      <Container fluid="xxl" className="detail-table">
+      <Container fluid="xxl">
       <Row>
-        <Col className="table table-bordered detail-table-divider">
+        <Col className="table table-bordered detail-table-divider mx-1 my-1">
           <Row>
             <Col sm="6">
               <b>Diagnosis:</b>
@@ -226,6 +226,10 @@ export default function Samples() {
               Download Image
             </Button>
           </Col>
+          </Row>
+          <Row>
+          <Col sm="6"></Col>
+          <Col sm="6"></Col>
           </Row>
         </Col>
       </Row>

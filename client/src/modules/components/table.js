@@ -29,9 +29,9 @@ export function TextFilter({
       size="sm"
       value={filterValue || ''}
       onChange={(e) => setFilter(e.target.value || undefined)}
-      placeholder={placeholder || `Search...`}
+      placeholder={placeholder || `Sample`}
       aria-label={aria}
-      className = ""
+      className = "border-0 rounded-pill"
     />
   );
 }
