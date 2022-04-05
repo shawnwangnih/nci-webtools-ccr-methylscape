@@ -226,7 +226,7 @@ export default function Table({
               <tr {...headerGroup.getHeaderGroupProps()} className="search-bg">
                 {headerGroup.headers.map((column) => (
                   <td {...column.getHeaderProps()}>
-                    <div>
+                    <div className="py-2">
                       {column.canFilter ? column.render('Filter') : null}
                     </div>
                   </td>
