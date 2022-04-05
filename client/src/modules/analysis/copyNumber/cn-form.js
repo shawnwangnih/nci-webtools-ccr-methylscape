@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { formState, geneOptionsSelector, preFormState } from './copyNumber.state';
 import MultiSearch from '../../components/multi-search';
-import { debounce } from 'lodash';
 
 export default function CopyNumberForm() {
   const [form, setForm] = useRecoilState(formState);
@@ -48,7 +47,7 @@ export default function CopyNumberForm() {
             onChange={handleSignificant}
           />
         </Form.Group>
-      </Col>
+      </Col> */}
       <Col sm="auto" className="d-flex">
         <Form.Group controlId="toggleAnnotations" className="my-auto">
           <Form.Check
@@ -60,7 +59,7 @@ export default function CopyNumberForm() {
             disabled={!preForm.significant}
           />
         </Form.Group>
-      </Col> */}
+      </Col>
       <Col md={6}>
         <Form.Group id="copy-number-search" className="mb-3">
           <Form.Label>Search</Form.Label>
