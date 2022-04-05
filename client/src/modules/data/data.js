@@ -23,7 +23,7 @@ export default function Data() {
     useRecoilValue(methylscapeData);
 
   return (
-    <div className="vh-100">
+    <div>
     <h3 className='text-white p-4 ml-6'>Samples</h3>
       <Container fluid="xxl" className="d-flex py-3 bg-light justify-content-center">
         <ErrorBoundary
