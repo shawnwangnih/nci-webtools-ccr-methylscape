@@ -16,12 +16,27 @@
 // }
 
 .stat-icon {
-  height: 90px;
+  height: 120px;
   align-self: left;
 }
 
-.data-text{
+.data-text-project{
   position: absolute;
+  //left: 140px;
+  //top: 25px;
+  padding-top:25px;
+  padding-left:125px;
+}
+
+.data-text-experiment{
+  position: absolute;
+  padding-top:25px;
+  padding-left:110px;
+}
+.data-text-sample{
+  position: absolute;
+  padding-top:25px;
+  padding-left:110px;
 }
 
 .header-img{

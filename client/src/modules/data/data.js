@@ -40,7 +40,7 @@ export default function Data() {
               <NavLink to={'projects'} className="text-decoration-none d-flex">
               {/* <PieChartFill className="stat-icon" /> */}
               <img src={ProjectImg} className="stat-icon" alt="Project" />
-              <div className="data-text">
+              <div className="data-text-project">
                 {data.length ? (
                     <CountUp
                       className="countup"
@@ -62,8 +62,8 @@ export default function Data() {
                 className="text-decoration-none d-flex ms-4 border-left"
               >
                 {/* <ClipboardData className="stat-icon" /> */}
-                <img src={ExperimentImg} className="stat-icon" alt="Project" />
-                <div> 
+                <img src={ExperimentImg} className="stat-icon" alt="Experiment" />
+                <div className="data-text-experiment"> 
                 {data.length ? (
                   <CountUp
                     className="countup"
@@ -85,8 +85,8 @@ export default function Data() {
               className="text-decoration-none d-flex ms-4"
             >
               {/* <PeopleFill className="stat-icon" /> */}
-              <img src={SampleImg} className="stat-icon" alt="Project" />
-              <div>
+              <img src={SampleImg} className="stat-icon" alt="Samples" />
+              <div className="data-text-sample">
               {data.length ? (
                 <CountUp
                   className="countup"
