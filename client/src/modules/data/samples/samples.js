@@ -88,8 +88,149 @@ export default function Samples() {
   const renderRowSubComponent = useCallback(({ row }) => {
     const { original } = row;
     return (
-      <Container fluid="xxl">
-        <Row>
+      <Container fluid="xxl" className="detail-table">
+      <Row>
+        <Col className="table table-bordered detail-table-divider">
+          <Row>
+            <Col sm="6">
+              <b>Diagnosis:</b>
+            </Col>
+            <Col sm="6">{original.diagnosis}</Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>Methylation Family (MF):</b>
+            </Col>
+            <Col sm="6">{original.family}</Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>MF Calibrated Scores:</b>
+            </Col>
+            <Col sm="6">{original.family_score}</Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>Methylation Class (MC):</b>
+            </Col>
+            <Col sm="6">{original.class}</Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>MC Calibrated Scores:</b>
+            </Col>
+            <Col sm="6">{original.class_score}</Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>MGMT Score:</b>
+            </Col>
+            <Col sm="6">
+              {original.mgmt_prediction == null
+                ? ''
+                : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>Notes:</b>
+            </Col>
+            <Col sm="6">{original.notes}</Col>
+          </Row>
+        </Col>
+        <Col className="table table-bordered detail-table-divider">
+          <Row>
+          <Col sm="6">
+              <b>Tumor Site:</b>
+            </Col>
+            <Col sm="6">{original.tumor_data}</Col>
+          </Row>
+          <Row>
+          <Col sm="6">
+              <b>t-SNE Plot:</b>
+            </Col>
+            <Col sm="6">
+              <Button
+                variant="link"
+                className="p-0"
+                onClick={() =>
+                  download(original.id, original.sample_name + '.html')
+                }
+              >
+                View Plot
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+          <Col sm="6">
+            <b>Methylation Report:</b>
+          </Col>
+          <Col sm="6">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() => download(original.id, original.report_file_name)}
+            >
+              Download Report
+            </Button>
+          </Col>
+          </Row>
+          <Row>
+          <Col sm="6">
+            <b>QCI Report:</b>
+          </Col>
+          <Col sm="6">
+            {original.xml_report ? (
+              <Link
+                className="btn btn-link p-0"
+                target="_blank"
+                to={`/qci?id=${original.id}&file=${original.xml_report}`}
+              >
+                View Report
+              </Link>
+            ) : (
+              <Button variant="link" className="p-0" disabled={true}>
+                View Report
+              </Button>
+            )}
+          </Col>
+          </Row>
+          <Row>
+          <Col sm="6">
+            <b>NGS Report (legacy)</b>
+          </Col>
+          <Col sm="6">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() =>
+                download(original.id, original.sample_name + '_NGS.pdf')
+              }
+            >
+              Download Report
+            </Button>
+          </Col>
+          </Row>
+          <Row>
+          <Col sm="6">
+            <b>Slide Image:</b>
+          </Col>
+          <Col sm="6">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() =>
+                download(original.id, original.sample_name + '.jpg')
+              }
+            >
+              Download Image
+            </Button>
+          </Col>
+          </Row>
+        </Col>
+      </Row>
+      
+        {/* <Row>
           <Col sm="3">
             <b>Diagnosis:</b>
           </Col>
@@ -211,7 +352,7 @@ export default function Samples() {
           </Col>
           <Col sm="3">{original.notes}</Col>
           <Col></Col>
-        </Row>
+        </Row> */}
       </Container>
     );
   }, []);
