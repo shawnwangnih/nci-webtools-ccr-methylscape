@@ -223,7 +223,7 @@ export default function Table({
             ))}
 
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr {...headerGroup.getHeaderGroupProps()} className="search-bg">
                 {headerGroup.headers.map((column) => (
                   <td {...column.getHeaderProps()}>
                     <div>

@@ -35,7 +35,7 @@ export default function Home() {
       </div> */}
 
       {/* <div className="h-100"> */}
-        <div className="text-white img-fluid homepage-img-bg float-left" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="text-white img-fluid homepage-img-bg" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <Row md={2}>
           <Col md={1}></Col>
             <Col md={{ span: 3, offset:1}} className="py-9 text-end">
