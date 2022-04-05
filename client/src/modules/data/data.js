@@ -25,7 +25,7 @@ export default function Data() {
   return (
     <div className="vh-100">
     <h3 className='text-white p-4 ml-6'>Samples</h3>
-      <Container fluid="xxl" className="d-flex py-4 bg-light justify-content-center">
+      <Container fluid="xxl" className="d-flex py-3 bg-light justify-content-center">
         <ErrorBoundary
           fallback={
             <Alert variant="danger">
@@ -36,7 +36,7 @@ export default function Data() {
         >
           <Suspense fallback={<Loader message="Loading Samples" />}>
           <Row className="vw-100 border-bottom justify-content-md-center">
-            <Col md={2} className="pb-3 border-end header-img">
+            <Col md={2} className="pb-2 border-end header-img">
               <NavLink to={'projects'} className="text-decoration-none d-flex">
               {/* <PieChartFill className="stat-icon" /> */}
               <img src={ProjectImg} className="stat-icon" alt="Project" />

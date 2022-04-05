@@ -31,6 +31,7 @@ export function TextFilter({
       onChange={(e) => setFilter(e.target.value || undefined)}
       placeholder={placeholder || `Search...`}
       aria-label={aria}
+      className = ""
     />
   );
 }
@@ -199,17 +200,7 @@ export default function Table({
       <div className="table-responsive">
         <BootstrapTable {...getTableProps()} hover size="sm">
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps()}>
-                    <div>
-                      {column.canFilter ? column.render('Filter') : null}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
+            
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -227,6 +218,18 @@ export default function Table({
                       )
                     )}
                   </th>
+                ))}
+              </tr>
+            ))}
+
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <td {...column.getHeaderProps()}>
+                    <div>
+                      {column.canFilter ? column.render('Filter') : null}
+                    </div>
+                  </td>
                 ))}
               </tr>
             ))}
