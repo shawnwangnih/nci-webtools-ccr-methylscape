@@ -13,15 +13,16 @@ export default function Samples() {
   const tableData = useRecoilValue(samplesTableData);
 
   const columns = [
-    // {
-    //   Header: () => null,
-    //   id: 'expander',
-    //   Cell: ({ row }) => (
-    //     <span {...row.getToggleRowExpandedProps()}>
-    //       {row.isExpanded ? <DashSquare /> : <PlusSquare />}
-    //     </span>
-    //   ),
-    // },
+    {
+      Header: () => null,
+      id: 'expander',
+      aria:'',
+      Cell: ({ row }) => (
+        <span {...row.getToggleRowExpandedProps()}>
+          {row.isExpanded ? <DashSquare /> : <PlusSquare />}
+        </span>
+      ),
+    },
     {
       id: 'sample_name',
       accessor: 'sample_name',
