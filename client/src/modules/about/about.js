@@ -11,8 +11,8 @@ export default function About() {
         <Card.Body>
           <Container className="my-4">
             <Row> 
-              <Col md lg={{ span: 2, offset: 2 }} className="text-wrap text-end">
-                <h2>About Methylscape Analysis</h2>
+              <Col md lg={{ span: 3, offset: 1 }} className="text-wrap text-end">
+                <div className="display-6"><b>About Methylscape Analysis</b></div>
               </Col>
               <Col lg={6}>
                 <div>
