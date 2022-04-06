@@ -8,6 +8,7 @@ import Data from './modules/data/data';
 import About from './modules/about/about';
 import Home from './modules/home/home';
 import Analysis from './modules/analysis/analysis';
+import MetadataSA from './modules/metadataStandalone/metadataSA';
 import Projects from './modules/data/projects/projects';
 import Experiments from './modules/data/experiments/experiments';
 import Samples from './modules/data/samples/samples';
@@ -18,7 +19,7 @@ import UserManagement from './modules/admin/user-management/user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
-import backgroundImage from './modules/home/images/Main_Graphic.png'
+import backgroundImage from './modules/home/images/Main_Graphic.png';
 
 export default function App() {
   const navbarLinks = [
@@ -37,16 +38,39 @@ export default function App() {
         show: (session) => session.authenticated,
       },
       { path: 'about', title: 'About' },
-      
     ],
     [
-      { path: 'admin', title: 'Admin', show: (session) => session.authenticated },
-      { path: '/api/logout', title: 'Logout', native: true, show: (session) => session.authenticated },
-      { title: 'Login', show: (session) => !session.authenticated, align: 'end', childLinks: [
-        { path: '/api/login', title: 'NIH Users', native: true, show: (session) => !session.authenticated },
-        { path: '/api/login/external', title: 'External Users', native: true, show: (session) => !session.authenticated },
-      ]}
-    ]
+      {
+        path: 'admin',
+        title: 'Admin',
+        show: (session) => session.authenticated,
+      },
+      {
+        path: '/api/logout',
+        title: 'Logout',
+        native: true,
+        show: (session) => session.authenticated,
+      },
+      {
+        title: 'Login',
+        show: (session) => !session.authenticated,
+        align: 'end',
+        childLinks: [
+          {
+            path: '/api/login',
+            title: 'NIH Users',
+            native: true,
+            show: (session) => !session.authenticated,
+          },
+          {
+            path: '/api/login/external',
+            title: 'External Users',
+            native: true,
+            show: (session) => !session.authenticated,
+          },
+        ],
+      },
+    ],
   ];
 
   return (
@@ -54,38 +78,40 @@ export default function App() {
       <Router>
         <Session>
           <Header />
-          
-            <Navbar linkGroups={navbarLinks} className="shadow-sm navbar-bottom-line" />
-            <ErrorBoundary
-              fallback={
-                <Alert variant="danger" className="m-5">
-                  An internal error prevented this page from loading. Please
-                  contact the website administrator if this problem persists.
-                </Alert>
-              }
-            >
-              <Suspense fallback={<Loader message="Loading Page" />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="analysis" element={<Analysis />} />
-                  <Route path="data" element={<Data />}>
-                    <Route path="projects" element={<Projects />} />
-                    <Route path="experiments" element={<Experiments />} />
-                    <Route path="samples" element={<Samples />} />
-                  </Route>
-                  <Route path="about/*" element={<About />} />
-                  <Route path="qci/*" element={<QCI />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route
-                    path="admin/user-management"
-                    element={<UserManagement />}
-                  />
-                  <Route path="admin/data-import" element={<DataImport />} />
-                </Routes>
-              </Suspense>
-            </ErrorBoundary>
-          
-          
+
+          <Navbar
+            linkGroups={navbarLinks}
+            className="shadow-sm navbar-bottom-line"
+          />
+          <ErrorBoundary
+            fallback={
+              <Alert variant="danger" className="m-5">
+                An internal error prevented this page from loading. Please
+                contact the website administrator if this problem persists.
+              </Alert>
+            }
+          >
+            <Suspense fallback={<Loader message="Loading Page" />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="analysis" element={<Analysis />} />
+                <Route path="metadata" element={<MetadataSA />} />
+                <Route path="data" element={<Data />}>
+                  <Route path="projects" element={<Projects />} />
+                  <Route path="experiments" element={<Experiments />} />
+                  <Route path="samples" element={<Samples />} />
+                </Route>
+                <Route path="about/*" element={<About />} />
+                <Route path="qci/*" element={<QCI />} />
+                <Route path="admin" element={<Admin />} />
+                <Route
+                  path="admin/user-management"
+                  element={<UserManagement />}
+                />
+                <Route path="admin/data-import" element={<DataImport />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </Session>
       </Router>
     </RecoilRoot>

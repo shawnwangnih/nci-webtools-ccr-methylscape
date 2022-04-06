@@ -86,16 +86,15 @@ export const plotState = selector({
         showarrow: false,
       }));
 
-    const weeklyThreshold = Date.now() - (1000 * 60 * 60 * 24 * 7);
-    const isWeeklyAnnotation = ({batchDate}) => batchDate && new Date(batchDate).getTime() > weeklyThreshold;
-    const weeklyAnnotations = data
-      .filter(isWeeklyAnnotation)
-      .map(value => ({
-        text: value.sample,
-        x: value.x,
-        y: value.y,
-        showarrow: true,
-      }));
+    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
+    const isWeeklyAnnotation = ({ batchDate }) =>
+      batchDate && new Date(batchDate).getTime() > weeklyThreshold;
+    const weeklyAnnotations = data.filter(isWeeklyAnnotation).map((value) => ({
+      text: value.sample,
+      x: value.x,
+      y: value.y,
+      showarrow: true,
+    }));
 
     // add annotations from search filter
     const sampleAnnotations = searchQueries.length
@@ -170,6 +169,7 @@ export const plotState = selector({
       uirevision: organSystem + embedding + search + showAnnotations,
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
+      autosize: true,
     };
 
     const config = {
