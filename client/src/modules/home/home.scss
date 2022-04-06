@@ -7,7 +7,7 @@
 
 .btn-home{
   border-radius: 90px;
-  box-shadow:  0 0 0 1px #061870 inset, 0 0 0 3px #061870;
+  box-shadow:  0 0 0 1px #738BA7 inset, 0 0 0 4px #203B5A;
 	background-color: none;
 
 }
@@ -20,9 +20,14 @@
 }
 
 .homepage-title{
-  font-size: 70px;
+  font-size: 4rem;
 }
 
 .homepage-title-small{
-  font-size: 50px;
+  font-size: 3rem;
+}
+
+#aboutpage-scroll{
+  height: calc(100vh - 110px);
+  overflow: auto;
 }
