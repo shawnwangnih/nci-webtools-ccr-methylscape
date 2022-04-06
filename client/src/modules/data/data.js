@@ -24,8 +24,8 @@ export default function Data() {
 
   return (
     <div>
-    <h3 className='text-white p-4 ml-6'>Samples</h3>
-      <Container fluid="xxl" className="d-flex py-3 bg-light justify-content-center">
+    <h3 className='text-white p-3'>Samples</h3>
+      <Container fluid="xxl" className="d-flex bg-light justify-content-center">
         <ErrorBoundary
           fallback={
             <Alert variant="danger">

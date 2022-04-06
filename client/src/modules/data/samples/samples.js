@@ -138,7 +138,7 @@ export default function Samples() {
             <Col sm="6">{original.notes}</Col>
           </Row>
         </Col>
-        <Col className="table table-bordered detail-table detail-table-divider">
+        <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
           <Row>
           <Col sm="6">
               <b>Tumor Site:</b>
