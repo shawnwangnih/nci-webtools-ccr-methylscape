@@ -32,7 +32,8 @@ export function TextFilter({
       placeholder={placeholder || `Sample`}
       aria-label={aria}
       className = "border-0 rounded-pill"
-    />
+    >
+    </Form.Control>
   );
 }
 

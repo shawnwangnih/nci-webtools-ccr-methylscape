@@ -26,11 +26,13 @@ export default function Samples() {
       id: 'sample_name',
       accessor: 'sample_name',
       Header: 'Sample Name',
+      aria: 'Sample Name',
     },
     {
       id: 'project',
       accessor: 'project',
       Header: 'Project',
+      aria: 'Project',
       Cell: (e) => (
         <Link to={'/data/projects?project=' + e.data[e.row.index].project}>
           {e.value}
@@ -41,6 +43,7 @@ export default function Samples() {
       id: 'experiment',
       accessor: 'experiment',
       Header: 'Experiment',
+      aria: 'Experiment',
       Cell: (e) => (
         <Link
           to={'/data/experiments?experiment=' + e.data[e.row.index].experiment}
@@ -53,26 +56,31 @@ export default function Samples() {
       id: 'pool_id',
       accessor: 'pool_id',
       Header: 'Sample Date',
+      aria: 'Sample Date',
     },
     {
       id: 'surgical_case',
       accessor: 'surgical_case',
       Header: 'Surgical Case',
+      aria:'Surgical Case',
     },
     {
       id: 'gender',
       accessor: 'gender',
       Header: 'Gender',
+      aria: 'Gender',
     },
     {
       id: 'age',
       accessor: 'age',
       Header: 'Age',
+      aria: 'Age',
     },
     {
       id: 'diagnosis',
       accessor: 'diagnosis',
       Header: 'Diagnosis',
+      aria: 'Diagnosis'
     },
   ];
 
@@ -165,50 +173,50 @@ export default function Samples() {
           <Col sm="6">
             <b>Methylation Report:</b>
           </Col>
-          <Col sm="6">
-            <Button
-              variant="link"
-              className="p-0"
-              onClick={() => download(original.id, original.report_file_name)}
-            >
-              Download Report
-            </Button>
-          </Col>
-          </Row>
-          <Row>
-          <Col sm="6">
-            <b>QCI Report:</b>
-          </Col>
-          <Col sm="6">
-            {original.xml_report ? (
-              <Link
-                className="btn btn-link p-0"
-                target="_blank"
-                to={`/qci?id=${original.id}&file=${original.xml_report}`}
+            <Col sm="6">
+              <Button
+                variant="link"
+                className="p-0"
+                onClick={() => download(original.id, original.report_file_name)}
               >
-                View Report
-              </Link>
-            ) : (
-              <Button variant="link" className="p-0" disabled={true}>
-                View Report
+                Download Report
               </Button>
-            )}
-          </Col>
+            </Col>
           </Row>
           <Row>
-          <Col sm="6">
-            <b>NGS Report (legacy)</b>
-          </Col>
-          <Col sm="6">
-            <Button
-              variant="link"
-              className="p-0"
-              onClick={() =>
-                download(original.id, original.sample_name + '_NGS.pdf')
-              }
-            >
-              Download Report
-            </Button>
+            <Col sm="6">
+              <b>QCI Report:</b>
+            </Col>
+            <Col sm="6">
+              {original.xml_report ? (
+                <Link
+                  className="btn btn-link p-0"
+                  target="_blank"
+                  to={`/qci?id=${original.id}&file=${original.xml_report}`}
+                >
+                  View Report
+                </Link>
+              ) : (
+                <Button variant="link" className="p-0" disabled={true}>
+                  View Report
+                </Button>
+              )}
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <b>NGS Report (legacy)</b>
+            </Col>
+            <Col sm="6">
+              <Button
+                variant="link"
+                className="p-0"
+                onClick={() =>
+                  download(original.id, original.sample_name + '_NGS.pdf')
+                }
+              >
+                Download Report
+              </Button>
           </Col>
           </Row>
           <Row>
