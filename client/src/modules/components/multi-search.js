@@ -20,7 +20,20 @@ export default function MultiSearch({
         ...provided,
         borderRadius: '2rem',
         borderColor: 'rgb(111, 208, 178)',
-        color: 'red',
+        boxShadow: state.isFocused
+          ? '0 0 0 0.25rem rgba(111, 208, 178, 0.25)'
+          : 'none',
+        ':hover': {
+          borderColor: 'rgb(111, 208, 178)',
+        },
+      }),
+      multiValue: (provided, state) => ({
+        ...provided,
+        borderRadius: '.75rem',
+      }),
+      multiValueRemove: (provided, state) => ({
+        ...provided,
+        borderRadius: '0 .75rem .75rem 0',
       }),
     },
   };

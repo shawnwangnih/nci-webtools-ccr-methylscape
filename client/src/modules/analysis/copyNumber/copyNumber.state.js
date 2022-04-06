@@ -86,6 +86,7 @@ export const copyNumberPlotDataSelector = selector({
   key: 'copyNumber.copyNumberPlotDataSelector',
   get: async ({ get }) => {
     const { idatFilename } = get(selectSampleState);
+    // const idatFilename = '10003886259_R01C02'
 
     if (!idatFilename) return false;
     try {
@@ -142,6 +143,11 @@ export const plotState = selector({
     const yAbsMax = Math.max(Math.abs(yMin), Math.abs(yMax));
     const yClamped = yAbsMax * 0.2; // approximates the majority of points
     const colorScale = createScale([-yClamped, yClamped], [0, 1], true);
+
+    // determine top points
+    const sortedBins = [...bins].sort((a, b) => a.medianLogIntensity - b.medianLogIntensity);
+    const topCount = Math.ceil(bins.length / 500); // top 0.5%
+    const topBins = [...sortedBins.slice(0, topCount), ...sortedBins.slice(-topCount)];
       
     const data = [{
       x: xCoordinates,
@@ -165,6 +171,14 @@ export const plotState = selector({
       },
     }];
 
+    const binAnnotations = annotations 
+      ? topBins.map(bin => ({
+          text: `${bin.gene[0] || 'No Gene'} ${bin.gene.length > 1 ? `+ ${bin.gene.length - 1}` : ''}`,
+          x: xOffsets[bin.chromosome] + bin.start,
+          y: bin.medianLogIntensity,
+        }))
+      : [];
+
     const searchAnnotations = (search || [])
       .map(search => search.value)
       .map(query => (binGeneMap[query] || []).map(e => ({...e, query})))
@@ -181,7 +195,7 @@ export const plotState = selector({
       title: `${idatFilename}`,
       showlegend: false,
       dragmode: 'pan',
-      xaxis: {
+      xaxis: { 
         title: 'Chromosome',
         showgrid: false,
         showline: true,
@@ -198,7 +212,7 @@ export const plotState = selector({
         ticks: 'outside',
         fixedrange: true,
       },
-      annotations: [...searchAnnotations],
+      annotations: [...binAnnotations, ...searchAnnotations],
       shapes: [
         // chromosome dividers
         ...chrLines.map((e) => ({
