@@ -98,7 +98,7 @@ export default function MetadataForm({ className, onSelect }) {
             href="#/metadata"
             target='_blank'
           >
-            <BoxArrowUpRight /> Fullscreen
+            <BoxArrowUpRight /> View Metadata
           </Button>
         </Col>
       </Row>
