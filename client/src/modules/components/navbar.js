@@ -38,7 +38,7 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
 
   return (
     <BootstrapNavbar bg="dark" variant="dark" className={className}>
-      <Container fluid>
+      <Container fluid className="justify-content-center">
         {children}
         {linkGroups.map((links, index) => (
           <Nav key={`navbar-nav-${index}`}>

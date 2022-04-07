@@ -19,7 +19,7 @@ import UserManagement from './modules/admin/user-management/user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
-import backgroundImage from './modules/home/images/Main_Graphic.png';
+
 
 export default function App() {
   const navbarLinks = [
