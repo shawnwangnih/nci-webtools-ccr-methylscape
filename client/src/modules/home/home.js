@@ -7,7 +7,9 @@ import Button from 'react-bootstrap/Button'
 import HomeImage from './images/home.svg';
 import { sessionState } from '../session/session.state';
 import './home.scss';
-import backgroundImage from './images/Main_Graphic.png'
+import backgroundImage from './images/Main_Graphic.png';
+//import Session from './session/session';
+
 
 export default function Home() {
   const session = useRecoilValue(sessionState);
@@ -42,7 +44,10 @@ export default function Home() {
               <h1 className="homepage-title">Methylscape</h1>
               <h2 className="homepage-title-small">Analysis</h2>
               <p className="py-4 lead">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
-              <Button variant="outline-light" size="lg" className="btn-home px-5 py-3">Perform Analysis</Button>{' '}
+              {session.authenticated && (
+                <Button variant="outline-light" size="lg" className="btn-home px-5 py-3">Perform Analysis</Button>
+              )}
+              
             </Col>           
           </Row>
           
