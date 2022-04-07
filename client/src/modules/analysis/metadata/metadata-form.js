@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { BoxArrowUpRight } from 'react-bootstrap-icons';
 import MultiSearch from '../../components/multi-search';
 
 export default function MetadataForm({ className, onSelect }) {
@@ -89,17 +88,6 @@ export default function MetadataForm({ className, onSelect }) {
               onChange={handleChange}
             />
           </Form.Group>
-        </Col>
-        <Col md="auto">
-          <Button
-            variant="link"
-            title="Open in new tab"
-            aria-label="Open Metadata in new tab"
-            href="#/metadata"
-            target='_blank'
-          >
-            <BoxArrowUpRight /> Fullscreen
-          </Button>
         </Col>
       </Row>
     </Form>
