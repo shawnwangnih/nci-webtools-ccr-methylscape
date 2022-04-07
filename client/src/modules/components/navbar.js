@@ -38,10 +38,11 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
 
   return (
     <BootstrapNavbar bg="dark" variant="dark" className={className}>
-      <Container fluid className="justify-content-center">
+      <Container fluid className="justify-content-strech">
+        <Nav></Nav>
         {children}
         {linkGroups.map((links, index) => (
-          <Nav key={`navbar-nav-${index}`}>
+          <Nav key={`navbar-nav-${index}`} className="justify-content-end">
             {links?.filter(shouldShowLink).map((link, linkIndex) => 
               <>
               {link.childLinks && <NavbarDropdown key={`navbar-nav-dropdown-${index}-${linkIndex}`} {...link} />}
