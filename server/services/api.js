@@ -88,7 +88,8 @@ apiRouter.post(
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
     const { sqsName } = config.aws;
-    const results = await createImportRequest(connection, sqsName);
+    const { forceRecreate } = request.body;
+    const results = await createImportRequest(connection, sqsName, { forceRecreate });
     response.json(results);
   })
 );
