@@ -55,12 +55,16 @@ export async function initializeSchema(connection, schema) {
     await connection.schema.raw(schema());
   }
 
-  for (const { name, schema, type, triggers } of tables) {
+  for (const { name, schema, rawSchema, type, triggers } of tables) {
     if (!type || type === 'table') {
-      await connection.schema.createTable(
-        name, 
-        table => schema(table, connection)
-      );
+      if (rawSchema) { 
+        await connection.schema.raw(rawSchema());
+      } else if (schema) {
+        await connection.schema.createTable(
+          name, 
+          table => schema(table, connection)
+        );
+      }
     }
 
     for (const trigger of triggers || []) {
@@ -71,8 +75,8 @@ export async function initializeSchema(connection, schema) {
   return true;
 }
 
-export async function initializeSchemaForImport(connection, tables) {
-  const importSchema = tables.filter(table => table.import);
+export async function initializeSchemaForImport(connection, tables, forceRecreate = false) {
+  const importSchema = tables.filter(table => table.import && (forceRecreate || table.recreate));
   return await initializeSchema(connection, importSchema);
 }
 
@@ -173,10 +177,6 @@ export async function importTable(connection, iterable, tableName, logger) {
   }
 
   await flushBuffer();
-
-  // this is needed to optimize the use of indexes in subsequent import steps
-  await connection.raw(`VACUUM ANALYZE ??`, [tableName]);
-
   return count;
 }
 
@@ -212,7 +212,7 @@ export function createRecordParser(columns, metadata) {
       let value = sourceMetadataName ? metadataValue : sourceValue;
       
       if (typeof formatter === 'function') {
-        value = formatter(value);
+        value = formatter(value, record);
       }
 
       row[name] = value;
