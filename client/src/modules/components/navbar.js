@@ -14,7 +14,7 @@ export function NavbarNativeLink({path, title}) {
 }
 
 export function NavbarRouterLink({path, title, exact}) {
-  return <NavLink to={path} className={({ isActive }) => classNames('nav-link', isActive && 'active')} end={exact}>
+  return <NavLink to={path} className={({ isActive }) => classNames('nav-link px-4', isActive && 'active')} end={exact}>
     {title}
   </NavLink>
 }
@@ -38,7 +38,8 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
 
   return (
     <BootstrapNavbar bg="dark" variant="dark" className={className}>
-      <Container fluid>
+      <Container fluid className="justify-content-strech">
+        <Nav></Nav>
         {children}
         {linkGroups.map((links, index) => (
           <Nav key={`navbar-nav-${index}`}>
@@ -47,8 +48,8 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
               {link.childLinks && <NavbarDropdown key={`navbar-nav-dropdown-${index}-${linkIndex}`} {...link} />}
               {!link.childLinks && (
                 link.native 
-                  ? <NavbarNativeLink key={`navbar-nav-native-link-${index}-${linkIndex}`} {...link} /> 
-                  : <NavbarRouterLink key={`navbar-nav-link-${index}-${linkIndex}`} {...link} />
+                  ? <NavbarNativeLink key={`navbar-nav-native-link-${index}-${linkIndex}`} {...link}/> 
+                  : <NavbarRouterLink key={`navbar-nav-link-${index}-${linkIndex}`} {...link}/>
               )}
               </>
             )}

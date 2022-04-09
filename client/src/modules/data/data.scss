@@ -2,7 +2,7 @@
   padding-left: 5px;
   margin-bottom: 0px;
   color: black;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 200;
   display: inline;
   margin-right: 0.5rem;
@@ -16,16 +16,38 @@
 // }
 
 .stat-icon {
-  height: 90px;
+  height: 120px;
   align-self: left;
 }
 
-.data-text{
+.data-text-project {
   position: absolute;
+  //left: 140px;
+  //top: 25px;
+  padding-top:35px;
+  padding-left:125px;
+}
+
+.data-text-experiment{
+  position: absolute;
+  padding-top:35px;
+  padding-left:110px;
+}
+.data-text-sample{
+  position: absolute;
+  padding-top:35px;
+  padding-left:110px;
 }
 
 .header-img{
   position:relative;
+}
+.detail-table{
+  background-color: #E4F8FF;
+}
+.detail-table-divider{
+  border-left: 3px solid #6BA5B4;
+  
 }
 
 

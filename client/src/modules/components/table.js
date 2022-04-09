@@ -29,9 +29,11 @@ export function TextFilter({
       size="sm"
       value={filterValue || ''}
       onChange={(e) => setFilter(e.target.value || undefined)}
-      placeholder={placeholder || `Search...`}
+      placeholder={placeholder || `Sample`}
       aria-label={aria}
-    />
+      className = "border-0 rounded-pill"
+    >
+    </Form.Control>
   );
 }
 
@@ -197,23 +199,13 @@ export default function Table({
         </Col>
       </Row>
       <div className="table-responsive">
-        <BootstrapTable {...getTableProps()} hover size="sm">
+        <BootstrapTable {...getTableProps()} hover size="sm" responsive className="mt-3">
           <thead>
+            
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr {...headerGroup.getHeaderGroupProps()} className="h5 text-center sample-title">
                 {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps()}>
-                    <div>
-                      {column.canFilter ? column.render('Filter') : null}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <td {...column.getHeaderProps(column.getSortByToggleProps())} aria-label={column.Header + '-sort'}>
                     {column.render('Header')}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
@@ -226,7 +218,19 @@ export default function Table({
                         <ChevronExpand className="ms-1" />
                       )
                     )}
-                  </th>
+                  </td>
+                ))}
+              </tr>
+            ))}
+
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()} className="search-bg">
+                {headerGroup.headers.map((column) => (
+                  <td {...column.getHeaderProps()}>
+                    <div className="py-2">
+                      {column.canFilter ? column.render('Filter') : null}
+                    </div>
+                  </td>
                 ))}
               </tr>
             ))}
@@ -274,11 +278,11 @@ export default function Table({
           of {rows.length.toLocaleString()}
         </div> */}
 
-        <div className="d-flex flex-row justify-content-end my-auto mb-4">
-          <div>
+        <div className="d-flex flex-row justify-content-end my-auto">
+          <div className="px-4">
             <Form.Control
             as="select"
-            className="rounded-0 btn-border-sample-blue"
+            className="rounded-0 btn-border-sample-blue px-4"
             name="select-page-size"
             aria-label="Select page size"
             value={pageSize}
@@ -292,11 +296,11 @@ export default function Table({
           </Form.Control>
           </div>
           
-          <div className="mx-3 align-items-center">
+          <div className="pe-2 py-2 align-items-center">
             {(1 + pageIndex * pageSize).toLocaleString()}
             </div>
           <div>
-            <Pagination className="mb-0 border border-0" aria-label="Previous">
+            <Pagination aria-label="Previous" className="border border-0">
               {/*<Pagination.First
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
@@ -306,6 +310,7 @@ export default function Table({
               <Pagination.Prev
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
+                className="border border-0"
               >
                 &#60; Previous
               </Pagination.Prev>
@@ -320,7 +325,7 @@ export default function Table({
               </Pagination.Last> */}
             </Pagination>
           </div>
-          <div className="px-3 align-items-center">
+          <div className="ps-2 py-2 align-items-center">
             {rows.length.toLocaleString()}
           </div>
         </div>
