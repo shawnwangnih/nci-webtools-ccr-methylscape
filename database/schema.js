@@ -1,3 +1,5 @@
+import { patternExtractionFormatter } from './services/formatters.js'
+
 export const schema = [
 
   /**
@@ -7,6 +9,7 @@ export const schema = [
   {
     name: "sample",
     import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
       table.string("sample");
@@ -53,6 +56,13 @@ export const schema = [
       table.string("diagnosisTier2");
       table.string("diagnosisTier3");
       table.string("whoDiagnosisTier4");
+      table.double("rfPurityAbsolute");
+      table.double("rfPurityEstimate");
+      table.double("lump");
+      table.string("mcf");
+      table.double("mcfScore");
+      table.string("subclass");
+      table.double("subclassScore");
       table.double("overallSurvivalMonths");
       table.integer("overallSurvivalStatus");
       table.date("batchDate");
@@ -66,9 +76,10 @@ export const schema = [
   {
     name: "sampleCoordinate",
     import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.integer("sampleId").references("sample.id");
+      table.string("sampleIdatFilename").references("sample.idatFilename");
       table.string("organSystem").index();
       table.string("embedding").index();
       table.double("x");
@@ -82,6 +93,7 @@ export const schema = [
   {
     name: "chromosome",
     import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
       table.string("name");
@@ -91,31 +103,52 @@ export const schema = [
   },
 
   /**
-   * Sources: Bins/BAF.bins_ <sample>.txt 
+   * Sources: CNV/bins/*.txt
    */
   {
     name: "cnvBin",
     import: true,
-    schema: (table) => {
-      table.increments("id");
-      table.string("sampleIdatFilename").index();
-      table.integer("chromosome");
-      table.integer("start").unsigned();
-      table.integer("end").unsigned();
-      table.string("feature");
-      table.double("medianLogIntensity");
-      table.text("gene");
+    recreate: false,
+    rawSchema: () => {
+      return `
+        create table if not exists "cnvBin"
+        (
+            "id"                  serial,
+            "sampleIdatFilename"  varchar(255),
+            "chromosome"          integer,
+            "start"               integer,
+            "end"                 integer,
+            "feature"             varchar(255),
+            "medianValue"         double precision,
+            "gene"                text,
+            primary key ("id", "sampleIdatFilename")
+        ) partition by list("sampleIdatFilename");
+      `;
     },
-    Notriggers: [
-      `create or replace trigger updateCnvBinGene 
-      before insert or update on "cnvBin" 
-      for each row execute procedure updateGeneForRange();`
-    ],
+    partitionSchema: (connection, metadata) => {
+      const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.bins\.txt$/);
+      const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
+      const partitionName = `cnvBin_${sampleIdatFilename}`;
+      return connection.raw(
+        `drop table if exists :partitionName:;
+
+        create table if not exists :partitionName:
+          partition of "cnvBin"
+          for values in('${sampleIdatFilename}');
+        
+        create index on :partitionName: (chromosome, start);`,
+        { partitionName }
+      );
+    },
   },
 
+  /**
+   * Sources: CNV/segments/*.txt
+   */
   {
     name: "cnvSegment",
     import: true,
+    recreate: false,
     schema: (table) => {
       table.increments("id");
       table.string("sampleIdatFilename").index();
@@ -137,6 +170,7 @@ export const schema = [
   {
     name: "gene",
     import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
       table.string("name");
@@ -222,26 +256,42 @@ export const schema = [
   },
 
   {
-    name: 'updateGeneForRange',
+    name: 'mapBinsToGenes',
     import: false,
     type: 'function',
     schema: () => {
-      return `create or replace function updateGeneForRange()
-      returns trigger as $$
-      begin
-      new.gene := (
-          select string_agg(distinct name::text, ';')
-          from gene g
-          where g.chromosome = new.chromosome and (
-            (g.start between new."start" and new."end") or
-            (g.end between new."start" and new."end") or
-            (new.start between g."start" and g."end") or
-            (new."end" between g."start" and g."end")
-          )
-      );
-      return new;
-      end;
-      $$ language 'plpgsql';`;
+      return `
+        drop procedure if exists mapBinsToGenes;
+        create or replace procedure mapBinsToGenes(tablename regclass) 
+          language plpgsql as $$
+          begin
+            EXECUTE format('
+              with geneMap as (
+                  select id, string_agg(distinct gene, '';'') as gene from (
+                      select c.id, g.name as gene
+                      from %s c
+                        join "gene" g on
+                          c.chromosome = g.chromosome and
+                          c.start <= g.start and
+                          g.start < c.end
+                      union
+                      select c.id, g.name as gene
+                      from %s c
+                        join "gene" g on
+                          c.chromosome = g.chromosome and
+                          g.start < c.start and
+                          c.start < g."end"
+                  ) as c group by c.id
+              ) update %s cnv
+                  set gene = geneMap.gene
+                  from geneMap
+                  where cnv.id = geneMap.id;', 
+                tablename, 
+                tablename, 
+                tablename
+            );
+          end
+          $$;`;
     }
   },
 
