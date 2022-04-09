@@ -42,7 +42,7 @@ export async function startQueueWorker(config) {
     pollInterval: config.aws.sqsPollInterval || 5,
     messageHandler: async (message) => {
       logger.info('Retrieved message from SQS queue');
-      let { type, importLogId } = message;
+      let { type, importLogId, forceRecreate } = message;
 
       try {
         if (type === 'importData') {
@@ -75,7 +75,7 @@ export async function startQueueWorker(config) {
             .where({ id: importLogId })
             .update({ status: 'RUNNING', updatedAt: new Date() });
 
-          await importDatabase(connection, schema, sources, sourceProvider, logger);
+          await importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate);
           logger.info('Finished importing data');
 
           await connection('importLog')
