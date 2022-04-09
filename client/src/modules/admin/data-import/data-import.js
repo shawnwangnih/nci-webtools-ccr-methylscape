@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { Container, Button, Modal } from 'react-bootstrap';
+import { Container, Button, Modal, SplitButton, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useRecoilValue, useRecoilRefresher_UNSTABLE as useRecoilRefresher } from 'recoil';
 import { importLogSelector } from './data-import.state';
 import Table from '../../components/table';
@@ -35,9 +35,9 @@ export default function DataImport() {
         setModal({...modal, show: false});
     }
 
-    async function runImport() {
+    async function runImport(forceRecreate = false) {
         try {
-            await axios.post('api/admin/importData');
+            await axios.post('api/admin/importData', { forceRecreate });
             refreshData();
             setModal({
                 show: 'true',
@@ -69,7 +69,10 @@ export default function DataImport() {
             <Container className="my-4 p-3 rounded bg-white">
                 <h1 className="h4 mb-3 text-primary d-flex justify-content-between">
                     Data Import
-                    <Button size="sm" onClick={runImport}>Run Import</Button>
+                    <DropdownButton id="import-type-selector" title="Run Import">
+                        <Dropdown.Item onClick={() => runImport()}>Progressive Import</Dropdown.Item>
+                        <Dropdown.Item onClick={() => runImport(true)}>Full Import</Dropdown.Item>
+                    </DropdownButton>
                 </h1>
                 <Table data={data} columns={columns} options={{ disableFilters: true }} />
             </Container>
