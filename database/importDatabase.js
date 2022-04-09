@@ -1,3 +1,4 @@
+import { basename } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
 import minimist from 'minimist';
@@ -5,16 +6,15 @@ import {
   createConnection,
   createRecordIterator,
   importTable,
-  importTableFromScript,
   initializeSchemaForImport,
   loadAwsCredentials,
-  recreateTable,
   withDuration,
 } from './services/utils.js';
 import { LocalProvider } from './services/providers/localProvider.js';
 import { S3Provider } from './services/providers/s3Provider.js';
 import { getLogger } from './services/logger.js';
 import { S3Client } from '@aws-sdk/client-s3';
+import groupBy from 'lodash/groupBy.js';
 
 // determine if this script was launched from the command line
 const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
@@ -56,48 +56,60 @@ if (isMainModule) {
   process.exit(0);
 }
 
-export async function importDatabase(connection, schema, sources, sourceProvider, logger) {
-  // although we would like to use transactions for the
-  // return await connection.transaction(async (transaction) => {
-  return (async (transaction) => {
-    await initializeSchemaForImport(transaction, schema);
+export async function importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate = false) {
+  const tableSchemaMap = groupBy(schema, 'name');
+
+  return await connection.transaction(async (transaction) => {
+    await initializeSchemaForImport(transaction, schema, forceRecreate);
 
     let totalCount = 0;
     const { results, duration } = await withDuration(async () => {
-      for (let { sourcePath, type, description, table, columns, parseConfig, temporarySchema, importScript } of sources) {
-        const sourcePaths = type === 'folder'
-          ? await sourceProvider.listFiles(sourcePath)
-          : [ sourcePath ];
+      for (let source of sources) {
+        const { description, table, columns, skipImport, parseConfig } = source;
+        const { partitionSchema } = tableSchemaMap[table][0];
+        const sourcePaths = await getSourcePaths(source, sourceProvider);
   
         for (const sourcePath of sourcePaths) {
           logger.info(`Importing ${sourcePath} => ${table} (${description})`);
-  
-          const { results, duration } = await withDuration(async () => {
-            const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
-            const count = (temporarySchema && importScript)
-              ? await importTableFromScript(transaction, records, temporarySchema, importScript, logger)
-              : await importTable(transaction, records, table, logger);
+          const metadata = { filename: basename(sourcePath) };
 
-            return count;
-          });
+          // determine if import should be skipped
+          const shouldSkip = typeof skipImport === 'function' &&
+            await skipImport(transaction, metadata);
 
-          totalCount += results;
-          logger.info(
-            `Finished importing ${sourcePath} => ${table} in ${(
-              duration.toFixed(2)
-            )}s (${Math.round(results / duration)} rows/s)`
-          );
+          if (shouldSkip) {
+            logger.info(`Skipping import of ${sourcePath} => ${table} (${description})`);
+          } else {
+            // initialize partition if needed
+            if (typeof partitionSchema === 'function') {
+              await partitionSchema(transaction, metadata);
+            }
+
+            const { results, duration } = await withDuration(async () => {
+              const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
+              return await importTable(transaction, records, table, logger);
+            });
+            totalCount += results;
+            logger.info(getStatusMessage({results, duration}));
+          }
         }
       }
       return totalCount;
     });
 
-    logger.info(
-      `Finished importing ${results} rows in ${(
-        duration.toFixed(2)
-      )}s (${Math.round(results / duration)} rows/s)`
-    );
-
+    logger.info(getStatusMessage({results, duration}));
     return true;
-  })(connection);
+  });
+}
+
+async function getSourcePaths(source, sourceProvider) {
+  return (source.type === 'folder')
+    ? await sourceProvider.listFiles(source.sourcePath)
+    : [ source.sourcePath ]
+}
+
+function getStatusMessage({results, duration}) {
+  return `Finished importing ${results} rows in ${(
+    duration.toFixed(2)
+  )}s (${Math.round(results / duration)} rows/s)`;
 }
