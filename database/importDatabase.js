@@ -59,8 +59,8 @@ if (isMainModule) {
 export async function importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate = false) {
   const tableSchemaMap = groupBy(schema, 'name');
 
-  return await connection.transaction(async (transaction) => {
-    await initializeSchemaForImport(transaction, schema, forceRecreate);
+  // return await connection.transaction(async (transaction) => {
+    await initializeSchemaForImport(connection, schema, forceRecreate);
 
     let totalCount = 0;
     const { results, duration } = await withDuration(async () => {
@@ -75,20 +75,23 @@ export async function importDatabase(connection, schema, sources, sourceProvider
 
           // determine if import should be skipped
           const shouldSkip = typeof skipImport === 'function' &&
-            await skipImport(transaction, metadata);
+            await skipImport(connection, metadata);
 
           if (shouldSkip) {
             logger.info(`Skipping import of ${sourcePath} => ${table} (${description})`);
           } else {
             // initialize partition if needed
             if (typeof partitionSchema === 'function') {
-              await partitionSchema(transaction, metadata);
+              await partitionSchema(connection, metadata);
             }
-
-            const { results, duration } = await withDuration(async () => {
-              const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
-              return await importTable(transaction, records, table, logger);
+            
+            const { results, duration } = await connection.transaction(async (transaction) => {
+              return await withDuration(async () => {
+                const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
+                return await importTable(transaction, records, table, logger);
+              });
             });
+
             totalCount += results;
             logger.info(getStatusMessage({results, duration}));
           }
@@ -98,8 +101,7 @@ export async function importDatabase(connection, schema, sources, sourceProvider
     });
 
     logger.info(getStatusMessage({results, duration}));
-    return true;
-  });
+  // });
 }
 
 async function getSourcePaths(source, sourceProvider) {
