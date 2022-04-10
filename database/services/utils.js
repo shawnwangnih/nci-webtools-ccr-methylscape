@@ -16,6 +16,13 @@ export function createConnection(
   return knex({
     client: 'pg',
     connection: args,
+    pool: {
+      min: 2,
+      max: 20,
+      acquireTimeoutMillis: 100 * 1000,
+      createTimeoutMillis: 100 * 1000,
+      propagateCreateError: false,
+    }
   });
 }
 
