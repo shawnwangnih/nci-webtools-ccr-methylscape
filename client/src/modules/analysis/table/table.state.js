@@ -239,6 +239,42 @@ export const tableData = selector({
         Header: "WHO Diagnosis (Tier 4)",
         show: false,
       },
+
+      { 
+        accessor: "rfPurityAbsolute",
+        Header: "RF Purity (Absolute)",
+        show: false,
+      },
+      { 
+        accessor: "rfPurityEstimate",
+        Header: "RF Purity (Estimate)",
+        show: false,
+      },
+      { 
+        accessor: "lump",
+        Header: "LUMP",
+        show: false,
+      },
+      { 
+        accessor: "mcf",
+        Header: "MCF",
+        show: false,
+      },
+      { 
+        accessor: "mcfScore",
+        Header: "MCF Score",
+        show: false,
+      },
+      { 
+        accessor: "subclass",
+        Header: "Subclass",
+        show: false,
+      },
+      { 
+        accessor: "subclassScore",
+        Header: "Subclass Score",
+        show: false,
+      },
     ];
 
     const tables = points.reduce(
