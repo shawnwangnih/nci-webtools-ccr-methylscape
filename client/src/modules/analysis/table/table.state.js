@@ -289,8 +289,6 @@ export const survivalDataSelector = selector({
   key: 'survivalDataSelector',
   get: async ({ get }) => {
     const selectedGroups = get(survivalGroupsSelector);
-    console.log({selectedGroups})
-
     if (selectedGroups?.length) {
       const response = await axios.post('api/survival', selectedGroups);
       return response.data;
