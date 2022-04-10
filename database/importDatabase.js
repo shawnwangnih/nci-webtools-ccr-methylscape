@@ -58,59 +58,56 @@ if (isMainModule) {
 
 export async function importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate = false) {
   const tableSchemaMap = groupBy(schema, 'name');
+  await initializeSchemaForImport(connection, schema, forceRecreate);
 
-  // return await connection.transaction(async (transaction) => {
-    await initializeSchemaForImport(connection, schema, forceRecreate);
+  let totalCount = 0;
+  const { results, duration } = await withDuration(async () => {
+    for (let source of sources) {
+      const { description, table, columns, skipImport, parseConfig } = source;
+      const { partitionSchema } = tableSchemaMap[table][0];
+      const sourcePaths = await getSourcePaths(source, sourceProvider);
 
-    let totalCount = 0;
-    const { results, duration } = await withDuration(async () => {
-      for (let source of sources) {
-        const { description, table, columns, skipImport, parseConfig } = source;
-        const { partitionSchema } = tableSchemaMap[table][0];
-        const sourcePaths = await getSourcePaths(source, sourceProvider);
-  
-        for (const sourcePath of sourcePaths) {
-          logger.info(`Importing ${sourcePath} => ${table} (${description})`);
-          const metadata = { filename: basename(sourcePath) };
+      for (const sourcePath of sourcePaths) {
+        logger.info(`Importing ${sourcePath} => ${table} (${description})`);
+        const metadata = { filename: basename(sourcePath) };
 
-          // determine if import should be skipped
-          const shouldSkip = typeof skipImport === 'function' &&
-            await skipImport(connection, metadata);
+        // determine if import should be skipped
+        const shouldSkip = typeof skipImport === 'function' &&
+          await skipImport(connection, metadata);
 
-          if (shouldSkip) {
-            logger.info(`Skipping import of ${sourcePath} => ${table} (${description})`);
-          } else {
-            // initialize partition if needed
-            if (typeof partitionSchema === 'function') {
-              await partitionSchema(connection, metadata);
-            }
-            
-            const { results, duration } = await connection.transaction(async (transaction) => {
-              return await withDuration(async () => {
-                const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
-                return await importTable(transaction, records, table, logger);
-              });
-            });
-
-            totalCount += results;
-            logger.info(getStatusMessage({results, duration}));
+        if (shouldSkip) {
+          logger.info(`Skipping import of ${sourcePath} => ${table} (${description})`);
+        } else {
+          // initialize partition if needed
+          if (typeof partitionSchema === 'function') {
+            await partitionSchema(connection, metadata);
           }
+
+          const { results, duration } = await connection.transaction(async (transaction) => {
+            return await withDuration(async () => {
+              const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
+              return await importTable(transaction, records, table, logger);
+            });
+          });
+
+          totalCount += results;
+          logger.info(getStatusMessage({ results, duration }));
         }
       }
-      return totalCount;
-    });
+    }
+    return totalCount;
+  });
 
-    logger.info(getStatusMessage({results, duration}));
-  // });
+  logger.info(getStatusMessage({ results, duration }));
 }
 
 async function getSourcePaths(source, sourceProvider) {
   return (source.type === 'folder')
     ? await sourceProvider.listFiles(source.sourcePath)
-    : [ source.sourcePath ]
+    : [source.sourcePath]
 }
 
-function getStatusMessage({results, duration}) {
+function getStatusMessage({ results, duration }) {
   return `Finished importing ${results} rows in ${(
     duration.toFixed(2)
   )}s (${Math.round(results / duration)} rows/s)`;
