@@ -170,6 +170,7 @@ export const plotState = selector({
       legend: { title: { text: 'Methylation Class' } },
       colorway: colors,
       autosize: true,
+      dragmode: 'select',
     };
 
     const config = {
