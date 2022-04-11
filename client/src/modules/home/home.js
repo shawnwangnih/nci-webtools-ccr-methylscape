@@ -45,7 +45,7 @@ export default function Home() {
               <h2 className="homepage-title-small">Analysis</h2>
               <p className="py-4 lead">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
               {session.authenticated && (
-                <Button variant="outline-light" size="lg" className="btn-home px-5 py-3">Perform Analysis</Button>
+                <a href="/#/analysis"><Button variant="outline-light" size="lg" className="btn-home px-5 py-3" >Perform Analysis</Button></a>
               )}
               
             </Col>           
