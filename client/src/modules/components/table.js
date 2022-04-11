@@ -279,7 +279,7 @@ export default function Table({
         </div> */}
 
         <div className="d-flex flex-row justify-content-end my-auto">
-          <div className="px-4">
+          <div className="d-flex align-items-center">
             <Form.Control
             as="select"
             className="rounded-0 btn-border-sample-blue px-4"
@@ -296,10 +296,10 @@ export default function Table({
           </Form.Control>
           </div>
           
-          <div className="pe-2 py-2 align-items-center">
+          <div className="d-flex pe-2 p-2 align-items-center">
             {(1 + pageIndex * pageSize).toLocaleString()}
-            </div>
-          <div>
+          </div>
+          <div className="d-flex">
             <Pagination aria-label="Previous" className="border border-0">
               {/*<Pagination.First
                 onClick={() => gotoPage(0)}
@@ -312,7 +312,7 @@ export default function Table({
                 disabled={!canPreviousPage}
                 className="border border-0"
               >
-                &#60; Previous
+              &#60; Previous
               </Pagination.Prev>
               <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
                 Next &#62;
@@ -325,7 +325,7 @@ export default function Table({
               </Pagination.Last> */}
             </Pagination>
           </div>
-          <div className="ps-2 py-2 align-items-center">
+          <div className="d-flex ps-2 p-1 align-items-center">
             {rows.length.toLocaleString()}
           </div>
         </div>
