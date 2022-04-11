@@ -31,6 +31,7 @@ export default function Analysis() {
 
   return (
     <Container fluid>
+      <Row className="m-3"><h1 className='text-white'>Analysis</h1></Row>
       <Row>
         <Col xl={expand ? 12 : 6} className="my-4">
           <Card className="h-100">

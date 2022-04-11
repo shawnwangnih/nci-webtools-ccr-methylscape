@@ -23,9 +23,12 @@ export default function Data() {
     useRecoilValue(methylscapeData);
 
   return (
-    <div>
-    <h3 className='text-white p-3'>Samples</h3>
-      <Container fluid="xxl" className="d-flex bg-light justify-content-center">
+    <>
+    <Container>
+      <Row className="m-3"><h1 className='text-white'>Samples</h1></Row>
+    </Container>
+    <Container fluid="xxl" className="d-flex bg-light justify-content-center">
+    
         <ErrorBoundary
           fallback={
             <Alert variant="danger">
@@ -110,6 +113,9 @@ export default function Data() {
       <Container fluid="xxl" className="bg-white mb-6">
         <Outlet />
       </Container>
-    </div>
+    
+      
+      
+    </>
   );
 }
