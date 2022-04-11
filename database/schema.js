@@ -109,36 +109,17 @@ export const schema = [
     name: "cnvBin",
     import: true,
     recreate: false,
-    rawSchema: () => {
-      return `
-        create table if not exists "cnvBin"
-        (
-            "id"                  serial,
-            "sampleIdatFilename"  varchar(255),
-            "chromosome"          integer,
-            "start"               integer,
-            "end"                 integer,
-            "feature"             varchar(255),
-            "medianValue"         double precision,
-            "gene"                text,
-            primary key ("id", "sampleIdatFilename")
-        ) partition by list("sampleIdatFilename");
-      `;
-    },
-    partitionSchema: (connection, metadata) => {
-      const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.bins\.txt$/);
-      const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
-      const partitionName = `cnvBin_${sampleIdatFilename}`;
-      return connection.raw(
-        `drop table if exists :partitionName:;
-
-        create table if not exists :partitionName:
-          partition of "cnvBin"
-          for values in('${sampleIdatFilename}');
-        
-        create index on :partitionName: (chromosome, start);`,
-        { partitionName }
-      );
+    schema: (table) => {
+      table.increments("id");
+      table.string("sampleIdatFilename");
+      table.integer("chromosome");
+      table.integer("start").unsigned();
+      table.integer("end").unsigned();
+      table.double("pValue");
+      table.string("feature");
+      table.double("medianValue");
+      table.text("gene");
+      table.index(["sampleIdatFilename", "chromosome", "start"]);
     },
   },
 
@@ -262,33 +243,34 @@ export const schema = [
     schema: () => {
       return `
         drop procedure if exists mapBinsToGenes;
-        create or replace procedure mapBinsToGenes(tablename regclass) 
+        create or replace procedure mapBinsToGenes(idat text) 
           language plpgsql as $$
           begin
             EXECUTE format('
               with geneMap as (
                   select id, string_agg(distinct gene, '';'') as gene from (
                       select c.id, g.name as gene
-                      from %s c
+                      from "cnvBin" c
                         join "gene" g on
                           c.chromosome = g.chromosome and
                           c.start <= g.start and
                           g.start < c.end
+                      where c."sampleIdatFilename" = %L
                       union
                       select c.id, g.name as gene
-                      from %s c
+                      from "cnvBin" c
                         join "gene" g on
                           c.chromosome = g.chromosome and
                           g.start < c.start and
                           c.start < g."end"
+                        where c."sampleIdatFilename" = %L
                   ) as c group by c.id
-              ) update %s cnv
+              ) update "cnvBin" cnv
                   set gene = geneMap.gene
                   from geneMap
                   where cnv.id = geneMap.id;', 
-                tablename, 
-                tablename, 
-                tablename
+              idat, 
+              idat
             );
           end
           $$;`;
