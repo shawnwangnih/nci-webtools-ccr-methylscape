@@ -10,18 +10,19 @@ async function getSamples(connection, { embedding, organSystem }) {
 }
 
 async function getCnvBins(connection, { idatFilename }) {
-  if (idatFilename && /^[A-Z0-9_]+$/i.test(idatFilename)) {
-    const tableName = `cnvBin_${idatFilename}`;
-    
-    const [geneCountResult] = await connection(tableName)
+  if (idatFilename) {
+    const [geneCountResult] = await connection('cnvBin')
       .count('gene', {as: 'count'})
-      .whereNotNull('gene');
+      .whereNotNull('gene')
+      .andWhere('sampleIdatFilename', idatFilename);
 
     if (+geneCountResult.count === 0) {
-      await connection.raw("call mapBinsToGenes('??')", [ tableName ]);
+      await connection.raw("call mapBinsToGenes(?)", [ idatFilename ]);
     }
 
-    const cnvBins = await connection(tableName).select('*');
+    const cnvBins = await connection('cnvBin')
+      .where('sampleIdatFilename', idatFilename);
+
     return cnvBins.map(cnvBin => ({
       ...cnvBin,
       gene: cnvBin.gene ? cnvBin.gene.split(';') : [],
