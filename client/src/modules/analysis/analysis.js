@@ -75,6 +75,9 @@ export default function Analysis() {
               <Tab eventKey="Table" title="Table">
                 <Table className="px-3" />
               </Tab>
+              <Tab eventKey="Survival" title="Survival">
+                <Table className="px-3" />
+              </Tab>
               {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
                 <PromoterMethylation className="px-3" />
               </Tab>

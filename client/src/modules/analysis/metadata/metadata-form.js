@@ -27,12 +27,14 @@ export default function MetadataForm({ className, onSelect }) {
         <Col md="auto">
           <Form.Group id="organSystem" className="mb-3">
             <Form.Label>Organ System</Form.Label>
-            <div className="custom-select">
+            <div className="">
               <Form.Select
                 name="organSystem"
                 value={form.organSystem}
                 onChange={handleChange}
+                className="custom-select"
                 >
+                
                 <option value="centralNervousSystem">
                   Central Nervous System
                 </option>
@@ -40,6 +42,7 @@ export default function MetadataForm({ className, onSelect }) {
                 <option value="hematopoietic">Hematopoietic</option>
                 <option value="renal">Renal</option>
                 <option value="panCancer">Pan-Cancer</option>
+               
               </Form.Select>
             </div>
             
