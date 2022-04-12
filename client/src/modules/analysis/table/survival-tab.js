@@ -6,10 +6,10 @@ import ErrorBoundary from '../../components/error-boundary';
 import SurvivalPlot from './survival-plot';
 import TableTabs from './table-tabs';
 
-export default function Table() {
+export default function Survival() {
   return (
     <Container fluid>
-      <TableTabs />
+      {/* <TableTabs /> */}
 
       <ErrorBoundary
         fallback={
@@ -26,7 +26,7 @@ export default function Table() {
             </div>
           }
         >
-          {/* <SurvivalPlot /> */}
+          <SurvivalPlot />
         </Suspense>
       </ErrorBoundary>
     </Container>
