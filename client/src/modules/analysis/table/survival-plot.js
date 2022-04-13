@@ -13,7 +13,7 @@ export default function SurvivalPlot() {
 
   
   return survivalData?.data?.length ? (
-    <div className="my-4">
+    <div className="mb-4">
         <SurvivalPlotTabs/>
 
         <Plot {...survivalPlot} className="mw-100 w-100 h-100" useResizeHandler />
@@ -32,7 +32,7 @@ export default function SurvivalPlot() {
       
     </div>
   ) : (
-    <div className="my-4">
+    <div className="mb-4">
       <SurvivalPlotTabs/>
     </div>
   );
