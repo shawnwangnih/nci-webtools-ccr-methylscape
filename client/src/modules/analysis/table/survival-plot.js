@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import ReactTable from '../../components/table';
 import { survivalDataSelector } from './table.state';
 import { getSurvivalPlot, getSummaryColumns } from './survival-plot.utils';
-import TableTabs from './table-tabs';
+import SurvivalPlotTabs from './survival-plot-tab.utils';
 
 
 export default function SurvivalPlot() {
@@ -14,7 +14,7 @@ export default function SurvivalPlot() {
   
   return survivalData?.data?.length ? (
     <div className="my-4">
-        <TableTabs/>
+        <SurvivalPlotTabs/>
 
         <Plot {...survivalPlot} className="mw-100 w-100 h-100" useResizeHandler />
         {survivalData?.pValue[0]?.pval && <div className="mb-2">
@@ -33,7 +33,7 @@ export default function SurvivalPlot() {
     </div>
   ) : (
     <div className="my-4">
-      <TableTabs/>
+      <SurvivalPlotTabs/>
     </div>
   );
 }
