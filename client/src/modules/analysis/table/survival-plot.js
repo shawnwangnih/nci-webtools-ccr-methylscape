@@ -11,6 +11,7 @@ export default function SurvivalPlot() {
   
   return survivalData?.data?.length ? (
     <div className="my-4">
+    
       <Plot {...survivalPlot} className="mw-100 w-100 h-100" useResizeHandler />
       {survivalData?.pValue[0]?.pval && <div className="mb-2">
         <strong>p-value: </strong>
