@@ -14,7 +14,6 @@ export default function GroupTables({ showTable = true }) {
     setForm({ group: e });
   }
 
-  console.log(umapPoints);
   return (
     <Tabs
       id="controlled-tab-example"
@@ -30,7 +29,7 @@ export default function GroupTables({ showTable = true }) {
             eventKey={`${i}`}
             title={`Group ${i + 1}`}
           >
-            {showTable && data.length && (
+            {showTable && data.length > 0 && (
               <ReactTable
                 data={data}
                 columns={cols}
