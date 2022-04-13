@@ -46,7 +46,7 @@ export default function GroupTables({ showTable = true }) {
                 }}
               />
             )}
-            {!data.length && (
+            {showTable && !data.length && (
               <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
                 <p className="mx-auto my-auto">
                   Use Box or Lasso Select in the UMAP plot to view details for
