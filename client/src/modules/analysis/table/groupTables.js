@@ -4,7 +4,7 @@ import { tableForm, tableData } from './table.state';
 import ReactTable from '../../components/table';
 import { selectedPoints } from '../metadata/metadata-plot.state';
 
-export default function GroupTables() {
+export default function GroupTables({ showTable = true }) {
   const [formState, setState] = useRecoilState(tableForm);
   const setForm = (newState) => setState({ ...formState, ...newState });
   const tables = useRecoilValue(tableData);
@@ -30,7 +30,7 @@ export default function GroupTables() {
             eventKey={`${i}`}
             title={`Group ${i + 1}`}
           >
-            {data.length > 0 && (
+            {showTable && data.length && (
               <ReactTable
                 data={data}
                 columns={cols}
@@ -47,7 +47,7 @@ export default function GroupTables() {
                 }}
               />
             )}
-            {!data.length > 0 && (
+            {!data.length && (
               <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
                 <p className="mx-auto my-auto">
                   Use Box or Lasso Select in the UMAP plot to view details for
