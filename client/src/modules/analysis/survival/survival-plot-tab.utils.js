@@ -1,6 +1,6 @@
 import { Button, Tabs, Tab } from 'react-bootstrap';
 import { useRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
-import { tableForm, tableData } from './table.state';
+import { tableForm, tableData } from '../table/table.state';
 import ReactTable from '../../components/table';
 import { selectedPoints } from '../metadata/metadata-plot.state';
 

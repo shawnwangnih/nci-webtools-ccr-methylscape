@@ -1,9 +1,9 @@
 import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
 import Plot from 'react-plotly.js';
 import ReactTable from '../../components/table';
-import { survivalDataSelector } from './table.state';
+import { survivalDataSelector } from '../table/table.state';
 import { getSurvivalPlot, getSummaryColumns } from './survival-plot.utils';
-import SurvivalPlotTabs from './survival-plot-tab.utils';
+import SurvivalPlotTabs from '../survival/survival-plot-tab.utils';
 
 
 export default function SurvivalPlot() {

@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Loader from '../../components/loader';
 import ErrorBoundary from '../../components/error-boundary';
-import SurvivalPlot from './survival-plot';
+import SurvivalPlot from '../survival/survival-plot';
 import TableTabs from './table-tabs';
 
 export default function Table() {
