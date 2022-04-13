@@ -36,13 +36,13 @@ export const schema = [
       table.string("subtypeOrPattern");
       table.string("who2007Grade");
       table.string("MCF1_v11b6");
-      table.string("MCF1_v11b6_score");
+      table.double("MCF1_v11b6_score");
       table.string("SC1_v11b6");
-      table.string("SC1_v11b6_score");
+      table.double("SC1_v11b6_score");
       table.string("MCF_v12_3");
-      table.string("MCF_v12_3_score");
+      table.double("MCF_v12_3_score");
       table.string("MCF_v12_5");
-      table.string("MCF_v12_5_score");
+      table.double("MCF_v12_5_score");
       table.string("gsmAccession");
       table.string("dkfzBrainTumorClassifier");
       table.string("primaryStudy");
@@ -274,6 +274,28 @@ export const schema = [
             );
           end
           $$;`;
+    }
+  },
+
+  {
+    name: 'mapAllBinsToGenes',
+    import: false,
+    type: 'function',
+    schema: () => {
+      return `
+        drop procedure if exists mapAllBinsToGenes;
+        create or replace procedure mapAllBinsToGenes()
+        language plpgsql as $$
+        declare
+            c text;
+        begin
+            for c in
+                select distinct "sampleIdatFilename" from "cnvBin"
+            loop
+                execute format('call mapBinsToGenes(%L)', c);
+            end loop;
+        end;
+        $$;`;
     }
   },
 
