@@ -3,17 +3,11 @@ import { Suspense } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Loader from '../../components/loader';
 import ErrorBoundary from '../../components/error-boundary';
-import SurvivalPlot from '../survival/survival-plot';
-import TableTabs from './table-tabs';
-import GroupTabs from './groupTabs';
-import GroupTables from './groupTables';
+import SurvivalPlot from './survival-plot';
 
-export default function Table() {
+export default function Survival() {
   return (
     <Container fluid>
-      {/* <TableTabs /> */}
-      <GroupTabs />
-      <GroupTables />
 
       <ErrorBoundary
         fallback={
@@ -30,7 +24,7 @@ export default function Table() {
             </div>
           }
         >
-          {/* <SurvivalPlot /> */}
+          <SurvivalPlot />
         </Suspense>
       </ErrorBoundary>
     </Container>

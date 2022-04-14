@@ -16,7 +16,7 @@ import SampleQuality from './sampleQuality/sampleQuality';
 import CopyNumber from './copyNumber/copyNumber';
 import PromoterMethylation from './promoterMethylation/promoterMethylation';
 import CohortAnalysis from './cohortAnalysis/cohortAnalysis';
-import Survival from './survival/survival';
+import Survival from './survival/survival-tab';
 import Table from './table/table';
 import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
 import Methodology from './methodology/methodology';
@@ -74,6 +74,9 @@ export default function Analysis() {
               </Tab>
               <Tab eventKey="Table" title="Table">
                 <Table className="px-3" />
+              </Tab>
+              <Tab eventKey="Survival" title="Survival">
+                <Survival className="px-3" />
               </Tab>
               {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
                 <PromoterMethylation className="px-3" />
