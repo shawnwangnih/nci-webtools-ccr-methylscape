@@ -20,7 +20,6 @@ import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
 
-
 export default function App() {
   const navbarLinks = [
     [
@@ -50,6 +49,12 @@ export default function App() {
         title: 'Logout',
         native: true,
         show: (session) => session.authenticated,
+      },
+      {
+        title: 'Register',
+        show: (session) => !session.authenticated,
+        align: 'end',
+        path: 'api/register',
       },
       {
         title: 'Login',
