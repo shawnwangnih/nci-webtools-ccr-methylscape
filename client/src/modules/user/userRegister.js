@@ -53,7 +53,8 @@ export default function UserRegister() {
             <Form.Group className="mb-3" controlId="lastname">
               <Form.Label>Last Name</Form.Label>
               <FormControl
-                type="text"
+                type="name"
+                name="lastname"
                 placeholder="Last Name"
                 value={state.lastname}
                 onChange={handleChange}
@@ -62,7 +63,8 @@ export default function UserRegister() {
             <Form.Group className="mb-3" controlId="firstname">
               <Form.Label>First Name</Form.Label>
               <Form.Control
-                type="text"
+                type="name"
+                name="firstname"
                 placeholder="First Name"
                 value={state.firstname}
                 onChange={handleChange}
@@ -74,6 +76,7 @@ export default function UserRegister() {
             <Form.Label>Email address</Form.Label>
             <Form.Control
               type="email"
+              name="email"
               placeholder="Enter email"
               value={state.email}
               onChange={handleChange}
@@ -83,6 +86,7 @@ export default function UserRegister() {
             <Form.Label>Organization/ Institution</Form.Label>
             <Form.Control
               type="text"
+              name="organization"
               placeholder="Enter Organization/ Instituiton"
               value={state.organization}
               onChange={handleChange}
