@@ -161,7 +161,7 @@ export const plotState = selector({
       annotations: showAnnotations
         ? [
             // ...labelAnnotations,
-            // ...sampleAnnotations,
+            ...sampleAnnotations,
             // ...classAnnotations
             ...weeklyAnnotations,
           ]
