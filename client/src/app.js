@@ -19,6 +19,7 @@ import UserManagement from './modules/admin/user-management/user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
+import UserRegister from './modules/user/userRegister';
 
 export default function App() {
   const navbarLinks = [
@@ -54,7 +55,7 @@ export default function App() {
         title: 'Register',
         show: (session) => !session.authenticated,
         align: 'end',
-        path: 'api/register',
+        path: 'register',
       },
       {
         title: 'Login',
@@ -99,6 +100,7 @@ export default function App() {
             <Suspense fallback={<Loader message="Loading Page" />}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="register/*" element={<UserRegister />} />
                 <Route path="analysis" element={<Analysis />} />
                 <Route path="metadata" element={<MetadataSA />} />
                 <Route path="data" element={<Data />}>
