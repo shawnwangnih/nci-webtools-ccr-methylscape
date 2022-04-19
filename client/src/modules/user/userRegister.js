@@ -4,37 +4,38 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { FormGroup } from 'react-bootstrap';
+import { FormControl, FormGroup, FormInput } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function UserRegister() {
-  //   const [state, setState] = useState({
-  //     firstname: '',
-  //     lastname: '',
-  //     email: '',
-  //     organization: '',
-  //   });
+  const [state, setState] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    organization: '',
+  });
 
-  //   const handleChange = (e) => {
-  //     const value = e.target.value;
-  //     setState({
-  //       ...state,
-  //     });
-  //   };
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setState({
+      ...state,
+      [e.target.name]: value,
+    });
+  };
 
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     const userData = {
-  //       firstname: state.firstname,
-  //       lastname: state.lastname,
-  //       email: state.email,
-  //       organization: state.organization,
-  //     };
-  //     axios.post('', userData).then((response) => {
-  //       console.log(response.status);
-  //       console.log(response.data);
-  //     });
-  //   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = {
+      firstname: state.firstname,
+      lastname: state.lastname,
+      email: state.email,
+      organization: state.organization,
+    };
+    axios.post('', userData).then((response) => {
+      console.log(response.status);
+      console.log(response.data);
+    });
+  };
 
   return (
     <>
@@ -51,11 +52,11 @@ export default function UserRegister() {
           <Row>
             <Form.Group className="mb-3" controlId="lastname">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control
+              <FormControl
                 type="text"
                 placeholder="Last Name"
-                //value={state.lastname}
-                //onChange={this.handleChange}
+                value={state.lastname}
+                onChange={handleChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="firstname">
@@ -63,8 +64,8 @@ export default function UserRegister() {
               <Form.Control
                 type="text"
                 placeholder="First Name"
-                //value={state.firstname}
-                //onChange={this.handleChange}
+                value={state.firstname}
+                onChange={handleChange}
               />
             </Form.Group>
           </Row>
@@ -74,19 +75,20 @@ export default function UserRegister() {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              //value={state.email}
-              //onChange={this.handleChange}
+              value={state.email}
+              onChange={handleChange}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="organization">
             <Form.Label>Organization/ Institution</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Organization/ Instituiton"
-              //value={state.organization}
+              placeholder="Enter Organization/ Instituiton"
+              value={state.organization}
+              onChange={handleChange}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" onClick={handleSubmit}>
             Submit
           </Button>
         </Form>
