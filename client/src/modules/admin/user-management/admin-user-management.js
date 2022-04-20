@@ -1,12 +1,13 @@
 import CurrentUsers from './current-users';
 import RegisterUsers from './registered-users';
-import { Container, Button, Tab, Tabs, Card } from 'react-bootstrap';
+import { Container, Button, Tab, Tabs, Card, Row } from 'react-bootstrap';
 
 export default function AdminUserManagement() {
   return (
     <>
-      <Container fluid="xxl" className="mb-3 rounded bg-white h-100">
-        <Card>
+      <Container fluid="xxl" className="my-3 text-white rounded h-100">
+        <h1 className="mb-1 h2">Admin User Management</h1>
+        <div className="bg-white">
           <Tabs
             defaultActiveKey="currentusers"
             id="admin-user-managemenr"
@@ -20,7 +21,7 @@ export default function AdminUserManagement() {
               <RegisterUsers />
             </Tab>
           </Tabs>
-        </Card>
+        </div>
       </Container>
     </>
   );
