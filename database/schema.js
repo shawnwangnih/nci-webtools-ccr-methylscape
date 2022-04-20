@@ -231,6 +231,7 @@ export const schema = [
       table.string("lastName");
       table.string("email");
       table.enum("status", ["pending", "inactive", "active"]).defaultTo("pending");
+      table.string("organization");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
     }
