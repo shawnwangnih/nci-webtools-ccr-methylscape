@@ -94,6 +94,53 @@ apiRouter.post(
   })
 );
 
+apiRouter.post(
+  '/users',
+  withAsync(async (request, response) => {
+    const { userManager } = request.app.locals;
+    const { firstName, lastName, email, organization } = request.body;
+    if (!firstName || !lastName || !email || !organization) {
+      throw new Error('Missing required fields');
+    }
+    const results = await userManager.addUser({ firstName, lastName, email, organization, name: email });
+    response.json(results);
+  })
+);
+
+apiRouter.get(
+  '/users/:id',
+  withAsync(async (request, response) => {
+    const { userManager } = request.app.locals;
+    const { id } = request.params;
+    const results = await userManager.getUser({id});
+    response.json(results);
+  })
+);
+
+apiRouter.put(
+  '/users/:id',
+  withAsync(async (request, response) => {
+    const { userManager } = request.app.locals;
+    const { id } = request.params;
+    const { firstName, lastName, email, organization } = request.body;
+    if (!id || !firstName || !lastName || !email || !organization) {
+      throw new Error('Missing required fields');
+    }
+    const results = await userManager.updateUser({ id, firstName, lastName, email, organization, name: email });
+    response.json(results);
+  })
+)
+
+apiRouter.delete(
+  '/users/:id',
+  withAsync(async (request, response) => {
+    const { userManager } = request.app.locals;
+    const { id } = request.params;
+    const results = await userManager.removeUser(id);
+    response.json(results);
+  })
+)
+
 apiRouter.get(
   '/samples',
   withAsync(async (request, response) => {
