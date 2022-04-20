@@ -16,10 +16,11 @@ import QCI from './modules/qciReport/qci';
 import Admin from './modules/admin/admin';
 import DataImport from './modules/admin/data-import/data-import';
 import UserManagement from './modules/admin/user-management/user-management';
+import AdminUserManagement from './modules/admin/user-management/admin-user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
-
+import UserRegister from './modules/user/userRegister';
 
 export default function App() {
   const navbarLinks = [
@@ -44,12 +45,26 @@ export default function App() {
         path: 'admin',
         title: 'Admin',
         show: (session) => session.authenticated,
+        // childLinks: [
+        //   {
+        //     path: '/admin/admin-user-management',
+        //     title: 'Manage Users',
+        //     native: true,
+        //     show: (session) => !session.authenticated,
+        //   },
+        // ],
       },
       {
         path: '/api/logout',
         title: 'Logout',
         native: true,
         show: (session) => session.authenticated,
+      },
+      {
+        title: 'Register',
+        show: (session) => !session.authenticated,
+        align: 'end',
+        path: 'register',
       },
       {
         title: 'Login',
@@ -94,6 +109,7 @@ export default function App() {
             <Suspense fallback={<Loader message="Loading Page" />}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="register/*" element={<UserRegister />} />
                 <Route path="analysis" element={<Analysis />} />
                 <Route path="metadata" element={<MetadataSA />} />
                 <Route path="data" element={<Data />}>
@@ -105,7 +121,7 @@ export default function App() {
                 <Route path="qci/*" element={<QCI />} />
                 <Route path="admin" element={<Admin />} />
                 <Route
-                  path="admin/user-management"
+                  path="admin/admin-user-management"
                   element={<UserManagement />}
                 />
                 <Route path="admin/data-import" element={<DataImport />} />

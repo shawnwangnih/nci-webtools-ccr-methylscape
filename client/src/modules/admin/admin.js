@@ -1,19 +1,19 @@
 import { Container, Col, Row, Card } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export default function Admin() {
   const actions = [
     {
-      title: "Manage Users",
-      icon: "bi-people-fill",
-      link: "/admin/user-management",
+      title: 'Manage Users',
+      icon: 'bi-people-fill',
+      link: '/admin/admin-user-management',
     },
     {
-      title: "Import Data",
-      icon: "bi-layer-backward",
-      link: "/admin/data-import",
+      title: 'Import Data',
+      icon: 'bi-layer-backward',
+      link: '/admin/data-import',
     },
-  ]
+  ];
 
   return (
     <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
@@ -27,7 +27,11 @@ export default function Admin() {
               <Card className="card-link card-accent-primary">
                 <Card.Body className="shadow">
                   <div className="text-center py-4">
-                    <i className={`display-3 bi ${action.icon}`} role="img" aria-label={action.title} />
+                    <i
+                      className={`display-3 bi ${action.icon}`}
+                      role="img"
+                      aria-label={action.title}
+                    />
                     <h2 className="h5 text-decoration-none">{action.title}</h2>
                   </div>
                 </Card.Body>

@@ -1,7 +1,7 @@
 import { Container, Button } from 'react-bootstrap';
 import Table from '../../components/table';
 
-export default function UserManagement() {
+export default function CurrentUsers() {
   const users = [
     {
       name: 'First Last',
@@ -40,16 +40,16 @@ export default function UserManagement() {
       id: 'actions',
       Cell: () => (
         <div className="d-flex">
-          <Button className="me-2">Approve</Button>
-          <Button variant="danger">Reject</Button>
+          {/* <Button className="me-2">Approve</Button> */}
+          <Button variant="danger">Remove</Button>
         </div>
       ),
     },
   ];
   return (
-    <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
-      <h1 className="h4 mb-3 text-primary">Admin User Management</h1>
+    <div>
+      {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
       <Table data={users} columns={cols} options={{ disableFilters: true }} />
-    </Container>
+    </div>
   );
 }

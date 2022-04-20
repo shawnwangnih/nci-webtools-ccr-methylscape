@@ -16,7 +16,7 @@ export default function Samples() {
     {
       Header: () => null,
       id: 'expander',
-      aria:'',
+      aria: '',
       Cell: ({ row }) => (
         <span {...row.getToggleRowExpandedProps()}>
           {row.isExpanded ? <DashSquare /> : <PlusSquare />}
@@ -63,7 +63,7 @@ export default function Samples() {
       id: 'surgical_case',
       accessor: 'surgical_case',
       Header: 'Surgical Case',
-      aria:'Surgical Case',
+      aria: 'Surgical Case',
     },
     {
       id: 'gender',
@@ -81,7 +81,7 @@ export default function Samples() {
       id: 'diagnosis',
       accessor: 'diagnosis',
       Header: 'Diagnosis',
-      aria: 'Diagnosis'
+      aria: 'Diagnosis',
     },
   ];
 
@@ -98,151 +98,153 @@ export default function Samples() {
     const { original } = row;
     return (
       <Container fluid="xxl" className="">
-      <Row>
-        <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
-          <Row>
-            <Col sm="6">
-              <b>Diagnosis:</b>
-            </Col>
-            <Col sm="6">{original.diagnosis}</Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>Methylation Family (MF):</b>
-            </Col>
-            <Col sm="6">{original.family}</Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>MF Calibrated Scores:</b>
-            </Col>
-            <Col sm="6">{original.family_score}</Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>Methylation Class (MC):</b>
-            </Col>
-            <Col sm="6">{original.class}</Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>MC Calibrated Scores:</b>
-            </Col>
-            <Col sm="6">{original.class_score}</Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>MGMT Score:</b>
-            </Col>
-            <Col sm="6">
-              {original.mgmt_prediction == null
-                ? ''
-                : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>Notes:</b>
-            </Col>
-            <Col sm="6">{original.notes}</Col>
-          </Row>
-        </Col>
-        <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
-          <Row>
-          <Col sm="6">
-              <b>Tumor Site:</b>
-            </Col>
-            <Col sm="6">{original.tumor_data}</Col>
-          </Row>
-          <Row>
-          <Col sm="6">
-              <b>t-SNE Plot:</b>
-            </Col>
-            <Col sm="6">
-              <Button
-                variant="link"
-                className="p-0"
-                onClick={() =>
-                  download(original.id, original.sample_name + '.html')
-                }
-              >
-                View Plot
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-          <Col sm="6">
-            <b>Methylation Report:</b>
+        <Row>
+          <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+            <Row>
+              <Col sm="6">
+                <b>Diagnosis:</b>
+              </Col>
+              <Col sm="6">{original.diagnosis}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>Methylation Family (MF):</b>
+              </Col>
+              <Col sm="6">{original.family}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>MF Calibrated Scores:</b>
+              </Col>
+              <Col sm="6">{original.family_score}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>Methylation Class (MC):</b>
+              </Col>
+              <Col sm="6">{original.class}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>MC Calibrated Scores:</b>
+              </Col>
+              <Col sm="6">{original.class_score}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>MGMT Score:</b>
+              </Col>
+              <Col sm="6">
+                {original.mgmt_prediction == null
+                  ? ''
+                  : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>Notes:</b>
+              </Col>
+              <Col sm="6">{original.notes}</Col>
+            </Row>
           </Col>
-            <Col sm="6">
-              <Button
-                variant="link"
-                className="p-0"
-                onClick={() => download(original.id, original.report_file_name)}
-              >
-                Download Report
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>QCI Report:</b>
-            </Col>
-            <Col sm="6">
-              {original.xml_report ? (
-                <Link
-                  className="btn btn-link p-0"
-                  target="_blank"
-                  to={`/qci?id=${original.id}&file=${original.xml_report}`}
+          <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+            <Row>
+              <Col sm="6">
+                <b>Tumor Site:</b>
+              </Col>
+              <Col sm="6">{original.tumor_data}</Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>t-SNE Plot:</b>
+              </Col>
+              <Col sm="6">
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '.html')
+                  }
                 >
-                  View Report
-                </Link>
-              ) : (
-                <Button variant="link" className="p-0" disabled={true}>
-                  View Report
+                  View Plot
                 </Button>
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="6">
-              <b>NGS Report (legacy)</b>
-            </Col>
-            <Col sm="6">
-              <Button
-                variant="link"
-                className="p-0"
-                onClick={() =>
-                  download(original.id, original.sample_name + '_NGS.pdf')
-                }
-              >
-                Download Report
-              </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>Methylation Report:</b>
+              </Col>
+              <Col sm="6">
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.report_file_name)
+                  }
+                >
+                  Download Report
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>QCI Report:</b>
+              </Col>
+              <Col sm="6">
+                {original.xml_report ? (
+                  <Link
+                    className="btn btn-link p-0"
+                    target="_blank"
+                    to={`/qci?id=${original.id}&file=${original.xml_report}`}
+                  >
+                    View Report
+                  </Link>
+                ) : (
+                  <Button variant="link" className="p-0" disabled={true}>
+                    View Report
+                  </Button>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>NGS Report (legacy)</b>
+              </Col>
+              <Col sm="6">
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '_NGS.pdf')
+                  }
+                >
+                  Download Report
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6">
+                <b>Slide Image:</b>
+              </Col>
+              <Col sm="6">
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '.jpg')
+                  }
+                >
+                  Download Image
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="6"></Col>
+              <Col sm="6"></Col>
+            </Row>
           </Col>
-          </Row>
-          <Row>
-          <Col sm="6">
-            <b>Slide Image:</b>
-          </Col>
-          <Col sm="6">
-            <Button
-              variant="link"
-              className="p-0"
-              onClick={() =>
-                download(original.id, original.sample_name + '.jpg')
-              }
-            >
-              Download Image
-            </Button>
-          </Col>
-          </Row>
-          <Row>
-          <Col sm="6"></Col>
-          <Col sm="6"></Col>
-          </Row>
-        </Col>
-      </Row>
-      
+        </Row>
+
         {/* <Row>
           <Col sm="3">
             <b>Diagnosis:</b>
@@ -395,7 +397,7 @@ export default function Samples() {
               data={tableData}
               columns={columns}
               options={options}
-              customOptions={{ expanded: true }}
+              customOptions={{ expanded: true, hideColumns: true }}
               renderRowSubComponent={renderRowSubComponent}
             />
           )}
