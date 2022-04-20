@@ -122,7 +122,7 @@ export default function App() {
                 <Route path="admin" element={<Admin />} />
                 <Route
                   path="admin/admin-user-management"
-                  element={<AdminUserManagement />}
+                  element={<UserManagement />}
                 />
                 <Route path="admin/data-import" element={<DataImport />} />
               </Routes>
