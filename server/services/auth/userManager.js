@@ -5,12 +5,17 @@ class UserManager {
     this.database = database;
   }
 
-  async getUser(userId) {
-    return await this.database('user').where({ id: userId }).first();
+  async getUser(params) {
+    return await this.database('user').where(params).first();
   }
 
   async addUser(user) {
-    return await this.database('user').insert(user);
+    const userExists = await this.getUser({name: user.name});
+    if (userExists) {
+      throw new Error('User already exists');
+    } else {
+      return await this.database('user').insert(user).returning('id');
+    }
   }
 
   async updateUser(user) {
