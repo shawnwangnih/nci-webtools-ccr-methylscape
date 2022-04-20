@@ -13,10 +13,10 @@ export default function AdminUserManagement() {
           className=""
         >
           <Tab eventKey="currentusers" title="Current Users">
-            {/* <CurrentUsers /> */}
+            <CurrentUsers />
           </Tab>
           <Tab eventKey="registeredusers" title="Registered Users">
-            {/* <RegisterUsers /> */}
+            <RegisterUsers />
           </Tab>
         </Tabs>
       </Card>

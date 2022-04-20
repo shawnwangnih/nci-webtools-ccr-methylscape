@@ -29,11 +29,10 @@ export function TextFilter({
       size="sm"
       value={filterValue || ''}
       onChange={(e) => setFilter(e.target.value || undefined)}
-      placeholder={placeholder || `Sample`}
+      placeholder={placeholder || `Search`}
       aria-label={aria}
-      className = "border-0 rounded-pill"
-    >
-    </Form.Control>
+      className="border-0 rounded-pill"
+    ></Form.Control>
   );
 }
 
@@ -155,7 +154,6 @@ export default function Table({
   );
   return (
     <>
-      
       <Row className="justify-content-end">
         {customOptions.download && (
           <Col sm="auto">
@@ -199,13 +197,24 @@ export default function Table({
         </Col>
       </Row>
       <div className="table-responsive">
-        <BootstrapTable {...getTableProps()} hover size="sm" responsive className="mt-3">
+        <BootstrapTable
+          {...getTableProps()}
+          hover
+          size="sm"
+          responsive
+          className="mt-3"
+        >
           <thead>
-            
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="h5 text-center sample-title">
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                className="h5 text-center sample-title"
+              >
                 {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps(column.getSortByToggleProps())} aria-label={column.Header + '-sort'}>
+                  <td
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    aria-label={column.Header + '-sort'}
+                  >
                     {column.render('Header')}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
@@ -223,17 +232,21 @@ export default function Table({
               </tr>
             ))}
 
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="search-bg">
-                {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps()}>
-                    <div className="py-2">
-                      {column.canFilter ? column.render('Filter') : null}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {!options.disableFilters &&
+              headerGroups.map((headerGroup) => (
+                <tr
+                  {...headerGroup.getHeaderGroupProps()}
+                  className="search-bg"
+                >
+                  {headerGroup.headers.map((column) => (
+                    <td {...column.getHeaderProps()}>
+                      <div className="py-2">
+                        {column.canFilter ? column.render('Filter') : null}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
           </thead>
 
           <tbody {...getTableBodyProps()}>
@@ -281,21 +294,21 @@ export default function Table({
         <div className="d-flex flex-row justify-content-end my-auto">
           <div className="d-flex align-items-center">
             <Form.Control
-            as="select"
-            className="rounded-0 btn-border-sample-blue px-4"
-            name="select-page-size"
-            aria-label="Select page size"
-            value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
-          >
-            {[10, 25, 50, 100].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </Form.Control>
+              as="select"
+              className="rounded-0 btn-border-sample-blue px-4"
+              name="select-page-size"
+              aria-label="Select page size"
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+            >
+              {[10, 25, 50, 100].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </Form.Control>
           </div>
-          
+
           <div className="d-flex pe-2 p-2 align-items-center">
             {(1 + pageIndex * pageSize).toLocaleString()}
           </div>
@@ -312,9 +325,12 @@ export default function Table({
                 disabled={!canPreviousPage}
                 className="border border-0"
               >
-              &#60; Previous
+                &#60; Previous
               </Pagination.Prev>
-              <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
+              <Pagination.Next
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+              >
                 Next &#62;
               </Pagination.Next>
               {/* <Pagination.Last
