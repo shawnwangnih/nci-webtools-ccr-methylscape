@@ -41,7 +41,7 @@ export default function UserRegister() {
     <>
       <Container fluid="xxl" className="d-flex justify-content-center">
         <Row className="text-white my-3">
-          <h1>Register</h1>
+          <h1>User Registration</h1>
         </Row>
       </Container>
       <Container

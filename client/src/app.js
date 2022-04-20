@@ -44,6 +44,14 @@ export default function App() {
         path: 'admin',
         title: 'Admin',
         show: (session) => session.authenticated,
+        childLinks: [
+          {
+            path: '/admin/user-management',
+            title: 'Manage Users',
+            native: true,
+            show: (session) => !session.authenticated,
+          },
+        ],
       },
       {
         path: '/api/logout',
