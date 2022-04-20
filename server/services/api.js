@@ -108,6 +108,16 @@ apiRouter.post(
 );
 
 apiRouter.get(
+  '/users',
+  withAsync(async (request, response) => {
+    const { userManager } = request.app.locals;
+    const { id } = request.params;
+    const results = await userManager.getAllUsers();
+    response.json(results);
+  })
+);
+
+apiRouter.get(
   '/users/:id',
   withAsync(async (request, response) => {
     const { userManager } = request.app.locals;

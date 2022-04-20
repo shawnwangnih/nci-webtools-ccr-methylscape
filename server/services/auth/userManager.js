@@ -5,6 +5,10 @@ class UserManager {
     this.database = database;
   }
 
+  async getAllUsers() {
+    return await this.database('user');
+  }
+
   async getUser(params) {
     return await this.database('user').where(params).first();
   }
