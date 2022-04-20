@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import MultiSearch from '../../components/multi-search';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 export default function MetadataForm({ className, onSelect }) {
   const [form, setForm] = useRecoilState(formState);
@@ -25,27 +26,39 @@ export default function MetadataForm({ className, onSelect }) {
     <Form className={className}>
       <Row>
         <Col md="auto">
-          <Form.Group id="organSystem" className="mb-3">
+          <Form.Group id="organSystem" className="form-group mb-3">
             <Form.Label>Organ System</Form.Label>
-            <div className="">
-              <Form.Select
-                name="organSystem"
-                value={form.organSystem}
-                onChange={handleChange}
-                className="custom-select"
-                >
-                
-                <option value="centralNervousSystem">
-                  Central Nervous System
-                </option>
-                <option value="boneAndSoftTissue">Bone and Soft Tissue</option>
-                <option value="hematopoietic">Hematopoietic</option>
-                <option value="renal">Renal</option>
-                <option value="panCancer">Pan-Cancer</option>
-               
-              </Form.Select>
-            </div>
-            
+            <Form.Select
+              name="organSystem"
+              value={form.organSystem}
+              onChange={handleChange}
+              className="source"
+            >
+              <option value="centralNervousSystem">
+                Central Nervous System
+              </option>
+              <option value="boneAndSoftTissue">Bone and Soft Tissue</option>
+              <option value="hematopoietic">Hematopoietic</option>
+              <option value="renal">Renal</option>
+              <option value="panCancer">Pan-Cancer</option>
+            </Form.Select>
+            {/* <DropdownButton
+              name="organSystem"
+              value={form.organSystem}
+              onClick={handleChange}
+              className="source"
+              title="Select"
+            >
+              <Dropdown.Item value="centralNervousSystem">
+                Central Nervous System
+              </Dropdown.Item>
+              <Dropdown.Item value="boneAndSoftTissue">
+                Bone and Soft Tissue
+              </Dropdown.Item>
+              <Dropdown.Item value="hematopoietic">Hematopoietic</Dropdown.Item>
+              <Dropdown.Item value="renal">Renal</Dropdown.Item>
+              <Dropdown.Item value="panCancer">Pan-Cancer</Dropdown.Item>
+            </DropdownButton> */}
           </Form.Group>
         </Col>
         <Col md="auto">

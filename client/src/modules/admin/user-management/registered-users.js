@@ -1,7 +1,7 @@
 import { Container, Button } from 'react-bootstrap';
 import Table from '../../components/table';
 
-export default function UserManagement() {
+export default function RegisterUsers() {
   const users = [
     {
       name: 'First Last',
@@ -47,9 +47,9 @@ export default function UserManagement() {
     },
   ];
   return (
-    <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
-      <h1 className="h4 mb-3 text-primary">Admin User Management</h1>
+    <div>
+      {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
       <Table data={users} columns={cols} options={{ disableFilters: true }} />
-    </Container>
+    </div>
   );
 }
