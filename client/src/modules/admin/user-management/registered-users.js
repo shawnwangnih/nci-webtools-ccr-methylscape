@@ -47,9 +47,9 @@ export default function RegisterUsers() {
     },
   ];
   return (
-    <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
-      <h1 className="h4 mb-3 text-primary">Registered Users</h1>
+    <div>
+      {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
       <Table data={users} columns={cols} options={{ disableFilters: true }} />
-    </Container>
+    </div>
   );
 }

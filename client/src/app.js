@@ -16,6 +16,7 @@ import QCI from './modules/qciReport/qci';
 import Admin from './modules/admin/admin';
 import DataImport from './modules/admin/data-import/data-import';
 import UserManagement from './modules/admin/user-management/user-management';
+import AdminUserManagement from './modules/admin/user-management/admin-user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
@@ -44,14 +45,14 @@ export default function App() {
         path: 'admin',
         title: 'Admin',
         show: (session) => session.authenticated,
-        childLinks: [
-          {
-            path: '/admin/user-management',
-            title: 'Manage Users',
-            native: true,
-            show: (session) => !session.authenticated,
-          },
-        ],
+        // childLinks: [
+        //   {
+        //     path: '/admin/admin-user-management',
+        //     title: 'Manage Users',
+        //     native: true,
+        //     show: (session) => !session.authenticated,
+        //   },
+        // ],
       },
       {
         path: '/api/logout',
@@ -120,8 +121,8 @@ export default function App() {
                 <Route path="qci/*" element={<QCI />} />
                 <Route path="admin" element={<Admin />} />
                 <Route
-                  path="admin/user-management"
-                  element={<UserManagement />}
+                  path="admin/admin-user-management"
+                  element={<AdminUserManagement />}
                 />
                 <Route path="admin/data-import" element={<DataImport />} />
               </Routes>
