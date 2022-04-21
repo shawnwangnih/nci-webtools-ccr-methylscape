@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Table from '../../components/table';
 import axios from 'axios';
-import { useRecoilValue } from 'recoil';
 
 export default function RegisterUsers() {
   const [users, setUsers] = React.useState([]);
@@ -15,51 +14,69 @@ export default function RegisterUsers() {
     });
   }, []);
 
-  //   const users = [
-  //     {
-  //       name: 'First Last',
-  //       type: 'NIH or Login.gov',
-  //       email: 'first.last@email.com',
-  //       organization: 'NCI',
-  //       submitteddate: '2020/02/02',
-  //       roles: 'Admin',
-  //     },
-  //     {
-  //       name: 'First Last',
-  //       type: 'NIH or Login.gov',
-  //       email: 'first.last@email.com',
-  //       organization: 'NCI',
-  //       submitteddate: '2020/02/02',
-  //       roles: 'User',
-  //     },
-  //     {
-  //       name: 'First Last',
-  //       type: 'NIH or Login.gov',
-  //       email: 'first.last@email.com',
-  //       organization: 'NCI',
-  //       submitteddate: '2020/02/02',
-  //       roles: 'External User',
-  //     },
-  //   ];
+  const formatDate = (date) => {
+    return new Date(date).toISOString().slice(0, 10);
+  };
+
   const cols = [
     {
       Header: 'Name',
       accessor: 'firstName',
       Cell: (e) => (
-        <>
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
           {e.value} {e.row.original.lastName}
-        </>
+        </div>
       ),
     },
     { Header: 'Email', accessor: 'email' },
-    { Header: 'Organization', accessor: 'organization' },
-    { Header: 'Submitted Date', accessor: 'createdAt' },
-    { Header: 'Roles', accessor: 'rodeId', Cell: (e) => e.value || 'NA' },
+    {
+      Header: 'Organization',
+      accessor: 'organization',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
+    },
+    {
+      Header: 'Submitted Date',
+      accessor: 'createdAt',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {formatDate(e.value)}
+        </div>
+      ),
+    },
+    {
+      Header: 'Roles',
+      accessor: 'rodeId',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value || 'NA'}
+        </div>
+      ),
+    },
     {
       Header: 'Actions',
       id: 'actions',
       Cell: () => (
-        <div className="d-flex">
+        <div className="d-flex text-center">
           <Button className="me-2">Approve</Button>
           <Button variant="danger">Reject</Button>
         </div>
@@ -69,7 +86,13 @@ export default function RegisterUsers() {
   return (
     <div>
       {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
-      <Table data={users} columns={cols} options={{ disableFilters: true }} />
+      <Table
+        responsive
+        data={users}
+        columns={cols}
+        options={{ disableFilters: true }}
+        className="text-center"
+      />
     </div>
   );
 }
