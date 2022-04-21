@@ -7,7 +7,6 @@ export default function CurrentUsers() {
   const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
-    console.log('TEST');
     axios.get('api/users').then((response) => {
       console.log(response.data);
       setUsers(response.data);
