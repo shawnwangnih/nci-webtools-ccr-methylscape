@@ -1,6 +1,6 @@
 import CurrentUsers from './current-users';
 import RegisterUsers from './registered-users';
-import { Container, Button, Tab, Tabs, Card, Row } from 'react-bootstrap';
+import { Container, Tab, Tabs } from 'react-bootstrap';
 
 export default function AdminUserManagement() {
   return (

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
 export default function RegisterUsers() {
-  const [users, setUsers] = React.useState();
+  const [users, setUsers] = React.useState([]);
 
   React.useEffect(() => {
     console.log('TEST');
@@ -14,14 +14,6 @@ export default function RegisterUsers() {
       setUsers(response.data);
     });
   }, []);
-
-  //   const getCustomersData = () => {
-  //     axios
-  //       .get('api/users')
-  //       .then((users) => console.log(users.data))
-  //       .catch((error) => console.log(error));
-  //   };
-  //   getCustomersData();
 
   //   const users = [
   //     {
@@ -50,12 +42,19 @@ export default function RegisterUsers() {
   //     },
   //   ];
   const cols = [
-    { Header: 'Name', accessor: 'name' },
-    { Header: 'Type', accessor: 'type' },
+    {
+      Header: 'Name',
+      accessor: 'firstName',
+      Cell: (e) => (
+        <>
+          {e.value} {e.row.original.lastName}
+        </>
+      ),
+    },
     { Header: 'Email', accessor: 'email' },
     { Header: 'Organization', accessor: 'organization' },
-    { Header: 'Submitted Date', accessor: 'submitteddate' },
-    { Header: 'Roles', accessor: 'roles' },
+    { Header: 'Submitted Date', accessor: 'createdAt' },
+    { Header: 'Roles', accessor: 'rodeId', Cell: (e) => e.value || 'NA' },
     {
       Header: 'Actions',
       id: 'actions',
