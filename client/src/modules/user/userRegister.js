@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import Button from 'react-bootstrap/Button';
-import { FormControl, FormGroup, FormInput } from 'react-bootstrap';
+import { FormControl, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function UserRegister() {
@@ -23,7 +20,28 @@ export default function UserRegister() {
       ...form,
       [name]: value,
     });
-  };
+  }
+  //   function validate() {
+  //     let firstNameError = "";
+  //     let lastNameError = "";
+  //     let emailError = "";
+  //     if (!this.form.firstname) {
+  //       firstNameError = "First Name field is required";
+  //     }
+  //     if (!this.form.lastname) {
+  //         lastNameError = "Last Name field is required";
+  //       }
+  //     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  //     if (!this.form.email || reg.test(this.form.email) === false) {
+  //       emailError = "Email Field is Invalid ";
+  //     }
+
+  //     if (emailError || firstNameError || lastNameError) {
+  //       this.setState({ firstNameError, emailError, lastNameError });
+  //       return false;
+  //     }
+  //     return true;
+  //   }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,14 +54,20 @@ export default function UserRegister() {
     try {
       setAlerts([]);
       const { status, data } = await axios.post('api/users', form);
-      console.log({status, data});
-      setAlerts([{type: 'success', message: 'Your registration request has been submitted.'}]);
-    } catch(error) {
+      console.log({ status, data });
+      setAlerts([
+        {
+          type: 'success',
+          message: 'Your registration request has been submitted.',
+        },
+      ]);
+    } catch (error) {
       console.error(error);
       const message = error.response.data;
-      setAlerts([{type: 'danger', message}]);
+      const message2 = 'Cannot register this user! - ';
+      setAlerts([{ type: 'danger', message2, message }]);
     }
-  };
+  }
 
   return (
     <>
@@ -57,11 +81,16 @@ export default function UserRegister() {
         className="d-inline-flex justify-content-center mb-2 p-2"
       >
         <Form className="bg-light p-3" onSubmit={handleSubmit}>
-          {alerts.map(({type, message}, i) => 
-            <Alert key={i} variant={type} onClose={() => setAlerts([])} dismissible>
+          {alerts.map(({ type, message }, i) => (
+            <Alert
+              key={i}
+              variant={type}
+              onClose={() => setAlerts([])}
+              dismissible
+            >
               {message}
             </Alert>
-          )}
+          ))}
           <Row>
             <Form.Group className="mb-3" controlId="lastName">
               <Form.Label>Last Name</Form.Label>
@@ -69,6 +98,7 @@ export default function UserRegister() {
                 type="text"
                 name="lastName"
                 placeholder="Last Name"
+                maxLength={255}
                 value={form.lastName}
                 onChange={handleChange}
                 required
@@ -80,6 +110,7 @@ export default function UserRegister() {
                 type="text"
                 name="firstName"
                 placeholder="First Name"
+                maxLength={255}
                 value={form.firstName}
                 onChange={handleChange}
                 required
@@ -110,11 +141,7 @@ export default function UserRegister() {
             />
           </Form.Group>
           <Row className="d-grid gap-2 col-6 mx-auto">
-            <Button
-              variant="primary"
-              type="submit"
-              className="btn-lg"
-            >
+            <Button variant="primary" type="submit" className="btn-lg">
               Submit
             </Button>
           </Row>
