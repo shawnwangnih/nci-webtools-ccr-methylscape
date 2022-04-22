@@ -71,6 +71,10 @@ export default function CurrentUsers() {
       ),
     },
     {
+      Header: 'Status',
+      accessor: 'status',
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       Cell: () => (

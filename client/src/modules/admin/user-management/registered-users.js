@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Modal } from 'react-bootstrap';
 import Table from '../../components/table';
 import axios from 'axios';
 import Alert from 'react-bootstrap/Alert';
+import Form from 'react-bootstrap/Form';
 
 export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [approveModal, setApproveModal] = useState(false);
+  const [userRole, setUserRole] = useState('User');
 
   useEffect(() => {
     axios.get('api/users').then((response) => {
@@ -25,15 +28,14 @@ export default function RegisterUsers() {
     axios.delete(`api/users/${id}`).then((res) => {
       const del = users.filter((user) => id !== user.id);
       setUsers(del);
+      console.log(res);
     });
   };
 
+  const hideApproveModal = () => setApproveModal(false);
+  const showApproveModal = () => setApproveModal(true);
+
   const cols = [
-    // {
-    //   Header: 'User ID',
-    //   accessor: 'id',
-    //   show: false,
-    // },
     {
       Header: 'Name',
       accessor: 'firstName',
@@ -74,6 +76,7 @@ export default function RegisterUsers() {
         </div>
       ),
     },
+
     {
       Header: 'Roles',
       accessor: 'rodeId',
@@ -88,11 +91,17 @@ export default function RegisterUsers() {
       ),
     },
     {
+      Header: 'Status',
+      accessor: 'status',
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       Cell: (row) => (
         <div className="d-flex text-center">
-          <Button className="me-2">Approve</Button>
+          <Button className="me-2" onClick={() => showApproveModal(row)}>
+            Approve
+          </Button>
           <Button variant="danger" onClick={() => rejectUser(row)}>
             Reject
           </Button>
@@ -114,6 +123,35 @@ export default function RegisterUsers() {
         columns={cols}
         options={{ disableFilters: true }}
       />
+      <Modal show={approveModal} onHide={hideApproveModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Set User Role</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="approveModalId">
+              <Form.Label>User Role</Form.Label>
+              <Form.Control
+                as="select"
+                value={userRole}
+                onChange={(e) => {
+                  console.log('e.target.value', e.target.value);
+                  setUserRole(e.target.value);
+                }}
+              >
+                <option value="role-user">User</option>
+                <option value="role-LP">LP</option>
+                <option value="role-admin">Admin</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={hideApproveModal}>
+            Approve
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

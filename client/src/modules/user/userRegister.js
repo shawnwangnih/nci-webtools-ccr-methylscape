@@ -55,12 +55,20 @@ export default function UserRegister() {
       setAlerts([]);
       const { status, data } = await axios.post('api/users', form);
       console.log({ status, data });
+
       setAlerts([
         {
           type: 'success',
           message: 'Your registration request has been submitted.',
         },
       ]);
+
+      setForm({
+        firstName: '',
+        lastName: '',
+        email: '',
+        organization: '',
+      });
     } catch (error) {
       console.error(error);
       const message = error.response.data;
