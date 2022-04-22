@@ -4,10 +4,11 @@ import Table from '../../components/table';
 import axios from 'axios';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
+import { groupBy } from 'lodash';
 
 export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [pendingUsers, setPendingUsers] = useState([]);
   const [approveModal, setApproveModal] = useState(false);
   const [userRole, setUserRole] = useState();
   const [approveUser, setApproveUser] = useState([]);
@@ -16,7 +17,11 @@ export default function RegisterUsers() {
     axios.get('api/users').then((response) => {
       console.log(response.data);
 
-      setUsers(response.data);
+      const statusGroup = groupBy(response.data, 'status');
+      console.log(statusGroup);
+      console.log(statusGroup['pending']);
+      //setUsers(response.data);
+      setPendingUsers(statusGroup['pending']);
     });
   }, []);
 
@@ -28,8 +33,8 @@ export default function RegisterUsers() {
     console.log(cell?.row?.original);
     let id = cell?.row?.original.id;
     axios.delete(`api/users/${id}`).then((res) => {
-      const del = users.filter((user) => id !== user.id);
-      setUsers(del);
+      const del = pendingUsers.filter((user) => id !== user.id);
+      setPendingUsers(del);
       console.log(res);
     });
   }
@@ -46,7 +51,7 @@ export default function RegisterUsers() {
       lastName: cell?.row?.original.lastName,
       email: cell?.row?.original.email,
       organization: cell?.row?.original.organization,
-      roleId: cell?.row?.original.role,
+      roleId: cell?.row?.original.roleId,
       status: 'active',
     });
   }
@@ -55,7 +60,7 @@ export default function RegisterUsers() {
     const { name, value } = e.target;
     setApproveUser({
       ...approveUser,
-      [name]: value,
+      [name]: parseInt(value),
     });
   }
   function approveUserSubmit(e) {
@@ -63,8 +68,8 @@ export default function RegisterUsers() {
     console.log(approveUser);
     hideApproveModal();
     axios.put(`api/users/${approveUser.id}`, approveUser).then((res) => {
-      const del = users.filter((user) => approveUser.id !== user.id);
-      setUsers(del);
+      const del = pendingUsers.filter((user) => approveUser.id !== user.id);
+      setPendingUsers(del);
       console.log(res);
     });
   }
@@ -75,14 +80,26 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
+            textAlign: 'center',
           }}
         >
           {e.value} {e.row.original.lastName}
         </div>
       ),
     },
-    { Header: 'Email', accessor: 'email' },
+    {
+      Header: 'Email',
+      accessor: 'email',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
+    },
     {
       Header: 'Organization',
       accessor: 'organization',
@@ -126,12 +143,21 @@ export default function RegisterUsers() {
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
     },
     {
       Header: 'Actions',
       id: 'actions',
       Cell: (row) => (
-        <div className="d-flex text-center">
+        <div className="text-center">
           <Button className="me-2" onClick={() => showApproveModal(row)}>
             Approve
           </Button>
@@ -152,7 +178,7 @@ export default function RegisterUsers() {
       ))}
       <Table
         responsive
-        data={users}
+        data={pendingUsers}
         columns={cols}
         options={{ disableFilters: true }}
       />
@@ -169,6 +195,7 @@ export default function RegisterUsers() {
                 value={userRole}
                 onChange={handleRoleChange}
               >
+                <option value="0">Select Role</option>
                 <option value="1">User</option>
                 <option value="2">LP</option>
                 <option value="3">Admin</option>

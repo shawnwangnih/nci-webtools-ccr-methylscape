@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import Table from '../../components/table';
 import axios from 'axios';
+import { groupBy } from 'lodash';
 
 export default function CurrentUsers() {
-  const [users, setUsers] = React.useState([]);
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [inactiveUsers, setInactiveUsers] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     axios.get('api/users').then((response) => {
-      console.log(response.data);
-      setUsers(response.data);
+      const statusGroup = groupBy(response.data, 'status');
+      //setUsers(response.data);
+      setActiveUsers(statusGroup['active']);
+      setInactiveUsers(statusGroup['inactive']);
     });
   }, []);
 
@@ -89,7 +93,11 @@ export default function CurrentUsers() {
   return (
     <div>
       {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
-      <Table data={users} columns={cols} options={{ disableFilters: true }} />
+      <Table
+        data={activeUsers}
+        columns={cols}
+        options={{ disableFilters: true }}
+      />
     </div>
   );
 }

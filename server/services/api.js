@@ -132,11 +132,11 @@ apiRouter.put(
   withAsync(async (request, response) => {
     const { userManager } = request.app.locals;
     const { id } = request.params;
-    const { firstName, lastName, email, organization, status} = request.body;
-    if (!id || !firstName || !lastName || !email || !organization || !status) {
+    const { firstName, lastName, email, organization, status, roleId} = request.body;
+    if (!id || !firstName || !lastName || !email || !organization || !status || !roleId) {
       throw new Error('Missing required fields');
     }
-    const results = await userManager.updateUser({ id, firstName, lastName, email, organization, name: email, status });
+    const results = await userManager.updateUser({ id, firstName, lastName, email, organization, name: email, status, roleId });
     response.json(results);
   })
 )
