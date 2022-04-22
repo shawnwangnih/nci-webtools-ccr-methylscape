@@ -79,7 +79,9 @@ export default function CurrentUsers() {
       id: 'actions',
       Cell: () => (
         <div className="d-flex">
-          <Button variant="danger">Remove</Button>
+          <Button variant="success" className="w-100">
+            Edit
+          </Button>
         </div>
       ),
     },

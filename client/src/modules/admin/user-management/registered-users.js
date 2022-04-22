@@ -15,6 +15,7 @@ export default function RegisterUsers() {
   useEffect(() => {
     axios.get('api/users').then((response) => {
       console.log(response.data);
+
       setUsers(response.data);
     });
   }, []);
@@ -23,7 +24,7 @@ export default function RegisterUsers() {
     return new Date(date).toISOString().slice(0, 10);
   };
 
-  const rejectUser = (cell) => {
+  function rejectUser(cell) {
     console.log(cell?.row?.original);
     let id = cell?.row?.original.id;
     axios.delete(`api/users/${id}`).then((res) => {
@@ -31,7 +32,7 @@ export default function RegisterUsers() {
       setUsers(del);
       console.log(res);
     });
-  };
+  }
 
   const hideApproveModal = () => setApproveModal(false);
   function showApproveModal(cell) {
@@ -45,7 +46,8 @@ export default function RegisterUsers() {
       lastName: cell?.row?.original.lastName,
       email: cell?.row?.original.email,
       organization: cell?.row?.original.organization,
-      role: cell?.row?.original.role,
+      roleId: cell?.row?.original.role,
+      status: 'active',
     });
   }
 
@@ -57,12 +59,14 @@ export default function RegisterUsers() {
     });
   }
   function approveUserSubmit(e) {
+    e.preventDefault();
     console.log(approveUser);
-    // axios.put(`api/users/${approveUser.id}`, approveUser).then((res) => {
-    //   const del = users.filter((user) => approveUser.id !== user.id);
-    //   setUsers(del);
-    //   console.log(res);
-    // });
+    hideApproveModal();
+    axios.put(`api/users/${approveUser.id}`, approveUser).then((res) => {
+      const del = users.filter((user) => approveUser.id !== user.id);
+      setUsers(del);
+      console.log(res);
+    });
   }
   const cols = [
     {
@@ -161,9 +165,9 @@ export default function RegisterUsers() {
             <Form.Group className="mb-3" controlId="approveModalId">
               <Form.Label>User Role</Form.Label>
               <Form.Select
-                name="role"
+                name="roleId"
                 value={userRole}
-                onChange={(e) => handleRoleChange(e)}
+                onChange={handleRoleChange}
               >
                 <option value="1">User</option>
                 <option value="2">LP</option>
