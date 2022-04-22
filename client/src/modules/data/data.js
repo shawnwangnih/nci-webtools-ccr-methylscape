@@ -38,7 +38,7 @@ export default function Data() {
         >
           <Suspense fallback={<Loader message="Loading Samples" />}>
             <Row className="vw-100 border-bottom justify-content-md-center">
-              <Col md={2} className="pb-2 border-end header-img">
+              <Col md={2} className="border-end header-img">
                 <NavLink
                   to={'projects'}
                   className="text-decoration-none d-flex"
@@ -60,7 +60,7 @@ export default function Data() {
                   </div>
                 </NavLink>
               </Col>
-              <Col md={2} className="pb-3 border-end">
+              <Col md={2} className="border-end">
                 <NavLink
                   to={'experiments'}
                   className="text-decoration-none d-flex ms-4 border-left"
@@ -112,7 +112,7 @@ export default function Data() {
           </Suspense>
         </ErrorBoundary>
       </Container>
-      <Container fluid="xxl" className="bg-white mb-6">
+      <Container fluid="xxl" className="bg-white mb-4">
         <Outlet />
       </Container>
     </>

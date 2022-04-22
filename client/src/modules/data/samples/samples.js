@@ -97,41 +97,44 @@ export default function Samples() {
   const renderRowSubComponent = useCallback(({ row }) => {
     const { original } = row;
     return (
-      <Container fluid="xxl" className="">
+      <Container fluid="xxl">
         <Row>
-          <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+          <Col
+            md
+            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
+          >
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Diagnosis:</b>
               </Col>
-              <Col sm="6">{original.diagnosis}</Col>
+              <Col>{original.diagnosis}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Methylation Family (MF):</b>
               </Col>
-              <Col sm="6">{original.family}</Col>
+              <Col>{original.family}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>MF Calibrated Scores:</b>
               </Col>
-              <Col sm="6">{original.family_score}</Col>
+              <Col>{original.family_score}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Methylation Class (MC):</b>
               </Col>
-              <Col sm="6">{original.class}</Col>
+              <Col>{original.class}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>MC Calibrated Scores:</b>
               </Col>
-              <Col sm="6">{original.class_score}</Col>
+              <Col>{original.class_score}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>MGMT Score:</b>
               </Col>
               <Col sm="6">
@@ -141,24 +144,27 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Notes:</b>
               </Col>
-              <Col sm="6">{original.notes}</Col>
+              <Col>{original.notes}</Col>
             </Row>
           </Col>
-          <Col className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+          <Col
+            md
+            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
+          >
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Tumor Site:</b>
               </Col>
-              <Col sm="6">{original.tumor_data}</Col>
+              <Col>{original.tumor_data}</Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>t-SNE Plot:</b>
               </Col>
-              <Col sm="6">
+              <Col>
                 <Button
                   variant="link"
                   className="p-0"
@@ -171,10 +177,10 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Methylation Report:</b>
               </Col>
-              <Col sm="6">
+              <Col>
                 <Button
                   variant="link"
                   className="p-0"
@@ -187,10 +193,10 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>QCI Report:</b>
               </Col>
-              <Col sm="6">
+              <Col>
                 {original.xml_report ? (
                   <Link
                     className="btn btn-link p-0"
@@ -207,10 +213,10 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>NGS Report (legacy)</b>
               </Col>
-              <Col sm="6">
+              <Col>
                 <Button
                   variant="link"
                   className="p-0"
@@ -223,10 +229,10 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6">
+              <Col>
                 <b>Slide Image:</b>
               </Col>
-              <Col sm="6">
+              <Col>
                 <Button
                   variant="link"
                   className="p-0"
@@ -239,8 +245,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col sm="6"></Col>
-              <Col sm="6"></Col>
+              <Col></Col>
+              <Col></Col>
             </Row>
           </Col>
         </Row>

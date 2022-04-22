@@ -9,7 +9,8 @@ export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
   const [users, setUsers] = useState([]);
   const [approveModal, setApproveModal] = useState(false);
-  const [userRole, setUserRole] = useState('User');
+  const [userRole, setUserRole] = useState();
+  const [approveUser, setApproveUser] = useState([]);
 
   useEffect(() => {
     axios.get('api/users').then((response) => {
@@ -33,8 +34,36 @@ export default function RegisterUsers() {
   };
 
   const hideApproveModal = () => setApproveModal(false);
-  const showApproveModal = () => setApproveModal(true);
+  function showApproveModal(cell) {
+    setApproveModal(true);
+    console.log(cell?.row?.original);
+    let id = cell?.row?.original.id;
+    console.log('ID: ' + id);
+    setApproveUser({
+      id: id,
+      firstName: cell?.row?.original.firstName,
+      lastName: cell?.row?.original.lastName,
+      email: cell?.row?.original.email,
+      organization: cell?.row?.original.organization,
+      role: cell?.row?.original.role,
+    });
+  }
 
+  async function handleRoleChange(e) {
+    const { name, value } = e.target;
+    setApproveUser({
+      ...approveUser,
+      [name]: value,
+    });
+  }
+  function approveUserSubmit(e) {
+    console.log(approveUser);
+    // axios.put(`api/users/${approveUser.id}`, approveUser).then((res) => {
+    //   const del = users.filter((user) => approveUser.id !== user.id);
+    //   setUsers(del);
+    //   console.log(res);
+    // });
+  }
   const cols = [
     {
       Header: 'Name',
@@ -124,33 +153,30 @@ export default function RegisterUsers() {
         options={{ disableFilters: true }}
       />
       <Modal show={approveModal} onHide={hideApproveModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Set User Role</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
+        <Form onSubmit={approveUserSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Set User Role</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
               <Form.Label>User Role</Form.Label>
-              <Form.Control
-                as="select"
+              <Form.Select
+                name="role"
                 value={userRole}
-                onChange={(e) => {
-                  console.log('e.target.value', e.target.value);
-                  setUserRole(e.target.value);
-                }}
+                onChange={(e) => handleRoleChange(e)}
               >
-                <option value="role-user">User</option>
-                <option value="role-LP">LP</option>
-                <option value="role-admin">Admin</option>
-              </Form.Control>
+                <option value="1">User</option>
+                <option value="2">LP</option>
+                <option value="3">Admin</option>
+              </Form.Select>
             </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={hideApproveModal}>
-            Approve
-          </Button>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit" className="btn-lg">
+              Approve
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );
