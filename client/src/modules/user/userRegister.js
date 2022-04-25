@@ -2,25 +2,29 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import {
-  FormControl,
-  Row,
-  Col,
-  Button,
-  Dropdown,
-  ButtonGroup,
-} from 'react-bootstrap';
+import { FormControl, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
+  const [showHideInput, setShowHideInput] = useState('');
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     email: '',
     organization: '',
-    accounttype: '',
+    accounttype: 'NIH',
   });
+  function organizationSelect(e) {
+    const orgSelect = e.target.value;
+    console.log(orgSelect);
+    setShowHideInput(orgSelect);
+
+    setForm({
+      ...form,
+      organization: e.target.value,
+    });
+  }
 
   async function handleChange(e) {
     const { name, value } = e.target;
@@ -54,16 +58,10 @@ export default function UserRegister() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // const userData = {
-    //   firstName: form.firstName,
-    //   lastName: form.lastName,
-    //   email: form.email,
-    //   organization: form.organization,
-    // };
     try {
       setAlerts([]);
-      //const { status, data } = await axios.post('api/users', form);
-      //console.log({ status, data });
+      const { status, data } = await axios.post('api/users', form);
+      console.log({ status, data });
       console.log(form);
       setAlerts([
         {
@@ -77,7 +75,7 @@ export default function UserRegister() {
         lastName: '',
         email: '',
         organization: '',
-        accounttype: '',
+        accounttype: 'NIH',
       });
     } catch (error) {
       console.error(error);
@@ -197,21 +195,23 @@ export default function UserRegister() {
             <Form.Select
               name="organization"
               value={form.organization}
-              onChange={handleChange}
+              onChange={organizationSelect}
             >
               <option value="">Select your Organization/Instituiton</option>
               <option value="NIH">NIH</option>
               <option value="other">Other</option>
             </Form.Select>
-            <Form.Control
-              type="text"
-              name="organization"
-              placeholder="Enter Organization/Instituiton"
-              value={form.organization}
-              onChange={handleChange}
-              required
-              className="mt-2"
-            />
+            {showHideInput !== 'NIH' && (
+              <Form.Control
+                type="text"
+                name="organization"
+                placeholder="Enter Organization/Instituiton"
+                value={form.organization}
+                onChange={handleChange}
+                required
+                className="mt-2"
+              />
+            )}
           </Form.Group>
           <Row className="d-grid gap-2 col-6 mx-auto">
             <Button variant="primary" type="submit" className="btn-lg">
