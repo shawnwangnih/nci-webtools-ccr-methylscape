@@ -19,7 +19,7 @@ export default function Header() {
   }
 
   return (
-    <header class="flex-grow-0 bg-white">
+    <header className="flex-grow-0 bg-white">
       <Container fluid>
         <Row className="justify-content-between">
           <Col>
