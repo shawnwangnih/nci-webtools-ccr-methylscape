@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { FormControl, Row, Col, Button } from 'react-bootstrap';
+import {
+  FormControl,
+  Row,
+  Col,
+  Button,
+  Dropdown,
+  ButtonGroup,
+} from 'react-bootstrap';
 import axios from 'axios';
 
 export default function UserRegister() {
@@ -12,6 +19,7 @@ export default function UserRegister() {
     lastName: '',
     email: '',
     organization: '',
+    accounttype: '',
   });
 
   async function handleChange(e) {
@@ -21,6 +29,7 @@ export default function UserRegister() {
       [name]: value,
     });
   }
+
   //   function validate() {
   //     let firstNameError = "";
   //     let lastNameError = "";
@@ -53,9 +62,9 @@ export default function UserRegister() {
     // };
     try {
       setAlerts([]);
-      const { status, data } = await axios.post('api/users', form);
-      console.log({ status, data });
-
+      //const { status, data } = await axios.post('api/users', form);
+      //console.log({ status, data });
+      console.log(form);
       setAlerts([
         {
           type: 'success',
@@ -68,6 +77,7 @@ export default function UserRegister() {
         lastName: '',
         email: '',
         organization: '',
+        accounttype: '',
       });
     } catch (error) {
       console.error(error);
@@ -99,6 +109,43 @@ export default function UserRegister() {
               {message}
             </Alert>
           ))}
+          <Row>
+            <Form.Group className="" controlId="accounttype">
+              <Form.Label>Account Type</Form.Label>
+              <Form.Check
+                inline
+                type="radio"
+                id="nih"
+                label="NIH"
+                name="accounttype"
+                defaultChecked={true}
+                //checked={form.accounttype === 'NIH'}
+                value="NIH"
+                onChange={handleChange}
+              />
+              <Form.Check
+                inline
+                type="radio"
+                id="login.gov"
+                label="Login.gov"
+                name="accounttype"
+                //checked={form.accounttype === 'Login.gov'}
+                value="login.gov"
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Row>
+          <Row>
+            <small>
+              If you dont have a login.gov account, click{' '}
+              <a href="https://secure.login.gov/sign_up/enter_email">
+                <b>here</b>
+              </a>{' '}
+              to sign up.
+            </small>
+            <hr />
+          </Row>
+
           <Row>
             <Form.Group className="mb-3" controlId="lastName">
               <Form.Label>Last Name</Form.Label>
@@ -139,6 +186,23 @@ export default function UserRegister() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="organization">
             <Form.Label>Organization/Institution</Form.Label>
+            {/* <Form.Control
+              type="text"
+              name="organization"
+              placeholder="Enter Organization/Instituiton"
+              value={form.organization}
+              onChange={handleChange}
+              required
+            /> */}
+            <Form.Select
+              name="organization"
+              value={form.organization}
+              onChange={handleChange}
+            >
+              <option value="">Select your Organization/Instituiton</option>
+              <option value="NIH">NIH</option>
+              <option value="other">Other</option>
+            </Form.Select>
             <Form.Control
               type="text"
               name="organization"
@@ -146,6 +210,7 @@ export default function UserRegister() {
               value={form.organization}
               onChange={handleChange}
               required
+              className="mt-2"
             />
           </Form.Group>
           <Row className="d-grid gap-2 col-6 mx-auto">
