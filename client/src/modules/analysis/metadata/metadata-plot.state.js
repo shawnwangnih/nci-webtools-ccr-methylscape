@@ -9,7 +9,7 @@ export const defaultFormState = {
   embedding: 'umap',
   search: [],
   showAnnotations: true,
-  methylClass: '',
+  color: 'v11b6',
 };
 
 export const formState = atom({
@@ -35,7 +35,7 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'metadataPlot.plotState',
   get: async ({ get }) => {
-    const { organSystem, embedding, search, showAnnotations, methylClass } =
+    const { organSystem, embedding, search, showAnnotations, color } =
       get(formState);
 
     if (!organSystem || !embedding) return defaultPlotState;
@@ -60,31 +60,32 @@ export const plotState = selector({
     // }
 
     const useWebGl = data.length > 1000;
-    const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
-    const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
+    // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
+    // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
+    const dataGroupedByColor = Object.entries(groupBy(data, (e) => e[color]));
 
     // use mean x/y values for annotation positions
-    const labelAnnotations = dataGroupedByLabel
-      .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
-      )
-      .map(([name, value]) => ({
-        text: name,
-        x: meanBy(value, (e) => e.x),
-        y: meanBy(value, (e) => e.y),
-        showarrow: false,
-      }));
+    // const labelAnnotations = dataGroupedByLabel
+    //   .filter(
+    //     ([name, value]) => !['null', 'undefined', ''].includes(String(name))
+    //   )
+    //   .map(([name, value]) => ({
+    //     text: name,
+    //     x: meanBy(value, (e) => e.x),
+    //     y: meanBy(value, (e) => e.y),
+    //     showarrow: false,
+    //   }));
 
-    const classAnnotations = dataGroupedByClass
-      .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
-      )
-      .map(([name, value]) => ({
-        text: name,
-        x: meanBy(value, (e) => e.x),
-        y: meanBy(value, (e) => e.y),
-        showarrow: false,
-      }));
+    // const classAnnotations = dataGroupedByClass
+    //   .filter(
+    //     ([name, value]) => !['null', 'undefined', ''].includes(String(name))
+    //   )
+    //   .map(([name, value]) => ({
+    //     text: name,
+    //     x: meanBy(value, (e) => e.x),
+    //     y: meanBy(value, (e) => e.y),
+    //     showarrow: false,
+    //   }));
 
     const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
     const isWeeklyAnnotation = ({ batchDate }) =>
@@ -119,7 +120,7 @@ export const plotState = selector({
       : [];
 
     // transform data to traces
-    const dataTraces = dataGroupedByClass
+    const dataTraces = dataGroupedByColor
       .sort((a, b) =>
         a[0] == 'No_match'
           ? -1
@@ -134,11 +135,14 @@ export const plotState = selector({
         customdata: data,
         mode: 'markers',
         hovertemplate:
-          'Sample: %{customdata.sample}<br>Metric: %{customdata.nciMetric}<br>Diagnosis: %{customdata.diagnosisProvided}<extra></extra>',
+          [
+            'Sample: %{customdata.sample}',
+            'Metric: %{customdata.nciMetric}',
+            'Diagnosis: %{customdata.diagnosisProvided}',
+            'Sex: %{customdata.sex}',
+            'RF Purity (Absolute): %{customdata.rfPurityAbsolute}',
+          ].join('<br>') + '<extra></extra>',
         type: useWebGl ? 'scattergl' : 'scatter',
-        marker: {
-          color: '%{customdata.nciMetric}',
-        },
       }));
 
     const plotTitles = {
@@ -166,8 +170,8 @@ export const plotState = selector({
             ...weeklyAnnotations,
           ]
         : [...sampleAnnotations],
-      uirevision: organSystem + embedding + search + showAnnotations,
-      legend: { title: { text: 'Methylation Class' } },
+      uirevision: organSystem + embedding + color + search + showAnnotations,
+      legend: { title: { text: 'Category' } },
       colorway: colors,
       autosize: true,
       dragmode: 'select',

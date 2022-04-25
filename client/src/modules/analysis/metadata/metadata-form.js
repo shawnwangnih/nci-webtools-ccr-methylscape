@@ -74,6 +74,20 @@ export default function MetadataForm({ className, onSelect }) {
             </Form.Select>
           </Form.Group>
         </Col>
+        <Col md="auto">
+          <Form.Group id="color" className="mb-3">
+            <Form.Label>Color By</Form.Label>
+            <Form.Select
+              name="color"
+              value={form.color}
+              onChange={handleChange}
+            >
+              <option value="v11b6">Methylation Class</option>
+              <option value="sex">Sex</option>
+              <option value="rfPurityAbsolute">RF Purity (Absolute)</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
         <Col md="3">
           <Form.Group id="search" className="mb-3">
             <Form.Label>Search</Form.Label>
@@ -85,18 +99,6 @@ export default function MetadataForm({ className, onSelect }) {
             />
           </Form.Group>
         </Col>
-        {/* <Col md="auto">
-          <Form.Group id="color" className="mb-3">
-            <Form.Label>Color By</Form.Label>
-            <Form.Select
-              name="color"
-              value={form.methylClass}
-              onChange={handleChange}
-            >
-              <option>No_match</option>
-            </Form.Select>
-          </Form.Group>
-        </Col> */}
         <Col md="auto">
           <Form.Group controlId="showAnnotations" className="mb-3">
             <Form.Check
