@@ -176,12 +176,15 @@ export default function RegisterUsers() {
           {message}
         </Alert>
       ))}
-      <Table
-        responsive
-        data={pendingUsers}
-        columns={cols}
-        options={{ disableFilters: true }}
-      />
+
+      {pendingUsers && pendingUsers.length > 0 && (
+        <Table
+          responsive
+          data={pendingUsers}
+          columns={cols}
+          options={{ disableFilters: true }}
+        />
+      )}
       <Modal show={approveModal} onHide={hideApproveModal}>
         <Form onSubmit={approveUserSubmit}>
           <Modal.Header closeButton>

@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { FormControl, Row, Col, Button } from 'react-bootstrap';
+import { FormControl, Row, Button } from 'react-bootstrap';
 import axios from 'axios';
-import Feedback from 'react-bootstrap/esm/Feedback';
-import { noConflict } from 'lodash';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
@@ -31,24 +29,30 @@ export default function UserRegister() {
     });
   }
 
-  function validateEmail(email) {
+  const validateEmail = (email, acctype) => {
     // const pattern =
     //   /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     const pattern = /@(nih|nci.nih).gov\s*$/;
     const result = pattern.test(email);
-    if (form.accounttype === 'NIH') {
+    let valid = true;
+    if (acctype === 'NIH') {
       if (result === true) {
         setEmailValidation({
           emailError: false,
           email: email,
         });
+        valid = true;
       } else {
         setEmailValidation({
           emailError: true,
         });
+        valid = false;
       }
+    } else {
+      valid = true;
     }
-  }
+    return valid;
+  };
 
   async function handleChange(e) {
     const { name, value } = e.target;
@@ -66,11 +70,10 @@ export default function UserRegister() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    validateEmail(form.email);
+    const validEmail = validateEmail(form.email, form.accounttype);
     try {
       setAlerts([]);
-      console.log(emailValidation.emailError);
-      if (emailValidation.emailError === false) {
+      if (validEmail) {
         const { status, data } = await axios.post('api/users', form);
         console.log({ status, data });
         console.log(form);
