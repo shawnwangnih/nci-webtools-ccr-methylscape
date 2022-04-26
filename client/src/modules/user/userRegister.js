@@ -61,37 +61,13 @@ export default function UserRegister() {
     });
   }
 
-  //   function validate() {
-  //     let firstNameError = "";
-  //     let lastNameError = "";
-  //     let emailError = "";
-  //     if (!this.form.firstname) {
-  //       firstNameError = "First Name field is required";
-  //     }
-  //     if (!this.form.lastname) {
-  //         lastNameError = "Last Name field is required";
-  //       }
-  //     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  //     if (!this.form.email || reg.test(this.form.email) === false) {
-  //       emailError = "Email Field is Invalid ";
-  //     }
-
-  //     if (emailError || firstNameError || lastNameError) {
-  //       this.setState({ firstNameError, emailError, lastNameError });
-  //       return false;
-  //     }
-  //     return true;
-  //   }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    if (form.accounttype === 'NIH') {
-      validateEmail(form.email);
-      console.log(form.email);
-      console.log('Test');
-    }
 
     try {
+      if (form.accounttype === 'NIH') {
+        validateEmail(form.email);
+      }
       setAlerts([]);
       if (emailValidation.emailError === false) {
         const { status, data } = await axios.post('api/users', form);
@@ -111,9 +87,7 @@ export default function UserRegister() {
           organization: '',
           accounttype: 'NIH',
         });
-        setEmailValidation({
-          emailError: false,
-        });
+        setShowHideInput('');
       } else {
         setAlerts([
           {
