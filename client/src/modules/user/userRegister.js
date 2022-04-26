@@ -4,10 +4,13 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FormControl, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+import Feedback from 'react-bootstrap/esm/Feedback';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
   const [showHideInput, setShowHideInput] = useState('');
+  const [emailValidation, setEmailValidation] = useState({ isDisabled: true });
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -15,6 +18,7 @@ export default function UserRegister() {
     organization: '',
     accounttype: 'NIH',
   });
+
   function organizationSelect(e) {
     const orgSelect = e.target.value;
     console.log(orgSelect);
@@ -26,8 +30,31 @@ export default function UserRegister() {
     });
   }
 
+  function validateEmail(email) {
+    // const pattern =
+    //   /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    const pattern = /@nih.gov\s*$/;
+    const result = pattern.test(email);
+    if (result === true) {
+      setEmailValidation({
+        emailError: false,
+        email: email,
+      });
+    } else {
+      setEmailValidation({
+        emailError: true,
+      });
+    }
+  }
+
   async function handleChange(e) {
     const { name, value } = e.target;
+    if (e.target.name === 'email') {
+      if (form.accounttype === 'NIH') {
+        validateEmail(e.target.value);
+      }
+    }
+
     setForm({
       ...form,
       [name]: value,
@@ -77,6 +104,9 @@ export default function UserRegister() {
         organization: '',
         accounttype: 'NIH',
       });
+      setEmailValidation({
+        emailError: false,
+      });
     } catch (error) {
       console.error(error);
       const message = error.response.data;
@@ -108,7 +138,7 @@ export default function UserRegister() {
             </Alert>
           ))}
           <Row>
-            <Form.Group className="" controlId="accounttype">
+            <Form.Group controlId="accounttype">
               <Form.Label>Account Type</Form.Label>
               <Form.Check
                 inline
@@ -141,7 +171,7 @@ export default function UserRegister() {
               </a>{' '}
               to sign up.
             </small>
-            <hr />
+            <hr className="my-2" />
           </Row>
 
           <Row>
@@ -181,6 +211,13 @@ export default function UserRegister() {
               onChange={handleChange}
               required
             />
+            {emailValidation.emailError ? (
+              <span style={{ color: 'red' }}>
+                Please Enter valid NIH email address
+              </span>
+            ) : (
+              ''
+            )}
           </Form.Group>
           <Form.Group className="mb-3" controlId="organization">
             <Form.Label>Organization/Institution</Form.Label>
@@ -201,12 +238,12 @@ export default function UserRegister() {
               <option value="NIH">NIH</option>
               <option value="other">Other</option>
             </Form.Select>
-            {showHideInput !== 'NIH' && (
+            {showHideInput === 'other' && (
               <Form.Control
                 type="text"
                 name="organization"
                 placeholder="Enter Organization/Instituiton"
-                value={form.organization}
+                //value={form.organization}
                 onChange={handleChange}
                 required
                 className="mt-2"
