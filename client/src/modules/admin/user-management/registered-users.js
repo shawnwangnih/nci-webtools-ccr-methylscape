@@ -21,7 +21,7 @@ export default function RegisterUsers() {
       //console.log(statusGroup);
       //console.log(statusGroup['pending']);
       //setUsers(response.data);
-      setPendingUsers(statusGroup['pending']);
+      setPendingUsers(statusGroup['pending'] || []);
     });
   }, []);
 
