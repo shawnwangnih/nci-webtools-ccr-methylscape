@@ -15,11 +15,11 @@ export default function RegisterUsers() {
 
   useEffect(() => {
     axios.get('api/users').then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
 
       const statusGroup = groupBy(response.data, 'status');
-      console.log(statusGroup);
-      console.log(statusGroup['pending']);
+      //console.log(statusGroup);
+      //console.log(statusGroup['pending']);
       //setUsers(response.data);
       setPendingUsers(statusGroup['pending']);
     });

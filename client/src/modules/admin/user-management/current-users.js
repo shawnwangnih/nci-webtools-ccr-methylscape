@@ -20,6 +20,12 @@ export default function CurrentUsers() {
     });
   }, []);
 
+  console.log(activeUsers);
+  console.log(inactiveUsers);
+
+  const allCurrentUsers = [...activeUsers, ...inactiveUsers];
+  console.log(allCurrentUsers);
+
   const hideEditModal = () => setEditModal(false);
   function showEditModal(cell) {
     setEditModal(true);
@@ -159,52 +165,50 @@ export default function CurrentUsers() {
   return (
     <div>
       {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
-      {activeUsers &&
-        activeUsers.length > 0 && (
-          <Table
-            data={activeUsers}
-            columns={cols}
-            options={{ disableFilters: true }}
-          />
-        ) && (
-          <Modal show={editModal} onHide={hideEditModal}>
-            <Form onSubmit={editUserSubmit}>
-              <Modal.Header closeButton>
-                <Modal.Title>Set User Role</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form.Group className="mb-3" controlId="editUserRole">
-                  <Form.Label>User Role</Form.Label>
-                  <Form.Select
-                    name="roleId"
-                    value={activeUsers.roleId}
-                    onChange={handleEditUserChange}
-                  >
-                    <option value="1">User</option>
-                    <option value="2">LP</option>
-                    <option value="3">Admin</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="editUserStatus">
-                  <Form.Label>Enable/ Disable Account</Form.Label>
-                  <Form.Select
-                    name="status"
-                    value={activeUsers.staus}
-                    onChange={handleEditUserChange}
-                  >
-                    <option value="active">Enable Account</option>
-                    <option value="inactive">Disable account</option>
-                  </Form.Select>
-                </Form.Group>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" type="submit" className="btn-lg">
-                  Approve
-                </Button>
-              </Modal.Footer>
-            </Form>
-          </Modal>
-        )}
+      {allCurrentUsers && allCurrentUsers.length > 0 && (
+        <Table
+          data={allCurrentUsers}
+          columns={cols}
+          options={{ disableFilters: true }}
+        />
+      )}
+      <Modal show={editModal} onHide={hideEditModal}>
+        <Form onSubmit={editUserSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Set User Role</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="editUserRole">
+              <Form.Label>User Role</Form.Label>
+              <Form.Select
+                name="roleId"
+                value={allCurrentUsers.roleId}
+                onChange={handleEditUserChange}
+              >
+                <option value="1">User</option>
+                <option value="2">LP</option>
+                <option value="3">Admin</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="editUserStatus">
+              <Form.Label>Enable/ Disable Account</Form.Label>
+              <Form.Select
+                name="status"
+                value={allCurrentUsers.staus}
+                onChange={handleEditUserChange}
+              >
+                <option value="active">Enable Account</option>
+                <option value="inactive">Disable account</option>
+              </Form.Select>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit" className="btn-lg">
+              Approve
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 }
