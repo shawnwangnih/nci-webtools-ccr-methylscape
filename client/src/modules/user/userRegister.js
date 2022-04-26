@@ -10,7 +10,7 @@ import { noConflict } from 'lodash';
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
   const [showHideInput, setShowHideInput] = useState('');
-  const [emailValidation, setEmailValidation] = useState({ isDisabled: true });
+  const [emailValidation, setEmailValidation] = useState([]);
 
   const [form, setForm] = useState({
     firstName: '',
@@ -36,15 +36,17 @@ export default function UserRegister() {
     //   /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     const pattern = /@(nih|nci.nih).gov\s*$/;
     const result = pattern.test(email);
-    if (result === true) {
-      setEmailValidation({
-        emailError: false,
-        email: email,
-      });
-    } else {
-      setEmailValidation({
-        emailError: true,
-      });
+    if (form.accounttype === 'NIH') {
+      if (result === true) {
+        setEmailValidation({
+          emailError: false,
+          email: email,
+        });
+      } else {
+        setEmailValidation({
+          emailError: true,
+        });
+      }
     }
   }
 
@@ -64,12 +66,10 @@ export default function UserRegister() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    validateEmail(form.email);
     try {
-      if (form.accounttype === 'NIH') {
-        validateEmail(form.email);
-      }
       setAlerts([]);
+      console.log(emailValidation.emailError);
       if (emailValidation.emailError === false) {
         const { status, data } = await axios.post('api/users', form);
         console.log({ status, data });
