@@ -7,8 +7,10 @@ import { groupBy } from 'lodash';
 export default function CurrentUsers() {
   const [activeUsers, setActiveUsers] = useState([]);
   const [inactiveUsers, setInactiveUsers] = useState([]);
+  //const [allCurrentUsers, setAllCurrentUsers] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [editUser, setEditUser] = useState([]);
+  const [showInactiveUsers, setShowInactiveUsers] = useState(false);
 
   useEffect(() => {
     axios.get('api/users').then((response) => {
@@ -20,13 +22,7 @@ export default function CurrentUsers() {
     });
   }, []);
 
-  console.log(activeUsers);
-  console.log(inactiveUsers);
-
   const allCurrentUsers = [...activeUsers, ...inactiveUsers];
-
-  console.log(allCurrentUsers);
-
   const hideEditModal = () => setEditModal(false);
   function showEditModal(cell) {
     setEditModal(true);
@@ -58,6 +54,10 @@ export default function CurrentUsers() {
       console.log(res);
     });
   }
+
+  const handleShowInactiveUsersChange = () => {
+    setShowInactiveUsers(!showInactiveUsers);
+  };
 
   const formatDate = (date) => {
     return new Date(date).toISOString().slice(0, 10);
@@ -166,14 +166,23 @@ export default function CurrentUsers() {
   return (
     <div>
       {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
-      {allCurrentUsers &&
-        allCurrentUsers.length > 0 && (
+      {allCurrentUsers && allCurrentUsers.length > 0 && (
+        <div className="d-flex flex-column">
+          <Form className="text-primary d-flex justify-content-center">
+            <Form.Check type="checkbox" id="show-inactive-user">
+              <Form.Check.Input
+                type="checkbox"
+                checked={showInactiveUsers}
+                onChange={handleShowInactiveUsersChange}
+              />
+              <Form.Check.Label>Show Inactive Users</Form.Check.Label>
+            </Form.Check>
+          </Form>
           <Table
-            data={allCurrentUsers}
+            data={showInactiveUsers ? allCurrentUsers : activeUsers}
             columns={cols}
             options={{ disableFilters: true }}
           />
-        ) && (
           <Modal show={editModal} onHide={hideEditModal}>
             <Form onSubmit={editUserSubmit}>
               <Modal.Header closeButton>
@@ -211,7 +220,8 @@ export default function CurrentUsers() {
               </Modal.Footer>
             </Form>
           </Modal>
-        )}
+        </div>
+      )}
     </div>
   );
 }
