@@ -10,6 +10,7 @@ export default function CurrentUsers() {
 
   useEffect(() => {
     axios.get('api/users').then((response) => {
+      console.log(response.data);
       const statusGroup = groupBy(response.data, 'status');
       //setUsers(response.data);
       setActiveUsers(statusGroup['active']);
@@ -95,6 +96,11 @@ export default function CurrentUsers() {
       {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
       <Table
         data={activeUsers}
+        columns={cols}
+        options={{ disableFilters: true }}
+      />
+      <Table
+        data={inactiveUsers}
         columns={cols}
         options={{ disableFilters: true }}
       />

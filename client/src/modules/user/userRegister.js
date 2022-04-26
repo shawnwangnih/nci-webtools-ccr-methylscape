@@ -5,6 +5,7 @@ import Alert from 'react-bootstrap/Alert';
 import { FormControl, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 import Feedback from 'react-bootstrap/esm/Feedback';
+import { noConflict } from 'lodash';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
@@ -33,7 +34,7 @@ export default function UserRegister() {
   function validateEmail(email) {
     // const pattern =
     //   /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
-    const pattern = /@nih.gov\s*$/;
+    const pattern = /@(nih|nci.nih).gov\s*$/;
     const result = pattern.test(email);
     if (result === true) {
       setEmailValidation({
