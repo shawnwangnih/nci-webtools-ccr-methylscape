@@ -49,11 +49,11 @@ export default function UserRegister() {
 
   async function handleChange(e) {
     const { name, value } = e.target;
-    if (e.target.name === 'email') {
-      if (form.accounttype === 'NIH') {
-        validateEmail(e.target.value);
-      }
-    }
+    // if (e.target.name === 'email') {
+    //   if (form.accounttype === 'NIH') {
+    //     validateEmail(e.target.value);
+    //   }
+    // }
 
     setForm({
       ...form,
@@ -85,28 +85,43 @@ export default function UserRegister() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (form.accounttype === 'NIH') {
+      validateEmail(form.email);
+      console.log(form.email);
+      console.log('Test');
+    }
+
     try {
       setAlerts([]);
-      const { status, data } = await axios.post('api/users', form);
-      console.log({ status, data });
-      console.log(form);
-      setAlerts([
-        {
-          type: 'success',
-          message: 'Your registration request has been submitted.',
-        },
-      ]);
+      if (emailValidation.emailError === false) {
+        const { status, data } = await axios.post('api/users', form);
+        console.log({ status, data });
+        console.log(form);
+        setAlerts([
+          {
+            type: 'success',
+            message: 'Your registration request has been submitted.',
+          },
+        ]);
 
-      setForm({
-        firstName: '',
-        lastName: '',
-        email: '',
-        organization: '',
-        accounttype: 'NIH',
-      });
-      setEmailValidation({
-        emailError: false,
-      });
+        setForm({
+          firstName: '',
+          lastName: '',
+          email: '',
+          organization: '',
+          accounttype: 'NIH',
+        });
+        setEmailValidation({
+          emailError: false,
+        });
+      } else {
+        setAlerts([
+          {
+            type: 'danger',
+            message: 'Please have valid NIH email',
+          },
+        ]);
+      }
     } catch (error) {
       console.error(error);
       const message = error.response.data;
