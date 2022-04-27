@@ -6,7 +6,7 @@ import axios from 'axios';
 import Table from '../../components/table';
 import { rolesSelector, usersSelector } from './user-management.state';
 
-export default function RegisterUsers() {
+export default function CurrentUsers() {
   const [alerts, setAlerts] = useState([]);
   const roles = useRecoilValue(rolesSelector);
   const users = useRecoilValue(usersSelector);
