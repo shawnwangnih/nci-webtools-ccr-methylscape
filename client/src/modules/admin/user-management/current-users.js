@@ -50,7 +50,7 @@ export default function CurrentUsers() {
             textAlign: 'left',
           }}
         >
-          {e.value} {e.row.original.lastName}
+          {e.value}, {e.row.original.lastName}
         </div>
       ),
     },

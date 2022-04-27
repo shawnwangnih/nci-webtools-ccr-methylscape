@@ -14,7 +14,9 @@ export default function RegisterUsers() {
   const users = useRecoilValue(usersSelector);
   const roles = useRecoilValue(rolesSelector);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [showRejectionModal, setShowRejectionModal] = useState(false);
   const [approvalForm, setApprovalForm] = useState({});
+  const [rejectionForm, setRejectionForm] = useState({});
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const userGroups = groupBy(users, 'status');
   const pendingUsers = userGroups['pending'] || [];
@@ -32,16 +34,35 @@ export default function RegisterUsers() {
     setApprovalForm(user);
   }
 
+  function openRejectionModal({ row }) {
+    const { id } = row.original;
+    const user = { id };
+    setShowRejectionModal(true);
+    setRejectionForm(user);
+  }
+
   function handleFormChange(e) {
     const { name, value } = e.target;
 
     setApprovalForm((form) => ({ ...form, [name]: value }));
   }
 
+  function handleRejectionFormChange(e) {
+    const { name, value } = e.target;
+    setRejectionForm((form) => ({ ...form, [name]: value }));
+  }
+
   async function handleFormSubmit(e) {
     e.preventDefault();
     setShowApprovalModal(false);
     await axios.put(`api/users/${approvalForm.id}`, approvalForm);
+    refreshUsers();
+  }
+
+  async function handleRejectionFormSubmit(e) {
+    e.preventDefault();
+    setShowRejectionModal(false);
+    await axios.delete(`api/users/${rejectionForm.id}`);
     refreshUsers();
   }
 
@@ -55,7 +76,7 @@ export default function RegisterUsers() {
             textAlign: 'left',
           }}
         >
-          {e.value}, {e.row.original.lastName}
+          {e.value} {e.row.original.lastName}
         </div>
       ),
     },
@@ -149,7 +170,8 @@ export default function RegisterUsers() {
           <Button className="me-2" onClick={() => openApprovalModal({ row })}>
             Approve
           </Button>
-          <Button variant="danger" onClick={() => rejectUser({ row })}>
+
+          <Button variant="danger" onClick={() => openRejectionModal({ row })}>
             Reject
           </Button>
         </div>
@@ -209,6 +231,34 @@ export default function RegisterUsers() {
           <Modal.Footer>
             <Button variant="primary" type="submit" className="btn-lg">
               Approve
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      <Modal
+        show={showRejectionModal}
+        onHide={() => setShowRejectionModal(false)}
+      >
+        <Form onSubmit={handleRejectionFormSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Reject User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Comments</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="comments"
+                value={rejectionForm.comments || ''}
+                onChange={handleRejectionFormChange}
+                required
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit" className="btn-lg">
+              Reject
             </Button>
           </Modal.Footer>
         </Form>
