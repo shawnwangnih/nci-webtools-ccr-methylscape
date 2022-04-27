@@ -9,7 +9,7 @@ export const defaultFormState = {
   embedding: 'umap',
   search: [],
   showAnnotations: true,
-  color: 'v11b6',
+  color: { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
 };
 
 export const formState = atom({
@@ -62,7 +62,10 @@ export const plotState = selector({
     const useWebGl = data.length > 1000;
     // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
     // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
-    const dataGroupedByColor = Object.entries(groupBy(data, (e) => e[color]));
+    const dataGroupedByColor =
+      color.type == 'categorical'
+        ? Object.entries(groupBy(data, (e) => e[color.value]))
+        : [];
 
     // use mean x/y values for annotation positions
     // const labelAnnotations = dataGroupedByLabel
@@ -119,32 +122,54 @@ export const plotState = selector({
           }))
       : [];
 
-    // transform data to traces
-    const dataTraces = dataGroupedByColor
-      .sort((a, b) =>
-        a[0] == 'No_match'
-          ? -1
-          : b[0] == 'No_match'
-          ? 1
-          : a[0].localeCompare(b[0])
-      )
-      .map(([name, data]) => ({
-        name,
-        x: data.map((e) => e.x),
-        y: data.map((e) => e.y),
-        customdata: data,
-        mode: 'markers',
-        hovertemplate:
-          [
-            'Sample: %{customdata.sample}',
-            'Metric: %{customdata.nciMetric}',
-            'Diagnosis: %{customdata.diagnosisProvided}',
-            'Sex: %{customdata.sex}',
-            'RF Purity (Absolute): %{customdata.rfPurityAbsolute}',
-          ].join('<br>') + '<extra></extra>',
-        type: useWebGl ? 'scattergl' : 'scatter',
-      }));
+    const hovertemplate =
+      [
+        'Sample: %{customdata.sample}',
+        'Metric: %{customdata.nciMetric}',
+        'Diagnosis: %{customdata.diagnosisProvided}',
+        'Sex: %{customdata.sex}',
+        'RF Purity (Absolute): %{customdata.rfPurityAbsolute}',
+        'Age: %{customdata.age}',
+      ].join('<br>') + '<extra></extra>';
 
+    // transform data to traces
+    const dataTraces =
+      color.type == 'categorical'
+        ? dataGroupedByColor
+            .sort((a, b) =>
+              a[0] == 'No_match'
+                ? -1
+                : b[0] == 'No_match'
+                ? 1
+                : a[0].localeCompare(b[0])
+            )
+            .map(([name, data]) => ({
+              name,
+              x: data.map((e) => e.x),
+              y: data.map((e) => e.y),
+              customdata: data,
+              mode: 'markers',
+              hovertemplate: hovertemplate,
+              type: useWebGl ? 'scattergl' : 'scatter',
+            }))
+        : [
+            {
+              x: data.map((e) => e.x),
+              y: data.map((e) => e.y),
+              customdata: data,
+              mode: 'markers',
+              hovertemplate: hovertemplate,
+              type: useWebGl ? 'scattergl' : 'scatter',
+              ...(color.type == 'continuous' && {
+                marker: {
+                  color: data.map((e) => e[color.value]),
+                  colorbar: { title: color.label, dtick: 5 },
+                },
+              }),
+            },
+          ];
+
+    console.log(dataTraces);
     const plotTitles = {
       centralNervousSystem: 'Central Nervous System',
       boneAndSoftTissue: 'Bone and Soft Tissue',
@@ -170,9 +195,11 @@ export const plotState = selector({
             ...weeklyAnnotations,
           ]
         : [...sampleAnnotations],
-      uirevision: organSystem + embedding + color + search + showAnnotations,
-      legend: { title: { text: 'Category' } },
-      colorway: colors,
+      uirevision:
+        organSystem + embedding + color.value + search + showAnnotations,
+      legend: { title: { text: color.label } },
+
+      colorway: color.type == 'categorical' ? colors : null,
       autosize: true,
       dragmode: 'select',
     };
