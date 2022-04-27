@@ -31,18 +31,19 @@ class UserManager {
       throw new Error('User already exists');
     } else {
       let params = {
-        roleId: user.roleId,
+        roleId: +user.roleId || null,
+        organizationId: +user.organizationId || null,
+        organizationOther: user.organizationOther,
+        accountType: user.accountType,
         name: user.name,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         status: user.status,
-        organizationId: user.organizationId,
-        organizationOther: user.organizationOther,
       };
   
       for (let key in params) {
-        if ([null, undefined, ''].includes(params[key])) {
+        if ([null, undefined, NaN, ''].includes(params[key])) {
           delete params[key];
         }
       }
@@ -58,19 +59,19 @@ class UserManager {
 
   async updateUser(user) {
     let params = {
-      id: user.id,
-      roleId: user.roleId,
+      roleId: +user.roleId || null,
+      organizationId: +user.organizationId || null,
+      organizationOther: user.organizationOther,
+      accountType: user.accountType,
       name: user.name,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       status: user.status,
-      organizationId: user.organizationId,
-      organizationOther: user.organizationOther,
     };
 
     for (let key in params) {
-      if ([null, undefined, ''].includes(params[key])) {
+      if ([null, undefined, NaN, ''].includes(params[key])) {
         delete params[key];
       }
     }
