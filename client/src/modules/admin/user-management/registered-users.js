@@ -12,50 +12,36 @@ export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
   const users = useRecoilValue(usersSelector);
   const roles = useRecoilValue(rolesSelector);
-  const [approveModal, setApproveModal] = useState(false);
-  const [userRoleId, setUserRoleId] = useState();
-  const [approveUser, setApproveUser] = useState({});
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [approvalForm, setApprovalForm] = useState({});
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
-
   const userGroups = groupBy(users, 'status');
   const pendingUsers = userGroups['pending'] || [];
 
-  const formatDate = (date) => {
-    return new Date(date).toISOString().slice(0, 10);
-  };
-
-  async function rejectUser(cell) {
-    console.log(cell?.row?.original);
-    let id = cell?.row?.original.id;
+  async function rejectUser({row}) {
+    const { id } = row.original;
     await axios.delete(`api/users/${id}`);
     refreshUsers();
   }
 
-  const hideApproveModal = () => setApproveModal(false);
-
-  function showApproveModal(cell) {
-    setApproveModal(true);
-    console.log(cell?.row?.original);
-    let id = cell?.row?.original.id;
-    console.log('ID: ' + id);
-    setApproveUser({ id, status: 'active' });
+  function openApprovalModal({row}) {
+    const { id } = row.original;
+    const user = { id, status: 'active' };
+    setShowApprovalModal(true);
+    setApprovalForm(user);
   }
 
-  async function handleRoleChange(e) {
+  function handleFormChange(e) {
     const { name, value } = e.target;
-    setApproveUser({
-      ...approveUser,
-      [name]: parseInt(value),
-    });
+    setApprovalForm(form => ({ ...form, [name]: value }));
   }
-  
-  async function approveUserSubmit(e) {
+
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    console.log(approveUser);
-    hideApproveModal();
-    await axios.put(`api/users/${approveUser.id}`, approveUser);
+    setShowApprovalModal(false);
+    await axios.put(`api/users/${approvalForm.id}`, approvalForm);
     refreshUsers();
-  }
+  }  
 
   const cols = [
     {
@@ -106,7 +92,7 @@ export default function RegisterUsers() {
             textAlign: 'center',
           }}
         >
-          {formatDate(e.value)}
+          {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
@@ -140,12 +126,12 @@ export default function RegisterUsers() {
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: (row) => (
+      Cell: ({row}) => (
         <div className="text-center">
-          <Button className="me-2" onClick={() => showApproveModal(row)}>
+          <Button className="me-2" onClick={() => openApprovalModal({row})}>
             Approve
           </Button>
-          <Button variant="danger" onClick={() => rejectUser(row)}>
+          <Button variant="danger" onClick={() => rejectUser({row})}>
             Reject
           </Button>
         </div>
@@ -174,8 +160,8 @@ export default function RegisterUsers() {
         </div>
       )}
 
-      <Modal show={approveModal} onHide={hideApproveModal}>
-        <Form onSubmit={approveUserSubmit}>
+      <Modal show={showApprovalModal} onHide={() => setShowApprovalModal(false)}>
+        <Form onSubmit={handleFormSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>Set User Role</Modal.Title>
           </Modal.Header>
@@ -184,13 +170,13 @@ export default function RegisterUsers() {
               <Form.Label>User Role</Form.Label>
               <Form.Select
                 name="roleId"
-                value={userRoleId}
-                onChange={handleRoleChange}
+                value={approvalForm.roleId || ''}
+                onChange={handleFormChange}
                 required
               >
                 <option value="" hidden>Select Role</option>
                 {roles.map(r => (
-                  <option key={r.id}>{r.description} ({r.name})</option>
+                  <option key={r.id} value={r.id}>{r.description} ({r.name})</option>
                 ))}
               </Form.Select>
             </Form.Group>
