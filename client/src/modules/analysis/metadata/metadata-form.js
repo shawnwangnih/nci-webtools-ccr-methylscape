@@ -3,9 +3,8 @@ import { formState } from './metadata-plot.state';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import MultiSearch from '../../components/multi-search';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import GroupSelect from '../../components/group-select';
 
 export default function MetadataForm({ className, onSelect }) {
   const [form, setForm] = useRecoilState(formState);
@@ -21,6 +20,25 @@ export default function MetadataForm({ className, onSelect }) {
   function handleSearch(e) {
     mergeForm({ search: e });
   }
+
+  const colorOptions = [
+    {
+      label: 'Categorical',
+      options: [
+        { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
+        { label: 'Sex', value: 'sex', type: 'categorical' },
+        {
+          label: 'RF Purity (Absolute)',
+          value: 'rfPurityAbsolute',
+          type: 'categorical',
+        },
+      ],
+    },
+    {
+      label: 'Continuous',
+      options: [{ label: 'Age', value: 'age', type: 'continuous' }],
+    },
+  ];
 
   return (
     <Form className={className}>
@@ -74,18 +92,15 @@ export default function MetadataForm({ className, onSelect }) {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col md="auto">
+        <Col md="2">
           <Form.Group id="color" className="mb-3">
             <Form.Label>Color By</Form.Label>
-            <Form.Select
+            <GroupSelect
               name="color"
-              value={form.color}
-              onChange={handleChange}
-            >
-              <option value="v11b6">Methylation Class</option>
-              <option value="sex">Sex</option>
-              <option value="rfPurityAbsolute">RF Purity (Absolute)</option>
-            </Form.Select>
+              defaultValue={colorOptions[0].options[0]}
+              options={colorOptions}
+              onChange={(e) => mergeForm({ color: e })}
+            />
           </Form.Group>
         </Col>
         <Col md="3">
