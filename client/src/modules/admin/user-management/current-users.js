@@ -6,12 +6,12 @@ import axios from 'axios';
 import Table from '../../components/table';
 import { rolesSelector, usersSelector } from './user-management.state';
 
-export default function RegisterUsers() {
+export default function CurrentUsers() {
   const [alerts, setAlerts] = useState([]);
   const roles = useRecoilValue(rolesSelector);
   const users = useRecoilValue(usersSelector);
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
-  const [showInactiveUsers, setShowInactiveUsers] = useState(false);
+  const [showInactiveUsers, setShowInactiveUsers] = useState(true);
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -20,17 +20,17 @@ export default function RegisterUsers() {
   const inactiveUsers = userGroups['inactive'] || [];
   const visibleUsers = [
     ...activeUsers,
-    ...(showInactiveUsers ? inactiveUsers : []),
+    ...(showInactiveUsers ? [] : inactiveUsers),
   ];
 
-  async function openEditModal({row}) {
+  async function openEditModal({ row }) {
     setShowEditModal(true);
     setForm(row.original);
   }
 
   async function handleFormChange(e) {
     const { name, value } = e.target;
-    setForm(form => ({ ...form, [name]: value }));
+    setForm((form) => ({ ...form, [name]: value }));
   }
 
   async function handleFormSubmit(e) {
@@ -82,7 +82,10 @@ export default function RegisterUsers() {
     },
     {
       Header: 'Organization',
-      accessor: e => ({name: e.organizationName, other: e.organizationOther}),
+      accessor: (e) => ({
+        name: e.organizationName,
+        other: e.organizationOther,
+      }),
       Cell: (e) => (
         <div
           style={{
@@ -122,9 +125,9 @@ export default function RegisterUsers() {
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: ({row}) => (
+      Cell: ({ row }) => (
         <div className="text-center">
-          <Button className="me-2" onClick={() => openEditModal({row})}>
+          <Button className="me-2" onClick={() => openEditModal({ row })}>
             Edit
           </Button>
         </div>
@@ -140,15 +143,15 @@ export default function RegisterUsers() {
         </Alert>
       ))}
       <Form className="text-primary d-flex justify-content-center">
-            <Form.Check type="checkbox" id="show-inactive-user">
-              <Form.Check.Input
-                type="checkbox"
-                checked={showInactiveUsers}
-                onChange={ev => setShowInactiveUsers(ev.target.checked)}
-              />
-              <Form.Check.Label>Show Inactive Users</Form.Check.Label>
-            </Form.Check>
-          </Form>
+        <Form.Check type="checkbox" id="show-inactive-user">
+          <Form.Check.Input
+            type="checkbox"
+            checked={showInactiveUsers}
+            onChange={(ev) => setShowInactiveUsers(ev.target.checked)}
+          />
+          <Form.Check.Label>Show Active Users Only</Form.Check.Label>
+        </Form.Check>
+      </Form>
       <Table
         responsive
         data={visibleUsers}
@@ -169,25 +172,31 @@ export default function RegisterUsers() {
                 onChange={handleFormChange}
                 required
               >
-                <option value="" hidden>Select Role</option>
-                {roles.map(r => (
-                  <option key={r.id} value={r.id}>{r.description} ({r.name})</option>
+                <option value="" hidden>
+                  Select Role
+                </option>
+                {roles.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.description} ({r.name})
+                  </option>
                 ))}
               </Form.Select>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="editUserStatus">
-                  <Form.Label>Enable/ Disable Account</Form.Label>
-                  <Form.Select
-                    name="status"
-                    value={form.status}
-                    onChange={handleFormChange}
-                  >
-                    <option value="" hidden>Select Status</option>
-                    <option value="active">Enable Account</option>
-                    <option value="inactive">Disable account</option>
-                  </Form.Select>
-              </Form.Group>            
+              <Form.Label>Enable/ Disable Account</Form.Label>
+              <Form.Select
+                name="status"
+                value={form.status}
+                onChange={handleFormChange}
+              >
+                <option value="" hidden>
+                  Select Status
+                </option>
+                <option value="active">Enable Account</option>
+                <option value="inactive">Disable account</option>
+              </Form.Select>
+            </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" type="submit" className="btn-lg">

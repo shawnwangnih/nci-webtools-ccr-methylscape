@@ -9,7 +9,7 @@ import { formState, organizationsSelector } from './user.state';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
-  const [form, setForm] = useRecoilState(formState)
+  const [form, setForm] = useRecoilState(formState);
   const resetForm = useResetRecoilState(formState);
   const organizations = useRecoilValue(organizationsSelector);
 
@@ -92,7 +92,11 @@ export default function UserRegister() {
           <Row>
             <small>
               If you don't have a login.gov account, click{' '}
-              <a href="https://secure.login.gov/sign_up/enter_email">
+              <a
+                href="https://secure.login.gov/sign_up/enter_email"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <b>here</b>
               </a>{' '}
               to sign up.
@@ -135,13 +139,16 @@ export default function UserRegister() {
               placeholder="Enter email"
               value={form.email}
               onChange={handleChange}
-              pattern={form.accountType ==='NIH' ? '.+@(nci\\.)?nih.gov' : null}
+              pattern={
+                form.accountType === 'NIH' ? '.+@(nci\\.)?nih.gov' : null
+              }
               required
             />
-            {form.accountType === 'NIH' && 
+            {form.accountType === 'NIH' && (
               <Form.Text className="text-muted">
                 Please provide an NIH email address.
-              </Form.Text>}
+              </Form.Text>
+            )}
           </Form.Group>
           <Form.Group className="mb-3" controlId="organization">
             <Form.Label>Organization/Institution</Form.Label>
@@ -151,9 +158,13 @@ export default function UserRegister() {
               onChange={handleChange}
               required
             >
-              <option value="" hidden>Select your Organization/Instituiton</option>
-              {organizations.map(o => (
-                <option key={`organization-${o}`} value={o.id}>{o.name}</option>
+              <option value="" hidden>
+                Select your Organization/Instituiton
+              </option>
+              {organizations.map((o) => (
+                <option key={`organization-${o}`} value={o.id}>
+                  {o.name}
+                </option>
               ))}
             </Form.Select>
             {+form.organizationId === 1 && (
