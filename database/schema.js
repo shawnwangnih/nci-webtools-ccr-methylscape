@@ -217,6 +217,21 @@ export const schema = [
   },
 
   /**
+   * Create the organization table.
+   */
+   {
+    name: "organization",
+    import: false,
+    schema: (table, connection) => {
+      table.increments("id");
+      table.integer("order");
+      table.string("name");
+      table.timestamp("createdAt").defaultTo(connection.fn.now());
+      table.timestamp("updatedAt").defaultTo(connection.fn.now());
+    }
+  },
+
+  /**
    * Create the user table.
    * Each user has a unique name and optionally, a role
    */
@@ -226,12 +241,14 @@ export const schema = [
     schema: (table, connection) => {
       table.increments("id");
       table.integer("roleId").references("role.id");
+      table.integer("organizationId").references("organization.id");
+      table.string("organizationOther");
+      table.string("accountType");
       table.string("name").notNullable().unique();
       table.string("firstName");
       table.string("lastName");
-      table.string("email");
+      table.string("email").unique();
       table.enum("status", ["pending", "inactive", "active"]).defaultTo("pending");
-      table.string("organization");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
     }
