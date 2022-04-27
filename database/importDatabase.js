@@ -1,5 +1,5 @@
-import { basename } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, resolve } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { createRequire } from 'module';
 import minimist from 'minimist';
 import {
@@ -23,8 +23,8 @@ const require = createRequire(import.meta.url);
 if (isMainModule) {
   const config = require('./config.json');
   const args = minimist(process.argv.slice(2));
-  const schemaPath = args.schema || './schema.js';
-  const sourcesPath = args.sources || './sources.js';
+  const schemaPath = pathToFileURL(args.schema || './schema.js');
+  const sourcesPath = pathToFileURL(args.sources || './sources.js');
   const providerName = args.provider || 'local';
   let providerArgs = [...args._];
 

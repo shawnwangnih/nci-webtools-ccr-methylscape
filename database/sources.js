@@ -246,7 +246,7 @@ export const sources = [
     skipImport: async (connection, metadata) => {
       const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.seg\.txt$/);
       const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
-      const [result] = await connection('cnvBin')
+      const [result] = await connection('cnvSegment')
         .count('id', {as: 'count'})
         .where({ sampleIdatFilename })
       return +result.count > 0;

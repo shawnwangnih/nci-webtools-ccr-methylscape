@@ -1,67 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Modal, Form } from 'react-bootstrap';
-import Table from '../../components/table';
-import axios from 'axios';
+import { Container, Button, Modal, Form, Alert } from 'react-bootstrap';
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
 import { groupBy } from 'lodash';
+import axios from 'axios';
+import Table from '../../components/table';
+import { rolesSelector, usersSelector } from './user-management.state';
 
-export default function CurrentUsers() {
-  const [activeUsers, setActiveUsers] = useState([]);
-  const [inactiveUsers, setInactiveUsers] = useState([]);
-  //const [allCurrentUsers, setAllCurrentUsers] = useState([]);
-  const [editModal, setEditModal] = useState(false);
-  const [editUser, setEditUser] = useState([]);
+export default function RegisterUsers() {
+  const [alerts, setAlerts] = useState([]);
+  const roles = useRecoilValue(rolesSelector);
+  const users = useRecoilValue(usersSelector);
+  const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const [showInactiveUsers, setShowInactiveUsers] = useState(false);
+  const [form, setForm] = useState({});
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  useEffect(() => {
-    axios.get('api/users').then((response) => {
-      console.log(response.data);
-      const statusGroup = groupBy(response.data, 'status');
-      //setUsers(response.data);
-      setActiveUsers(statusGroup['active'] || []);
-      setInactiveUsers(statusGroup['inactive'] || []);
-    });
-  }, []);
+  const userGroups = groupBy(users, 'status');
+  const activeUsers = userGroups['active'] || [];
+  const inactiveUsers = userGroups['inactive'] || [];
+  const visibleUsers = [
+    ...activeUsers,
+    ...(showInactiveUsers ? inactiveUsers : []),
+  ];
 
-  const allCurrentUsers = [...activeUsers, ...inactiveUsers];
-  const hideEditModal = () => setEditModal(false);
-  function showEditModal(cell) {
-    setEditModal(true);
-    console.log(cell?.row?.original);
-    let id = cell?.row?.original.id;
-    console.log('ID: ' + id);
-    setEditUser({
-      id: id,
-      firstName: cell?.row?.original.firstName,
-      lastName: cell?.row?.original.lastName,
-      email: cell?.row?.original.email,
-      organization: cell?.row?.original.organization,
-      roleId: cell?.row?.original.roleId,
-      status: cell?.row?.original.status,
-    });
+  async function openEditModal({row}) {
+    setShowEditModal(true);
+    setForm(row.original);
   }
-  async function handleEditUserChange(e) {
+
+  async function handleFormChange(e) {
     const { name, value } = e.target;
-    setEditUser({
-      ...editUser,
-      [name]: value,
-    });
+    setForm(form => ({ ...form, [name]: value }));
   }
-  function editUserSubmit(e) {
+
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    editUser.roleId = parseInt(editUser.roleId);
-    hideEditModal();
-    axios.put(`api/users/${editUser.id}`, editUser).then((res) => {
-      console.log(res);
-    });
+    setShowEditModal(false);
+    await axios.put(`api/users/${form.id}`, form);
+    refreshUsers();
   }
 
-  const handleShowInactiveUsersChange = () => {
-    setShowInactiveUsers(!showInactiveUsers);
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toISOString().slice(0, 10);
-  };
   const cols = [
     {
       Header: 'Name',
@@ -76,10 +54,9 @@ export default function CurrentUsers() {
         </div>
       ),
     },
-    { Header: 'Email', accessor: 'email' },
     {
       Header: 'Account',
-      accessor: 'accounttype',
+      accessor: 'accountType',
       Cell: (e) => (
         <div
           style={{
@@ -91,8 +68,8 @@ export default function CurrentUsers() {
       ),
     },
     {
-      Header: 'Organization',
-      accessor: 'organization',
+      Header: 'Email',
+      accessor: 'email',
       Cell: (e) => (
         <div
           style={{
@@ -104,25 +81,21 @@ export default function CurrentUsers() {
       ),
     },
     {
-      Header: 'Status',
-      accessor: 'status',
-    },
-    {
-      Header: 'Submitted Date',
-      accessor: 'createdAt',
+      Header: 'Organization',
+      accessor: e => ({name: e.organizationName, other: e.organizationOther}),
       Cell: (e) => (
         <div
           style={{
             textAlign: 'center',
           }}
         >
-          {formatDate(e.value)}
+          {e.value.name} {e.value.other && `(${e.value.other})`}
         </div>
       ),
     },
     {
-      Header: 'Approved Data',
-      accessor: 'arroveData',
+      Header: 'Role',
+      accessor: 'roleName',
       Cell: (e) => (
         <div
           style={{
@@ -134,29 +107,24 @@ export default function CurrentUsers() {
       ),
     },
     {
-      Header: 'Role',
-      accessor: 'roleId',
+      Header: 'Status',
+      accessor: 'status',
       Cell: (e) => (
         <div
           style={{
             textAlign: 'center',
           }}
         >
-          {e.value === 1 ? 'Admin' : e.value === 2 ? 'LP' : 'User'}
+          {e.value}
         </div>
       ),
     },
-
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: (row) => (
-        <div className="d-flex">
-          <Button
-            variant="success"
-            className="w-100"
-            onClick={() => showEditModal(row)}
-          >
+      Cell: ({row}) => (
+        <div className="text-center">
+          <Button className="me-2" onClick={() => openEditModal({row})}>
             Edit
           </Button>
         </div>
@@ -165,63 +133,69 @@ export default function CurrentUsers() {
   ];
   return (
     <div>
-      {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
-      {allCurrentUsers && allCurrentUsers.length > 0 && (
-        <div className="d-flex flex-column">
-          <Form className="text-primary d-flex justify-content-center">
+      {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
+      {alerts.map(({ type, message }, i) => (
+        <Alert key={i} variant={type} onClose={() => setAlerts([])} dismissible>
+          {message}
+        </Alert>
+      ))}
+      <Form className="text-primary d-flex justify-content-center">
             <Form.Check type="checkbox" id="show-inactive-user">
               <Form.Check.Input
                 type="checkbox"
                 checked={showInactiveUsers}
-                onChange={handleShowInactiveUsersChange}
+                onChange={ev => setShowInactiveUsers(ev.target.checked)}
               />
               <Form.Check.Label>Show Inactive Users</Form.Check.Label>
             </Form.Check>
           </Form>
-          <Table
-            data={showInactiveUsers ? allCurrentUsers : activeUsers}
-            columns={cols}
-            options={{ disableFilters: true }}
-          />
-          <Modal show={editModal} onHide={hideEditModal}>
-            <Form onSubmit={editUserSubmit}>
-              <Modal.Header closeButton>
-                <Modal.Title>Set User Role</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form.Group className="mb-3" controlId="editUserRole">
-                  <Form.Label>User Role</Form.Label>
-                  <Form.Select
-                    name="roleId"
-                    value={allCurrentUsers.roleId}
-                    onChange={handleEditUserChange}
-                  >
-                    <option value="1">User</option>
-                    <option value="2">LP</option>
-                    <option value="3">Admin</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="editUserStatus">
+      <Table
+        responsive
+        data={visibleUsers}
+        columns={cols}
+        options={{ disableFilters: true }}
+      />
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Form onSubmit={handleFormSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="approveModalId">
+              <Form.Label>User Role</Form.Label>
+              <Form.Select
+                name="roleId"
+                value={form.roleId}
+                onChange={handleFormChange}
+                required
+              >
+                <option value="" hidden>Select Role</option>
+                {roles.map(r => (
+                  <option key={r.id} value={r.id}>{r.description} ({r.name})</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="editUserStatus">
                   <Form.Label>Enable/ Disable Account</Form.Label>
                   <Form.Select
                     name="status"
-                    value={allCurrentUsers.staus}
-                    onChange={handleEditUserChange}
+                    value={form.status}
+                    onChange={handleFormChange}
                   >
+                    <option value="" hidden>Select Status</option>
                     <option value="active">Enable Account</option>
                     <option value="inactive">Disable account</option>
                   </Form.Select>
-                </Form.Group>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" type="submit" className="btn-lg">
-                  Approve
-                </Button>
-              </Modal.Footer>
-            </Form>
-          </Modal>
-        </div>
-      )}
+              </Form.Group>            
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit" className="btn-lg">
+              Save
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 }

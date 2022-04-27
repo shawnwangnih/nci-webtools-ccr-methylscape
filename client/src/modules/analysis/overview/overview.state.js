@@ -17,7 +17,7 @@ export const overviewState = selector({
     if (!organSystem || !embedding) return defaultOverviewState;
 
     const params = { embedding, organSystem };
-    const { data } = await axios.get('api/samples', { params });
+    const { data } = await axios.get('api/analysis/samples', { params });
 
     const samples = data.filter((v) => v.category); // && v.matchedCases != 'Duplicate');
     const studies = [

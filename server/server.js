@@ -8,7 +8,6 @@ const { apiRouter } = require('./services/api');
 const { forkCluster } = require('./services/cluster');
 const { logErrors } = require('./services/middleware');
 const UserManager = require('./services/auth/userManager');
-const RoleManager = require('./services/auth/roleManager');
 const { loadAwsCredentials } = require('./services/aws');
 const args = require('minimist')(process.argv.slice(2));
 const config = require('./config.json');
@@ -41,8 +40,7 @@ async function createApp(config) {
   app.locals.logger = getLogger('methylscape-analysis');
   app.locals.connection = connection;
   app.locals.userManager = new UserManager(connection);
-  app.locals.roleManager = new RoleManager(connection);
-
+  
   app.use(createSession());
   app.use(passport.initialize());
   app.use(passport.session());

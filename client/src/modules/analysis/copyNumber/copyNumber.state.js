@@ -59,7 +59,7 @@ export const selectSampleState = atom({
 export const geneSelector = selector({
   key: 'copyNumber.geneSelector',
   get: async () => {
-    const response = await axios.get('api/genes');
+    const response = await axios.get('api/analysis/genes');
     return response.data;
   },
   default: [],
@@ -90,8 +90,8 @@ export const copyNumberPlotDataSelector = selector({
     if (!idatFilename) return false;
     try {
 
-      const segmentsResponse = await axios.get('api/cnv/segments', { params: { idatFilename } });
-      const binsResponse = await axios.get('api/cnv/bins', { params: { idatFilename } });
+      const segmentsResponse = await axios.get('api/analysis/cnv/segments', { params: { idatFilename } });
+      const binsResponse = await axios.get('api/analysis/cnv/bins', { params: { idatFilename } });
       let binGeneMap = {};
 
       // map bins to each gene

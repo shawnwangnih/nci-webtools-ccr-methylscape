@@ -15,7 +15,6 @@ import Samples from './modules/data/samples/samples';
 import QCI from './modules/qciReport/qci';
 import Admin from './modules/admin/admin';
 import DataImport from './modules/admin/data-import/data-import';
-import UserManagement from './modules/admin/user-management/user-management';
 import AdminUserManagement from './modules/admin/user-management/admin-user-management';
 import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
