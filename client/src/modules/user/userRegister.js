@@ -21,6 +21,7 @@ export default function UserRegister() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    console.log(form);
     try {
       setAlerts([]);
       const { status, data } = await axios.post('api/users', form);
@@ -162,12 +163,12 @@ export default function UserRegister() {
                 Select your Organization/Instituiton
               </option>
               {organizations.map((o) => (
-                <option key={`organization-${o}`} value={o.id}>
+                <option key={`organization-${o.name}`} value={o.id}>
                   {o.name}
                 </option>
               ))}
             </Form.Select>
-            {+form.organizationId === 1 && (
+            {/* {+form.organizationId === 1 && (
               <Form.Control
                 type="text"
                 name="organizationOther"
@@ -177,7 +178,18 @@ export default function UserRegister() {
                 required
                 className="mt-2"
               />
-            )}
+            )} */}
+
+            <Form.Control
+              type="text"
+              name="organizationOther"
+              placeholder="Enter Organization/Instituiton"
+              value={form.organizationOther}
+              onChange={handleChange}
+              required
+              className="mt-2"
+              disabled={+form.organizationId === 1 ? '' : 'disabled'}
+            />
           </Form.Group>
           <Row className="d-grid gap-2 col-6 mx-auto">
             <Button variant="primary" type="submit" className="btn-lg">

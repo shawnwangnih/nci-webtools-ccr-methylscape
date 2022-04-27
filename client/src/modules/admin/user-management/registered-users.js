@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { groupBy } from 'lodash';
 import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
 import { rolesSelector, usersSelector } from './user-management.state';
+import { ConeStriped } from 'react-bootstrap-icons';
 
 export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
@@ -47,8 +48,9 @@ export default function RegisterUsers() {
       ...approveUser,
       [name]: parseInt(value),
     });
+    console.log(approveUser);
   }
-  
+
   async function approveUserSubmit(e) {
     e.preventDefault();
     console.log(approveUser);
@@ -64,10 +66,23 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value}, {e.row.original.lastName}
+        </div>
+      ),
+    },
+    {
+      Header: 'Account',
+      accessor: 'accountType',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value || 'NA'}
         </div>
       ),
     },
@@ -86,7 +101,10 @@ export default function RegisterUsers() {
     },
     {
       Header: 'Organization',
-      accessor: e => ({name: e.organizationName, other: e.organizationOther}),
+      accessor: (e) => ({
+        name: e.organizationName,
+        other: e.organizationOther,
+      }),
       Cell: (e) => (
         <div
           style={{
@@ -161,7 +179,7 @@ export default function RegisterUsers() {
         </Alert>
       ))}
 
-      {(pendingUsers && pendingUsers.length > 0) ? (
+      {pendingUsers && pendingUsers.length > 0 ? (
         <Table
           responsive
           data={pendingUsers}
@@ -188,9 +206,13 @@ export default function RegisterUsers() {
                 onChange={handleRoleChange}
                 required
               >
-                <option value="" hidden>Select Role</option>
-                {roles.map(r => (
-                  <option key={r.id}>{r.description} ({r.name})</option>
+                <option value="" hidden>
+                  Select Role
+                </option>
+                {roles.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.description} ({r.name})
+                  </option>
                 ))}
               </Form.Select>
             </Form.Group>
