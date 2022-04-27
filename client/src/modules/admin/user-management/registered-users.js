@@ -5,55 +5,40 @@ import axios from 'axios';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import { groupBy } from 'lodash';
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
+import { rolesSelector, usersSelector } from './user-management.state';
 
 export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
-  const [pendingUsers, setPendingUsers] = useState([]);
+  const users = useRecoilValue(usersSelector);
+  const roles = useRecoilValue(rolesSelector);
   const [approveModal, setApproveModal] = useState(false);
-  const [userRole, setUserRole] = useState();
-  const [approveUser, setApproveUser] = useState([]);
+  const [userRoleId, setUserRoleId] = useState();
+  const [approveUser, setApproveUser] = useState({});
+  const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
 
-  useEffect(() => {
-    axios.get('api/users').then((response) => {
-      console.log(response.data);
-
-      const statusGroup = groupBy(response.data, 'status');
-      console.log(statusGroup);
-      console.log(statusGroup['pending']);
-      //setUsers(response.data);
-      setPendingUsers(statusGroup['pending']);
-    });
-  }, []);
+  const userGroups = groupBy(users, 'status');
+  const pendingUsers = userGroups['pending'] || [];
 
   const formatDate = (date) => {
     return new Date(date).toISOString().slice(0, 10);
   };
 
-  function rejectUser(cell) {
+  async function rejectUser(cell) {
     console.log(cell?.row?.original);
     let id = cell?.row?.original.id;
-    axios.delete(`api/users/${id}`).then((res) => {
-      const del = pendingUsers.filter((user) => id !== user.id);
-      setPendingUsers(del);
-      console.log(res);
-    });
+    await axios.delete(`api/users/${id}`);
+    refreshUsers();
   }
 
   const hideApproveModal = () => setApproveModal(false);
+
   function showApproveModal(cell) {
     setApproveModal(true);
     console.log(cell?.row?.original);
     let id = cell?.row?.original.id;
     console.log('ID: ' + id);
-    setApproveUser({
-      id: id,
-      firstName: cell?.row?.original.firstName,
-      lastName: cell?.row?.original.lastName,
-      email: cell?.row?.original.email,
-      organization: cell?.row?.original.organization,
-      roleId: cell?.row?.original.roleId,
-      status: 'active',
-    });
+    setApproveUser({ id, status: 'active' });
   }
 
   async function handleRoleChange(e) {
@@ -63,16 +48,15 @@ export default function RegisterUsers() {
       [name]: parseInt(value),
     });
   }
-  function approveUserSubmit(e) {
+  
+  async function approveUserSubmit(e) {
     e.preventDefault();
     console.log(approveUser);
     hideApproveModal();
-    axios.put(`api/users/${approveUser.id}`, approveUser).then((res) => {
-      const del = pendingUsers.filter((user) => approveUser.id !== user.id);
-      setPendingUsers(del);
-      console.log(res);
-    });
+    await axios.put(`api/users/${approveUser.id}`, approveUser);
+    refreshUsers();
   }
+
   const cols = [
     {
       Header: 'Name',
@@ -83,7 +67,7 @@ export default function RegisterUsers() {
             textAlign: 'center',
           }}
         >
-          {e.value} {e.row.original.lastName}
+          {e.value}, {e.row.original.lastName}
         </div>
       ),
     },
@@ -102,14 +86,14 @@ export default function RegisterUsers() {
     },
     {
       Header: 'Organization',
-      accessor: 'organization',
+      accessor: e => ({name: e.organizationName, other: e.organizationOther}),
       Cell: (e) => (
         <div
           style={{
             textAlign: 'center',
           }}
         >
-          {e.value}
+          {e.value.name} {e.value.other && `(${e.value.other})`}
         </div>
       ),
     },
@@ -128,8 +112,8 @@ export default function RegisterUsers() {
     },
 
     {
-      Header: 'Roles',
-      accessor: 'rodeId',
+      Header: 'Role',
+      accessor: 'roleName',
       Cell: (e) => (
         <div
           style={{
@@ -192,13 +176,14 @@ export default function RegisterUsers() {
               <Form.Label>User Role</Form.Label>
               <Form.Select
                 name="roleId"
-                value={userRole}
+                value={userRoleId}
                 onChange={handleRoleChange}
+                required
               >
-                <option value="0">Select Role</option>
-                <option value="1">User</option>
-                <option value="2">LP</option>
-                <option value="3">Admin</option>
+                <option value="" hidden>Select Role</option>
+                {roles.map(r => (
+                  <option key={r.id}>{r.description} ({r.name})</option>
+                ))}
               </Form.Select>
             </Form.Group>
           </Modal.Body>

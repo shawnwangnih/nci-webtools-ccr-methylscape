@@ -1,25 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Modal } from 'react-bootstrap';
 import Table from '../../components/table';
 import axios from 'axios';
+import Alert from 'react-bootstrap/Alert';
+import Form from 'react-bootstrap/Form';
 import { groupBy } from 'lodash';
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
+import { rolesSelector, usersSelector } from './user-management.state';
 
-export default function CurrentUsers() {
-  const [activeUsers, setActiveUsers] = useState([]);
-  const [inactiveUsers, setInactiveUsers] = useState([]);
+export default function RegisterUsers() {
+  const [alerts, setAlerts] = useState([]);
+  const roles = useRecoilValue(rolesSelector);
+  const users = useRecoilValue(usersSelector);
+  const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
+  const [showInactiveUsers, setShowInactiveUsers] = useState(false);
+  const [form, setForm] = useState({});
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  useEffect(() => {
-    axios.get('api/users').then((response) => {
-      const statusGroup = groupBy(response.data, 'status');
-      //setUsers(response.data);
-      setActiveUsers(statusGroup['active']);
-      setInactiveUsers(statusGroup['inactive']);
-    });
-  }, []);
+  const userGroups = groupBy(users, 'status');
+  const activeUsers = userGroups['active'] || [];
+  const inactiveUsers = userGroups['active'] || [];
+  const visibleUsers = [
+    ...activeUsers,
+    ...(showInactiveUsers ? inactiveUsers : []),
+  ];
 
-  const formatDate = (date) => {
-    return new Date(date).toISOString().slice(0, 10);
-  };
+  async function openEditModal({row}) {
+    setShowEditModal(true);
+    setForm(row.original);
+  }
+
+  async function handleFormChange(e) {
+    const { name, value } = e.target;
+    setForm(form => ({ ...form, [name]: value }));
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    setShowEditModal(false);
+    await axios.put(`api/users/${form.id}`, form);
+    refreshUsers();
+  }
+
   const cols = [
     {
       Header: 'Name',
@@ -27,17 +49,16 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
+            textAlign: 'center',
           }}
         >
-          {e.value} {e.row.original.lastName}
+          {e.value}, {e.row.original.lastName}
         </div>
       ),
     },
-    { Header: 'Email', accessor: 'email' },
     {
-      Header: 'Organization',
-      accessor: 'organization',
+      Header: 'Email',
+      accessor: 'email',
       Cell: (e) => (
         <div
           style={{
@@ -49,21 +70,21 @@ export default function CurrentUsers() {
       ),
     },
     {
-      Header: 'Submitted Date',
-      accessor: 'createdAt',
+      Header: 'Organization',
+      accessor: e => ({name: e.organizationName, other: e.organizationOther}),
       Cell: (e) => (
         <div
           style={{
             textAlign: 'center',
           }}
         >
-          {formatDate(e.value)}
+          {e.value.name} {e.value.other && `(${e.value.other})`}
         </div>
       ),
     },
     {
-      Header: 'Roles',
-      accessor: 'rodeId',
+      Header: 'Role',
+      accessor: 'roleName',
       Cell: (e) => (
         <div
           style={{
@@ -77,13 +98,22 @@ export default function CurrentUsers() {
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
     },
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: () => (
-        <div className="d-flex">
-          <Button variant="success" className="w-100">
+      Cell: ({row}) => (
+        <div className="text-center">
+          <Button className="me-2" onClick={() => openEditModal({row})}>
             Edit
           </Button>
         </div>
@@ -92,12 +122,48 @@ export default function CurrentUsers() {
   ];
   return (
     <div>
-      {/* <h1 className="h4 mb-3 text-primary">Current Users</h1> */}
+      {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
+      {alerts.map(({ type, message }, i) => (
+        <Alert key={i} variant={type} onClose={() => setAlerts([])} dismissible>
+          {message}
+        </Alert>
+      ))}
       <Table
-        data={activeUsers}
+        responsive
+        data={visibleUsers}
         columns={cols}
         options={{ disableFilters: true }}
       />
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Form onSubmit={handleFormSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="approveModalId">
+              <Form.Label>User Role</Form.Label>
+              <Form.Select
+                name="roleId"
+                value={form.roleId}
+                onChange={handleFormChange}
+                required
+              >
+                <option value="" hidden>Select Role</option>
+                {roles.map(r => (
+                  <option key={r.id} value={r.id}>{r.description} ({r.name})</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <pre>{JSON.stringify(form, null, 2)}</pre>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" type="submit" className="btn-lg">
+              Save
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 }
