@@ -22,6 +22,8 @@ import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
 import Methodology from './methodology/methodology';
 import Metadata from './metadata/metadata';
 
+import './analysis.scss';
+
 export default function Analysis() {
   const [expand, setExpand] = useState(false);
 
@@ -52,7 +54,6 @@ export default function Analysis() {
                 </Button>
                 <Button
                   id="expandLayout"
-                  className="rounded-circle"
                   aria-label="Expand"
                   onClick={() => setExpand(!expand)}
                 >
