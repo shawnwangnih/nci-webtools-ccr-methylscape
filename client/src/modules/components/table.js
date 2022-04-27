@@ -208,7 +208,7 @@ export default function Table({
             {headerGroups.map((headerGroup) => (
               <tr
                 {...headerGroup.getHeaderGroupProps()}
-                className="h5 text-center sample-title"
+                className="h5 sample-title"
               >
                 {headerGroup.headers.map((column) => (
                   <td

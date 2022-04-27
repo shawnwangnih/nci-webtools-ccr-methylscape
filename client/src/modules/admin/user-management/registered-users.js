@@ -76,7 +76,7 @@ export default function RegisterUsers() {
             textAlign: 'left',
           }}
         >
-          {e.value} {e.row.original.lastName}
+          {e.value}, {e.row.original.lastName}
         </div>
       ),
     },
@@ -86,7 +86,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value || 'NA'}
@@ -99,7 +99,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value}
@@ -115,7 +115,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value.name} {e.value.other && `(${e.value.other})`}
@@ -128,7 +128,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {new Date(e.value).toLocaleDateString()}
@@ -142,7 +142,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value || 'NA'}
@@ -155,7 +155,7 @@ export default function RegisterUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value}
@@ -166,7 +166,7 @@ export default function RegisterUsers() {
       Header: 'Actions',
       id: 'actions',
       Cell: ({ row }) => (
-        <div className="text-center">
+        <div>
           <Button className="me-2" onClick={() => openApprovalModal({ row })}>
             Approve
           </Button>

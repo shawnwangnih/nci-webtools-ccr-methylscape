@@ -60,7 +60,7 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value || 'NA'}
@@ -73,7 +73,7 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value}
@@ -89,7 +89,7 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value.name} {e.value.other && `(${e.value.other})`}
@@ -102,7 +102,7 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value || 'NA'}
@@ -115,7 +115,7 @@ export default function CurrentUsers() {
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'left',
           }}
         >
           {e.value}
@@ -126,7 +126,7 @@ export default function CurrentUsers() {
       Header: 'Actions',
       id: 'actions',
       Cell: ({ row }) => (
-        <div className="text-center">
+        <div>
           <Button className="me-2" onClick={() => openEditModal({ row })}>
             Edit
           </Button>
