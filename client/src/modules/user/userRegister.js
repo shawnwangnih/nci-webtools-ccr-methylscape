@@ -4,34 +4,18 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FormControl, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { formState, organizationsSelector } from './user.state';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
-  const [showHideInput, setShowHideInput] = useState('');
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    organization: '',
-    accounttype: 'NIH',
-  });
-  function organizationSelect(e) {
-    const orgSelect = e.target.value;
-    console.log(orgSelect);
-    setShowHideInput(orgSelect);
-
-    setForm({
-      ...form,
-      organization: e.target.value,
-    });
-  }
+  const [form, setForm] = useRecoilState(formState)
+  const resetForm = useResetRecoilState(formState);
+  const organizations = useRecoilValue(organizationsSelector);
 
   async function handleChange(e) {
     const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
+    setForm((form) => ({ ...form, [name]: value }));
   }
 
   //   function validate() {
@@ -70,13 +54,7 @@ export default function UserRegister() {
         },
       ]);
 
-      setForm({
-        firstName: '',
-        lastName: '',
-        email: '',
-        organization: '',
-        accounttype: 'NIH',
-      });
+      resetForm();
     } catch (error) {
       console.error(error);
       const message = error.response.data;
@@ -115,9 +93,8 @@ export default function UserRegister() {
                 type="radio"
                 id="nih"
                 label="NIH"
-                name="accounttype"
-                defaultChecked={true}
-                //checked={form.accounttype === 'NIH'}
+                name="accountType"
+                checked={form.accountType === 'NIH'}
                 value="NIH"
                 onChange={handleChange}
               />
@@ -126,9 +103,9 @@ export default function UserRegister() {
                 type="radio"
                 id="login.gov"
                 label="Login.gov"
-                name="accounttype"
-                //checked={form.accounttype === 'Login.gov'}
-                value="login.gov"
+                name="accountType"
+                checked={form.accountType === 'Login.gov'}
+                value="Login.gov"
                 onChange={handleChange}
               />
             </Form.Group>
@@ -184,29 +161,23 @@ export default function UserRegister() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="organization">
             <Form.Label>Organization/Institution</Form.Label>
-            {/* <Form.Control
-              type="text"
-              name="organization"
-              placeholder="Enter Organization/Instituiton"
-              value={form.organization}
+            <Form.Select
+              name="organizationId"
+              value={form.organizationId}
               onChange={handleChange}
               required
-            /> */}
-            <Form.Select
-              name="organization"
-              value={form.organization}
-              onChange={organizationSelect}
             >
-              <option value="">Select your Organization/Instituiton</option>
-              <option value="NIH">NIH</option>
-              <option value="other">Other</option>
+              <option value="" hidden>Select your Organization/Instituiton</option>
+              {organizations.map(o => (
+                <option key={`organization-${o}`} value={o.id}>{o.name}</option>
+              ))}
             </Form.Select>
-            {showHideInput !== 'NIH' && (
+            {+form.organizationId === 1 && (
               <Form.Control
                 type="text"
-                name="organization"
+                name="organizationOther"
                 placeholder="Enter Organization/Instituiton"
-                value={form.organization}
+                value={form.organizationOther}
                 onChange={handleChange}
                 required
                 className="mt-2"
