@@ -4,7 +4,11 @@ import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
 import { groupBy } from 'lodash';
 import axios from 'axios';
 import Table from '../../components/table';
-import { rolesSelector, usersSelector } from './user-management.state';
+import {
+  rolesSelector,
+  usersSelector,
+  organizationsSelector,
+} from './user-management.state';
 
 export default function CurrentUsers() {
   const [alerts, setAlerts] = useState([]);
@@ -22,6 +26,7 @@ export default function CurrentUsers() {
     ...activeUsers,
     ...(showInactiveUsers ? inactiveUsers : []),
   ];
+  const organizations = useRecoilValue(organizationsSelector);
 
   async function openEditModal({ row }) {
     setShowEditModal(true);
@@ -232,6 +237,35 @@ export default function CurrentUsers() {
                 <option value="active">Enable Account</option>
                 <option value="inactive">Disable account</option>
               </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="organization">
+              <Form.Label>Organization/Institution</Form.Label>
+              <Form.Select
+                name="organizationId"
+                value={form.organizationId}
+                onChange={handleFormChange}
+                required
+              >
+                <option value="" hidden>
+                  Select your Organization/Instituiton
+                </option>
+                {organizations.map((o) => (
+                  <option key={`organization-${o.name}`} value={o.id}>
+                    {o.name}
+                  </option>
+                ))}
+              </Form.Select>
+              {+form.organizationId === 1 && (
+                <Form.Control
+                  type="text"
+                  name="organizationOther"
+                  placeholder="Enter Organization/Instituiton"
+                  value={form.organizationOther}
+                  onChange={handleFormChange}
+                  required
+                  className="mt-2"
+                />
+              )}
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
