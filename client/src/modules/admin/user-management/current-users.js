@@ -142,22 +142,32 @@ export default function CurrentUsers() {
           {message}
         </Alert>
       ))}
-      <Form className="text-primary d-flex justify-content-center">
-        <Form.Check type="checkbox" id="show-inactive-user">
-          <Form.Check.Input
-            type="checkbox"
-            checked={showInactiveUsers}
-            onChange={(ev) => setShowInactiveUsers(ev.target.checked)}
+
+      {visibleUsers && visibleUsers.length > 0 ? (
+        <>
+          <Form className="text-primary d-flex justify-content-center">
+            <Form.Check type="checkbox" id="show-inactive-user">
+              <Form.Check.Input
+                type="checkbox"
+                checked={showInactiveUsers}
+                onChange={(ev) => setShowInactiveUsers(ev.target.checked)}
+              />
+              <Form.Check.Label>Show Active Users Only</Form.Check.Label>
+            </Form.Check>
+          </Form>
+          <Table
+            responsive
+            data={visibleUsers}
+            columns={cols}
+            options={{ disableFilters: true }}
           />
-          <Form.Check.Label>Show Active Users Only</Form.Check.Label>
-        </Form.Check>
-      </Form>
-      <Table
-        responsive
-        data={visibleUsers}
-        columns={cols}
-        options={{ disableFilters: true }}
-      />
+        </>
+      ) : (
+        <div className="text-center py-5 text-primary">
+          <h3>No current users available</h3>
+        </div>
+      )}
+
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Form onSubmit={handleFormSubmit}>
           <Modal.Header closeButton>

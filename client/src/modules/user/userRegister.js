@@ -90,18 +90,21 @@ export default function UserRegister() {
               />
             </Form.Group>
           </Row>
+
           <Row>
-            <small>
-              If you don't have a login.gov account, click{' '}
-              <a
-                href="https://secure.login.gov/sign_up/enter_email"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <b>here</b>
-              </a>{' '}
-              to sign up.
-            </small>
+            {form.accountType === 'Login.gov' && (
+              <small>
+                If you don't have a login.gov account, click{' '}
+                <a
+                  href="https://secure.login.gov/sign_up/enter_email"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <b>here</b>
+                </a>{' '}
+                to sign up.
+              </small>
+            )}
             <hr className="my-2" />
           </Row>
 
@@ -168,7 +171,7 @@ export default function UserRegister() {
                 </option>
               ))}
             </Form.Select>
-            {/* {+form.organizationId === 1 && (
+            {+form.organizationId === 1 && (
               <Form.Control
                 type="text"
                 name="organizationOther"
@@ -178,9 +181,9 @@ export default function UserRegister() {
                 required
                 className="mt-2"
               />
-            )} */}
+            )}
 
-            <Form.Control
+            {/* <Form.Control
               type="text"
               name="organizationOther"
               placeholder="Enter Organization/Instituiton"
@@ -189,7 +192,7 @@ export default function UserRegister() {
               required
               className="mt-2"
               disabled={+form.organizationId === 1 ? '' : 'disabled'}
-            />
+            /> */}
           </Form.Group>
           <Row className="d-grid gap-2 col-6 mx-auto">
             <Button variant="primary" type="submit" className="btn-lg">
