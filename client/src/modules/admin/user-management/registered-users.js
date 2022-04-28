@@ -81,7 +81,7 @@ export default function RegisterUsers() {
       ),
     },
     {
-      Header: 'Account',
+      Header: 'Type',
       accessor: 'accountType',
       Cell: (e) => (
         <div

@@ -11,7 +11,7 @@ export default function CurrentUsers() {
   const roles = useRecoilValue(rolesSelector);
   const users = useRecoilValue(usersSelector);
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
-  const [showInactiveUsers, setShowInactiveUsers] = useState(true);
+  const [showInactiveUsers, setShowInactiveUsers] = useState(false);
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -20,7 +20,7 @@ export default function CurrentUsers() {
   const inactiveUsers = userGroups['inactive'] || [];
   const visibleUsers = [
     ...activeUsers,
-    ...(showInactiveUsers ? [] : inactiveUsers),
+    ...(showInactiveUsers ? inactiveUsers : []),
   ];
 
   async function openEditModal({ row }) {
@@ -123,6 +123,32 @@ export default function CurrentUsers() {
       ),
     },
     {
+      Header: 'Submitted Date',
+      accessor: 'createdAt',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {new Date(e.value).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
+      Header: 'Approved Data',
+      accessor: 'updatedAt',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {new Date(e.value).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       Cell: ({ row }) => (
@@ -152,7 +178,7 @@ export default function CurrentUsers() {
                 checked={showInactiveUsers}
                 onChange={(ev) => setShowInactiveUsers(ev.target.checked)}
               />
-              <Form.Check.Label>Show Active Users Only</Form.Check.Label>
+              <Form.Check.Label>Include Inactive Users</Form.Check.Label>
             </Form.Check>
           </Form>
           <Table
