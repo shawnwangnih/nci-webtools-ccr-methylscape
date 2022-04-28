@@ -206,7 +206,7 @@ export default function CurrentUsers() {
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
-              <Form.Label>User Role</Form.Label>
+              <Form.Label>Update User Role</Form.Label>
               <Form.Select
                 name="roleId"
                 value={form.roleId}
@@ -239,7 +239,7 @@ export default function CurrentUsers() {
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3" controlId="organization">
-              <Form.Label>Organization/Institution</Form.Label>
+              <Form.Label>Update Organization/Institution</Form.Label>
               <Form.Select
                 name="organizationId"
                 value={form.organizationId}
@@ -247,7 +247,7 @@ export default function CurrentUsers() {
                 required
               >
                 <option value="" hidden>
-                  Select your Organization/Instituiton
+                  Select Organization/Instituiton
                 </option>
                 {organizations.map((o) => (
                   <option key={`organization-${o.name}`} value={o.id}>
