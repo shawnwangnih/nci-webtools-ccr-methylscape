@@ -291,7 +291,7 @@ export default function Table({
           of {rows.length.toLocaleString()}
         </div> */}
 
-        <div className="d-flex flex-row justify-content-end my-auto">
+        <div className="d-flex flex-row justify-content-end my-auto text-primary">
           <div className="d-flex align-items-center">
             <Form.Control
               as="select"
