@@ -12,12 +12,16 @@ export default function AdminUserManagement() {
             defaultActiveKey="currentusers"
             id="admin-user-managemenr"
             transition={false}
-            className=""
+            className="mx-4"
           >
-            <Tab eventKey="currentusers" title="Current Users">
+            <Tab eventKey="currentusers" title="Current Users" className="mx-3">
               <CurrentUsers />
             </Tab>
-            <Tab eventKey="registeredusers" title="Registered Users">
+            <Tab
+              eventKey="registeredusers"
+              title="Registered Users"
+              className="mx-3"
+            >
               <RegisterUsers />
             </Tab>
           </Tabs>
