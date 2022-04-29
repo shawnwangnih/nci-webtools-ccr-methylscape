@@ -141,7 +141,7 @@ export default function CurrentUsers() {
       ),
     },
     {
-      Header: 'Approved Data',
+      Header: 'Approved Date',
       accessor: 'updatedAt',
       Cell: (e) => (
         <div

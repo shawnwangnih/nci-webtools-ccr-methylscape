@@ -9,6 +9,11 @@ export default function Admin() {
       link: '/admin/admin-user-management',
     },
     {
+      title: 'Manage Organizations',
+      icon: 'bi-building',
+      link: '/admin/admin-organization-management',
+    },
+    {
       title: 'Import Data',
       icon: 'bi-layer-backward',
       link: '/admin/data-import',
