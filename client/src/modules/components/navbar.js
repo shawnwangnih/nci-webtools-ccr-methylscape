@@ -22,9 +22,7 @@ export function NavbarRouterLink({path, title, exact}) {
 export function NavbarDropdown({title, childLinks, align = 'start'}) {
   return <NavDropdown title={title} id={title} align={align}>
     {childLinks.map(link => (
-      <NavDropdown.Item key={`navbar-dropdown-${link.path}`} href={link.path}>
-        {link.title}
-      </NavDropdown.Item>
+      <NavDropdown.Item key={`navbar-dropdown-${link.path}`} href={link.native ? link.path : `#${link.path}`}>{link.title}</NavDropdown.Item>
     ))}
   </NavDropdown>
 }
