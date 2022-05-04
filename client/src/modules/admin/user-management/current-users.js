@@ -16,6 +16,7 @@ export default function CurrentUsers() {
   const users = useRecoilValue(usersSelector);
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const [showInactiveUsers, setShowInactiveUsers] = useState(false);
+  const [userStatus, setUserStatus] = useState();
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -31,11 +32,25 @@ export default function CurrentUsers() {
   async function openEditModal({ row }) {
     setShowEditModal(true);
     setForm(row.original);
+    row.original.status === 'active'
+      ? setUserStatus(true)
+      : setUserStatus(false);
+    console.log(userStatus);
   }
 
   async function handleFormChange(e) {
     const { name, value } = e.target;
     setForm((form) => ({ ...form, [name]: value }));
+  }
+
+  async function handleUserStatusChange(e) {
+    console.log(e.target);
+    setUserStatus(e.target.checked);
+    console.log(userStatus);
+    let s;
+    userStatus ? (s = 'inactive') : (s = 'active');
+    setForm((form) => ({ ...form, status: s }));
+    console.log(form);
   }
 
   async function handleFormSubmit(e) {
@@ -224,20 +239,6 @@ export default function CurrentUsers() {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="editUserStatus">
-              <Form.Label>Enable/ Disable Account</Form.Label>
-              <Form.Select
-                name="status"
-                value={form.status}
-                onChange={handleFormChange}
-              >
-                <option value="" hidden>
-                  Select Status
-                </option>
-                <option value="active">Enable Account</option>
-                <option value="inactive">Disable account</option>
-              </Form.Select>
-            </Form.Group>
             <Form.Group className="mb-3" controlId="organization">
               <Form.Label>Update Organization/Institution</Form.Label>
               <Form.Select
@@ -267,6 +268,33 @@ export default function CurrentUsers() {
                 />
               )}
             </Form.Group>
+            <Form.Group>
+              <Form.Check
+                inline
+                type="checkbox"
+                id={form.id}
+                label="active"
+                name="status"
+                checked={userStatus}
+                onChange={handleUserStatusChange}
+                //checked={form.status === 'active'}
+                //onChange={handleFormChange}
+              />
+            </Form.Group>
+            {/* <Form.Group className="mb-3" controlId="editUserStatus">
+              <Form.Label>Enable/ Disable Account</Form.Label>
+              <Form.Select
+                name="status"
+                value={form.status}
+                onChange={handleFormChange}
+              >
+                <option value="" hidden>
+                  Select Status
+                </option>
+                <option value="active">Enable Account</option>
+                <option value="inactive">Disable account</option>
+              </Form.Select>
+            </Form.Group> */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" type="submit" className="btn-lg">
