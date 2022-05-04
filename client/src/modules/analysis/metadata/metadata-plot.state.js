@@ -132,14 +132,17 @@ export const plotState = selector({
         'Age: %{customdata.age}',
       ].join('<br>') + '<extra></extra>';
 
+    // Sort these keywords to the top so that their traces are rendered first and overlapped by others
+    const sortTopKeyWord = ['No_match', 'Unclassified', 'NotAvailable', 'null'];
+
     // transform data to traces
     const dataTraces =
       color.type == 'categorical'
         ? dataGroupedByColor
             .sort((a, b) =>
-              a[0] == 'No_match'
+              sortTopKeyWord.includes(a[0])
                 ? -1
-                : b[0] == 'No_match'
+                : sortTopKeyWord.includes(b[0])
                 ? 1
                 : a[0].localeCompare(b[0])
             )
