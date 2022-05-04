@@ -85,6 +85,19 @@ export default function AdminOrganizationManagement() {
       ),
     },
     {
+      Header: 'Created Date',
+      accessor: 'createdAt',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {new Date(e.value).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       disableSortBy: true,

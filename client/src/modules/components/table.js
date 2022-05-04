@@ -109,6 +109,7 @@ export default function Table({
     canPreviousPage,
     canNextPage,
     pageCount,
+    pageOptions,
     gotoPage,
     nextPage,
     previousPage,
@@ -310,39 +311,40 @@ export default function Table({
           </div>
 
           <div className="d-flex pe-2 p-2 align-items-center">
-            {(1 + pageIndex * pageSize).toLocaleString()}
+            {/* {(1 + pageIndex * pageSize).toLocaleString()} */}
           </div>
           <div className="d-flex">
             <Pagination aria-label="Previous" className="border border-0">
-              {/*<Pagination.First
+              <Pagination.First
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
               >
-                First
-              </Pagination.First> */}
+                {'<<'}
+              </Pagination.First>
               <Pagination.Prev
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
                 className="border border-0"
               >
-                &#60; Previous
+                &#60;
               </Pagination.Prev>
               <Pagination.Next
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
               >
-                Next &#62;
+                &#62;
               </Pagination.Next>
-              {/* <Pagination.Last
+              <Pagination.Last
                 onClick={() => gotoPage(pageCount - 1)}
                 disabled={!canNextPage}
               >
-                Last
-              </Pagination.Last> */}
+                {'>>'}
+              </Pagination.Last>
             </Pagination>
           </div>
           <div className="d-flex ps-2 p-1 align-items-center">
-            {rows.length.toLocaleString()}
+            {/* {rows.length.toLocaleString()} */}
+            Page {pageIndex + 1} of {pageOptions.length}
           </div>
         </div>
       </div>
