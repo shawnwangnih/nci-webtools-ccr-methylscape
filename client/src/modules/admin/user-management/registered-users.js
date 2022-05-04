@@ -109,16 +109,17 @@ export default function RegisterUsers() {
     {
       Header: 'Organization',
       accessor: (e) => ({
+        id: e.organizationId,
         name: e.organizationName,
         other: e.organizationOther,
       }),
-      Cell: (e) => (
+      Cell: ({value}) => (
         <div
           style={{
             textAlign: 'left',
           }}
         >
-          {e.value.name} {e.value.other && `(${e.value.other})`}
+          {value.name} {(value.id === 1 && value.other) && `(${value.other})`}
         </div>
       ),
     },
