@@ -11,6 +11,7 @@ import {
 import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
 import Table from '../../components/table';
 import { organizationsSelector } from './organization-management.state';
+import axios from 'axios';
 
 export default function AdminOrganizationManagement() {
   const organizations = useRecoilValue(organizationsSelector);
@@ -26,8 +27,10 @@ export default function AdminOrganizationManagement() {
     setShowAddOrgModal(true);
   }
 
-  async function openRenameOrgModal() {
+  async function openRenameOrgModal(cell) {
     setShowRenameOrgModal(true);
+    setForm(cell?.row?.original);
+    const { id, name } = cell?.row?.original;
   }
 
   async function addOrganizationChange(e) {
@@ -51,12 +54,22 @@ export default function AdminOrganizationManagement() {
     //refreshOrgs();
   }
 
-  function handleSubmit(e) {
+  async function handleAddOrgSubmit(e) {
     e.preventDefault();
-    console.log('submit');
+
+    const response = await axios.post('api/organizations', { name: form.name });
+    const id = response.data[0].id;
+    console.log(id);
     console.log(form);
+    setShowAddOrgModal(false);
+    refreshOrgs();
   }
 
+  function handleRenameSubmit(e) {
+    e.preventDefault();
+    console.log('rename');
+    console.log(form);
+  }
   const cols = [
     {
       Header: 'Active Organizations',
@@ -75,15 +88,20 @@ export default function AdminOrganizationManagement() {
       Header: 'Actions',
       id: 'actions',
       Cell: ({ row, setEditableRowIndex, editableRowIndex }) => (
+        // <div>
+        //   <Button className="me-2" onClick={() => openRenameOrgModal({ row })}>
+        //     Rename
+        //   </Button>
+        //   <Button
+        //     className="btn-danger me-2"
+        //     onClick={(e) => handleRemoveOrgChange({ row })}
+        //   >
+        //     Remove
+        //   </Button>
+        // </div>
         <div>
-          <Button className="me-2" onClick={() => openRenameOrgModal()}>
-            Rename
-          </Button>
-          <Button
-            className="btn-danger me-2"
-            onClick={(e) => handleRemoveOrgChange({ row })}
-          >
-            Remove
+          <Button className="me-2" onClick={() => openRenameOrgModal({ row })}>
+            Edit
           </Button>
         </div>
       ),
@@ -122,7 +140,7 @@ export default function AdminOrganizationManagement() {
           </ul> */}
         </div>
         <Modal show={showAddOrgModal} onHide={() => setShowAddOrgModal(false)}>
-          <Form className="bg-light p-3" onSubmit={handleSubmit}>
+          <Form className="bg-light p-3" onSubmit={handleAddOrgSubmit}>
             <Modal.Header closeButton>
               <Modal.Title>Add New Organization/ Instituiton</Modal.Title>
             </Modal.Header>
@@ -133,9 +151,9 @@ export default function AdminOrganizationManagement() {
                 <FormControl
                   type="text"
                   name="name"
-                  placeholder="Organization Name"
+                  placeholder="Add Organization Name"
                   maxLength={255}
-                  value={form.name}
+                  //value={form.name}
                   onChange={addOrganizationChange}
                   required
                 />
@@ -154,7 +172,7 @@ export default function AdminOrganizationManagement() {
           show={showRenameOrgModal}
           onHide={() => setShowRenameOrgModal(false)}
         >
-          <Form className="bg-light p-3" onSubmit={handleSubmit}>
+          <Form className="bg-light p-3" onSubmit={handleRenameSubmit}>
             <Modal.Header closeButton>
               <Modal.Title>Rename Organization</Modal.Title>
             </Modal.Header>
@@ -162,6 +180,7 @@ export default function AdminOrganizationManagement() {
             <Modal.Body>
               <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>Current Organization Name</Form.Label>
+                <span>{form.name} </span>
               </Form.Group>
               <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>New Organization Name</Form.Label>
@@ -174,6 +193,33 @@ export default function AdminOrganizationManagement() {
                   onChange={renameOrganizationChange}
                   required
                 />
+
+                {/* <Form.Select
+                  name="organizationId"
+                  value={form.organizationId}
+                  onChange={renameOrganizationChange}
+                  required
+                >
+                  <option value="" hidden>
+                    Select Organization/Instituiton
+                  </option>
+                  {organizations.map((o) => (
+                    <option key={`organization-${o.name}`} value={o.id}>
+                      {o.name}
+                    </option>
+                  ))}
+                </Form.Select>
+                {+form.organizationId === 1 && (
+                  <Form.Control
+                    type="text"
+                    name="organizationOther"
+                    placeholder="Enter Organization/Instituiton"
+                    value={form.organizationOther}
+                    onChange={renameOrganizationChange}
+                    required
+                    className="mt-2"
+                  />
+                )} */}
               </Form.Group>
             </Modal.Body>
 

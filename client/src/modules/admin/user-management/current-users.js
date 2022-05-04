@@ -34,8 +34,14 @@ export default function CurrentUsers() {
   }
 
   async function handleFormChange(e) {
-    const { name, value } = e.target;
+    let { name, value, checked, type } = e.target;
+    console.log(e.target);
+    if (name === 'status') {
+      value = checked ? 'active' : 'inactive';
+    }
     setForm((form) => ({ ...form, [name]: value }));
+
+    console.log(form);
   }
 
   async function handleFormSubmit(e) {
@@ -225,20 +231,6 @@ export default function CurrentUsers() {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="editUserStatus">
-              <Form.Label>Enable/ Disable Account</Form.Label>
-              <Form.Select
-                name="status"
-                value={form.status}
-                onChange={handleFormChange}
-              >
-                <option value="" hidden>
-                  Select Status
-                </option>
-                <option value="active">Enable Account</option>
-                <option value="inactive">Disable account</option>
-              </Form.Select>
-            </Form.Group>
             <Form.Group className="mb-3" controlId="organization">
               <Form.Label>Update Organization/Institution</Form.Label>
               <Form.Select
@@ -268,6 +260,31 @@ export default function CurrentUsers() {
                 />
               )}
             </Form.Group>
+            <Form.Group>
+              <Form.Check
+                inline
+                type="switch"
+                id={form.id}
+                label="active"
+                name="status"
+                checked={form.status === 'active'}
+                onChange={handleFormChange}
+              />
+            </Form.Group>
+            {/* <Form.Group className="mb-3" controlId="editUserStatus">
+              <Form.Label>Enable/ Disable Account</Form.Label>
+              <Form.Select
+                name="status"
+                value={form.status}
+                onChange={handleFormChange}
+              >
+                <option value="" hidden>
+                  Select Status
+                </option>
+                <option value="active">Enable Account</option>
+                <option value="inactive">Disable account</option>
+              </Form.Select>
+            </Form.Group> */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" type="submit" className="btn-lg">
