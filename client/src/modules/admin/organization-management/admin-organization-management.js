@@ -19,14 +19,16 @@ export default function AdminOrganizationManagement() {
   const [showAddOrgModal, setShowAddOrgModal] = useState(false);
   const [showRenameOrgModal, setShowRenameOrgModal] = useState(false);
   const refreshOrgs = useRecoilRefresher_UNSTABLE(organizationsSelector);
+  const [oldOrgName, setOldOrgName] = useState([]);
 
   async function openAddOrgModal() {
     setShowAddOrgModal(true);
   }
 
-  async function openRenameOrgModal(cell) {
+  async function openEditOrgModal(cell) {
     setShowRenameOrgModal(true);
     setForm(cell?.row?.original);
+    setOldOrgName(cell?.row?.original);
     const { id, name } = cell?.row?.original;
   }
 
@@ -90,10 +92,7 @@ export default function AdminOrganizationManagement() {
         return (
           <>
             {props.row.original.id !== 1 ? (
-              <Button
-                className="me-2"
-                onClick={() => openRenameOrgModal(props)}
-              >
+              <Button className="me-2" onClick={() => openEditOrgModal(props)}>
                 Edit
               </Button>
             ) : (
@@ -164,13 +163,13 @@ export default function AdminOrganizationManagement() {
         >
           <Form className="bg-light p-3" onSubmit={handleRenameSubmit}>
             <Modal.Header closeButton>
-              <Modal.Title>Rename Organization</Modal.Title>
+              <Modal.Title>Edit Organization</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
               <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>Current Organization Name</Form.Label>
-                <span>{form.name} </span>
+                <span>{oldOrgName.name} </span>
               </Form.Group>
               <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>New Organization Name</Form.Label>
