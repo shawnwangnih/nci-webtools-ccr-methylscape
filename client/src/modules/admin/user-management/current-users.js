@@ -16,7 +16,7 @@ export default function CurrentUsers() {
   const users = useRecoilValue(usersSelector);
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const [showInactiveUsers, setShowInactiveUsers] = useState(false);
-  const [userStatus, setUserStatus] = useState();
+  const [userStatus, setUserStatus] = useState(true);
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -40,15 +40,19 @@ export default function CurrentUsers() {
 
   async function handleFormChange(e) {
     const { name, value } = e.target;
+    // setUserStatus(e.target.checked);
+    // console.log(userStatus);
+    // userStatus ? (form.status = 'inactive') : (form.status = 'active');
     setForm((form) => ({ ...form, [name]: value }));
+    console.log(form);
   }
 
-  async function handleUserStatusChange(e) {
+  function handleUserStatusChange(e) {
     console.log(e.target);
     setUserStatus(e.target.checked);
     console.log(userStatus);
     let s;
-    userStatus ? (s = 'inactive') : (s = 'active');
+    userStatus ? (s = 'active') : (s = 'inactive');
     setForm((form) => ({ ...form, status: s }));
     console.log(form);
   }
@@ -277,8 +281,6 @@ export default function CurrentUsers() {
                 name="status"
                 checked={userStatus}
                 onChange={handleUserStatusChange}
-                //checked={form.status === 'active'}
-                //onChange={handleFormChange}
               />
             </Form.Group>
             {/* <Form.Group className="mb-3" controlId="editUserStatus">
