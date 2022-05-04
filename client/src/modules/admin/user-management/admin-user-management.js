@@ -6,7 +6,7 @@ export default function AdminUserManagement() {
   return (
     <>
       <Container fluid="xxl" className="my-3 text-white rounded h-100">
-        <h1 className="mb-1 h2">Admin User Management</h1>
+        <h1 className="mb-1 h2">Manage Users</h1>
         <div className="bg-white">
           <Tabs
             defaultActiveKey="currentusers"
