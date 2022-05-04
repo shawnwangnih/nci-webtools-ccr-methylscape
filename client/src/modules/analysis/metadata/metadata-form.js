@@ -36,8 +36,9 @@ export default function MetadataForm({ className, onSelect }) {
           label: 'RF Purity (Absolute)',
           value: 'rfPurityAbsolute',
           type: 'continuous',
+          dtick: 0.05,
         },
-        { label: 'Age', value: 'age', type: 'continuous' },
+        { label: 'Age', value: 'age', type: 'continuous', dtick: 5 },
       ],
     },
   ];

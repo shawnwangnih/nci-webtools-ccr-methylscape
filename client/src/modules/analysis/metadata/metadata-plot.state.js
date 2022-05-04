@@ -166,7 +166,7 @@ export const plotState = selector({
               ...(color.type == 'continuous' && {
                 marker: {
                   color: data.map((e) => e[color.value]),
-                  colorbar: { title: color.label, dtick: 5 },
+                  colorbar: { title: color.label, dtick: color.dtick },
                 },
               }),
             },
