@@ -136,33 +136,6 @@ export default function RegisterUsers() {
         </div>
       ),
     },
-
-    {
-      Header: 'Role',
-      accessor: 'roleName',
-      Cell: (e) => (
-        <div
-          style={{
-            textAlign: 'left',
-          }}
-        >
-          {e.value || 'NA'}
-        </div>
-      ),
-    },
-    {
-      Header: 'Status',
-      accessor: 'status',
-      Cell: (e) => (
-        <div
-          style={{
-            textAlign: 'left',
-          }}
-        >
-          {e.value}
-        </div>
-      ),
-    },
     {
       Header: 'Actions',
       id: 'actions',
