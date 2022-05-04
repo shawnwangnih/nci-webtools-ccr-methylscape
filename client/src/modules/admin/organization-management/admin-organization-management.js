@@ -85,6 +85,7 @@ export default function AdminOrganizationManagement() {
     {
       Header: 'Actions',
       id: 'actions',
+      disableSortBy: true,
       Cell: (props) => {
         return (
           <>

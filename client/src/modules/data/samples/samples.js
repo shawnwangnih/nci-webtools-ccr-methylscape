@@ -17,6 +17,7 @@ export default function Samples() {
       Header: () => null,
       id: 'expander',
       aria: '',
+      disableSortBy: true,
       Cell: ({ row }) => (
         <span {...row.getToggleRowExpandedProps()}>
           {row.isExpanded ? <DashSquare /> : <PlusSquare />}

@@ -160,6 +160,7 @@ export default function CurrentUsers() {
     {
       Header: 'Actions',
       id: 'actions',
+      disableSortBy: true,
       Cell: ({ row }) => (
         <div>
           <Button className="me-2" onClick={() => openEditModal({ row })}>
