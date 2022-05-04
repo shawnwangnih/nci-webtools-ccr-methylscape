@@ -16,7 +16,6 @@ export default function CurrentUsers() {
   const users = useRecoilValue(usersSelector);
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const [showInactiveUsers, setShowInactiveUsers] = useState(false);
-  const [userStatus, setUserStatus] = useState(true);
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -28,7 +27,6 @@ export default function CurrentUsers() {
     ...(showInactiveUsers ? inactiveUsers : []),
   ];
   const organizations = useRecoilValue(organizationsSelector);
-  const mergeForm = (state) => setForm({ ...form, ...state });
 
   async function openEditModal({ row }) {
     setShowEditModal(true);
@@ -264,7 +262,7 @@ export default function CurrentUsers() {
             <Form.Group>
               <Form.Check
                 inline
-                type="checkbox"
+                type="switch"
                 id={form.id}
                 label="active"
                 name="status"
