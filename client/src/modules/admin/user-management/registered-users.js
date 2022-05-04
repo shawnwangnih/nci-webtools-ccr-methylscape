@@ -113,13 +113,13 @@ export default function RegisterUsers() {
         name: e.organizationName,
         other: e.organizationOther,
       }),
-      Cell: ({value}) => (
+      Cell: ({ value }) => (
         <div
           style={{
             textAlign: 'left',
           }}
         >
-          {value.name} {(value.id === 1 && value.other) && `(${value.other})`}
+          {value.name} {value.id === 1 && value.other && `(${value.other})`}
         </div>
       ),
     },
@@ -166,6 +166,7 @@ export default function RegisterUsers() {
     {
       Header: 'Actions',
       id: 'actions',
+      disableSortBy: true,
       Cell: ({ row }) => (
         <div>
           <Button className="me-2" onClick={() => openApprovalModal({ row })}>
