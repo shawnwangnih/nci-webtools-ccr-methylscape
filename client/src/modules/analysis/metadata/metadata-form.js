@@ -27,16 +27,19 @@ export default function MetadataForm({ className, onSelect }) {
       options: [
         { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
         { label: 'Sex', value: 'sex', type: 'categorical' },
-        {
-          label: 'RF Purity (Absolute)',
-          value: 'rfPurityAbsolute',
-          type: 'categorical',
-        },
       ],
     },
     {
       label: 'Continuous',
-      options: [{ label: 'Age', value: 'age', type: 'continuous' }],
+      options: [
+        {
+          label: 'RF Purity (Absolute)',
+          value: 'rfPurityAbsolute',
+          type: 'continuous',
+          dtick: 0.05,
+        },
+        { label: 'Age', value: 'age', type: 'continuous', dtick: 5 },
+      ],
     },
   ];
 
