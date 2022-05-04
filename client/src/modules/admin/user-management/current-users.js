@@ -35,13 +35,10 @@ export default function CurrentUsers() {
 
   async function handleFormChange(e) {
     let { name, value, checked, type } = e.target;
-    console.log(e.target);
     if (name === 'status') {
       value = checked ? 'active' : 'inactive';
     }
     setForm((form) => ({ ...form, [name]: value }));
-
-    console.log(form);
   }
 
   async function handleFormSubmit(e) {
@@ -98,13 +95,13 @@ export default function CurrentUsers() {
         name: e.organizationName,
         other: e.organizationOther,
       }),
-      Cell: ({value}) => (
+      Cell: ({ value }) => (
         <div
           style={{
             textAlign: 'left',
           }}
         >
-          {value.name} {(value.id === 1 && value.other) && `(${value.other})`}
+          {value.name} {value.id === 1 && value.other && `(${value.other})`}
         </div>
       ),
     },

@@ -18,10 +18,8 @@ export default function AdminOrganizationManagement() {
   const [form, setForm] = useState([]);
   const [showAddOrgModal, setShowAddOrgModal] = useState(false);
   const [showRenameOrgModal, setShowRenameOrgModal] = useState(false);
-
-  const [editableRowIndex, setEditableRowIndex] = React.useState(null);
-
   const refreshOrgs = useRecoilRefresher_UNSTABLE(organizationsSelector);
+  const [showBtn, setShowBtn] = useState(true);
 
   async function openAddOrgModal() {
     setShowAddOrgModal(true);
@@ -65,10 +63,12 @@ export default function AdminOrganizationManagement() {
     refreshOrgs();
   }
 
-  function handleRenameSubmit(e) {
+  async function handleRenameSubmit(e) {
     e.preventDefault();
-    console.log('rename');
-    console.log(form);
+    const response = await axios.put(`api/organizations/${form.id}`, form);
+    console.log(response);
+    setShowRenameOrgModal(false);
+    refreshOrgs();
   }
   const cols = [
     {
@@ -87,24 +87,30 @@ export default function AdminOrganizationManagement() {
     {
       Header: 'Actions',
       id: 'actions',
-      Cell: ({ row, setEditableRowIndex, editableRowIndex }) => (
-        // <div>
-        //   <Button className="me-2" onClick={() => openRenameOrgModal({ row })}>
-        //     Rename
-        //   </Button>
-        //   <Button
-        //     className="btn-danger me-2"
-        //     onClick={(e) => handleRemoveOrgChange({ row })}
-        //   >
-        //     Remove
-        //   </Button>
-        // </div>
-        <div>
-          <Button className="me-2" onClick={() => openRenameOrgModal({ row })}>
-            Edit
-          </Button>
-        </div>
-      ),
+      //   Cell: ({ row }) => (
+
+      //           <Button
+      //             className="me-2"
+      //             onClick={() => openRenameOrgModal({ row })}
+      //           >
+      //             Edit
+      //           </Button>
+
+      //   ),
+      Cell: (props) => {
+        return (
+          <>
+            {props.row.original.id !== 1 ? (
+              <Button
+                className="me-2"
+                onClick={() => openRenameOrgModal(props)}
+              >
+                Edit
+              </Button>
+            ) : null}
+          </>
+        );
+      },
     },
   ];
   return (
@@ -225,7 +231,7 @@ export default function AdminOrganizationManagement() {
 
             <Modal.Footer>
               <Button variant="primary" type="submit" className="btn-lg">
-                Add
+                Rename
               </Button>
             </Modal.Footer>
           </Form>
