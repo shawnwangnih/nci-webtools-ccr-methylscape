@@ -28,32 +28,25 @@ export default function CurrentUsers() {
     ...(showInactiveUsers ? inactiveUsers : []),
   ];
   const organizations = useRecoilValue(organizationsSelector);
+  const mergeForm = (state) => setForm({ ...form, ...state });
 
   async function openEditModal({ row }) {
     setShowEditModal(true);
     setForm(row.original);
-    row.original.status === 'active'
-      ? setUserStatus(true)
-      : setUserStatus(false);
-    console.log(userStatus);
+    // row.original.status === 'active'
+    //   ? setUserStatus(true)
+    //   : setUserStatus(false);
+    // console.log(userStatus);
   }
 
   async function handleFormChange(e) {
-    const { name, value } = e.target;
-    // setUserStatus(e.target.checked);
-    // console.log(userStatus);
-    // userStatus ? (form.status = 'inactive') : (form.status = 'active');
-    setForm((form) => ({ ...form, [name]: value }));
-    console.log(form);
-  }
-
-  function handleUserStatusChange(e) {
+    let { name, value, checked, type } = e.target;
     console.log(e.target);
-    setUserStatus(e.target.checked);
-    console.log(userStatus);
-    let s;
-    userStatus ? (s = 'active') : (s = 'inactive');
-    setForm((form) => ({ ...form, status: s }));
+    if (name === 'status') {
+      value = checked ? 'active' : 'inactive';
+    }
+    setForm((form) => ({ ...form, [name]: value }));
+
     console.log(form);
   }
 
@@ -279,8 +272,8 @@ export default function CurrentUsers() {
                 id={form.id}
                 label="active"
                 name="status"
-                checked={userStatus}
-                onChange={handleUserStatusChange}
+                checked={form.status === 'active'}
+                onChange={handleFormChange}
               />
             </Form.Group>
             {/* <Form.Group className="mb-3" controlId="editUserStatus">
