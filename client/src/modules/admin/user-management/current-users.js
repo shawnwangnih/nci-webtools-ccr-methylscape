@@ -33,10 +33,6 @@ export default function CurrentUsers() {
   async function openEditModal({ row }) {
     setShowEditModal(true);
     setForm(row.original);
-    // row.original.status === 'active'
-    //   ? setUserStatus(true)
-    //   : setUserStatus(false);
-    // console.log(userStatus);
   }
 
   async function handleFormChange(e) {
