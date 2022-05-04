@@ -19,7 +19,6 @@ export default function AdminOrganizationManagement() {
   const [showAddOrgModal, setShowAddOrgModal] = useState(false);
   const [showRenameOrgModal, setShowRenameOrgModal] = useState(false);
   const refreshOrgs = useRecoilRefresher_UNSTABLE(organizationsSelector);
-  const [showBtn, setShowBtn] = useState(true);
 
   async function openAddOrgModal() {
     setShowAddOrgModal(true);
@@ -47,7 +46,6 @@ export default function AdminOrganizationManagement() {
     const { id, name } = cell?.row?.original;
     console.log(id);
     console.log(name);
-
     //await axios.delete(`api/organizations/${id}`);
     //refreshOrgs();
   }
@@ -87,16 +85,6 @@ export default function AdminOrganizationManagement() {
     {
       Header: 'Actions',
       id: 'actions',
-      //   Cell: ({ row }) => (
-
-      //           <Button
-      //             className="me-2"
-      //             onClick={() => openRenameOrgModal({ row })}
-      //           >
-      //             Edit
-      //           </Button>
-
-      //   ),
       Cell: (props) => {
         return (
           <>
@@ -107,7 +95,9 @@ export default function AdminOrganizationManagement() {
               >
                 Edit
               </Button>
-            ) : null}
+            ) : (
+              <div></div>
+            )}
           </>
         );
       },
@@ -115,7 +105,7 @@ export default function AdminOrganizationManagement() {
   ];
   return (
     <>
-      <Container fluid="xxl" className="my-3 text-white rounded h-100">
+      <Container fluid="xxl" className="my-3 text-white rounded">
         <Row>
           <div class="col-sm-10 col-xs-12 col-12">
             <h1 className="h2">Admin Oraganization Management</h1>
@@ -129,22 +119,15 @@ export default function AdminOrganizationManagement() {
             </Button>
           </div>
         </Row>
-        <div className="bg-white text-primary">
+        <div className="bg-white text-primary px-3">
           <Table
             responsive
             data={organizations}
             columns={cols}
             options={{ disableFilters: true }}
           />
-
-          {/* <ul>
-            {organizations.map((o) => (
-              <li key={`organization-${o.name}`} value={o.id}>
-                {o.name}
-              </li>
-            ))}
-          </ul> */}
         </div>
+
         <Modal show={showAddOrgModal} onHide={() => setShowAddOrgModal(false)}>
           <Form className="bg-light p-3" onSubmit={handleAddOrgSubmit}>
             <Modal.Header closeButton>
