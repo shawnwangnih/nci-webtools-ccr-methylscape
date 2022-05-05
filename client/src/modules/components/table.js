@@ -329,13 +329,13 @@ export default function Table({
                 disabled={!canPreviousPage}
                 className="border border-0"
               >
-                &#60;
+                Previous
               </Pagination.Prev>
               <Pagination.Next
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
               >
-                &#62;
+                Next
               </Pagination.Next>
               <Pagination.Last
                 onClick={() => gotoPage(pageCount - 1)}
@@ -345,22 +345,22 @@ export default function Table({
               </Pagination.Last>
             </Pagination>
           </div>
-          <div className="d-flex align-items-center">
+          <div className="d-flex ps-2 pb-1 align-items-center">
             {/* {rows.length.toLocaleString()} */}
-            Page {pageIndex + 1} of {pageOptions.length}
-          </div>
-          <div className="d-flex ps-2 p-1 align-items-center">
-            | Go to page: {'  '}
+            {/* Page {pageIndex + 1} of {pageOptions.length} */}
+            Page &nbsp;
             <input
               type="number"
-              defaultValue={pageIndex + 1}
+              // defaultValue={pageIndex + 1}
+              value={pageIndex + 1}
               onChange={(e) => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 gotoPage(page);
               }}
               style={paginationInput}
             />
-          </div>{' '}
+            &nbsp; of {pageOptions.length}
+          </div>
         </div>
       </div>
     </>

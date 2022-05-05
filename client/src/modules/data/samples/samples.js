@@ -99,44 +99,44 @@ export default function Samples() {
     const { original } = row;
     return (
       <Container fluid="xxl">
-        <Row>
+        <Row className="ps-6">
           <Col
             md
             className="table table-bordered detail-table detail-table-divider mx-1 my-1"
           >
             <Row>
-              <Col>
-                <b>Diagnosis:</b>
+              <Col className="text-primary small">
+                <b>DIAGNOSIS:</b>
               </Col>
               <Col>{original.diagnosis}</Col>
             </Row>
             <Row>
-              <Col>
-                <b>Methylation Family (MF):</b>
+              <Col className="text-primary small">
+                <b>METHYLATION FAMILY (MF):</b>
               </Col>
               <Col>{original.family}</Col>
             </Row>
             <Row>
-              <Col>
-                <b>MF Calibrated Scores:</b>
+              <Col className="text-primary small">
+                <b>MF CALIBRATED SCORES:</b>
               </Col>
               <Col>{original.family_score}</Col>
             </Row>
             <Row>
-              <Col>
-                <b>Methylation Class (MC):</b>
+              <Col className="text-primary small">
+                <b>METHYLATION CLASS (MC):</b>
               </Col>
               <Col>{original.class}</Col>
             </Row>
-            <Row>
+            <Row className="text-primary small">
               <Col>
-                <b>MC Calibrated Scores:</b>
+                <b>MC CALIBRATED SCORES:</b>
               </Col>
               <Col>{original.class_score}</Col>
             </Row>
             <Row>
-              <Col>
-                <b>MGMT Score:</b>
+              <Col className="text-primary small">
+                <b>MGMT SCORES:</b>
               </Col>
               <Col sm="6">
                 {original.mgmt_prediction == null
@@ -145,8 +145,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <b>Notes:</b>
+              <Col className="text-primary small">
+                <b>NOTES:</b>
               </Col>
               <Col>{original.notes}</Col>
             </Row>
@@ -156,14 +156,14 @@ export default function Samples() {
             className="table table-bordered detail-table detail-table-divider mx-1 my-1"
           >
             <Row>
-              <Col>
-                <b>Tumor Site:</b>
+              <Col className="text-primary small">
+                <b>TUMORE SITES:</b>
               </Col>
               <Col>{original.tumor_data}</Col>
             </Row>
             <Row>
-              <Col>
-                <b>t-SNE Plot:</b>
+              <Col className="text-primary small">
+                <b>t-SNE PLOT:</b>
               </Col>
               <Col>
                 <Button
@@ -178,8 +178,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <b>Methylation Report:</b>
+              <Col className="text-primary small">
+                <b>METHYLATION REPORT:</b>
               </Col>
               <Col>
                 <Button
@@ -194,8 +194,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <b>QCI Report:</b>
+              <Col className="text-primary small">
+                <b>QCI REPORT:</b>
               </Col>
               <Col>
                 {original.xml_report ? (
@@ -214,8 +214,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <b>NGS Report (legacy)</b>
+              <Col className="text-primary small">
+                <b>NGS REPORT (LEGACY)</b>
               </Col>
               <Col>
                 <Button
@@ -230,8 +230,8 @@ export default function Samples() {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <b>Slide Image:</b>
+              <Col className="text-primary small">
+                <b>SLIDE IMAGE:</b>
               </Col>
               <Col>
                 <Button
