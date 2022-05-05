@@ -231,7 +231,7 @@ export const schema = [
     schema: (table, connection) => {
       table.increments("id");
       table.integer("order");
-      table.string("name");
+      table.string("name").notNullable().unique();
       table.enum("status", ["inactive", "active"]).defaultTo("active");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
