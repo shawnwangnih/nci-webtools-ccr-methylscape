@@ -153,6 +153,10 @@ export default function Table({
       }
     }
   );
+
+  const paginationInput = {
+    width: '50px',
+  };
   return (
     <>
       <Row className="justify-content-end">
@@ -309,8 +313,7 @@ export default function Table({
               ))}
             </Form.Control>
           </div>
-
-          <div className="d-flex pe-2 p-2 align-items-center">
+          <div className="d-flex align-items-center">
             {/* {(1 + pageIndex * pageSize).toLocaleString()} */}
           </div>
           <div className="d-flex">
@@ -342,10 +345,22 @@ export default function Table({
               </Pagination.Last>
             </Pagination>
           </div>
-          <div className="d-flex ps-2 p-1 align-items-center">
+          <div className="d-flex align-items-center">
             {/* {rows.length.toLocaleString()} */}
             Page {pageIndex + 1} of {pageOptions.length}
           </div>
+          <div className="d-flex ps-2 p-1 align-items-center">
+            | Go to page: {'  '}
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={paginationInput}
+            />
+          </div>{' '}
         </div>
       </div>
     </>
