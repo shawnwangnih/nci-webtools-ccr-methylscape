@@ -174,6 +174,8 @@ export const schema = [
       table.text("log");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -191,6 +193,8 @@ export const schema = [
       table.string("description");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -213,6 +217,8 @@ export const schema = [
       table.string("resource");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -226,8 +232,11 @@ export const schema = [
       table.increments("id");
       table.integer("order");
       table.string("name");
+      table.enum("status", ["inactive", "active"]).defaultTo("active");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -248,9 +257,11 @@ export const schema = [
       table.string("firstName");
       table.string("lastName");
       table.string("email").unique();
-      table.enum("status", ["pending", "inactive", "active"]).defaultTo("pending");
+      table.enum("status", ["pending", "rejected", "inactive", "active"]).defaultTo("pending");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
