@@ -42,7 +42,7 @@ router.put(
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const { id } = request.params;
-        const user = {...request.body, id};
+        const user = {...request.body, id, updatedAt: new Date() };
         const results = await userManager.updateUser(user);
         response.json(results);
     })

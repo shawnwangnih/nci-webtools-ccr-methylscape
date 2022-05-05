@@ -39,7 +39,7 @@ router.put(
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const { id } = request.params;
-        const organization = { ...request.body, id };
+        const organization = { ...request.body, id, updatedAt: new Date() };
         const results = await connection('organization')
             .where({ id })
             .update(organization);
