@@ -98,6 +98,45 @@ export default function AdminOrganizationManagement() {
       ),
     },
     {
+      Header: 'Created By',
+      accessor: 'createdBy',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
+    },
+    {
+      Header: 'Updated Date',
+      accessor: 'updatedAt',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {new Date(e.value).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
+      Header: 'Updated By',
+      accessor: 'updatedBy',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       disableSortBy: true,
