@@ -28,16 +28,16 @@ export default function Admin() {
       <Row>
         {actions.map((action, index) => (
           <Col md="3" key={`admin-action-${index}`}>
-            <Link to={action.link}>
+            <Link to={action.link} className="text-decoration-none">
               <Card className="card-link card-accent-primary">
                 <Card.Body className="shadow">
-                  <div className="text-center py-4">
+                  <div className="text-center py-4 admin-manage-icons">
                     <i
                       className={`display-3 bi ${action.icon}`}
                       role="img"
                       aria-label={action.title}
                     />
-                    <h2 className="h5 text-decoration-none">{action.title}</h2>
+                    <h2 className="h5">{action.title}</h2>
                   </div>
                 </Card.Body>
               </Card>
