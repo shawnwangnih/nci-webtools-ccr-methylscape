@@ -49,7 +49,12 @@ export default function RegisterUsers() {
 
   function handleRejectionFormChange(e) {
     const { name, value } = e.target;
-    setRejectionForm((form) => ({ ...form, [name]: value }));
+    //setRejectionForm((form) => ({...form,status:'rejected'}));
+    setRejectionForm((form) => ({
+      ...form,
+      status: 'rejected',
+      [name]: value,
+    }));
   }
 
   async function handleFormSubmit(e) {
@@ -62,7 +67,9 @@ export default function RegisterUsers() {
   async function handleRejectionFormSubmit(e) {
     e.preventDefault();
     setShowRejectionModal(false);
-    await axios.delete(`api/users/${rejectionForm.id}`);
+    console.log(rejectionForm);
+    // await axios.delete(`api/users/${rejectionForm.id}`);
+    await axios.put(`api/users/${rejectionForm.id}`, rejectionForm);
     refreshUsers();
   }
 
