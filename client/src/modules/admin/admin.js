@@ -22,10 +22,10 @@ export default function Admin() {
 
   return (
     <Container fluid="xxl" className="my-4 p-3 rounded bg-white">
-      <h1 className="h3 mb-4 text-primary">Administrative Tasks</h1>
+      <h1 className="h3 mb-4 px-3 text-primary">Administrative Tasks</h1>
       <hr className="mb-4 mb-4 border-info" />
 
-      <Row>
+      <Row className="px-3">
         {actions.map((action, index) => (
           <Col md="3" key={`admin-action-${index}`}>
             <Link to={action.link} className="text-decoration-none">
