@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { createImportRequest } = require('../database.js');
 const { getImportLogs } = require('../query.js');
 const { withAsync } = require('../middleware');
+const config = require('../../config.json');
 
 const router = Router();
 
