@@ -82,18 +82,23 @@ export async function initializeSchema(connection, schema) {
   return true;
 }
 
-export async function initializeSchemaForImport(connection, tables, forceRecreate = false) {
-  const importSchema = tables.filter(table => table.import && (forceRecreate || table.recreate));
+export async function initializeSchemaForImport(connection, schema, sources, forceRecreate = false) {
+  const shouldRecreateTable = table => (forceRecreate || table.recreate) && sources.find(s => s.table === table.name);
+  const importSchema = schema.filter(shouldRecreateTable);
   return await initializeSchema(connection, importSchema);
+}
+
+export function getFileMetadataFromPath(filePath) {
+  return {
+    filename: basename(filePath),
+    filepath: filePath,
+  }
 }
 
 export async function createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig }) {
   const fileExtension = sourcePath.split('.').pop().toLowerCase();
   const inputStream = await sourceProvider.readFile(sourcePath);
-  const metadata = {
-    filename: basename(sourcePath),
-    filepath: sourcePath,
-  }
+  const metadata = getFileMetadataFromPath(sourcePath);
 
   switch (fileExtension) {
     case 'csv':
@@ -107,6 +112,7 @@ export async function createRecordIterator(sourcePath, sourceProvider, { columns
       throw new Error(`Unsupported file extension: ${fileExtension}`);
   }
 }
+
 
 export async function createExcelRecordIterator(stream, columns, metadata = {}) {
   let buffers = [];
