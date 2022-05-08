@@ -69,30 +69,17 @@ export async function processMessage({
       const message = data.Messages[0];
       const messageBody = messageParser(message.Body);
 
-      // while processing is not complete, update the message's visibilityTimeout
-      const intervalId = setInterval(async () => {
-        await sqs.send(
-          new ChangeMessageVisibilityCommand({
-            QueueUrl: queueUrl,
-            ReceiptHandle: message.ReceiptHandle,
-            VisibilityTimeout: visibilityTimeout,
-          }),
-        );
-      }, 1000 * (visibilityTimeout / 2));
-
       try {
-        await messageHandler(messageBody);
-      } catch (e) {
-        await errorHandler(e, message);
-      } finally {
-        // remove original message from queue/bucket once processed
-        clearInterval(intervalId);
+        // delete message immediately since processing usually takes longer than the message's validity period
         await sqs.send(
           new DeleteMessageCommand({
             QueueUrl: queueUrl,
             ReceiptHandle: message.ReceiptHandle,
           }),
         );
+        await messageHandler(messageBody);
+      } catch (e) {
+        await errorHandler(e, message);
       }
     }
   } catch (e) {
