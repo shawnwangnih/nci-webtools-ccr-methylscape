@@ -1,5 +1,3 @@
-import { patternExtractionFormatter } from './services/formatters.js'
-
 export const schema = [
 
   /**
@@ -8,7 +6,6 @@ export const schema = [
    */
   {
     name: "sample",
-    import: true,
     recreate: true,
     schema: (table) => {
       table.increments("id");
@@ -75,7 +72,6 @@ export const schema = [
    */
   {
     name: "sampleCoordinate",
-    import: true,
     recreate: true,
     schema: (table) => {
       table.increments("id");
@@ -92,7 +88,6 @@ export const schema = [
    */
   {
     name: "chromosome",
-    import: true,
     recreate: true,
     schema: (table) => {
       table.increments("id");
@@ -102,12 +97,29 @@ export const schema = [
     }
   },
 
+  
+  /**
+   * Source: genes.csv
+   * Genome references for copy number
+   */
+   {
+    name: "gene",
+    recreate: true,
+    schema: (table) => {
+      table.increments("id");
+      table.string("name");
+      table.integer("chromosome");
+      table.integer("start");
+      table.integer("end");
+      table.index(['chromosome', 'start']);
+    },
+  },
+
   /**
    * Sources: CNV/bins/*.txt
    */
   {
     name: "cnvBin",
-    import: true,
     recreate: false,
     schema: (table) => {
       table.increments("id");
@@ -128,7 +140,6 @@ export const schema = [
    */
   {
     name: "cnvSegment",
-    import: true,
     recreate: false,
     schema: (table) => {
       table.increments("id");
@@ -144,30 +155,13 @@ export const schema = [
     }
   },
 
-  /**
-   * Source: genes.csv
-   * Genome references for copy number
-   */
-  {
-    name: "gene",
-    import: true,
-    recreate: true,
-    schema: (table) => {
-      table.increments("id");
-      table.string("name");
-      table.integer("chromosome");
-      table.integer("start");
-      table.integer("end");
-      table.index(['chromosome', 'start']);
-    },
-  },
 
   /**
    * Stores import job status logs
    */
   {
     name: "importLog",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.string("status");
@@ -186,7 +180,7 @@ export const schema = [
    */
   {
     name: "role",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.string("name").notNullable().unique();
@@ -209,7 +203,7 @@ export const schema = [
    */
   {
     name: "rolePolicy",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.integer("roleId").notNullable().references("role.id");
@@ -227,7 +221,7 @@ export const schema = [
    */
    {
     name: "organization",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.integer("order");
@@ -246,7 +240,7 @@ export const schema = [
    */
   {
     name: "user",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.integer("roleId").references("role.id");
@@ -267,7 +261,6 @@ export const schema = [
 
   {
     name: 'mapBinsToGenes',
-    import: false,
     type: 'function',
     schema: () => {
       return `
@@ -308,7 +301,6 @@ export const schema = [
 
   {
     name: 'mapAllBinsToGenes',
-    import: false,
     type: 'function',
     schema: () => {
       return `
@@ -319,7 +311,9 @@ export const schema = [
             c text;
         begin
             for c in
-                select distinct "sampleIdatFilename" from "cnvBin"
+                select distinct "sampleIdatFilename"from "cnvBin"
+                  group by "sampleIdatFilename"
+                  having count(gene) = 0
             loop
                 execute format('call mapBinsToGenes(%L)', c);
             end loop;
@@ -330,7 +324,6 @@ export const schema = [
 
   {
     name: 'getChromosomeOffset',
-    import: false,
     type: 'function',
     schema: () => {
       return `create or replace function getChromosomeOffset (chromosome numeric)
@@ -361,9 +354,8 @@ export const schema = [
               when $1 = 23 then 2881033286
               when $1 = 24 then 3036303846
               else 0
-              END
+          END
       $$ language sql;`
     }
   }
 ];
-
