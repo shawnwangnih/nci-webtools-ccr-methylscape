@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration Approval</title>
+    <style>
+      body,
+      pre {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Dear <%- firstName %> <%- lastName %>,</p>
+
+    <p>Your Methylscape profile has been updated with the following details:</p>
+
+    <div>
+      <strong>Email:</strong>
+      <%- userEmail %>
+    </div>
+    <div>
+      <strong>Role:</strong>
+      <%- userRole %>
+    </div>
+    <div>
+      <strong>Organization:</strong>
+      <%- organization %>
+    </div>
+
+    <p>Please contact the site administrators if you have further questions, or believe this update was made in error.</p>
+
+    <p>Respectfully,</p>
+    <p>Methylscape Application Team</p>
+  </body>
+</html>

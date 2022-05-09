@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your account has been edited by Admin</title>
+    <title>User Registration Rejection</title>
     <style>
       body,
       pre {
@@ -13,20 +13,14 @@
     </style>
   </head>
   <body>
-    <p>Dear Methylscape User,</p>
+    <p>Dear <%- firstName %> <%- lastName %>,</p>
 
-    <p>Your account has been edited by admin</p>
-    <div>
-      <strong>Name:</strong>
-      <%- name %>
-    </div>
-    <div>
-      <strong>Email:</strong>
-      <%- email %>
-    </div>
-    
+    <p>Your Methylscape account registration request has been rejected for the following reason:</p>
+    <p><%- rejectionReason %></p>
+
+    <p>Please contact the site administrators if you have further questions, or believe this rejection was made in error.</p>
 
     <p>Respectfully,</p>
-    <p>Methylscape Web Tool</p>
+    <p>Methylscape Application Team</p>
   </body>
 </html>

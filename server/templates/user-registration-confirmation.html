@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your application has been approved</title>
+    <title>User Registration Confirmation</title>
     <style>
       body,
       pre {
@@ -13,19 +13,11 @@
     </style>
   </head>
   <body>
-    <p>Dear Methylscape User,</p>
+    <p>Dear <%- firstName %> <%- lastName %>,</p>
 
-    <p>Your Registration application has been approved</p>
-    <div>
-      <strong>Name:</strong>
-      <%- name %>
-    </div>
-    <div>
-      <strong>Email:</strong>
-      <%- email %>
-    </div>
+    <p>Your Methylscape account registration request has been received. Please expect a response within 24-48 hours.</p>
 
     <p>Respectfully,</p>
-    <p>Methylscape Web Tool</p>
+    <p>Methylscape Application Team</p>
   </body>
 </html>

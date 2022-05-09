@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your application has been rejected</title>
+    <title>User Registration Request</title>
     <style>
       body,
       pre {
@@ -13,25 +13,26 @@
     </style>
   </head>
   <body>
-    <p>Dear Methylscape User,</p>
+    <p>Dear <%- firstName %> <%- lastName %>,</p>
 
-    <p>Your Registration application has been rejected</p>
+    <p>A new user registration request has been submitted to the Methylscape website:</p>
+
     <div>
       <strong>Name:</strong>
-      <%- name %>
+      <%- userLastName %>, <%- userFirstName %> 
     </div>
     <div>
       <strong>Email:</strong>
-      <%- email %>
+      <%- userEmail %>
     </div>
     <div>
-      <strong>Reason of rejection:</strong>
-      <%- subject %>
+      <strong>Organization:</strong>
+      <%- organization %>
     </div>
-    <div><strong>Message Body:</strong></div>
-    <pre wrap style="white-space: pre-wrap"><%- body %></pre>
+
+    <p>To approve this user, please log in to the Methylscape site and visit the user management portal.</p>
 
     <p>Respectfully,</p>
-    <p>Methylscape Web Tool</p>
+    <p>Methylscape Application Team</p>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Registration Confirmation</title>
+    <title>User Registration Approval</title>
     <style>
       body,
       pre {
@@ -13,20 +13,13 @@
     </style>
   </head>
   <body>
-    <p>Dear Methylscape <%- name %>,</p>
+    <p>Dear <%- firstName %> <%- lastName %>,</p>
 
-    <div>You have successfully registered Methylscape</div>
-    <div>
-      <strong>Name:</strong>
-      <%- name %>
-    </div>
-    <div>
-      <strong>Email:</strong>
-      <%- email %>
-    </div>
-    <div>You will receive another email when your registration is approved/ rejected</div>
+    <p>Your Methylscape account registration request has been approved. You may now log in to the Methylscape analysis portal at the following url:</p>
+    
+    <a href="<%- websiteUrl %>"><%- websiteUrl %></a>
 
     <p>Respectfully,</p>
-    <p>Methylscape Web Tool</p>
+    <p>Methylscape Application Team</p>
   </body>
 </html>
