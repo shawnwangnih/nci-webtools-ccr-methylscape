@@ -5,6 +5,7 @@ import minimist from 'minimist';
 import {
   createConnection,
   createRecordIterator,
+  getFileMetadataFromPath,
   importTable,
   initializeSchemaForImport,
   loadAwsCredentials,
@@ -14,7 +15,6 @@ import { LocalProvider } from './services/providers/localProvider.js';
 import { S3Provider } from './services/providers/s3Provider.js';
 import { getLogger } from './services/logger.js';
 import { S3Client } from '@aws-sdk/client-s3';
-import groupBy from 'lodash/groupBy.js';
 
 // determine if this script was launched from the command line
 const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
@@ -26,6 +26,7 @@ if (isMainModule) {
   const schemaPath = pathToFileURL(args.schema || './schema.js');
   const sourcesPath = pathToFileURL(args.sources || './sources.js');
   const providerName = args.provider || 'local';
+  const forceRecreate = args.recreate;
   let providerArgs = [...args._];
 
   const SourceProvider = {
@@ -52,51 +53,50 @@ if (isMainModule) {
   const { sources } = await import(sourcesPath);
   const sourceProvider = new SourceProvider(...providerArgs);
   const logger = getLogger("import");
-  await importDatabase(connection, schema, sources, sourceProvider, logger);
+  await importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate);
   process.exit(0);
 }
 
 export async function importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate = false) {
-  const tableSchemaMap = groupBy(schema, 'name');
-  await initializeSchemaForImport(connection, schema, forceRecreate);
-
+  const tableSources = sources.filter(source => source.table);
+  const postImportSources = sources.filter(source => source.type === 'postImport');
   let totalCount = 0;
-  const { results, duration } = await withDuration(async () => {
-    for (let source of sources) {
-      const { description, table, columns, skipImport, parseConfig } = source;
-      const { partitionSchema } = tableSchemaMap[table][0];
-      const sourcePaths = await getSourcePaths(source, sourceProvider);
+  
+  let { results, duration } = await withDuration(async () => {
+    return await connection.transaction(async (connection) => {
+      await initializeSchemaForImport(connection, schema, sources, forceRecreate);
 
-      for (const sourcePath of sourcePaths) {
-        logger.info(`Importing ${sourcePath} => ${table} (${description})`);
-        const metadata = { filename: basename(sourcePath) };
-
-        // determine if import should be skipped
-        const shouldSkip = typeof skipImport === 'function' &&
-          await skipImport(connection, metadata);
-
-        if (shouldSkip) {
-          logger.info(`Skipping import of ${sourcePath} => ${table} (${description})`);
-        } else {
-          // initialize partition if needed
-          if (typeof partitionSchema === 'function') {
-            await partitionSchema(connection, metadata);
-          }
-
-          const { results, duration } = await connection.transaction(async (transaction) => {
-            return await withDuration(async () => {
-              const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
-              return await importTable(transaction, records, table, logger);
-            });
+      for (let source of tableSources) {
+        const { description, table, columns, skipImport, parseConfig } = source;
+        const shouldSkip = skipImport ? await skipImport(connection) : () => false;
+        const sourcePaths = await getSourcePaths(source, sourceProvider);
+  
+        for (const sourcePath of sourcePaths) {
+          const metadata = getFileMetadataFromPath(sourcePath);
+          if (shouldSkip(metadata)) continue;
+  
+          logger.info(`Importing ${sourcePath} => ${table} (${description})`);
+          const { results, duration } = await withDuration(async () => {
+            const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
+            return await importTable(connection, records, table, logger);
           });
 
-          totalCount += results;
           logger.info(getStatusMessage({ results, duration }));
+          totalCount += results;
         }
       }
-    }
-    return totalCount;
+      return totalCount;
+    })
   });
+
+  // post-import callbacks are executed after the transaction is committed
+  // this is to allow the database to autovacuum/analyze/etc.
+  for (const source of postImportSources) {  
+    logger.info(`Running post-import step: ${source.description}`);
+    const status = await withDuration(async () => await source.callback(connection));
+    logger.info(`${status.results} (${(status.duration.toFixed(2))}s)`);
+    duration += status.duration;
+  }
 
   logger.info(getStatusMessage({ results, duration }));
 }

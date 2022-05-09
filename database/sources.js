@@ -243,13 +243,17 @@ export const sources = [
       { sourceName: "seg.mean", name: "meanValue" },
       { sourceName: "seg.median", name: "medianValue" },
     ],
-    skipImport: async (connection, metadata) => {
-      const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.seg\.txt$/);
-      const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
-      const [result] = await connection('cnvSegment')
-        .count('id', {as: 'count'})
-        .where({ sampleIdatFilename })
-      return +result.count > 0;
+    skipImport: async (connection) => {
+      const recordKey = 'sampleIdatFilename';
+      const records = await connection('cnvSegment').select(recordKey).pluck(recordKey).distinct();
+      const recordMap = Object.fromEntries(records.map(r => [r, true]));
+
+
+      return (metadata) => {
+        const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.seg\.txt$/);
+        const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
+        return recordMap[sampleIdatFilename];
+      }
     },
   },
   {
@@ -269,14 +273,34 @@ export const sources = [
       { sourceName: "Feature", name: "feature" },
       { sourceName: "MedianLogIntensity", name: "medianValue" },
     ],
-    skipImport: async (connection, metadata) => {
-      const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.bins\.txt$/);
-      const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
-      const [result] = await connection('cnvBin')
-        .count('id', {as: 'count'})
-        .where({ sampleIdatFilename })
-      return +result.count > 0;
+    skipImport: async (connection) => {
+      const recordKey = 'sampleIdatFilename';
+      const records = await connection('cnvBin').select(recordKey).pluck(recordKey).distinct();
+      const recordMap = Object.fromEntries(records.map(r => [r, true]));
+
+      return (metadata) => {
+        const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.bins\.txt$/);
+        const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
+        return recordMap[sampleIdatFilename];
+      }
     },
   },
+  {
+    type: 'postImport',
+    description: 'Analyse CNV bins',
+    callback: async (connection) => {
+      await connection.raw('analyse "cnvBin"');
+      return `Ran analysis on CNV bins`;
+    }
+  },
+  {
+    type: 'postImport',
+    description: 'Map CNV bins to genes',
+    callback: async (connection) => {
+      await connection.raw('call mapAllBinsToGenes()');
+      return `Mapped CNV bins to genes`;
+    }
+  }
 ];
 
+export default sources;
