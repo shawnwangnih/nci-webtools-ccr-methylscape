@@ -3,6 +3,7 @@ import mapValues from 'lodash/mapValues.js';
 import { parse } from 'csv-parse';
 import * as XLSX from 'xlsx';
 import knex from 'knex';
+import postgres from 'pg';
 
 export function createConnection(
   args = {
@@ -19,11 +20,26 @@ export function createConnection(
     pool: {
       min: 2,
       max: 20,
+      reapIntervalMillis: 50,
       acquireTimeoutMillis: 100 * 1000,
       createTimeoutMillis: 100 * 1000,
       propagateCreateError: false,
     }
   });
+}
+
+export async function createPostgresClient(
+  args = {
+    host: 'localhost',
+    port: 5432,
+    user: 'methylscape',
+    password: 'methylscape',
+    database: 'methylscape',
+  }
+) {
+  const client = new postgres.Client(args);
+  await client.connect()
+  return client;
 }
 
 export function loadAwsCredentials(config) {
