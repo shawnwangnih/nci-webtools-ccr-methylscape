@@ -9,6 +9,7 @@ const projectsRouter = require('./routes/projects');
 const sessionRouter = require('./routes/session');
 const usersRouter = require('./routes/users');
 const rolesRouter = require('./routes/roles');
+const notificationsRouter = require('./routes/notifications');
 
 const apiRouter = express.Router();
 
@@ -30,5 +31,6 @@ apiRouter.use(organizationsRouter);
 apiRouter.use(usersRouter);
 apiRouter.use(rolesRouter);
 apiRouter.use(sessionRouter);
+apiRouter.use(notificationsRouter);
 
 module.exports = { apiRouter };
