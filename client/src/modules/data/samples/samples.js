@@ -99,7 +99,7 @@ export default function Samples() {
     const { original } = row;
     return (
       <Container fluid="xxl">
-        <Row className="ps-6">
+        <Row className="ps-3">
           <Col
             md
             className="table table-bordered detail-table detail-table-divider mx-1 my-1"

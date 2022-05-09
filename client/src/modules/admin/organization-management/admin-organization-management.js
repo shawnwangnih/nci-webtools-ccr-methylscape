@@ -219,10 +219,10 @@ export default function AdminOrganizationManagement() {
             </Modal.Header>
 
             <Modal.Body>
-              <Form.Group className="mb-3" controlId="organizationName">
+              {/* <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>Current Organization Name</Form.Label>
                 <span>{oldOrgName.name} </span>
-              </Form.Group>
+              </Form.Group> */}
               <Form.Group className="mb-3" controlId="organizationName">
                 <Form.Label>New Organization Name</Form.Label>
                 <FormControl
