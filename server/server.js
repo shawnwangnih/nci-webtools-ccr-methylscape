@@ -1,6 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const passport = require("passport");
+const nodemailer = require('nodemailer');
 const { registerUserSerializers, registerAuthStrategies } = require("./services/auth/passportUtils");
 const { createSession } = require("./services/session");
 const getLogger = require('./services/logger');
@@ -45,6 +46,10 @@ async function createApp(config) {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/api', apiRouter);
+
+
+  nodemailer.createTransport(config.email.smtp);
+
   app.use(logErrors); // logErrors should always be last
 
   return app;
