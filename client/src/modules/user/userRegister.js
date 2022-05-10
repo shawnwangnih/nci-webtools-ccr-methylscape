@@ -21,12 +21,36 @@ export default function UserRegister() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(form);
     try {
       setAlerts([]);
-      const { status, data } = await axios.post('api/users', form);
-      console.log({ status, data });
-      console.log(form);
+      // const { status, data } = await axios.post('api/users', form);
+      // console.log({ status, data });
+      //console.log(form);
+      // const [firstResponse, secondResponse] = await axios.all([
+      //   axios.post('api/users', form),
+      //   axios.post('/api/notifications', {
+      //     to: 'thuong.nguyen.sep09@gmail.com',
+      //     subject: 'User Registration Confirmation',
+      //     templateName: 'user-registration-confirmation.html',
+      //     params: {
+      //       firstName: form.firstName,
+      //       lastName: form.lastName,
+      //     },
+      //   }),
+      // ]);
+      // console.log(firstResponse);
+      // console.log(secondResponse)
+      await axios.post('api/users', form);
+      await axios.post('/api/notifications', {
+        to: 'thuong.nguyen.sep09@gmail.com',
+        subject: 'User Registration Confirmation',
+        templateName: 'user-registration-confirmation.html',
+        params: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+        },
+      });
+
       setAlerts([
         {
           type: 'success',
