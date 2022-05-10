@@ -2,7 +2,7 @@ import { atom, selector } from 'recoil';
 import axios from 'axios';
 
 export const organizationsSelector = selector({
-  key: 'userRegistration.organizations',
+  key: 'organizationManagement.organizations',
   get: async ({ get }) => {
     try {
       const response = await axios.get('api/organizations');

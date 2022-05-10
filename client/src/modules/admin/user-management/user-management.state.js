@@ -35,7 +35,7 @@ export const activeUser = atom({
 });
 
 export const organizationsSelector = selector({
-  key: 'userRegistration.organizations',
+  key: 'userManagement.organizations',
   get: async ({ get }) => {
     try {
       const response = await axios.get('api/organizations');

@@ -14,7 +14,7 @@ export const formState = atom({
 })
 
 export const organizationsSelector = selector({
-    key: 'userRegistration.organizations',
+    key: 'user.organizations',
     get: async ({ get }) => {
         try {
             const response = await axios.get('api/organizations');
