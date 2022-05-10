@@ -42,7 +42,7 @@ export default function UserRegister() {
       // console.log(secondResponse)
       await axios.post('api/users', form);
       await axios.post('/api/notifications', {
-        to: 'thuong.nguyen.sep09@gmail.com',
+        to: 'thuong.nguyen@nih.gov',
         subject: 'User Registration Confirmation',
         templateName: 'user-registration-confirmation.html',
         params: {
