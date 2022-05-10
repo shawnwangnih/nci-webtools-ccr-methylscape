@@ -3,6 +3,7 @@ import axios from 'axios';
 import groupBy from 'lodash/groupBy';
 import meanBy from 'lodash/meanBy';
 import colors from './colors.json';
+import nciMetricColors from './nciMetricColors';
 
 export const defaultFormState = {
   organSystem: 'centralNervousSystem',
@@ -135,6 +136,9 @@ export const plotState = selector({
     // Sort these keywords to the top so that their traces are rendered first and overlapped by others
     const sortTopKeyWord = ['No_match', 'Unclassified', 'NotAvailable', 'null'];
 
+    const nciMetricColorMap = await nciMetricColors();
+    let colorCount = 0;
+
     // transform data to traces
     const dataTraces =
       color.type == 'categorical'
@@ -154,6 +158,9 @@ export const plotState = selector({
               mode: 'markers',
               hovertemplate: hovertemplate,
               type: useWebGl ? 'scattergl' : 'scatter',
+              marker: {
+                color: nciMetricColorMap[name] || colors[colorCount++],
+              },
             }))
         : [
             {
@@ -163,16 +170,13 @@ export const plotState = selector({
               mode: 'markers',
               hovertemplate: hovertemplate,
               type: useWebGl ? 'scattergl' : 'scatter',
-              ...(color.type == 'continuous' && {
-                marker: {
-                  color: data.map((e) => e[color.value]),
-                  colorbar: { title: color.label, dtick: color.dtick },
-                },
-              }),
+              marker: {
+                color: data.map((e) => e[color.value]),
+                colorbar: { title: color.label, dtick: color.dtick },
+              },
             },
           ];
 
-    console.log(dataTraces);
     const plotTitles = {
       centralNervousSystem: 'Central Nervous System',
       boneAndSoftTissue: 'Bone and Soft Tissue',
@@ -201,8 +205,6 @@ export const plotState = selector({
       uirevision:
         organSystem + embedding + color.value + search + showAnnotations,
       legend: { title: { text: color.label } },
-
-      colorway: color.type == 'categorical' ? colors : null,
       autosize: true,
       dragmode: 'select',
     };
