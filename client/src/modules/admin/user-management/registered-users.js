@@ -28,15 +28,15 @@ export default function RegisterUsers() {
   }
 
   function openApprovalModal({ row }) {
-    const { id } = row.original;
-    const user = { id, status: 'active' };
+    const { id, firstName, lastName, email } = row.original;
+    const user = { id, status: 'active', email, firstName, lastName };
     setShowApprovalModal(true);
     setApprovalForm(user);
   }
 
   function openRejectionModal({ row }) {
-    const { id } = row.original;
-    const user = { id };
+    const { id, firstName, lastName, email } = row.original;
+    const user = { id, firstName, lastName, email };
     setShowRejectionModal(true);
     setRejectionForm(user);
   }
@@ -60,7 +60,19 @@ export default function RegisterUsers() {
   async function handleFormSubmit(e) {
     e.preventDefault();
     setShowApprovalModal(false);
+    console.log(approvalForm);
     await axios.put(`api/users/${approvalForm.id}`, approvalForm);
+
+    await axios.post('/api/notifications', {
+      to: approvalForm.email,
+      subject: 'User Registration Approval',
+      templateName: 'user-registration-approval.html',
+      params: {
+        firstName: approvalForm.firstName,
+        lastName: approvalForm.lastName,
+        websiteUrl: 'https://methylscape-dev.ccr.cancer.gov/',
+      },
+    });
     refreshUsers();
   }
 
@@ -70,6 +82,16 @@ export default function RegisterUsers() {
     console.log(rejectionForm);
     // await axios.delete(`api/users/${rejectionForm.id}`);
     await axios.put(`api/users/${rejectionForm.id}`, rejectionForm);
+    await axios.post('/api/notifications', {
+      to: rejectionForm.email,
+      subject: 'User Registration Rejection',
+      templateName: 'user-registration-rejection.html',
+      params: {
+        firstName: rejectionForm.firstName,
+        lastName: rejectionForm.lastName,
+        rejectionReason: rejectionForm.comments,
+      },
+    });
     refreshUsers();
   }
 

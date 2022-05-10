@@ -44,7 +44,22 @@ export default function CurrentUsers() {
   async function handleFormSubmit(e) {
     e.preventDefault();
     setShowEditModal(false);
+    let org = organizations.find((o) => o.id === +form.organizationId);
     await axios.put(`api/users/${form.id}`, form);
+    await axios.post('/api/notifications', {
+      to: form.email,
+      subject: 'User Profile Update',
+      templateName: 'user-profile-update.html',
+      params: {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        userRole: form.roleName,
+        organization: org.name,
+        status: form.status,
+      },
+    });
+    console.log(form);
+    console.log(org);
     refreshUsers();
   }
 

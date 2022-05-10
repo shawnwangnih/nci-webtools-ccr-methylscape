@@ -25,29 +25,28 @@ export default function UserRegister() {
       setAlerts([]);
       // const { status, data } = await axios.post('api/users', form);
       // console.log({ status, data });
-      //console.log(form);
-      // const [firstResponse, secondResponse] = await axios.all([
-      //   axios.post('api/users', form),
-      //   axios.post('/api/notifications', {
-      //     to: 'thuong.nguyen.sep09@gmail.com',
-      //     subject: 'User Registration Confirmation',
-      //     templateName: 'user-registration-confirmation.html',
-      //     params: {
-      //       firstName: form.firstName,
-      //       lastName: form.lastName,
-      //     },
-      //   }),
-      // ]);
-      // console.log(firstResponse);
-      // console.log(secondResponse)
+      console.log(form);
+      let org = organizations.find((o) => o.id === +form.organizationId);
+
       await axios.post('api/users', form);
       await axios.post('/api/notifications', {
-        to: 'thuong.nguyen@nih.gov',
+        to: form.email,
         subject: 'User Registration Confirmation',
         templateName: 'user-registration-confirmation.html',
         params: {
           firstName: form.firstName,
           lastName: form.lastName,
+        },
+      });
+      await axios.post('/api/notifications', {
+        to: 'thuong.nguyen@nih.gov',
+        subject: 'User Registration Review',
+        templateName: 'admin-user-registration-review.html',
+        params: {
+          userFirstName: form.firstName,
+          userLastName: form.lastName,
+          userEmail: form.email,
+          organization: org.name,
         },
       });
 
