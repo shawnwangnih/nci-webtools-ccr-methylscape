@@ -38,7 +38,11 @@ export default function CurrentUsers() {
     if (name === 'status') {
       value = checked ? 'active' : 'inactive';
     }
+    if (name === 'receiveNotification') {
+      value = checked ? true : false;
+    }
     setForm((form) => ({ ...form, [name]: value }));
+    console.log(form);
   }
 
   async function handleFormSubmit(e) {
@@ -173,6 +177,19 @@ export default function CurrentUsers() {
       ),
     },
     {
+      Header: 'Receive Notification',
+      accessor: 'receiveNotification',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {e.value ? <p>YES</p> : <p>NO</p>}
+        </div>
+      ),
+    },
+    {
       Header: 'Actions',
       id: 'actions',
       disableSortBy: true,
@@ -281,6 +298,17 @@ export default function CurrentUsers() {
                 label="active"
                 name="status"
                 checked={form.status === 'active'}
+                onChange={handleFormChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check
+                inline
+                type="switch"
+                id={form.id}
+                label="Receive Notification"
+                name="receiveNotification"
+                checked={form.receiveNotification === true}
                 onChange={handleFormChange}
               />
             </Form.Group>

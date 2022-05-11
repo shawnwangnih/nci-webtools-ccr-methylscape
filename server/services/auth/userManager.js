@@ -68,6 +68,7 @@ class UserManager {
       lastName: user.lastName,
       email: user.email,
       status: user.status,
+      receiveNotification: user.receiveNotification,
     };
 
     for (let key in params) {
