@@ -3,15 +3,24 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FormControl, Row, Button } from 'react-bootstrap';
+import { groupBy } from 'lodash';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { formState, organizationsSelector } from './user.state';
+import { formState, organizationsSelector, usersSelector } from './user.state';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
   const [form, setForm] = useRecoilState(formState);
   const resetForm = useResetRecoilState(formState);
   const organizations = useRecoilValue(organizationsSelector);
+  const users = useRecoilValue(usersSelector);
+
+  const userGroups = groupBy(users, 'roleId');
+  const adminUsers = userGroups['1'] || [];
+
+  //adminUsers.forEach((u) => console.log(u.email));
+  const adminEmails = [];
+  adminUsers.forEach((u) => adminEmails.push(u.email));
 
   async function handleChange(e) {
     const { name, value } = e.target;
@@ -25,13 +34,13 @@ export default function UserRegister() {
       setAlerts([]);
       // const { status, data } = await axios.post('api/users', form);
       // console.log({ status, data });
-      console.log(form);
+      //console.log(form);
       let org = organizations.find((o) => o.id === +form.organizationId);
 
       await axios.post('api/users', form);
       await axios.post('/api/notifications', {
         to: form.email,
-        subject: 'User Registration Confirmation',
+        subject: 'Methylscape registration confirmation',
         templateName: 'user-registration-confirmation.html',
         params: {
           firstName: form.firstName,
@@ -40,7 +49,8 @@ export default function UserRegister() {
       });
       await axios.post('/api/notifications', {
         to: 'thuong.nguyen@nih.gov',
-        subject: 'User Registration Review',
+        //to: adminEmails,
+        subject: 'Methylscape user registration received',
         templateName: 'admin-user-registration-review.html',
         params: {
           userFirstName: form.firstName,
