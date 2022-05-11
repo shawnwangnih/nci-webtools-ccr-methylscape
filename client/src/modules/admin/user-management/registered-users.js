@@ -29,14 +29,21 @@ export default function RegisterUsers() {
 
   function openApprovalModal({ row }) {
     const { id, firstName, lastName, email } = row.original;
-    const user = { id, status: 'active', email, firstName, lastName };
+    const user = {
+      id,
+      status: 'active',
+      receiveNotification: false,
+      email,
+      firstName,
+      lastName,
+    };
     setShowApprovalModal(true);
     setApprovalForm(user);
   }
 
   function openRejectionModal({ row }) {
     const { id, firstName, lastName, email } = row.original;
-    const user = { id, firstName, lastName, email };
+    const user = { id, firstName, lastName, email, receiveNotification: false };
     setShowRejectionModal(true);
     setRejectionForm(user);
   }
@@ -65,7 +72,7 @@ export default function RegisterUsers() {
 
     await axios.post('/api/notifications', {
       to: approvalForm.email,
-      subject: 'User Registration Approval',
+      subject: 'Methylscape account approved',
       templateName: 'user-registration-approval.html',
       params: {
         firstName: approvalForm.firstName,
@@ -84,7 +91,7 @@ export default function RegisterUsers() {
     await axios.put(`api/users/${rejectionForm.id}`, rejectionForm);
     await axios.post('/api/notifications', {
       to: rejectionForm.email,
-      subject: 'User Registration Rejection',
+      subject: 'Methylscape account rejected',
       templateName: 'user-registration-rejection.html',
       params: {
         firstName: rejectionForm.firstName,
