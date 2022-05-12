@@ -41,6 +41,7 @@ export const sources = [
       { sourceName: "lastName", name: "lastName" },
       { sourceName: "email", name: "email" },
       { sourceName: "status", name: "status" },
+      { sourceName: "receiveNotification", name: "receiveNotification" },
     ],
   },
 
