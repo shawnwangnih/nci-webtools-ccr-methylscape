@@ -3,24 +3,16 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { FormControl, Row, Button } from 'react-bootstrap';
-import { groupBy } from 'lodash';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { formState, organizationsSelector, usersSelector } from './user.state';
+import { formState, organizationsSelector } from './user.state';
 
 export default function UserRegister() {
   const [alerts, setAlerts] = useState([]);
   const [form, setForm] = useRecoilState(formState);
   const resetForm = useResetRecoilState(formState);
   const organizations = useRecoilValue(organizationsSelector);
-  const users = useRecoilValue(usersSelector);
-
-  const userGroups = groupBy(users, 'roleId');
-  const adminUsers = userGroups['1'] || [];
-
-  //adminUsers.forEach((u) => console.log(u.email));
-  const adminEmails = [];
-  adminUsers.forEach((u) => adminEmails.push(u.email));
+  const activeOrganizations = organizations.filter(org => org.status === 'active');
 
   async function handleChange(e) {
     const { name, value } = e.target;
@@ -32,42 +24,13 @@ export default function UserRegister() {
 
     try {
       setAlerts([]);
-      // const { status, data } = await axios.post('api/users', form);
-      // console.log({ status, data });
-      //console.log(form);
-      let org = organizations.find((o) => o.id === +form.organizationId);
-
-      await axios.post('api/users', form);
-      await axios.post('/api/notifications', {
-        to: form.email,
-        subject: 'Methylscape registration confirmation',
-        templateName: 'user-registration-confirmation.html',
-        params: {
-          firstName: form.firstName,
-          lastName: form.lastName,
-        },
-      });
-      await axios.post('/api/notifications', {
-        to: 'thuong.nguyen@nih.gov',
-        //to: adminEmails,
-        subject: 'Methylscape user registration received',
-        templateName: 'admin-user-registration-review.html',
-        params: {
-          userFirstName: form.firstName,
-          userLastName: form.lastName,
-          userEmail: form.email,
-          organization: org.name,
-          roleName: 'admin',
-        },
-      });
-
+      await axios.post('api/user/register', form);
       setAlerts([
         {
           type: 'success',
           message: 'Your registration request has been submitted.',
         },
       ]);
-
       resetForm();
     } catch (error) {
       console.error(error);
@@ -88,42 +51,40 @@ export default function UserRegister() {
         fluid="xxl"
         className="d-inline-flex justify-content-center mb-2 p-2"
       >
-        <Form className="bg-light p-3" onSubmit={handleSubmit}>
-          {alerts.map(({ type, message }, i) => (
-            <Alert
-              key={i}
-              variant={type}
-              onClose={() => setAlerts([])}
-              dismissible
-            >
-              {message}
-            </Alert>
-          ))}
-          <Row>
-            <Form.Group controlId="accounttype">
-              <Form.Label>Account Type</Form.Label>
-              <Form.Check
-                inline
-                type="radio"
-                id="nih"
-                label="NIH"
-                name="accountType"
-                checked={form.accountType === 'NIH'}
-                value="NIH"
-                onChange={handleChange}
-              />
-              <Form.Check
-                inline
-                type="radio"
-                id="login.gov"
-                label="Login.gov"
-                name="accountType"
-                checked={form.accountType === 'Login.gov'}
-                value="Login.gov"
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </Row>
+      <Form className="bg-light p-3" onSubmit={handleSubmit}>
+        {alerts.map(({ type, message }, i) => (
+          <Alert
+            key={i}
+            variant={type}
+            onClose={() => setAlerts([])}
+            dismissible
+          >
+            {message}
+          </Alert>
+        ))}
+          <Form.Group controlId="accounttype">
+            <Form.Label>Account Type</Form.Label>
+            <Form.Check
+              inline
+              type="radio"
+              id="nih"
+              label="NIH"
+              name="accountType"
+              checked={form.accountType === 'NIH'}
+              value="NIH"
+              onChange={handleChange}
+            />
+            <Form.Check
+              inline
+              type="radio"
+              id="login.gov"
+              label="Login.gov"
+              name="accountType"
+              checked={form.accountType === 'Login.gov'}
+              value="Login.gov"
+              onChange={handleChange}
+            />
+          </Form.Group>
 
           <Row>
             {form.accountType === 'Login.gov' && (
@@ -142,7 +103,19 @@ export default function UserRegister() {
             <hr className="my-2" />
           </Row>
 
-          <Row>
+          <Form.Group className="mb-3" controlId="firstName">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                maxLength={255}
+                value={form.firstName}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="lastName">
               <Form.Label>Last Name</Form.Label>
               <FormControl
@@ -155,19 +128,6 @@ export default function UserRegister() {
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="firstName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                maxLength={255}
-                value={form.firstName}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-          </Row>
 
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email address</Form.Label>
@@ -199,7 +159,7 @@ export default function UserRegister() {
               <option value="" hidden>
                 Select your Organization/Instituiton
               </option>
-              {organizations.map((o) => (
+              {activeOrganizations.map((o) => (
                 <option key={`organization-${o.name}`} value={o.id}>
                   {o.name}
                 </option>

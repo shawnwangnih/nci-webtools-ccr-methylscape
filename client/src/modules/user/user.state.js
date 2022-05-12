@@ -26,17 +26,3 @@ export const organizationsSelector = selector({
     }
   },
 });
-
-export const usersSelector = selector({
-  key: 'userManagement.usersSelector',
-  get: async ({ get }) => {
-    try {
-      const response = await axios.get('api/users');
-      const data = response.data;
-      return data;
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-  },
-});
