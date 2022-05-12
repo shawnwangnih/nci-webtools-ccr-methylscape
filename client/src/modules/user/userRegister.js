@@ -57,6 +57,7 @@ export default function UserRegister() {
           userLastName: form.lastName,
           userEmail: form.email,
           organization: org.name,
+          roleName: 'admin',
         },
       });
 
