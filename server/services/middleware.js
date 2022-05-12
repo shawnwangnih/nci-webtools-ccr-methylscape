@@ -21,7 +21,7 @@ function logRequests(
 
 function logErrors(error, request, response, next) {
   const { name, message } = error;
-  request.app.locals.logger.error(error);
+  request.app.locals.logger.error(error.stack ? error.stack : error);
 
   // return less descriptive errors in production
   // response.status(500).json(isProduction ? name : `${name}: ${message}`);
