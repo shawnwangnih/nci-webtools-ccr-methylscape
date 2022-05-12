@@ -248,7 +248,6 @@ export const sources = [
       const records = await connection('cnvSegment').select(recordKey).pluck(recordKey).distinct();
       const recordMap = Object.fromEntries(records.map(r => [r, true]));
 
-
       return (metadata) => {
         const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.seg\.txt$/);
         const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
@@ -287,16 +286,9 @@ export const sources = [
   },
   {
     type: 'postImport',
-    description: 'Analyse CNV bins',
-    callback: async (connection) => {
-      await connection.raw('analyse "cnvBin"');
-      return `Ran analysis on CNV bins`;
-    }
-  },
-  {
-    type: 'postImport',
     description: 'Map CNV bins to genes',
     callback: async (connection) => {
+      await connection.raw('analyse "cnvBin"');
       await connection.raw('call mapAllBinsToGenes()');
       return `Mapped CNV bins to genes`;
     }
