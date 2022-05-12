@@ -34,36 +34,19 @@ export default function CurrentUsers() {
   }
 
   async function handleFormChange(e) {
-    let { name, value, checked, type } = e.target;
-    if (name === 'status') {
-      value = checked ? 'active' : 'inactive';
-    }
-    if (name === 'receiveNotification') {
-      value = checked ? true : false;
+    let { name, value, checked, type, dataset } = e.target;
+    if (type === 'checkbox') {
+      value = checked
+        ? (dataset.checkedvalue || true)
+        : (dataset.uncheckedvalue || false);
     }
     setForm((form) => ({ ...form, [name]: value }));
-    console.log(form);
   }
 
   async function handleFormSubmit(e) {
     e.preventDefault();
     setShowEditModal(false);
-    let org = organizations.find((o) => o.id === +form.organizationId);
-    await axios.put(`api/users/${form.id}`, form);
-    await axios.post('/api/notifications', {
-      to: form.email,
-      subject: 'User Profile Update',
-      templateName: 'user-profile-update.html',
-      params: {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        userRole: form.roleName,
-        organization: org.name,
-        status: form.status,
-      },
-    });
-    console.log(form);
-    console.log(org);
+    await axios.put(`api/user/${form.id}`, form);
     refreshUsers();
   }
 
@@ -293,10 +276,12 @@ export default function CurrentUsers() {
             <Form.Group>
               <Form.Check
                 inline
+                id="status"
                 type="switch"
-                id={form.id}
-                label="active"
+                label="Active"
                 name="status"
+                data-checkedvalue='active'
+                data-uncheckedvalue='inactive'
                 checked={form.status === 'active'}
                 onChange={handleFormChange}
               />
@@ -305,10 +290,10 @@ export default function CurrentUsers() {
               <Form.Check
                 inline
                 type="switch"
-                id={form.id}
-                label="Receive Notification"
+                id="receiveNotification"
+                label="Receive Notifications"
                 name="receiveNotification"
-                checked={form.receiveNotification === true}
+                checked={form.receiveNotification}
                 onChange={handleFormChange}
               />
             </Form.Group>
