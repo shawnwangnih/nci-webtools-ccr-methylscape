@@ -18,87 +18,46 @@ export default function RegisterUsers() {
   const [approvalForm, setApprovalForm] = useState({});
   const [rejectionForm, setRejectionForm] = useState({});
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
+  const [showRejectedUsers, setShowRejectedUsers] = useState(false);
   const userGroups = groupBy(users, 'status');
   const pendingUsers = userGroups['pending'] || [];
-
-  async function rejectUser({ row }) {
-    const { id } = row.original;
-    await axios.delete(`api/users/${id}`);
-    refreshUsers();
-  }
+  const rejectedUsers = userGroups['rejected'] || [];
+  const visibleUsers = [
+    ...pendingUsers,
+    ...(showRejectedUsers ? rejectedUsers : []),
+  ];
 
   function openApprovalModal({ row }) {
-    const { id, firstName, lastName, email } = row.original;
-    const user = {
-      id,
-      status: 'active',
-      receiveNotification: false,
-      email,
-      firstName,
-      lastName,
-    };
     setShowApprovalModal(true);
-    setApprovalForm(user);
+    setApprovalForm(row.original);
   }
 
   function openRejectionModal({ row }) {
-    const { id, firstName, lastName, email } = row.original;
-    const user = { id, firstName, lastName, email, receiveNotification: false };
     setShowRejectionModal(true);
-    setRejectionForm(user);
+    setRejectionForm(row.original);
   }
 
-  function handleFormChange(e) {
+  function handleApprovalFormChange(e) {
     const { name, value } = e.target;
-
     setApprovalForm((form) => ({ ...form, [name]: value }));
   }
 
   function handleRejectionFormChange(e) {
     const { name, value } = e.target;
-    //setRejectionForm((form) => ({...form,status:'rejected'}));
-    setRejectionForm((form) => ({
-      ...form,
-      status: 'rejected',
-      [name]: value,
-    }));
+    setRejectionForm((form) => ({ ...form, [name]: value }));
   }
 
-  async function handleFormSubmit(e) {
+  async function handleApprovalFormSubmit(e) {
     e.preventDefault();
     setShowApprovalModal(false);
-    console.log(approvalForm);
-    await axios.put(`api/users/${approvalForm.id}`, approvalForm);
-
-    await axios.post('/api/notifications', {
-      to: approvalForm.email,
-      subject: 'Methylscape account approved',
-      templateName: 'user-registration-approval.html',
-      params: {
-        firstName: approvalForm.firstName,
-        lastName: approvalForm.lastName,
-        websiteUrl: 'https://methylscape-dev.ccr.cancer.gov/',
-      },
-    });
+    await axios.post(`api/user/approve`, approvalForm);
     refreshUsers();
   }
 
   async function handleRejectionFormSubmit(e) {
     e.preventDefault();
     setShowRejectionModal(false);
-    console.log(rejectionForm);
-    // await axios.delete(`api/users/${rejectionForm.id}`);
-    await axios.put(`api/users/${rejectionForm.id}`, rejectionForm);
-    await axios.post('/api/notifications', {
-      to: rejectionForm.email,
-      subject: 'Methylscape account rejected',
-      templateName: 'user-registration-rejection.html',
-      params: {
-        firstName: rejectionForm.firstName,
-        lastName: rejectionForm.lastName,
-        rejectionReason: rejectionForm.comments,
-      },
-    });
+    await axios.post(`api/user/reject`, rejectionForm);
     refreshUsers();
   }
 
@@ -112,7 +71,7 @@ export default function RegisterUsers() {
             textAlign: 'left',
           }}
         >
-          {e.value}, {e.row.original.lastName}
+          {e.row.original.lastName}, {e.value}
         </div>
       ),
     },
@@ -172,6 +131,19 @@ export default function RegisterUsers() {
         </div>
       ),
     },
+    showRejectedUsers && {
+      Header: 'Notes',
+      accessor: 'notes',
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: 'left',
+          }}
+        >
+          {e.value}
+        </div>
+      ),
+    },
     {
       Header: 'Actions',
       id: 'actions',
@@ -182,13 +154,13 @@ export default function RegisterUsers() {
             Approve
           </Button>
 
-          <Button variant="danger" onClick={() => openRejectionModal({ row })}>
+          {!showRejectedUsers && <Button variant="danger" onClick={() => openRejectionModal({ row })}>
             Reject
-          </Button>
+          </Button>}
         </div>
       ),
     },
-  ];
+  ].filter(Boolean);
   return (
     <Container>
       {/* <h1 className="h4 mb-3 text-primary">Registered Users</h1> */}
@@ -197,14 +169,23 @@ export default function RegisterUsers() {
           {message}
         </Alert>
       ))}
-
-      {pendingUsers && pendingUsers.length > 0 ? (
-        <Table
-          responsive
-          data={pendingUsers}
-          columns={cols}
-          options={{ disableFilters: true }}
-        />
+      <Form className="text-primary d-flex justify-content-center">
+        <Form.Check type="checkbox" id="show-rejected-user">
+          <Form.Check.Input
+            type="checkbox"
+            checked={showRejectedUsers}
+            onChange={(ev) => setShowRejectedUsers(ev.target.checked)}
+          />
+          <Form.Check.Label>Show Rejected Users</Form.Check.Label>
+        </Form.Check>
+      </Form>        
+      {visibleUsers && visibleUsers.length > 0 ? (
+          <Table
+            responsive
+            data={visibleUsers}
+            columns={cols}
+            options={{ disableFilters: true }}
+          />
       ) : (
         <div className="text-center py-5 text-primary">
           <h3>No pending users</h3>
@@ -215,7 +196,7 @@ export default function RegisterUsers() {
         show={showApprovalModal}
         onHide={() => setShowApprovalModal(false)}
       >
-        <Form onSubmit={handleFormSubmit}>
+        <Form onSubmit={handleApprovalFormSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>Set User Role</Modal.Title>
           </Modal.Header>
@@ -225,7 +206,7 @@ export default function RegisterUsers() {
               <Form.Select
                 name="roleId"
                 value={approvalForm.roleId || ''}
-                onChange={handleFormChange}
+                onChange={handleApprovalFormChange}
                 required
               >
                 <option value="" hidden>
@@ -260,8 +241,8 @@ export default function RegisterUsers() {
               <Form.Label>Comments</Form.Label>
               <Form.Control
                 as="textarea"
-                name="comments"
-                value={rejectionForm.comments || ''}
+                name="notes"
+                value={rejectionForm.notes || ''}
                 onChange={handleRejectionFormChange}
                 required
               />
