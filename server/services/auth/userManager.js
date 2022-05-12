@@ -13,6 +13,24 @@ class UserManager {
       .orderBy('user.id');
   }
 
+  async getUsersByRoleName(roleName) {
+    return await this.database('user')
+      .leftJoin('role', 'user.roleId', 'role.id')
+      .leftJoin('organization', 'user.organizationId', 'organization.id')
+      .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
+      .where({ 'role.name': roleName })
+      .orderBy('user.id');
+  }
+
+  async getUsersByOrganizationName(organizationName) {
+    return await this.database('user')
+      .leftJoin('role', 'user.roleId', 'role.id')
+      .leftJoin('organization', 'user.organizationId', 'organization.id')
+      .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
+      .where('organization.name', organizationName)
+      .orderBy('user.id');
+  }
+
   async getUser(userId) {
     const user = await this.database('user')
       .leftJoin('role', 'user.roleId', 'role.id')
@@ -30,61 +48,26 @@ class UserManager {
     if (userExists && userExists.length > 0) {
       throw new Error('User already exists');
     } else {
-      let params = {
-        roleId: +user.roleId || null,
-        organizationId: +user.organizationId || null,
-        organizationOther: user.organizationOther,
-        accountType: user.accountType,
-        name: user.name,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        status: user.status,
-      };
-  
-      for (let key in params) {
-        if ([null, undefined, NaN, ''].includes(params[key])) {
-          delete params[key];
+      const columnInfo = await this.database('user').columnInfo();
+      for (let key in user) {
+        if (!columnInfo[key]) {
+          delete user[key];
         }
       }
-
-      if (Object.keys(params).length > 0) {
-        await this.database('user').insert(params);
-        return true;
-      } else {
-        return false;
-      }
+      const [newUser] = await this.database('user').insert(user).returning('id');
+      return await this.getUser(newUser.id);
     }
   }
 
   async updateUser(user) {
-    let params = {
-      roleId: +user.roleId || null,
-      organizationId: +user.organizationId || null,
-      organizationOther: user.organizationOther,
-      accountType: user.accountType,
-      name: user.name,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      status: user.status,
-      receiveNotification: user.receiveNotification,
-    };
-
-    for (let key in params) {
-      if ([null, undefined, NaN, ''].includes(params[key])) {
-        delete params[key];
+    const columnInfo = await this.database('user').columnInfo();
+    for (let key in user) {
+      if (!columnInfo[key]) {
+        delete user[key];
       }
     }
-
-    if (Object.keys(params).length > 0) {
-      await this.database('user')
-        .where({ id: user.id })
-        .update(params);
-      return true;
-    } else {
-      return false;
-    }
+    await this.database('user').where({ id: user.id }).update(user);
+    return await this.getUser(user.id);
   }
 
   async removeUser(userId) {
