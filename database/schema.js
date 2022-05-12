@@ -253,6 +253,7 @@ export const schema = [
       table.string("email").unique();
       table.enum("status", ["pending", "rejected", "inactive", "active"]).defaultTo("pending");
       table.boolean("receiveNotification").defaultTo(true);
+      table.text("notes");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
