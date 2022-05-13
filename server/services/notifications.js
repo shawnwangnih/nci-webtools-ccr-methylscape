@@ -13,6 +13,10 @@ async function sendNotification({ userManager, from, to = [], cc = [], bcc = [],
         throw new Error('Missing template');
     }
 
+    to = asArray(to);
+    cc = asArray(cc);
+    bcc = asArray(bcc);
+
     if (roleName) {
         const users = await userManager.getUsersByRoleName(roleName);
         bcc = [...bcc, ...users.map(user => user.email)];
@@ -33,10 +37,13 @@ async function sendNotification({ userManager, from, to = [], cc = [], bcc = [],
         .sendMail({ from, to, cc, bcc, subject, html });
 }
 
+function asArray(values) {
+    return Array.isArray(values)
+        ? values
+        : [values];
+}
+
 async function getValidNotificationEmails(emails, userManager) {
-    if (!Array.isArray(emails)) {
-        emails = [emails];
-    }
     const users = await userManager.getUsers();
     return emails.filter(email => 
         users.find(user => 
