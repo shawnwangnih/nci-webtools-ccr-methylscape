@@ -154,9 +154,14 @@ export default function RegisterUsers() {
             Approve
           </Button>
 
-          {!showRejectedUsers && <Button variant="danger" onClick={() => openRejectionModal({ row })}>
-            Reject
-          </Button>}
+          {!showRejectedUsers && (
+            <Button
+              variant="danger"
+              onClick={() => openRejectionModal({ row })}
+            >
+              Reject
+            </Button>
+          )}
         </div>
       ),
     },
@@ -178,14 +183,14 @@ export default function RegisterUsers() {
           />
           <Form.Check.Label>Show Rejected Users</Form.Check.Label>
         </Form.Check>
-      </Form>        
+      </Form>
       {visibleUsers && visibleUsers.length > 0 ? (
-          <Table
-            responsive
-            data={visibleUsers}
-            columns={cols}
-            options={{ disableFilters: true }}
-          />
+        <Table
+          responsive
+          data={visibleUsers}
+          columns={cols}
+          options={{ disableFilters: true }}
+        />
       ) : (
         <div className="text-center py-5 text-primary">
           <h3>No pending users</h3>
@@ -198,7 +203,9 @@ export default function RegisterUsers() {
       >
         <Form onSubmit={handleApprovalFormSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Set User Role</Modal.Title>
+            <Modal.Title>
+              Set User Role: {approvalForm.firstName}, {approvalForm.lastName}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
@@ -234,7 +241,9 @@ export default function RegisterUsers() {
       >
         <Form onSubmit={handleRejectionFormSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Reject User</Modal.Title>
+            <Modal.Title>
+              Reject User: {rejectionForm.firstName}, {rejectionForm.lastName}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3">

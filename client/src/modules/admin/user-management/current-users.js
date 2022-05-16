@@ -37,8 +37,8 @@ export default function CurrentUsers() {
     let { name, value, checked, type, dataset } = e.target;
     if (type === 'checkbox') {
       value = checked
-        ? (dataset.checkedvalue || true)
-        : (dataset.uncheckedvalue || false);
+        ? dataset.checkedvalue || true
+        : dataset.uncheckedvalue || false;
     }
     setForm((form) => ({ ...form, [name]: value }));
   }
@@ -222,7 +222,9 @@ export default function CurrentUsers() {
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Form onSubmit={handleFormSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit User</Modal.Title>
+            <Modal.Title>
+              Edit User: {form.firstName}, {form.lastName}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
@@ -280,8 +282,8 @@ export default function CurrentUsers() {
                 type="switch"
                 label="Active"
                 name="status"
-                data-checkedvalue='active'
-                data-uncheckedvalue='inactive'
+                data-checkedvalue="active"
+                data-uncheckedvalue="inactive"
                 checked={form.status === 'active'}
                 onChange={handleFormChange}
               />
