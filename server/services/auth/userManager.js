@@ -39,7 +39,19 @@ class UserManager {
       .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
       .first();
 
-    user.rolePolicies = await this.getUserRolePolicies(userId);
+    user.rolePolicies = await this.getUserRolePolicies(user.id);
+    return user;
+  }
+  
+  async getUserByEmail(email) {
+    const user = await this.database('user')
+      .leftJoin('role', 'user.roleId', 'role.id')
+      .leftJoin('organization', 'user.organizationId', 'organization.id')
+      .where({ 'user.email': email })
+      .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
+      .first();
+
+    user.rolePolicies = await this.getUserRolePolicies(user.id);
     return user;
   }
 
