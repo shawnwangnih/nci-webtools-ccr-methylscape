@@ -99,7 +99,7 @@ router.post(
             params: {
                 firstName: results.firstName,
                 lastName: results.lastName,
-            }
+            },
         });
 
         // send emails to admins
@@ -173,7 +173,7 @@ router.post(
                 firstName: results.firstName,
                 lastName: results.lastName,
                 notes: results.notes,
-            }
+            },
         });
         response.json(results);
     })
