@@ -1,6 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 const passport = require("passport");
+const nodemailer = require('nodemailer');
 const { registerUserSerializers, registerAuthStrategies } = require("./services/auth/passportUtils");
 const { createSession } = require("./services/session");
 const getLogger = require('./services/logger');
@@ -8,7 +9,6 @@ const { apiRouter } = require('./services/api');
 const { forkCluster } = require('./services/cluster');
 const { logErrors } = require('./services/middleware');
 const UserManager = require('./services/auth/userManager');
-const RoleManager = require('./services/auth/roleManager');
 const { loadAwsCredentials } = require('./services/aws');
 const args = require('minimist')(process.argv.slice(2));
 const config = require('./config.json');
@@ -41,12 +41,15 @@ async function createApp(config) {
   app.locals.logger = getLogger('methylscape-analysis');
   app.locals.connection = connection;
   app.locals.userManager = new UserManager(connection);
-  app.locals.roleManager = new RoleManager(connection);
-
+  
   app.use(createSession());
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/api', apiRouter);
+
+
+  nodemailer.createTransport(config.email.smtp);
+
   app.use(logErrors); // logErrors should always be last
 
   return app;

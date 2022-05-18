@@ -3,11 +3,13 @@ import { NavLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import HomeImage from './images/home.svg';
 import { sessionState } from '../session/session.state';
 import './home.scss';
-import backgroundImage from './images/Main_Graphic.png'
+import backgroundImage from './images/Main_Graphic.png';
+
+//import Session from './session/session';
 
 export default function Home() {
   const session = useRecoilValue(sessionState);
@@ -35,21 +37,40 @@ export default function Home() {
       </div> */}
 
       {/* <div className="h-100"> */}
-        <div className="text-white img-fluid homepage-img-bg" style={{ backgroundImage: `url(${backgroundImage})` }}>
-          <Row md={2}>
+      <div
+        className="text-white img-fluid homepage-img-bg bg-image"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <Row md={2}>
           <Col md={1}></Col>
-            <Col md={{ span: 3, offset:1}} className="py-9 text-end">
-              <h1 className="homepage-title">Methylscape</h1>
-              <h2 className="homepage-title-small">Analysis</h2>
-              <p className="my-4 text-right">Explore the clinically-reportable assay that uses genome-wide DNA methylation profiling as a diagnostic tool for tumores of the central nervous system.</p>
-              <Button variant="outline-light" size="lg" className="btn-home px-5 py-3">Perform Analysis</Button>{' '}
-            </Col>           
-          </Row>
-          
-          
+          <Col
+            md
+            lg={{ span: 3, offset: 1 }}
+            sm={{ span: 0, offser: 0 }}
+            className="py-9 text-end"
+          >
+            <h1 className="homepage-title">Methylscape</h1>
+            <h2 className="homepage-title-small">Analysis</h2>
+            <p className="py-4 lead">
+              Explore the clinically-reportable assay that uses genome-wide DNA
+              methylation profiling as a diagnostic tool for tumores of the
+              central nervous system.
+            </p>
+            {session.authenticated && (
+              <a href="/#/analysis">
+                <Button
+                  variant="outline-light"
+                  size="lg"
+                  className="btn-home px-5 py-3"
+                >
+                  Perform Analysis
+                </Button>
+              </a>
+            )}
+          </Col>
+        </Row>
       </div>
       {/* </div> */}
-      
     </>
   );
 }

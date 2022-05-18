@@ -16,6 +16,8 @@ export default function Samples() {
     {
       Header: () => null,
       id: 'expander',
+      aria: '',
+      disableSortBy: true,
       Cell: ({ row }) => (
         <span {...row.getToggleRowExpandedProps()}>
           {row.isExpanded ? <DashSquare /> : <PlusSquare />}
@@ -26,11 +28,13 @@ export default function Samples() {
       id: 'sample_name',
       accessor: 'sample_name',
       Header: 'Sample Name',
+      aria: 'Sample Name',
     },
     {
       id: 'project',
       accessor: 'project',
       Header: 'Project',
+      aria: 'Project',
       Cell: (e) => (
         <Link to={'/data/projects?project=' + e.data[e.row.index].project}>
           {e.value}
@@ -41,6 +45,7 @@ export default function Samples() {
       id: 'experiment',
       accessor: 'experiment',
       Header: 'Experiment',
+      aria: 'Experiment',
       Cell: (e) => (
         <Link
           to={'/data/experiments?experiment=' + e.data[e.row.index].experiment}
@@ -53,26 +58,31 @@ export default function Samples() {
       id: 'pool_id',
       accessor: 'pool_id',
       Header: 'Sample Date',
+      aria: 'Sample Date',
     },
     {
       id: 'surgical_case',
       accessor: 'surgical_case',
       Header: 'Surgical Case',
+      aria: 'Surgical Case',
     },
     {
       id: 'gender',
       accessor: 'gender',
       Header: 'Gender',
+      aria: 'Gender',
     },
     {
       id: 'age',
       accessor: 'age',
       Header: 'Age',
+      aria: 'Age',
     },
     {
       id: 'diagnosis',
       accessor: 'diagnosis',
       Header: 'Diagnosis',
+      aria: 'Diagnosis',
     },
   ];
 
@@ -89,7 +99,160 @@ export default function Samples() {
     const { original } = row;
     return (
       <Container fluid="xxl">
-        <Row>
+        <Row className="ps-3">
+          <Col
+            md
+            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
+          >
+            <Row>
+              <Col className="text-primary small">
+                <b>DIAGNOSIS:</b>
+              </Col>
+              <Col>{original.diagnosis}</Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>METHYLATION FAMILY (MF):</b>
+              </Col>
+              <Col>{original.family}</Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>MF CALIBRATED SCORES:</b>
+              </Col>
+              <Col>{original.family_score}</Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>METHYLATION CLASS (MC):</b>
+              </Col>
+              <Col>{original.class}</Col>
+            </Row>
+            <Row className="text-primary small">
+              <Col>
+                <b>MC CALIBRATED SCORES:</b>
+              </Col>
+              <Col>{original.class_score}</Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>MGMT SCORES:</b>
+              </Col>
+              <Col sm="6">
+                {original.mgmt_prediction == null
+                  ? ''
+                  : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>NOTES:</b>
+              </Col>
+              <Col>{original.notes}</Col>
+            </Row>
+          </Col>
+          <Col
+            md
+            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
+          >
+            <Row>
+              <Col className="text-primary small">
+                <b>TUMORE SITES:</b>
+              </Col>
+              <Col>{original.tumor_data}</Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>t-SNE PLOT:</b>
+              </Col>
+              <Col>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '.html')
+                  }
+                >
+                  View Plot
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>METHYLATION REPORT:</b>
+              </Col>
+              <Col>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.report_file_name)
+                  }
+                >
+                  Download Report
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>QCI REPORT:</b>
+              </Col>
+              <Col>
+                {original.xml_report ? (
+                  <Link
+                    className="btn btn-link p-0"
+                    target="_blank"
+                    to={`/qci?id=${original.id}&file=${original.xml_report}`}
+                  >
+                    View Report
+                  </Link>
+                ) : (
+                  <Button variant="link" className="p-0" disabled={true}>
+                    View Report
+                  </Button>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>NGS REPORT (LEGACY)</b>
+              </Col>
+              <Col>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '_NGS.pdf')
+                  }
+                >
+                  Download Report
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="text-primary small">
+                <b>SLIDE IMAGE:</b>
+              </Col>
+              <Col>
+                <Button
+                  variant="link"
+                  className="p-0"
+                  onClick={() =>
+                    download(original.id, original.sample_name + '.jpg')
+                  }
+                >
+                  Download Image
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col></Col>
+              <Col></Col>
+            </Row>
+          </Col>
+        </Row>
+
+        {/* <Row>
           <Col sm="3">
             <b>Diagnosis:</b>
           </Col>
@@ -211,7 +374,7 @@ export default function Samples() {
           </Col>
           <Col sm="3">{original.notes}</Col>
           <Col></Col>
-        </Row>
+        </Row> */}
       </Container>
     );
   }, []);
@@ -219,7 +382,7 @@ export default function Samples() {
   async function download(id, file) {
     try {
       const response = await axios.post(
-        `api/getFile`,
+        `api/projects/getFile`,
         {
           sample: id + '/' + file,
         },
@@ -241,7 +404,7 @@ export default function Samples() {
               data={tableData}
               columns={columns}
               options={options}
-              customOptions={{ expanded: true }}
+              customOptions={{ expanded: true, hideColumns: true }}
               renderRowSubComponent={renderRowSubComponent}
             />
           )}

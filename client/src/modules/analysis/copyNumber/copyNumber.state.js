@@ -59,7 +59,7 @@ export const selectSampleState = atom({
 export const geneSelector = selector({
   key: 'copyNumber.geneSelector',
   get: async () => {
-    const response = await axios.get('api/genes');
+    const response = await axios.get('api/analysis/genes');
     return response.data;
   },
   default: [],
@@ -86,13 +86,12 @@ export const copyNumberPlotDataSelector = selector({
   key: 'copyNumber.copyNumberPlotDataSelector',
   get: async ({ get }) => {
     const { idatFilename } = get(selectSampleState);
-    // const idatFilename = '10003886259_R01C02'
 
     if (!idatFilename) return false;
     try {
 
-      const segmentsResponse = await axios.get('api/cnv/segments', { params: { idatFilename } });
-      const binsResponse = await axios.get('api/cnv/bins', { params: { idatFilename } });
+      const segmentsResponse = await axios.get('api/analysis/cnv/segments', { params: { idatFilename } });
+      const binsResponse = await axios.get('api/analysis/cnv/bins', { params: { idatFilename } });
       let binGeneMap = {};
 
       // map bins to each gene
@@ -138,14 +137,14 @@ export const plotState = selector({
     });
 
     // determine y coordinates for each bin
-    const yCoordinates = bins.map(bin => bin.medianLogIntensity);
+    const yCoordinates = bins.map(bin => bin.medianValue);
     const [yMin, yMax] = getRange(yCoordinates);
     const yAbsMax = Math.max(Math.abs(yMin), Math.abs(yMax));
     const yClamped = yAbsMax * 0.2; // approximates the majority of points
     const colorScale = createScale([-yClamped, yClamped], [0, 1], true);
 
     // determine top points
-    const sortedBins = [...bins].sort((a, b) => a.medianLogIntensity - b.medianLogIntensity);
+    const sortedBins = [...bins].sort((a, b) => a.medianValue - b.medianValue);
     const topCount = Math.ceil(bins.length / 500); // top 0.5%
     const topBins = [...sortedBins.slice(0, topCount), ...sortedBins.slice(-topCount)];
       
@@ -156,7 +155,7 @@ export const plotState = selector({
       text: bins.map(bin => [
         `Genes: ${bin.gene[0] || 'N/A'} ${bin.gene.length > 1 ? ` + ${bin.gene.length - 1}` : ''}`,
         `Chromosome: ${bin.chromosome}`,
-        `Log<sub>2</sub>ratio: ${bin.medianLogIntensity.toFixed(2)}`,
+        `Log<sub>2</sub>ratio: ${bin.medianValue.toFixed(2)}`,
       ].join('<br>')),
       hovertemplate: '%{text}<extra></extra>',
       mode: 'markers',
@@ -175,7 +174,7 @@ export const plotState = selector({
       ? topBins.map(bin => ({
           text: `${bin.gene[0] || 'No Gene'} ${bin.gene.length > 1 ? `+ ${bin.gene.length - 1}` : ''}`,
           x: xOffsets[bin.chromosome] + bin.start,
-          y: bin.medianLogIntensity,
+          y: bin.medianValue,
         }))
       : [];
 
@@ -186,7 +185,7 @@ export const plotState = selector({
       .map(bin => ({
         text: bin.query,
         x: xOffsets[bin.chromosome] + bin.start,
-        y: bin.medianLogIntensity,
+        y: bin.medianValue,
       }));
 
     const bufferMargin = 0.25;

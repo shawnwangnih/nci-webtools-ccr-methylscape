@@ -41,7 +41,7 @@ export default function TableTabs() {
       </Button>
       <Button
         size="sm"
-        variant="outline-secondary"
+        variant="outline-danger"
         onClick={() => {
           resetForm();
           resetPoints();

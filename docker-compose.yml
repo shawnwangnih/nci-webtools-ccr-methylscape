@@ -7,6 +7,7 @@ services:
         volumes:
             - './server/docker.config.json:/app/server/config.json:ro'
             - './server/logs:/app/server/logs'
+            - '~/.aws/credentials:/root/.aws/credentials:ro'
         ports: 
             - '10000:10000'
 
@@ -29,6 +30,7 @@ services:
         volumes:
             - './server/docker.config.json:/app/database/config.json:ro'
             - './database/logs:/app/database/logs'
+            - '~/.aws/credentials:/root/.aws/credentials:ro'
 
     database:
         image: postgres

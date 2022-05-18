@@ -1,14 +1,14 @@
-import { fileURLToPath } from 'url';
+import { basename, resolve } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { createRequire } from 'module';
 import minimist from 'minimist';
 import {
   createConnection,
   createRecordIterator,
+  getFileMetadataFromPath,
   importTable,
-  importTableFromScript,
   initializeSchemaForImport,
   loadAwsCredentials,
-  recreateTable,
   withDuration,
 } from './services/utils.js';
 import { LocalProvider } from './services/providers/localProvider.js';
@@ -23,9 +23,10 @@ const require = createRequire(import.meta.url);
 if (isMainModule) {
   const config = require('./config.json');
   const args = minimist(process.argv.slice(2));
-  const schemaPath = args.schema || './schema.js';
-  const sourcesPath = args.sources || './sources.js';
+  const schemaPath = pathToFileURL(args.schema || './schema.js');
+  const sourcesPath = pathToFileURL(args.sources || './sources.js');
   const providerName = args.provider || 'local';
+  const forceRecreate = args.recreate;
   let providerArgs = [...args._];
 
   const SourceProvider = {
@@ -52,52 +53,62 @@ if (isMainModule) {
   const { sources } = await import(sourcesPath);
   const sourceProvider = new SourceProvider(...providerArgs);
   const logger = getLogger("import");
-  await importDatabase(connection, schema, sources, sourceProvider, logger);
+  await importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate);
   process.exit(0);
 }
 
-export async function importDatabase(connection, schema, sources, sourceProvider, logger) {
-  // although we would like to use transactions for the
-  // return await connection.transaction(async (transaction) => {
-  return (async (transaction) => {
-    await initializeSchemaForImport(transaction, schema);
+export async function importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate = false) {
+  const tableSources = sources.filter(source => source.table);
+  const postImportSources = sources.filter(source => source.type === 'postImport');
+  let totalCount = 0;
+  
+  let { results, duration } = await withDuration(async () => {
+    return await connection.transaction(async (connection) => {
+      await initializeSchemaForImport(connection, schema, sources, forceRecreate);
 
-    let totalCount = 0;
-    const { results, duration } = await withDuration(async () => {
-      for (let { sourcePath, type, description, table, columns, parseConfig, temporarySchema, importScript } of sources) {
-        const sourcePaths = type === 'folder'
-          ? await sourceProvider.listFiles(sourcePath)
-          : [ sourcePath ];
+      for (let source of tableSources) {
+        const { description, table, columns, skipImport, parseConfig } = source;
+        const shouldSkip = skipImport ? await skipImport(connection) : () => false;
+        const sourcePaths = await getSourcePaths(source, sourceProvider);
   
         for (const sourcePath of sourcePaths) {
-          logger.info(`Importing ${sourcePath} => ${table} (${description})`);
+          const metadata = getFileMetadataFromPath(sourcePath);
+          if (shouldSkip(metadata)) continue;
   
+          logger.info(`Importing ${sourcePath} => ${table} (${description})`);
           const { results, duration } = await withDuration(async () => {
             const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig });
-            const count = (temporarySchema && importScript)
-              ? await importTableFromScript(transaction, records, temporarySchema, importScript, logger)
-              : await importTable(transaction, records, table, logger);
-
-            return count;
+            return await importTable(connection, records, table, logger);
           });
 
+          logger.info(getStatusMessage({ results, duration }));
           totalCount += results;
-          logger.info(
-            `Finished importing ${sourcePath} => ${table} in ${(
-              duration.toFixed(2)
-            )}s (${Math.round(results / duration)} rows/s)`
-          );
         }
       }
       return totalCount;
-    });
+    })
+  });
 
-    logger.info(
-      `Finished importing ${results} rows in ${(
-        duration.toFixed(2)
-      )}s (${Math.round(results / duration)} rows/s)`
-    );
+  // post-import callbacks are executed after the transaction is committed
+  // this is to allow the database to autovacuum/analyze/etc.
+  for (const source of postImportSources) {  
+    logger.info(`Running post-import step: ${source.description}`);
+    const status = await withDuration(async () => await source.callback(connection));
+    logger.info(`${status.results} (${(status.duration.toFixed(2))}s)`);
+    duration += status.duration;
+  }
 
-    return true;
-  })(connection);
+  logger.info(getStatusMessage({ results, duration }));
+}
+
+async function getSourcePaths(source, sourceProvider) {
+  return (source.type === 'folder')
+    ? await sourceProvider.listFiles(source.sourcePath)
+    : [source.sourcePath]
+}
+
+function getStatusMessage({ results, duration }) {
+  return `Finished importing ${results} rows in ${(
+    duration.toFixed(2)
+  )}s (${Math.round(results / duration)} rows/s)`;
 }

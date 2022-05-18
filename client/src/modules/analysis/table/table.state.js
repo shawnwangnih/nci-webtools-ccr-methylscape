@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 import axios from 'axios';
 import { selectedPoints } from '../metadata/metadata-plot.state';
 import pick from 'lodash/pick';
+import isNumber from 'lodash/isNumber';
 
 export const defaultTableForm = {
   group: 0,
@@ -238,6 +239,42 @@ export const tableData = selector({
         Header: "WHO Diagnosis (Tier 4)",
         show: false,
       },
+
+      { 
+        accessor: "rfPurityAbsolute",
+        Header: "RF Purity (Absolute)",
+        show: false,
+      },
+      { 
+        accessor: "rfPurityEstimate",
+        Header: "RF Purity (Estimate)",
+        show: false,
+      },
+      { 
+        accessor: "lump",
+        Header: "LUMP",
+        show: false,
+      },
+      { 
+        accessor: "mcf",
+        Header: "MCF",
+        show: false,
+      },
+      { 
+        accessor: "mcfScore",
+        Header: "MCF Score",
+        show: false,
+      },
+      { 
+        accessor: "subclass",
+        Header: "Subclass",
+        show: false,
+      },
+      { 
+        accessor: "subclassScore",
+        Header: "Subclass Score",
+        show: false,
+      },
     ];
 
     const tables = points.reduce(
@@ -262,50 +299,34 @@ export const tableData = selector({
   },
 });
 
-const selectedPoints_intermediate = selector({
-  key: 'selectedPoints_intermediate',
+const survivalGroupsSelector = selector({
+  key: 'table.survivalGroupsSelector',
   get: ({ get }) => {
     const { points } = get(selectedPoints);
-    const filterPoints = points.filter((v) => v.length);
-
-    if (!filterPoints.length) return '[]';
-
-    const survivalData = filterPoints
-      .map((data, i) => ({
-        [parseInt(i) + 1]: data
-          .map((e) => e.customdata)
-          .filter(
-            ({ overallSurvivalMonths, overallSurvivalStatus }) =>
-              overallSurvivalMonths &&
-              (overallSurvivalStatus || overallSurvivalStatus == 0)
-          )
-          .map(({ overallSurvivalMonths, overallSurvivalStatus }) => ({
-            overallSurvivalMonths,
-            overallSurvivalStatus,
-          })),
-      }))
-      .reduce((prev, curr) => {
-        const groupName = Object.keys(curr)[0];
-        return [
-          ...prev,
-          ...curr[groupName].map((d) => ({
-            group: groupName,
-            overallSurvivalMonths: d.overallSurvivalMonths,
-            overallSurvivalStatus: d.overallSurvivalStatus,
-          })),
-        ];
-      }, []);
-
-    return JSON.stringify(survivalData);
-  },
+    return points
+      .filter(p => p.length)
+      .map((pointGroup, groupIndex) => (
+        pointGroup
+          .map(g => ({
+            group: groupIndex + 1,
+            overallSurvivalMonths: g.customdata.overallSurvivalMonths,
+            overallSurvivalStatus: g.customdata.overallSurvivalStatus,
+          }))
+          .filter(data => (
+            isNumber(data.overallSurvivalMonths) && 
+            isNumber(data.overallSurvivalStatus)
+          ))
+      ))
+      .flat();
+  }
 });
 
 export const survivalDataSelector = selector({
   key: 'survivalDataSelector',
   get: async ({ get }) => {
-    const selectedPoints = JSON.parse(get(selectedPoints_intermediate));
-    if (selectedPoints?.length) {
-      const response = await axios.post('api/survival', selectedPoints);
+    const selectedGroups = get(survivalGroupsSelector);
+    if (selectedGroups?.length) {
+      const response = await axios.post('api/analysis/survival', selectedGroups);
       return response.data;
     } else {
       return null;

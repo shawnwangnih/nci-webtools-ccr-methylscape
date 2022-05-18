@@ -1,7 +1,7 @@
 async function getSamples(connection, { embedding, organSystem }) {
   if (embedding && organSystem) {
     return await connection('sample')
-      .join('sampleCoordinate', 'sample.id', 'sampleCoordinate.sampleId')
+      .join('sampleCoordinate', 'sample.idatFilename', 'sampleCoordinate.sampleIdatFilename')
       .where('sampleCoordinate.embedding', embedding)
       .andWhere('sampleCoordinate.organSystem', organSystem);
   } else {
@@ -11,12 +11,23 @@ async function getSamples(connection, { embedding, organSystem }) {
 
 async function getCnvBins(connection, { idatFilename }) {
   if (idatFilename) {
-    const cnvBins =  await connection('cnvBin')
+    const [geneCountResult] = await connection('cnvBin')
+      .count('gene', {as: 'count'})
+      .whereNotNull('gene')
+      .andWhere('sampleIdatFilename', idatFilename);
+
+    if (+geneCountResult.count === 0) {
+      await connection.raw("call mapBinsToGenes(?)", [ idatFilename ]);
+    }
+
+    const cnvBins = await connection('cnvBin')
       .where('sampleIdatFilename', idatFilename);
+
     return cnvBins.map(cnvBin => ({
       ...cnvBin,
       gene: cnvBin.gene ? cnvBin.gene.split(';') : [],
     }));
+
   } else {
     return [];
   }

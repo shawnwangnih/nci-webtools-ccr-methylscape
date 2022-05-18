@@ -25,7 +25,6 @@ export default function CopyNumberForm() {
   }
     
   function filterGenes(inputValue = '', limit = 100) {
-    console.log(inputValue);
     return geneOptions
       .filter((g) => !inputValue || g.label.toLowerCase().startsWith(inputValue.toLowerCase()))
       .slice(0, limit);

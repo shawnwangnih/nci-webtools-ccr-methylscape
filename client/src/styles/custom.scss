@@ -3,7 +3,7 @@
   }
 
 
-  .navbar-dark .navbar-nav .nav-link.active {
+.navbar-dark .navbar-nav .nav-link.active {
     background-color: $yellow;
     color:black;
 }
@@ -12,6 +12,25 @@
     z-index: 100;
 }
 
+
 .sample-blue{
     color: $sample-blue;
 }
+
+.footer-background-color{
+    background-color: #0C95A1;
+}
+
+.text-align-center{
+    text-align: center;
+}
+
+.text-align-left{
+    text-align:left;
+}
+
+
+.admin-manage-icons:hover {
+    color:$green;
+}
+

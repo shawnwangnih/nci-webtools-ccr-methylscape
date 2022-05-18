@@ -3,13 +3,14 @@ import axios from 'axios';
 import groupBy from 'lodash/groupBy';
 import meanBy from 'lodash/meanBy';
 import colors from './colors.json';
+import nciMetricColors from './nciMetricColors';
 
 export const defaultFormState = {
   organSystem: 'centralNervousSystem',
   embedding: 'umap',
   search: [],
   showAnnotations: true,
-  methylClass: '',
+  color: { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
 };
 
 export const formState = atom({
@@ -35,13 +36,13 @@ export const defaultPlotState = {
 export const plotState = selector({
   key: 'metadataPlot.plotState',
   get: async ({ get }) => {
-    const { organSystem, embedding, search, showAnnotations, methylClass } =
+    const { organSystem, embedding, search, showAnnotations, color } =
       get(formState);
 
     if (!organSystem || !embedding) return defaultPlotState;
 
     const params = { embedding, organSystem };
-    const { data } = await axios.get('api/samples', { params });
+    const { data } = await axios.get('api/analysis/samples', { params });
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());
@@ -60,42 +61,45 @@ export const plotState = selector({
     // }
 
     const useWebGl = data.length > 1000;
-    const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
-    const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
+    // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
+    // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
+    const dataGroupedByColor =
+      color.type == 'categorical'
+        ? Object.entries(groupBy(data, (e) => e[color.value]))
+        : [];
 
     // use mean x/y values for annotation positions
-    const labelAnnotations = dataGroupedByLabel
-      .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
-      )
-      .map(([name, value]) => ({
-        text: name,
-        x: meanBy(value, (e) => e.x),
-        y: meanBy(value, (e) => e.y),
-        showarrow: false,
-      }));
+    // const labelAnnotations = dataGroupedByLabel
+    //   .filter(
+    //     ([name, value]) => !['null', 'undefined', ''].includes(String(name))
+    //   )
+    //   .map(([name, value]) => ({
+    //     text: name,
+    //     x: meanBy(value, (e) => e.x),
+    //     y: meanBy(value, (e) => e.y),
+    //     showarrow: false,
+    //   }));
 
-    const classAnnotations = dataGroupedByClass
-      .filter(
-        ([name, value]) => !['null', 'undefined', ''].includes(String(name))
-      )
-      .map(([name, value]) => ({
-        text: name,
-        x: meanBy(value, (e) => e.x),
-        y: meanBy(value, (e) => e.y),
-        showarrow: false,
-      }));
+    // const classAnnotations = dataGroupedByClass
+    //   .filter(
+    //     ([name, value]) => !['null', 'undefined', ''].includes(String(name))
+    //   )
+    //   .map(([name, value]) => ({
+    //     text: name,
+    //     x: meanBy(value, (e) => e.x),
+    //     y: meanBy(value, (e) => e.y),
+    //     showarrow: false,
+    //   }));
 
-    const weeklyThreshold = Date.now() - (1000 * 60 * 60 * 24 * 7);
-    const isWeeklyAnnotation = ({batchDate}) => batchDate && new Date(batchDate).getTime() > weeklyThreshold;
-    const weeklyAnnotations = data
-      .filter(isWeeklyAnnotation)
-      .map(value => ({
-        text: value.sample,
-        x: value.x,
-        y: value.y,
-        showarrow: true,
-      }));
+    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
+    const isWeeklyAnnotation = ({ batchDate }) =>
+      batchDate && new Date(batchDate).getTime() > weeklyThreshold;
+    const weeklyAnnotations = data.filter(isWeeklyAnnotation).map((value) => ({
+      text: value.sample,
+      x: value.x,
+      y: value.y,
+      showarrow: true,
+    }));
 
     // add annotations from search filter
     const sampleAnnotations = searchQueries.length
@@ -119,28 +123,59 @@ export const plotState = selector({
           }))
       : [];
 
+    const hovertemplate =
+      [
+        'Sample: %{customdata.sample}',
+        'Metric: %{customdata.nciMetric}',
+        'Diagnosis: %{customdata.diagnosisProvided}',
+        'Sex: %{customdata.sex}',
+        'RF Purity (Absolute): %{customdata.rfPurityAbsolute}',
+        'Age: %{customdata.age}',
+      ].join('<br>') + '<extra></extra>';
+
+    // Sort these keywords to the top so that their traces are rendered first and overlapped by others
+    const sortTopKeyWord = ['No_match', 'Unclassified', 'NotAvailable', 'null'];
+
+    const nciMetricColorMap = await nciMetricColors();
+    let colorCount = 0;
+
     // transform data to traces
-    const dataTraces = dataGroupedByClass
-      .sort((a, b) =>
-        a[0] == 'No_match'
-          ? -1
-          : b[0] == 'No_match'
-          ? 1
-          : a[0].localeCompare(b[0])
-      )
-      .map(([name, data]) => ({
-        name,
-        x: data.map((e) => e.x),
-        y: data.map((e) => e.y),
-        customdata: data,
-        mode: 'markers',
-        hovertemplate:
-          'Sample: %{customdata.sample}<br>Metric: %{customdata.nciMetric}<br>Diagnosis: %{customdata.diagnosisProvided}<extra></extra>',
-        type: useWebGl ? 'scattergl' : 'scatter',
-        marker: {
-          color: '%{customdata.nciMetric}',
-        },
-      }));
+    const dataTraces =
+      color.type == 'categorical'
+        ? dataGroupedByColor
+            .sort((a, b) =>
+              sortTopKeyWord.includes(a[0])
+                ? -1
+                : sortTopKeyWord.includes(b[0])
+                ? 1
+                : a[0].localeCompare(b[0])
+            )
+            .map(([name, data]) => ({
+              name,
+              x: data.map((e) => e.x),
+              y: data.map((e) => e.y),
+              customdata: data,
+              mode: 'markers',
+              hovertemplate: hovertemplate,
+              type: useWebGl ? 'scattergl' : 'scatter',
+              marker: {
+                color: nciMetricColorMap[name] || colors[colorCount++],
+              },
+            }))
+        : [
+            {
+              x: data.map((e) => e.x),
+              y: data.map((e) => e.y),
+              customdata: data,
+              mode: 'markers',
+              hovertemplate: hovertemplate,
+              type: useWebGl ? 'scattergl' : 'scatter',
+              marker: {
+                color: data.map((e) => e[color.value]),
+                colorbar: { title: color.label, dtick: color.dtick },
+              },
+            },
+          ];
 
     const plotTitles = {
       centralNervousSystem: 'Central Nervous System',
@@ -162,14 +197,16 @@ export const plotState = selector({
       annotations: showAnnotations
         ? [
             // ...labelAnnotations,
-            // ...sampleAnnotations,
+            ...sampleAnnotations,
             // ...classAnnotations
             ...weeklyAnnotations,
           ]
         : [...sampleAnnotations],
-      uirevision: organSystem + embedding + search + showAnnotations,
-      legend: { title: { text: 'Methylation Class' } },
-      colorway: colors,
+      uirevision:
+        organSystem + embedding + color.value + search + showAnnotations,
+      legend: { title: { text: color.label } },
+      autosize: true,
+      dragmode: 'select',
     };
 
     const config = {

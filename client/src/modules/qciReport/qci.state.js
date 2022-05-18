@@ -20,7 +20,7 @@ export const qciData = selector({
     async function downloadFile(id, file) {
       try {
         const response = await axios.post(
-          `api/getFile`,
+          `api/projects/getFile`,
           {
             sample: id + '/' + file,
           },

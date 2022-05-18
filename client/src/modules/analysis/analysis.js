@@ -1,37 +1,69 @@
+import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Button from 'react-bootstrap/Button';
+import {
+  Fullscreen,
+  FullscreenExit,
+  BoxArrowUpRight,
+} from 'react-bootstrap-icons';
 import Overview from './overview/overview';
 import SampleQuality from './sampleQuality/sampleQuality';
 import CopyNumber from './copyNumber/copyNumber';
 import PromoterMethylation from './promoterMethylation/promoterMethylation';
 import CohortAnalysis from './cohortAnalysis/cohortAnalysis';
-import Survival from './survival/survival';
+import Survival from './survival/survival-tab';
 import Table from './table/table';
 import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
 import Methodology from './methodology/methodology';
 import Metadata from './metadata/metadata';
 
+import './analysis.scss';
+
 export default function Analysis() {
+  const [expand, setExpand] = useState(false);
+
   function handleSelect(event) {
     console.log(event);
   }
 
   return (
     <Container fluid>
+      <Row className="mt-3">
+        <h1 className="text-white">Analysis</h1>
+      </Row>
       <Row>
-        <Col xl={6} className="my-4">
+        <Col xl={expand ? 12 : 6} className="my-4">
           <Card className="h-100">
             <Card.Body>
               <Metadata onSelect={handleSelect} />
+              <div className="d-flex justify-content-between p-1">
+                <Button
+                  size="sm"
+                  variant="link"
+                  title="Open in new tab"
+                  aria-label="Open Metadata in new tab"
+                  href="#/metadata"
+                  target="_blank"
+                >
+                  <BoxArrowUpRight /> View Metadata
+                </Button>
+                <Button
+                  id="expandLayout"
+                  aria-label="Expand"
+                  onClick={() => setExpand(!expand)}
+                >
+                  {expand ? <FullscreenExit /> : <Fullscreen />}
+                </Button>
+              </div>
             </Card.Body>
           </Card>
         </Col>
-
-        <Col xl={6} className="my-4">
+        <Col xl={expand ? 12 : 6} className="my-4">
           <Card className="h-100">
             <Tabs defaultActiveKey="overview" className="mb-3">
               <Tab eventKey="overview" title="Overview">
@@ -45,6 +77,9 @@ export default function Analysis() {
               </Tab>
               <Tab eventKey="Table" title="Table">
                 <Table className="px-3" />
+              </Tab>
+              <Tab eventKey="Survival" title="Survival">
+                <Survival className="px-3" />
               </Tab>
               {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">
                 <PromoterMethylation className="px-3" />

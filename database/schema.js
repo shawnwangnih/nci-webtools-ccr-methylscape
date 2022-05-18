@@ -6,7 +6,7 @@ export const schema = [
    */
   {
     name: "sample",
-    import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
       table.string("sample");
@@ -33,13 +33,13 @@ export const schema = [
       table.string("subtypeOrPattern");
       table.string("who2007Grade");
       table.string("MCF1_v11b6");
-      table.string("MCF1_v11b6_score");
+      table.double("MCF1_v11b6_score");
       table.string("SC1_v11b6");
-      table.string("SC1_v11b6_score");
+      table.double("SC1_v11b6_score");
       table.string("MCF_v12_3");
-      table.string("MCF_v12_3_score");
+      table.double("MCF_v12_3_score");
       table.string("MCF_v12_5");
-      table.string("MCF_v12_5_score");
+      table.double("MCF_v12_5_score");
       table.string("gsmAccession");
       table.string("dkfzBrainTumorClassifier");
       table.string("primaryStudy");
@@ -53,6 +53,13 @@ export const schema = [
       table.string("diagnosisTier2");
       table.string("diagnosisTier3");
       table.string("whoDiagnosisTier4");
+      table.double("rfPurityAbsolute");
+      table.double("rfPurityEstimate");
+      table.double("lump");
+      table.string("mcf");
+      table.double("mcfScore");
+      table.string("subclass");
+      table.double("subclassScore");
       table.double("overallSurvivalMonths");
       table.integer("overallSurvivalStatus");
       table.date("batchDate");
@@ -65,10 +72,10 @@ export const schema = [
    */
   {
     name: "sampleCoordinate",
-    import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.integer("sampleId").references("sample.id");
+      table.string("sampleIdatFilename").references("sample.idatFilename");
       table.string("organSystem").index();
       table.string("embedding").index();
       table.double("x");
@@ -81,7 +88,7 @@ export const schema = [
    */
   {
     name: "chromosome",
-    import: true,
+    recreate: true,
     schema: (table) => {
       table.increments("id");
       table.string("name");
@@ -90,32 +97,50 @@ export const schema = [
     }
   },
 
+  
   /**
-   * Sources: Bins/BAF.bins_ <sample>.txt 
+   * Source: genes.csv
+   * Genome references for copy number
+   */
+   {
+    name: "gene",
+    recreate: true,
+    schema: (table) => {
+      table.increments("id");
+      table.string("name");
+      table.integer("chromosome");
+      table.integer("start");
+      table.integer("end");
+      table.index(['chromosome', 'start']);
+    },
+  },
+
+  /**
+   * Sources: CNV/bins/*.txt
    */
   {
     name: "cnvBin",
-    import: true,
+    recreate: false,
     schema: (table) => {
       table.increments("id");
-      table.string("sampleIdatFilename").index();
+      table.string("sampleIdatFilename");
       table.integer("chromosome");
       table.integer("start").unsigned();
       table.integer("end").unsigned();
+      table.double("pValue");
       table.string("feature");
-      table.double("medianLogIntensity");
+      table.double("medianValue");
       table.text("gene");
+      table.index(["sampleIdatFilename", "chromosome", "start"]);
     },
-    Notriggers: [
-      `create or replace trigger updateCnvBinGene 
-      before insert or update on "cnvBin" 
-      for each row execute procedure updateGeneForRange();`
-    ],
   },
 
+  /**
+   * Sources: CNV/segments/*.txt
+   */
   {
     name: "cnvSegment",
-    import: true,
+    recreate: false,
     schema: (table) => {
       table.increments("id");
       table.string("sampleIdatFilename").index();
@@ -130,35 +155,21 @@ export const schema = [
     }
   },
 
-  /**
-   * Source: genes.csv
-   * Genome references for copy number
-   */
-  {
-    name: "gene",
-    import: true,
-    schema: (table) => {
-      table.increments("id");
-      table.string("name");
-      table.integer("chromosome");
-      table.integer("start");
-      table.integer("end");
-      table.index(['chromosome', 'start']);
-    },
-  },
 
   /**
    * Stores import job status logs
    */
   {
     name: "importLog",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.string("status");
       table.text("log");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -169,13 +180,15 @@ export const schema = [
    */
   {
     name: "role",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.string("name").notNullable().unique();
       table.string("description");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -190,7 +203,7 @@ export const schema = [
    */
   {
     name: "rolePolicy",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.integer("roleId").notNullable().references("role.id");
@@ -198,6 +211,26 @@ export const schema = [
       table.string("resource");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
+    }
+  },
+
+  /**
+   * Create the organization table.
+   */
+   {
+    name: "organization",
+    recreate: true,
+    schema: (table, connection) => {
+      table.increments("id");
+      table.integer("order");
+      table.string("name").notNullable().unique();
+      table.enum("status", ["inactive", "active"]).defaultTo("active");
+      table.timestamp("createdAt").defaultTo(connection.fn.now());
+      table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
@@ -207,47 +240,92 @@ export const schema = [
    */
   {
     name: "user",
-    import: false,
+    recreate: true,
     schema: (table, connection) => {
       table.increments("id");
       table.integer("roleId").references("role.id");
+      table.integer("organizationId").references("organization.id");
+      table.string("organizationOther");
+      table.string("accountType");
       table.string("name").notNullable().unique();
       table.string("firstName");
       table.string("lastName");
-      table.string("email");
-      table.enum("status", ["pending", "inactive", "active"]).defaultTo("pending");
+      table.string("email").unique();
+      table.enum("status", ["pending", "rejected", "inactive", "active"]).defaultTo("pending");
+      table.boolean("receiveNotification").defaultTo(true);
+      table.text("notes");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
+      table.string("createdBy").defaultTo("system");
+      table.string("updatedBy").defaultTo("system");
     }
   },
 
   {
-    name: 'updateGeneForRange',
-    import: false,
+    name: 'mapBinsToGenes',
     type: 'function',
     schema: () => {
-      return `create or replace function updateGeneForRange()
-      returns trigger as $$
-      begin
-      new.gene := (
-          select string_agg(distinct name::text, ';')
-          from gene g
-          where g.chromosome = new.chromosome and (
-            (g.start between new."start" and new."end") or
-            (g.end between new."start" and new."end") or
-            (new.start between g."start" and g."end") or
-            (new."end" between g."start" and g."end")
-          )
-      );
-      return new;
-      end;
-      $$ language 'plpgsql';`;
+      return `
+        drop procedure if exists mapBinsToGenes;
+        create or replace procedure mapBinsToGenes(idat text) 
+          language plpgsql as $$
+          begin
+            EXECUTE format('
+              with geneMap as (
+                  select id, string_agg(distinct gene, '';'') as gene from (
+                      select c.id, g.name as gene
+                      from "cnvBin" c
+                        join "gene" g on
+                          c.chromosome = g.chromosome and
+                          c.start <= g.start and
+                          g.start < c.end
+                      where c."sampleIdatFilename" = %L
+                      union
+                      select c.id, g.name as gene
+                      from "cnvBin" c
+                        join "gene" g on
+                          c.chromosome = g.chromosome and
+                          g.start < c.start and
+                          c.start < g."end"
+                        where c."sampleIdatFilename" = %L
+                  ) as c group by c.id
+              ) update "cnvBin" cnv
+                  set gene = geneMap.gene
+                  from geneMap
+                  where cnv.id = geneMap.id;', 
+              idat, 
+              idat
+            );
+          end
+          $$;`;
+    }
+  },
+
+  {
+    name: 'mapAllBinsToGenes',
+    type: 'function',
+    schema: () => {
+      return `
+        drop procedure if exists mapAllBinsToGenes;
+        create or replace procedure mapAllBinsToGenes()
+        language plpgsql as $$
+        declare
+            c text;
+        begin
+            for c in
+                select distinct "sampleIdatFilename"from "cnvBin"
+                  group by "sampleIdatFilename"
+                  having count(gene) = 0
+            loop
+                execute format('call mapBinsToGenes(%L)', c);
+            end loop;
+        end;
+        $$;`;
     }
   },
 
   {
     name: 'getChromosomeOffset',
-    import: false,
     type: 'function',
     schema: () => {
       return `create or replace function getChromosomeOffset (chromosome numeric)
@@ -278,9 +356,8 @@ export const schema = [
               when $1 = 23 then 2881033286
               when $1 = 24 then 3036303846
               else 0
-              END
+          END
       $$ language sql;`
     }
   }
 ];
-

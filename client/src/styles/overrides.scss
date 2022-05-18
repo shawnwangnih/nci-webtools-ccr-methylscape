@@ -7,3 +7,23 @@ legend {
   float: none;
   width: inherit;
 }
+
+.card.card-link {
+  cursor: pointer;
+  transition: all 0.1s;
+  &.card-accent-primary {
+    border-top: 6px $primary solid;
+    .bi {
+      color: $blue-400;
+      transition: all 0.1s;
+    }
+    &:hover {
+      color: $blue-600;
+      border-top-color: $blue-400;
+      box-shadow: 0 .75rem 1.5rem rgba($black, .15);
+      .bi {
+        color: $green;
+      }
+    }
+  }
+}

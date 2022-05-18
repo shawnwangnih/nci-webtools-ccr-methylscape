@@ -1,4 +1,4 @@
-import { ageFormatter, chromosomeFormatter, patternExtractionFormatter } from './services/formatters.js';
+import { ageFormatter, chromosomeFormatter, patternExtractionFormatter, unparsedColonNumericValueFormatter } from './services/formatters.js';
 
 export const sources = [
   {
@@ -6,7 +6,6 @@ export const sources = [
     table: 'sample',
     description: 'master sample metadata',
     columns: [
-      { sourceName: "nn", name: "id" },
       { sourceName: "Sample", name: "sample" },
       { sourceName: "idat_filename", name: "idatFilename" },
       { sourceName: "NIH_labels", name: "nihLabels" },
@@ -51,6 +50,13 @@ export const sources = [
       { sourceName: "Diagnosis.(tier.2)", name: "diagnosisTier2" },
       { sourceName: "Diagnosis.(tier.3)", name: "diagnosisTier3" },
       { sourceName: "WHO.diagnosis.(tier.4)", name: "whoDiagnosisTier4" },
+      { sourceName: "RFpurity.ABSOLUTE", name: "rfPurityAbsolute" },
+      { sourceName: "RFpurity.ESTIMATE", name: "rfPurityEstimate" },
+      { sourceName: "LUMP", name: "lump" },
+      { sourceName: "MCF", name: "mcf", formatter: patternExtractionFormatter(/^(.*):/, true) },
+      { sourceName: "MCF.score", name: "mcfScore", formatter: (value, record) => unparsedColonNumericValueFormatter(value, record, 'MCF') },
+      { sourceName: "Subclass", name: "subclass", formatter: patternExtractionFormatter(/^(.*):/, true) },
+      { sourceName: "Subclass.score", name: "subclassScore", formatter: (value, record) => unparsedColonNumericValueFormatter(value, record, 'Subclass') },
       { sourceName: "OS_months", name: "overallSurvivalMonths" },
       { sourceName: "OS_status", name: "overallSurvivalStatus" },
       { sourceName: "Batch_date", name: "batchDate" },
@@ -62,7 +68,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'umap coordinates - centralNervousSystem',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       { sourceName: null, name: 'organSystem', defaultValue: 'centralNervousSystem'},
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
@@ -75,7 +81,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'densmap coordinates - centralNervousSystem',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       {
         sourceName: null,
         name: 'organSystem',
@@ -92,7 +98,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'umap coordinates - boneAndSoftTissue',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       {
         sourceName: null,
         name: 'organSystem',
@@ -109,7 +115,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'densmap coordinates - boneAndSoftTissue',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       {
         sourceName: null,
         name: 'organSystem',
@@ -126,7 +132,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'umap coordinates - hematopoietic',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       {
         sourceName: null,
         name: 'organSystem',
@@ -143,7 +149,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'densmap coordinates - hematopoietic',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       {
         sourceName: null,
         name: 'organSystem',
@@ -160,7 +166,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'umap coordinates - renal',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       { sourceName: null, name: 'organSystem', defaultValue: 'renal' },
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
@@ -173,7 +179,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'densmap coordinates - renal',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       { sourceName: null, name: 'organSystem', defaultValue: 'renal' },
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
@@ -186,7 +192,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'umap coordinates - panCancer',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       { sourceName: null, name: 'organSystem', defaultValue: 'panCancer' },
       { sourceName: null, name: 'embedding', defaultValue: 'umap' },
       { sourceName: 'umap_x', name: 'x' },
@@ -199,7 +205,7 @@ export const sources = [
     table: 'sampleCoordinate',
     description: 'densmap coordinates - panCancer',
     columns: [
-      { sourceName: 'nn', name: 'sampleId' },
+      { sourceName: "idat_filename", name: "sampleIdatFilename" },
       { sourceName: null, name: 'organSystem', defaultValue: 'panCancer' },
       { sourceName: null, name: 'embedding', defaultValue: 'densmap' },
       { sourceName: 'densmap_x', name: 'x' },
@@ -218,58 +224,10 @@ export const sources = [
     ],
   },
   {
-    sourcePath: 'CNV/bins/',
-    type: 'folder',
-    table: 'cnvBin',
-    description: 'CNV bins (conumee output)',
-    parseConfig: {
-      columns: ["Index", "Chromosome", "Start", "End", "Feature", "MedianLogIntensity"],
-      from_line: 2,
-    },
-    columns: [
-      { sourceMetadataName: "filename", name: "sampleIdatFilename", formatter: patternExtractionFormatter(/^(.*)\.bins\.txt$/) },
-      { sourceName: "Chromosome", name: "chromosome", formatter: chromosomeFormatter },
-      { sourceName: "Start", name: "start" },
-      { sourceName: "End", name: "end" },
-      { sourceName: "Feature", name: "feature" },
-      { sourceName: "MedianLogIntensity", name: "medianLogIntensity" },
-    ],
-    temporarySchema: (table) => {
-      table.increments("id");
-      table.string("sampleIdatFilename").index();
-      table.integer("chromosome");
-      table.integer("start").unsigned();
-      table.integer("end").unsigned();
-      table.string("feature");
-      table.double("medianLogIntensity");
-      table.index(["chromosome", "start"]);
-    },
-    importScript: () => {
-      // fast range-overlap join
-      // source: https://doi.org/10.1007/s00778-021-00692-3
-      return `with results as (
-          select c.*, g.name as gene from :temporaryTable: c
-              join gene g on
-                  c.chromosome = g.chromosome and
-                  c.start <= g.start and
-                  g.start < c.end
-          union
-          select c.*, g.name as gene from :temporaryTable: c
-          join gene g on
-              c.chromosome = g.chromosome and
-              g.start < c.start and
-              c.start < g."end"
-      ) insert into "cnvBin"("sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity", "gene")
-      select "sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity", string_agg(distinct gene, ';') as "gene"
-      from results
-      group by "sampleIdatFilename", "chromosome", "start", "end", "feature", "medianLogIntensity"`
-    },
-  },
-  {
     sourcePath: 'CNV/segments/',
     type: 'folder',
     table: 'cnvSegment',
-    description: 'CNV segments (conumee output)',
+    description: 'CNV segments',
     parseConfig: {
       columns: ["Index", "ID", "chrom", "loc.start", "loc.end", "num.mark", "bstat", "pval", "seg.mean", "seg.median"],
       from_line: 2,
@@ -285,6 +243,56 @@ export const sources = [
       { sourceName: "seg.mean", name: "meanValue" },
       { sourceName: "seg.median", name: "medianValue" },
     ],
+    skipImport: async (connection) => {
+      const recordKey = 'sampleIdatFilename';
+      const records = await connection('cnvSegment').select(recordKey).pluck(recordKey).distinct();
+      const recordMap = Object.fromEntries(records.map(r => [r, true]));
+
+      return (metadata) => {
+        const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.seg\.txt$/);
+        const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
+        return recordMap[sampleIdatFilename];
+      }
+    },
+  },
+  {
+    sourcePath: 'CNV/bins/',
+    type: 'folder',
+    table: 'cnvBin',
+    description: 'CNV bins',
+    parseConfig: {
+      columns: ["Index", "Chromosome", "Start", "End", "Feature", "MedianLogIntensity"],
+      from_line: 2,
+    },
+    columns: [
+      { sourceMetadataName: "filename", name: "sampleIdatFilename", formatter: patternExtractionFormatter(/^(.*)\.bins\.txt$/) },
+      { sourceName: "Chromosome", name: "chromosome", formatter: chromosomeFormatter },
+      { sourceName: "Start", name: "start" },
+      { sourceName: "End", name: "end" },
+      { sourceName: "Feature", name: "feature" },
+      { sourceName: "MedianLogIntensity", name: "medianValue" },
+    ],
+    skipImport: async (connection) => {
+      const recordKey = 'sampleIdatFilename';
+      const records = await connection('cnvBin').select(recordKey).pluck(recordKey).distinct();
+      const recordMap = Object.fromEntries(records.map(r => [r, true]));
+
+      return (metadata) => {
+        const sampleIdatFormatter = patternExtractionFormatter(/^(.*)\.bins\.txt$/);
+        const sampleIdatFilename = sampleIdatFormatter(metadata.filename);
+        return recordMap[sampleIdatFilename];
+      }
+    },
+  },
+  {
+    type: 'postImport',
+    description: 'Map CNV bins to genes',
+    callback: async (connection) => {
+      await connection.raw('analyse "cnvBin"');
+      await connection.raw('call mapAllBinsToGenes()');
+      return `Mapped CNV bins to genes`;
+    }
   }
 ];
 
+export default sources;

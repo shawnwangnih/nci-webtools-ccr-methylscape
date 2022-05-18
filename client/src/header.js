@@ -19,7 +19,7 @@ export default function Header() {
   }
 
   return (
-    <header class="flex-grow-0 bg-white">
+    <header className="flex-grow-0 bg-white">
       <Container fluid>
         <Row className="justify-content-between">
           <Col>
@@ -29,10 +29,10 @@ export default function Header() {
               className="h5 mb-1" rel="noreferrer"
             >
               <img
-                src="assets/images/nci-ccr-logo.svg"
+                src="assets/images/nci-ccr-logo.png"
                 className="img-fluid my-3"
                 alt="National Cancer Institute"
-                style={{ height: '56px', maxWidth: '100%' }}
+                style={{ height: 'auto', maxWidth: '100%' }}
               />
               <span className="visually-hidden">
                 Center for Cancer Research

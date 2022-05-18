@@ -29,9 +29,10 @@ export function TextFilter({
       size="sm"
       value={filterValue || ''}
       onChange={(e) => setFilter(e.target.value || undefined)}
-      placeholder={placeholder || `Search...`}
+      placeholder={placeholder || `Search`}
       aria-label={aria}
-    />
+      className="border-0 rounded-pill"
+    ></Form.Control>
   );
 }
 
@@ -108,6 +109,7 @@ export default function Table({
     canPreviousPage,
     canNextPage,
     pageCount,
+    pageOptions,
     gotoPage,
     nextPage,
     previousPage,
@@ -151,9 +153,12 @@ export default function Table({
       }
     }
   );
+
+  const paginationInput = {
+    width: '50px',
+  };
   return (
     <>
-      
       <Row className="justify-content-end">
         {customOptions.download && (
           <Col sm="auto">
@@ -197,23 +202,24 @@ export default function Table({
         </Col>
       </Row>
       <div className="table-responsive">
-        <BootstrapTable {...getTableProps()} hover size="sm">
+        <BootstrapTable
+          {...getTableProps()}
+          hover
+          size="sm"
+          responsive
+          className="mt-3"
+        >
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                className="h5 sample-title"
+              >
                 {headerGroup.headers.map((column) => (
-                  <td {...column.getHeaderProps()}>
-                    <div>
-                      {column.canFilter ? column.render('Filter') : null}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <td
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    aria-label={column.Header + '-sort'}
+                  >
                     {column.render('Header')}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
@@ -226,10 +232,26 @@ export default function Table({
                         <ChevronExpand className="ms-1" />
                       )
                     )}
-                  </th>
+                  </td>
                 ))}
               </tr>
             ))}
+
+            {!options.disableFilters &&
+              headerGroups.map((headerGroup) => (
+                <tr
+                  {...headerGroup.getHeaderGroupProps()}
+                  className="search-bg"
+                >
+                  {headerGroup.headers.map((column) => (
+                    <td {...column.getHeaderProps()}>
+                      <div className="py-2">
+                        {column.canFilter ? column.render('Filter') : null}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
           </thead>
 
           <tbody {...getTableBodyProps()}>
@@ -274,54 +296,70 @@ export default function Table({
           of {rows.length.toLocaleString()}
         </div> */}
 
-        <div className="d-flex flex-row justify-content-end my-auto mb-4">
-          <div>
+        <div className="d-flex flex-row justify-content-end my-auto text-primary">
+          <div className="d-flex align-items-center">
             <Form.Control
-            as="select"
-            className="rounded-0 btn-border-sample-blue"
-            name="select-page-size"
-            aria-label="Select page size"
-            value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
-          >
-            {[10, 25, 50, 100].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </Form.Control>
+              as="select"
+              className="rounded-0 btn-border-sample-blue px-4"
+              name="select-page-size"
+              aria-label="Select page size"
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+            >
+              {[10, 25, 50, 100].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </Form.Control>
           </div>
-          
-          <div className="mx-3 align-items-center">
-            {(1 + pageIndex * pageSize).toLocaleString()}
-            </div>
-          <div>
-            <Pagination className="mb-0 border border-0" aria-label="Previous">
-              {/*<Pagination.First
+          <div className="d-flex align-items-center">
+            {/* {(1 + pageIndex * pageSize).toLocaleString()} */}
+          </div>
+          <div className="d-flex">
+            <Pagination aria-label="Previous" className="border border-0">
+              <Pagination.First
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
               >
-                First
-              </Pagination.First> */}
+                {'<<'}
+              </Pagination.First>
               <Pagination.Prev
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
+                className="border border-0"
               >
-                &#60; Previous
+                Previous
               </Pagination.Prev>
-              <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
-                Next &#62;
+              <Pagination.Next
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+              >
+                Next
               </Pagination.Next>
-              {/* <Pagination.Last
+              <Pagination.Last
                 onClick={() => gotoPage(pageCount - 1)}
                 disabled={!canNextPage}
               >
-                Last
-              </Pagination.Last> */}
+                {'>>'}
+              </Pagination.Last>
             </Pagination>
           </div>
-          <div className="px-3 align-items-center">
-            {rows.length.toLocaleString()}
+          <div className="d-flex ps-2 pb-1 align-items-center">
+            {/* {rows.length.toLocaleString()} */}
+            {/* Page {pageIndex + 1} of {pageOptions.length} */}
+            Page &nbsp;
+            <input
+              type="number"
+              // defaultValue={pageIndex + 1}
+              value={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={paginationInput}
+            />
+            &nbsp; of {pageOptions.length}
           </div>
         </div>
       </div>

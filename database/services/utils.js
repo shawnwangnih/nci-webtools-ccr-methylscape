@@ -3,6 +3,7 @@ import mapValues from 'lodash/mapValues.js';
 import { parse } from 'csv-parse';
 import * as XLSX from 'xlsx';
 import knex from 'knex';
+import postgres from 'pg';
 
 export function createConnection(
   args = {
@@ -16,7 +17,29 @@ export function createConnection(
   return knex({
     client: 'pg',
     connection: args,
+    pool: {
+      min: 2,
+      max: 20,
+      reapIntervalMillis: 50,
+      acquireTimeoutMillis: 100 * 1000,
+      createTimeoutMillis: 100 * 1000,
+      propagateCreateError: false,
+    }
   });
+}
+
+export async function createPostgresClient(
+  args = {
+    host: 'localhost',
+    port: 5432,
+    user: 'methylscape',
+    password: 'methylscape',
+    database: 'methylscape',
+  }
+) {
+  const client = new postgres.Client(args);
+  await client.connect()
+  return client;
 }
 
 export function loadAwsCredentials(config) {
@@ -55,12 +78,16 @@ export async function initializeSchema(connection, schema) {
     await connection.schema.raw(schema());
   }
 
-  for (const { name, schema, type, triggers } of tables) {
+  for (const { name, schema, rawSchema, type, triggers } of tables) {
     if (!type || type === 'table') {
-      await connection.schema.createTable(
-        name, 
-        table => schema(table, connection)
-      );
+      if (rawSchema) { 
+        await connection.schema.raw(rawSchema());
+      } else if (schema) {
+        await connection.schema.createTable(
+          name, 
+          table => schema(table, connection)
+        );
+      }
     }
 
     for (const trigger of triggers || []) {
@@ -71,18 +98,23 @@ export async function initializeSchema(connection, schema) {
   return true;
 }
 
-export async function initializeSchemaForImport(connection, tables) {
-  const importSchema = tables.filter(table => table.import);
+export async function initializeSchemaForImport(connection, schema, sources, forceRecreate = false) {
+  const shouldRecreateTable = table => (forceRecreate || table.recreate) && sources.find(s => s.table === table.name);
+  const importSchema = schema.filter(shouldRecreateTable);
   return await initializeSchema(connection, importSchema);
+}
+
+export function getFileMetadataFromPath(filePath) {
+  return {
+    filename: basename(filePath),
+    filepath: filePath,
+  }
 }
 
 export async function createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig }) {
   const fileExtension = sourcePath.split('.').pop().toLowerCase();
   const inputStream = await sourceProvider.readFile(sourcePath);
-  const metadata = {
-    filename: basename(sourcePath),
-    filepath: sourcePath,
-  }
+  const metadata = getFileMetadataFromPath(sourcePath);
 
   switch (fileExtension) {
     case 'csv':
@@ -96,6 +128,7 @@ export async function createRecordIterator(sourcePath, sourceProvider, { columns
       throw new Error(`Unsupported file extension: ${fileExtension}`);
   }
 }
+
 
 export async function createExcelRecordIterator(stream, columns, metadata = {}) {
   let buffers = [];
@@ -173,10 +206,6 @@ export async function importTable(connection, iterable, tableName, logger) {
   }
 
   await flushBuffer();
-
-  // this is needed to optimize the use of indexes in subsequent import steps
-  await connection.raw(`VACUUM ANALYZE ??`, [tableName]);
-
   return count;
 }
 
@@ -212,7 +241,7 @@ export function createRecordParser(columns, metadata) {
       let value = sourceMetadataName ? metadataValue : sourceValue;
       
       if (typeof formatter === 'function') {
-        value = formatter(value);
+        value = formatter(value, record);
       }
 
       row[name] = value;
