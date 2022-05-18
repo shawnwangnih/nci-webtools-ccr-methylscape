@@ -33,23 +33,19 @@ async function createApp(config) {
     connection: config.database
   });
 
-  loadAwsCredentials(config.aws);
-  registerUserSerializers(passport, connection);
-  await registerAuthStrategies(passport, config.auth);
-
   app.locals.config = config;
   app.locals.logger = getLogger('methylscape-analysis');
   app.locals.connection = connection;
   app.locals.userManager = new UserManager(connection);
   
+  loadAwsCredentials(config.aws);
+  registerUserSerializers(passport, app.locals.userManager);
+  await registerAuthStrategies(passport, config.auth);
+
   app.use(createSession());
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/api', apiRouter);
-
-
-  nodemailer.createTransport(config.email.smtp);
-
   app.use(logErrors); // logErrors should always be last
 
   return app;
