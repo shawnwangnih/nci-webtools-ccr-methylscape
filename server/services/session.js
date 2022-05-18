@@ -4,7 +4,7 @@ const { randomBytes } = require('crypto');
 
 function createSession({ sessionSecret, maxAge } = {}) {
   sessionSecret = sessionSecret || randomBytes(16).toString("hex");
-  maxAge = maxAge || 60 * 60 * 24;
+  maxAge = maxAge || 60 * 60 * 1000;
 
   return session({
     cookie: {
