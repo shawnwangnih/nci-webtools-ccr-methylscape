@@ -11,8 +11,9 @@ async function createOAuthStrategy({ baseUrl, clientId, clientSecret, redirectUr
     response_types: ['code'],
   });
 
-  return new Strategy({ client, params }, (tokenSet, done) => {
-    done(null, tokenSet.claims());
+  return new Strategy({ client, params }, async (tokenSet, done) => {
+    const user = await client.userinfo(tokenSet);
+    done(null, user);
   });
 }
 
@@ -33,8 +34,9 @@ async function createPkceStrategy({ baseUrl, clientId, redirectUris, params }) {
     ...params,
   };
 
-  return new Strategy({ client, params }, (tokenSet, done) => {
-    done(null, tokenSet.claims());
+  return new Strategy({ client, params }, async (tokenSet, done) => {
+    const user = await client.userinfo(tokenSet);
+    done(null, user);
   });
 }
 
