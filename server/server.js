@@ -42,7 +42,7 @@ async function createApp(config) {
   registerUserSerializers(passport, app.locals.userManager);
   await registerAuthStrategies(passport, config.auth);
 
-  app.use(createSession());
+  app.use(createSession({maxAge: config.server.maxSessionAge}));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/api', apiRouter);
