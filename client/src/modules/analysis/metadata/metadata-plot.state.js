@@ -42,7 +42,7 @@ export const plotState = selector({
     if (!organSystem || !embedding) return defaultPlotState;
 
     const params = { embedding, organSystem };
-    const { data } = await axios.get('api/analysis/samples', { params });
+    const { data } = await axios.get('/api/analysis/samples', { params });
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());

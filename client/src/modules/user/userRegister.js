@@ -24,7 +24,7 @@ export default function UserRegister() {
 
     try {
       setAlerts([]);
-      await axios.post('api/user/register', form);
+      await axios.post('/api/user/register', form);
       setAlerts([
         {
           type: 'success',

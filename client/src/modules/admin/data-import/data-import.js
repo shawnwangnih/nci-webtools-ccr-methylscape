@@ -37,7 +37,7 @@ export default function DataImport() {
 
     async function runImport(forceRecreate = false) {
         try {
-            await axios.post('api/admin/importData', { forceRecreate });
+            await axios.post('/api/admin/importData', { forceRecreate });
             refreshData();
             setModal({
                 show: 'true',
