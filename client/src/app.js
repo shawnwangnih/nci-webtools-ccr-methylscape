@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { sessionState } from './modules/session/session.state';
 import Alert from 'react-bootstrap/Alert';
 import Loader from './modules/components/loader';
 import Navbar from './modules/components/navbar';
@@ -22,22 +23,24 @@ import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
 import UserRegister from './modules/user/userRegister';
 import RequirePolicy from './modules/require-policy/require-policy';
+import { isAuthorized } from './modules/require-policy/require-policy.utils';
 
 export default function App() {
+
   const navbarLinks = [
     [
       { path: '/', title: 'Home', exact: true },
       {
         path: 'analysis',
         title: 'Analysis',
-        show: (session) => session.authenticated,
+        show: (session) => isAuthorized(session, 'GetPage', '/analysis'),
       },
       //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
         path: 'data/samples',
         title: 'Samples',
-        show: (session) => session.authenticated,
+        show: (session) => isAuthorized(session, 'GetPage', '/data'),
       },
       { path: 'about', title: 'About' },
     ],
@@ -45,7 +48,7 @@ export default function App() {
       {
         path: 'admin',
         title: 'Admin',
-        show: (session) => session.authenticated,
+        show: (session) => isAuthorized(session, 'GetPage', '/admin'),
         // childLinks: [
         //   {
         //     //path: '/admin/admin-user-management',
