@@ -2,12 +2,14 @@ const { Router } = require('express');
 const { createImportRequest } = require('../database.js');
 const { getImportLogs } = require('../query.js');
 const { withAsync } = require('../middleware');
+const { requiresRouteAccessPolicy } = require('../auth/policyMiddleware');
 const config = require('../../config.json');
 
 const router = Router();
 
 router.get(
     '/importLogs',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const results = await getImportLogs(connection);
@@ -17,6 +19,7 @@ router.get(
 
 router.post(
     '/importData',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const { sqsName } = config.aws;

@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const { withAsync } = require('../middleware');
+const { requiresRouteAccessPolicy } = require('../auth/policyMiddleware');
 
 const router = Router();
 
 router.post(
     '/roles',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const role = request.body;
@@ -17,6 +19,7 @@ router.post(
 
 router.get(
     '/roles',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const results = await connection('role');
@@ -26,6 +29,7 @@ router.get(
 
 router.get(
     '/roles/:id',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const { id } = request.params;
@@ -36,6 +40,7 @@ router.get(
 
 router.put(
     '/roles/:id',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const { id } = request.params;
@@ -49,6 +54,7 @@ router.put(
 
 router.delete(
     '/roles/:id',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { connection } = request.app.locals;
         const { id } = request.params;

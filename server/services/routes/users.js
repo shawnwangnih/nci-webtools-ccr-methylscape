@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { withAsync } = require('../middleware');
+const { requiresRouteAccessPolicy } = require('../auth/policyMiddleware');
 const { sendNotification } = require('../notifications');
 const config = require('../../config');
 
@@ -7,6 +8,7 @@ const router = Router();
 
 router.get(
     '/users',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const results = await userManager.getUsers();
@@ -16,6 +18,7 @@ router.get(
 
 router.post(
     '/user',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const user = {
@@ -31,6 +34,7 @@ router.post(
 
 router.get(
     '/user/:id(\\d+)',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const { id } = request.params;
@@ -41,6 +45,7 @@ router.get(
 
 router.put(
     '/user/:id(\\d+)',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const { id } = request.params;
@@ -69,6 +74,7 @@ router.put(
 
 router.delete(
     '/user/:id(\\d+)',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const { id } = request.params;
@@ -127,6 +133,7 @@ router.post(
 
 router.post(
     '/user/approve',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const user = {
@@ -154,6 +161,7 @@ router.post(
 
 router.post(
     '/user/reject',
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
         const { userManager } = request.app.locals;
         const user = {

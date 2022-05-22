@@ -4,12 +4,14 @@ const { Router } = require('express');
 const { createTransport } = require('nodemailer');
 const { template } = require('lodash');
 const { withAsync } = require('../middleware');
+const { requiresRouteAccessPolicy } = require('../auth/policyMiddleware');
 const config = require('../../config.json');
 
 const router = Router();
 
 router.post(
     "/notifications",
+    requiresRouteAccessPolicy('AccessApi'),
     withAsync(async (request, response) => {
     const { from, smtp } = config.email;
     const { to, subject, templateName, params } = request.body;
