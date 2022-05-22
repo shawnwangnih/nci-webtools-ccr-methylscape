@@ -7,7 +7,7 @@ function isPolicyAuthorized(policy, action, resource) {
         && asPolicyRegex(policy.resource).test(resource);
 }
 
-export function isAuthorized(user, action, resource) {
+export function isAuthorized(session, action, resource) {
     const isAuthorizedPolicy = policy => isPolicyAuthorized(policy, action, resource);
-    return user?.rolePolicies?.some(isAuthorizedPolicy);
+    return session?.user?.rolePolicies?.some(isAuthorizedPolicy);
 }
