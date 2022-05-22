@@ -21,6 +21,7 @@ import Session from './modules/session/session';
 import ErrorBoundary from './modules/components/error-boundary';
 import Header from './header';
 import UserRegister from './modules/user/userRegister';
+import RequirePolicy from './modules/require-policy/require-policy';
 
 export default function App() {
   const navbarLinks = [
@@ -116,25 +117,25 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="register/*" element={<UserRegister />} />
-                <Route path="analysis" element={<Analysis />} />
-                <Route path="metadata" element={<MetadataSA />} />
-                <Route path="data" element={<Data />}>
-                  <Route path="projects" element={<Projects />} />
-                  <Route path="experiments" element={<Experiments />} />
-                  <Route path="samples" element={<Samples />} />
+                <Route path="analysis" element={<RequirePolicy action="GetPage"><Analysis /></RequirePolicy>} />
+                <Route path="metadata" element={<RequirePolicy action="GetPage"><MetadataSA /></RequirePolicy>} />
+                <Route path="data" element={<RequirePolicy action="GetPage"><Data /></RequirePolicy>}>
+                  <Route path="projects" element={<RequirePolicy action="GetPage"><Projects /></RequirePolicy>} />
+                  <Route path="experiments" element={<RequirePolicy action="GetPage"><Experiments /></RequirePolicy>} />
+                  <Route path="samples" element={<RequirePolicy action="GetPage"><Samples /></RequirePolicy>} />
                 </Route>
                 <Route path="about/*" element={<About />} />
-                <Route path="qci/*" element={<QCI />} />
-                <Route path="admin" element={<Admin />} />
+                <Route path="qci/*" element={<RequirePolicy action="GetPage"><QCI /></RequirePolicy>} />
+                <Route path="admin" element={<RequirePolicy action="GetPage"><Admin /></RequirePolicy>} />
                 <Route
                   path="admin/admin-user-management"
-                  element={<AdminUserManagement />}
+                  element={<RequirePolicy action="GetPage"><AdminUserManagement /></RequirePolicy>}
                 />
                 <Route
                   path="/admin/admin-organization-management"
-                  element={<AdminOrganizationManagement />}
+                  element={<RequirePolicy action="GetPage"><AdminOrganizationManagement /></RequirePolicy>}
                 />
-                <Route path="admin/data-import" element={<DataImport />} />
+                <Route path="admin/data-import" element={<RequirePolicy action="GetPage"><DataImport /></RequirePolicy>} />
               </Routes>
             </Suspense>
           </ErrorBoundary>
