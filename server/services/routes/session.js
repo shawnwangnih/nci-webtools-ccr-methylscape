@@ -30,9 +30,7 @@ router.get(
 );
 
 router.get('/logout', (request, response) => {
-    // request.logout();
-    // request.session.destroy();
-    response.redirect('/');
+    request.logout(() => response.redirect('/'));
 })
 
 router.get('/session', (request, response) => {
