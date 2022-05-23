@@ -1,10 +1,11 @@
-FROM ${BASE_IMAGE:-quay.io/centos/centos:stream9}
+FROM ${BASE_IMAGE:-quay.io/centos/centos:stream8}
 
 RUN dnf -y update \
  && dnf -y install \
     dnf-plugins-core \
     epel-release \
- && dnf config-manager --set-enabled crb \
+ && dnf config-manager --set-enabled powertools \
+ && curl -fsSL https://rpm.nodesource.com/setup_16.x | bash - \
  && dnf -y install \
     make \
     gcc-c++ \
