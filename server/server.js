@@ -1,7 +1,6 @@
 const express = require('express');
 const knex = require('knex');
 const passport = require("passport");
-const nodemailer = require('nodemailer');
 const { registerUserSerializers, registerAuthStrategies } = require("./services/auth/passportUtils");
 const { createSession } = require("./services/session");
 const getLogger = require('./services/logger');
