@@ -46,7 +46,7 @@ export default function CurrentUsers() {
   async function handleFormSubmit(e) {
     e.preventDefault();
     setShowEditModal(false);
-    await axios.put(`api/user/${form.id}`, form);
+    await axios.put(`/api/user/${form.id}`, form);
     refreshUsers();
   }
 

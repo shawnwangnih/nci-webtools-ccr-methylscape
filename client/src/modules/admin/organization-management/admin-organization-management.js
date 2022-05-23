@@ -48,7 +48,7 @@ export default function AdminOrganizationManagement() {
     const { id, name } = cell?.row?.original;
     console.log(id);
     console.log(name);
-    //await axios.delete(`api/organizations/${id}`);
+    //await axios.delete(`/api/organizations/${id}`);
     //refreshOrgs();
   }
 
@@ -65,7 +65,7 @@ export default function AdminOrganizationManagement() {
 
   async function handleRenameSubmit(e) {
     e.preventDefault();
-    const response = await axios.put(`api/organizations/${form.id}`, form);
+    const response = await axios.put(`/api/organizations/${form.id}`, form);
     console.log(response);
     setShowRenameOrgModal(false);
     refreshOrgs();

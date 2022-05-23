@@ -50,14 +50,14 @@ export default function RegisterUsers() {
   async function handleApprovalFormSubmit(e) {
     e.preventDefault();
     setShowApprovalModal(false);
-    await axios.post(`api/user/approve`, approvalForm);
+    await axios.post(`/api/user/approve`, approvalForm);
     refreshUsers();
   }
 
   async function handleRejectionFormSubmit(e) {
     e.preventDefault();
     setShowRejectionModal(false);
-    await axios.post(`api/user/reject`, rejectionForm);
+    await axios.post(`/api/user/reject`, rejectionForm);
     refreshUsers();
   }
 

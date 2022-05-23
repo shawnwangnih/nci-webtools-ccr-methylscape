@@ -14,7 +14,7 @@ export const methylscapeData = selector({
   key: 'methylscapeData',
   get: async (_) => {
     try {
-      const response = await axios.get('/api/projects/scanDynamoDB');
+      const response = await axios.get('/api/reports/scanDynamoDB');
       const data = response.data;
 
       const projectsCount = [
