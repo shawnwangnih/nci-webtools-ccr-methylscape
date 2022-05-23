@@ -1,5 +1,5 @@
 function asPolicyRegex(policy) {
-    return new RegExp(`^${policy.replace(/\*/g, '.*')}$`);
+    return new RegExp(`^${policy}$`);
 }
 
 function isPolicyAuthorized(policy, action, resource) {
