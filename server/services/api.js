@@ -5,7 +5,7 @@ const adminRouter = require('./routes/admin');
 const analysisRouter = require('./routes/analysis');
 const healthcheckRouter = require('./routes/healthcheck');
 const organizationsRouter = require('./routes/organizations');
-const projectsRouter = require('./routes/projects');
+const reportsRouter = require('./routes/reports');
 const sessionRouter = require('./routes/session');
 const usersRouter = require('./routes/users');
 const rolesRouter = require('./routes/roles');
@@ -25,7 +25,7 @@ apiRouter.use(logRequests());
 // register routes
 apiRouter.use('/admin', adminRouter);
 apiRouter.use('/analysis', analysisRouter);
-apiRouter.use('/projects', projectsRouter);
+apiRouter.use('/reports', reportsRouter);
 apiRouter.use(healthcheckRouter);
 apiRouter.use(organizationsRouter);
 apiRouter.use(usersRouter);
