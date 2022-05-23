@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { sessionState } from './modules/session/session.state';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Loader from './modules/components/loader';
 import Navbar from './modules/components/navbar';
