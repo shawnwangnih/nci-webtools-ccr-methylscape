@@ -4,14 +4,14 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Loader from './modules/components/loader';
 import Navbar from './modules/components/navbar';
-import Data from './modules/data/data';
+import Reports from './modules/reports/data';
 import About from './modules/about/about';
 import Home from './modules/home/home';
 import Analysis from './modules/analysis/analysis';
 import MetadataSA from './modules/metadataStandalone/metadataSA';
-import Projects from './modules/data/projects/projects';
-import Experiments from './modules/data/experiments/experiments';
-import Samples from './modules/data/samples/samples';
+import Projects from './modules/reports/projects/projects';
+import Experiments from './modules/reports/experiments/experiments';
+import Samples from './modules/reports/samples/samples';
 import QCI from './modules/qciReport/qci';
 import Admin from './modules/admin/admin';
 import DataImport from './modules/admin/data-import/data-import';
@@ -37,9 +37,9 @@ export default function App() {
       //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
       // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
-        path: 'data/samples',
+        path: 'reports/samples',
         title: 'Samples',
-        show: (session) => isAuthorized(session, 'GetPage', '/data'),
+        show: (session) => isAuthorized(session, 'GetPage', '/reports'),
       },
       { path: 'about', title: 'About' },
     ],
@@ -121,7 +121,7 @@ export default function App() {
                 <Route path="register/*" element={<UserRegister />} />
                 <Route path="analysis" element={<RequirePolicy action="GetPage"><Analysis /></RequirePolicy>} />
                 <Route path="metadata" element={<RequirePolicy action="GetPage"><MetadataSA /></RequirePolicy>} />
-                <Route path="data" element={<RequirePolicy action="GetPage"><Data /></RequirePolicy>}>
+                <Route path="reports" element={<RequirePolicy action="GetPage"><Reports /></RequirePolicy>}>
                   <Route path="projects" element={<RequirePolicy action="GetPage"><Projects /></RequirePolicy>} />
                   <Route path="experiments" element={<RequirePolicy action="GetPage"><Experiments /></RequirePolicy>} />
                   <Route path="samples" element={<RequirePolicy action="GetPage"><Samples /></RequirePolicy>} />
