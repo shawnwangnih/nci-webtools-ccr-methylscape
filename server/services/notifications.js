@@ -34,7 +34,7 @@ async function sendNotification({ userManager, from, to = [], cc = [], bcc = [],
         bcc = await getValidNotificationEmails(bcc, userManager);
     }
 
-    const html = renderTemplate(templateName, params);
+    const html = await renderTemplate(templateName, params);
     return await sendMail({ from, to, cc, bcc, subject, html });
 }
 
