@@ -75,7 +75,7 @@ export const schema = [
     recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.string("sampleIdatFilename").references("sample.idatFilename");
+      table.string("sampleIdatFilename").index();
       table.string("organSystem").index();
       table.string("embedding").index();
       table.double("x");
@@ -165,6 +165,7 @@ export const schema = [
     schema: (table, connection) => {
       table.increments("id");
       table.string("status");
+      table.string("type").defaultTo("progressive");
       table.text("log");
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
