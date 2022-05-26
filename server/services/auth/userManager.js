@@ -40,8 +40,8 @@ class UserManager {
       .first();
     
     if (user)
-    user.rolePolicies = await this.getUserRolePolicies(user.id);
-    
+      user.rolePolicies = await this.getUserRolePolicies(user.id);
+
     return user;
   }
   
