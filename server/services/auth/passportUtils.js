@@ -2,7 +2,7 @@ const { createOAuthStrategy, createPkceStrategy } = require("./passportStrategie
 
 function registerUserSerializers(passport, userManager) {
     passport.serializeUser((user, done) => done(null, user));
-    passport.deserializeUser(async ({email}, done) => done(null, await userManager.getUserByEmail(email)));
+    passport.deserializeUser(async ({email}, done) => done(null, (await userManager.getUserByEmail(email)) || {}));
 }
 
 async function registerAuthStrategies(passport, providers) {

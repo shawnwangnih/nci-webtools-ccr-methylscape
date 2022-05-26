@@ -38,8 +38,10 @@ class UserManager {
       .where({ 'user.id': userId })
       .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
       .first();
-
+    
+    if (user)
     user.rolePolicies = await this.getUserRolePolicies(user.id);
+    
     return user;
   }
   
@@ -51,7 +53,9 @@ class UserManager {
       .select('user.*', 'role.name as roleName', 'organization.name as organizationName')
       .first();
 
-    user.rolePolicies = await this.getUserRolePolicies(user.id);
+    if (user)
+      user.rolePolicies = await this.getUserRolePolicies(user.id);
+
     return user;
   }
 
