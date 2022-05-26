@@ -41,7 +41,9 @@ export function ageFormatter(value) {
   }
 
   export function invalidNumberFormatter(value, record, columnName, logger) {
-    if (isNaN(value) || [null, undefined, ''].includes(value)) {
+    if ([null, undefined, ''].includes(value)) {
+      return null;
+    } else if (isNaN(value)) {
       logger?.warn(`Invalid number: ${value} in ${columnName} for ${format(record)}`);
       return null;
     } else {
