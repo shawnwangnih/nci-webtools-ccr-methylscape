@@ -32,7 +32,7 @@ export function ageFormatter(value) {
 
   // this formatter should be removed once the import data format has been fixed
   export function unparsedColonNumericValueFormatter(value, record, columnName) {
-    if (isNaN(value)) {
+    if (isNaN(value) || [null, undefined, ''].includes(value)) {
       const colonParser = patternExtractionFormatter(/^.*:(.*)/)
       return colonParser(record[columnName]);
     } else {
@@ -41,7 +41,7 @@ export function ageFormatter(value) {
   }
 
   export function invalidNumberFormatter(value, record, columnName, logger) {
-    if (isNaN(value)) {
+    if (isNaN(value) || [null, undefined, ''].includes(value)) {
       logger?.warn(`Invalid number: ${value} in ${columnName} for ${format(record)}`);
       return null;
     } else {
