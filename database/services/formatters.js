@@ -1,3 +1,5 @@
+import { format } from 'util';
+
 export function ageFormatter(value) {
     if (!isNaN(value)) {
       return value;
@@ -33,6 +35,15 @@ export function ageFormatter(value) {
     if (isNaN(value)) {
       const colonParser = patternExtractionFormatter(/^.*:(.*)/)
       return colonParser(record[columnName]);
+    } else {
+      return +value;
+    }
+  }
+
+  export function invalidNumberFormatter(value, record, columnName, logger) {
+    if (isNaN(value)) {
+      logger?.warn(`Invalid number: ${value} in ${columnName} for ${format(record)}`);
+      return null;
     } else {
       return +value;
     }
