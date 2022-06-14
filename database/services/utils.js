@@ -111,26 +111,26 @@ export function getFileMetadataFromPath(filePath) {
   }
 }
 
-export async function createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig }) {
+export async function createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig, logger }) {
   const fileExtension = sourcePath.split('.').pop().toLowerCase();
   const inputStream = await sourceProvider.readFile(sourcePath);
   const metadata = getFileMetadataFromPath(sourcePath);
 
   switch (fileExtension) {
     case 'csv':
-      return createCsvRecordIterator(inputStream, columns, { delimiter: ',', ...parseConfig}, metadata);
+      return createCsvRecordIterator(inputStream, columns, { delimiter: ',', ...parseConfig}, metadata, logger);
     case 'txt':
     case 'tsv':
-      return createCsvRecordIterator(inputStream, columns, { delimiter: '\t', ...parseConfig}, metadata);
+      return createCsvRecordIterator(inputStream, columns, { delimiter: '\t', ...parseConfig}, metadata, logger);
     case 'xlsx':
-      return await createExcelRecordIterator(inputStream, columns, metadata);
+      return await createExcelRecordIterator(inputStream, columns, metadata, logger);
     default:
       throw new Error(`Unsupported file extension: ${fileExtension}`);
   }
 }
 
 
-export async function createExcelRecordIterator(stream, columns, metadata = {}) {
+export async function createExcelRecordIterator(stream, columns, metadata = {}, logger) {
   let buffers = [];
   for await (const chunk of stream) {
     buffers.push(chunk);
@@ -155,17 +155,17 @@ export async function createExcelRecordIterator(stream, columns, metadata = {}) 
   }
 
   const records = XLSX.utils.sheet_to_json(sheet);
-  const recordParser = createRecordParser(columns, metadata);
+  const recordParser = createRecordParser(columns, metadata, logger);
 
   return records.map((record) => recordParser(mapValues(record, castValue)));
 }
 
-export function createCsvRecordIterator(stream, columns, options = {}, metadata = {}) {
+export function createCsvRecordIterator(stream, columns, options = {}, metadata = {}, logger) {
   const parseOptions = {
     columns: true,
     skip_empty_lines: true,
     cast: castValue,
-    on_record: createRecordParser(columns, metadata),
+    on_record: createRecordParser(columns, metadata, logger),
     ...options,
   };
 
@@ -232,7 +232,7 @@ export function castValue(value) {
   }
 }
 
-export function createRecordParser(columns, metadata) {
+export function createRecordParser(columns, metadata, logger) {
   return function (record) {
     let row = {};
     for (const { sourceName, sourceMetadataName, name, defaultValue, formatter } of columns) {
@@ -241,7 +241,7 @@ export function createRecordParser(columns, metadata) {
       let value = sourceMetadataName ? metadataValue : sourceValue;
       
       if (typeof formatter === 'function') {
-        value = formatter(value, record);
+        value = formatter(value, record, name, logger);
       }
 
       row[name] = value;

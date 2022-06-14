@@ -5,6 +5,7 @@ import { stat, readdir } from 'fs/promises';
 export class LocalProvider {
 
     constructor(basePath) {
+        this.type = 'local';
         this.basePath = basePath || '';
         this.listFiles = this.listFiles.bind(this);
         this.readFile = this.readFile.bind(this);

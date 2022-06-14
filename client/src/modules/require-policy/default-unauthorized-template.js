@@ -18,7 +18,7 @@ export default function DefaultUnauthorizedTemplate() {
             </Col>
             <Col md lg={6}>
                 <p>
-                    You are not authorized to access this resource. If you are not logged in and believe you should be, please contact the administrator.
+                    You are not authorized to access this page. If you have a Methylscape account, please contact the administrator to request access to this page.
                 </p>
             </Col>
           </Row>

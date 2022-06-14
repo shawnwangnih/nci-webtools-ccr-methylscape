@@ -2,6 +2,7 @@ import { GetObjectAttributesCommand, GetObjectCommand, ListObjectsV2Command, pag
 
 export class S3Provider {
     constructor(client, basePath) {
+        this.type = 's3';
         this.client = client;
         this.basePath = basePath;
         this.listFiles = this.listFiles.bind(this);

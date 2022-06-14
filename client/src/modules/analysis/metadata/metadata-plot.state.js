@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 import axios from 'axios';
 import groupBy from 'lodash/groupBy';
 import meanBy from 'lodash/meanBy';
+import isNumber from 'lodash/isNumber';
 import colors from './colors.json';
 import nciMetricColors from './nciMetricColors';
 
@@ -128,9 +129,9 @@ export const plotState = selector({
         'Sample: %{customdata.sample}',
         'Metric: %{customdata.nciMetric}',
         'Diagnosis: %{customdata.diagnosisProvided}',
-        'Sex: %{customdata.sex}',
-        'RF Purity (Absolute): %{customdata.rfPurityAbsolute}',
-        'Age: %{customdata.age}',
+        'Sex: %{customdata.customSex}',
+        'RF Purity (Absolute): %{customdata.customRfPurityAbsolute}',
+        'Age: %{customdata.customAge}',
       ].join('<br>') + '<extra></extra>';
 
     // Sort these keywords to the top so that their traces are rendered first and overlapped by others
@@ -138,6 +139,12 @@ export const plotState = selector({
 
     const nciMetricColorMap = await nciMetricColors();
     let colorCount = 0;
+
+    // maximum fixed precision formatter
+    const toFixed = (num, maxDigits = 2) => 
+      isNumber(num) && !isNaN(num)
+        ? +num.toFixed(maxDigits) 
+        : num;
 
     // transform data to traces
     const dataTraces =
@@ -154,7 +161,12 @@ export const plotState = selector({
               name,
               x: data.map((e) => e.x),
               y: data.map((e) => e.y),
-              customdata: data,
+              customdata: data.map(d => ({
+                ...d,
+                customSex: d.sex ?? 'N/A',
+                customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? 'N/A',
+                customAge: toFixed(d.age, 2) ?? 'N/A',
+              })),
               mode: 'markers',
               hovertemplate: hovertemplate,
               type: useWebGl ? 'scattergl' : 'scatter',
