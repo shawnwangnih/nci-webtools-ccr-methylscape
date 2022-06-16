@@ -1,6 +1,6 @@
-import { selector } from 'recoil';
-import { formState } from '../metadata/metadata-plot.state';
-import axios from 'axios';
+import { selector } from "recoil";
+import { formState } from "../metadata/metadata-plot.state";
+import axios from "axios";
 
 export const defaultOverviewState = {
   samples: 0,
@@ -10,28 +10,22 @@ export const defaultOverviewState = {
 };
 
 export const overviewState = selector({
-  key: 'overviewState',
+  key: "overviewState",
   get: async ({ get }) => {
     const { organSystem, embedding } = get(formState);
 
     if (!organSystem || !embedding) return defaultOverviewState;
 
     const params = { embedding, organSystem };
-    const { data } = await axios.get('/api/analysis/samples', { params });
+    const { data } = await axios.get("/api/analysis/samples", { params });
 
     const samples = data.filter((v) => v.category); // && v.matchedCases != 'Duplicate');
     const studies = [
-      ...new Set(
-        samples
-          .filter(({ primaryStudy }) => primaryStudy)
-          .map(({ primaryStudy }) => primaryStudy)
-      ),
+      ...new Set(samples.filter(({ primaryStudy }) => primaryStudy).map(({ primaryStudy }) => primaryStudy)),
     ].length;
     const institutions = [
       ...new Set(
-        samples
-          .filter(({ centerMethylation }) => centerMethylation)
-          .map(({ centerMethylation }) => centerMethylation)
+        samples.filter(({ centerMethylation }) => centerMethylation).map(({ centerMethylation }) => centerMethylation)
       ),
     ].length;
 
@@ -44,16 +38,14 @@ export const overviewState = selector({
     };
 
     const catCount = Object.fromEntries(
-      Object.entries(
-        samples.map(({ category }) => category).reduce(reducer, {})
-      ).sort(([, a], [, b]) => a - b)
+      Object.entries(samples.map(({ category }) => category).reduce(reducer, {})).sort(([, a], [, b]) => a - b)
     );
     const plotData = [
       {
         x: Object.values(catCount),
         y: Object.keys(catCount),
-        type: 'bar',
-        orientation: 'h',
+        type: "bar",
+        orientation: "h",
       },
     ];
 

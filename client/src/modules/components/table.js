@@ -1,62 +1,41 @@
-import { useMemo, forwardRef, useRef, useEffect, Fragment } from 'react';
-import BootstrapTable from 'react-bootstrap/Table';
-import {
-  Form,
-  InputGroup,
-  Pagination,
-  Row,
-  Col,
-  Dropdown,
-  Button,
-} from 'react-bootstrap';
-import {
-  useTable,
-  useFilters,
-  usePagination,
-  useSortBy,
-  useRowSelect,
-  useExpanded,
-} from 'react-table';
-import { ChevronUp, ChevronDown, ChevronExpand } from 'react-bootstrap-icons';
-import Papa from 'papaparse';
-import './table.scss';
+import { useMemo, forwardRef, useRef, useEffect, Fragment } from "react";
+import BootstrapTable from "react-bootstrap/Table";
+import { Form, InputGroup, Pagination, Row, Col, Dropdown, Button } from "react-bootstrap";
+import { useTable, useFilters, usePagination, useSortBy, useRowSelect, useExpanded } from "react-table";
+import { ChevronUp, ChevronDown, ChevronExpand } from "react-bootstrap-icons";
+import Papa from "papaparse";
+import "./table.scss";
 
-export function TextFilter({
-  column: { filterValue, setFilter, placeholder, aria },
-}) {
+export function TextFilter({ column: { filterValue, setFilter, placeholder, aria } }) {
   return (
     <Form.Control
       size="sm"
-      value={filterValue || ''}
+      value={filterValue || ""}
       onChange={(e) => setFilter(e.target.value || undefined)}
       placeholder={placeholder || `Search`}
       aria-label={aria}
-      className="border-0 rounded-pill"
-    ></Form.Control>
+      className="border-0 rounded-pill"></Form.Control>
   );
 }
 
-export function RangeFilter({
-  column: { filterValue = [], setFilter, minPlaceholder, maxPlaceholder, aria },
-}) {
-  const getInputValue = (ev) =>
-    ev.target.value ? parseInt(ev.target.value, 10) : undefined;
+export function RangeFilter({ column: { filterValue = [], setFilter, minPlaceholder, maxPlaceholder, aria } }) {
+  const getInputValue = (ev) => (ev.target.value ? parseInt(ev.target.value, 10) : undefined);
 
   return (
     <InputGroup className="flex-nowrap">
       <Form.Control
-        placeholder={minPlaceholder || 'Min value'}
+        placeholder={minPlaceholder || "Min value"}
         type="number"
-        value={filterValue[0] || ''}
+        value={filterValue[0] || ""}
         onChange={(e) => setFilter((old = []) => [getInputValue(e), old[1]])}
-        aria-label={aria + ' Min'}
+        aria-label={aria + " Min"}
       />
       <Form.Control
-        placeholder={maxPlaceholder || 'Max value'}
+        placeholder={maxPlaceholder || "Max value"}
         type="number"
-        value={filterValue[1] || ''}
+        value={filterValue[1] || ""}
         onChange={(e) => setFilter((old = []) => [old[0], getInputValue(e)])}
-        aria-label={aria + ' Max'}
+        aria-label={aria + " Max"}
       />
     </InputGroup>
   );
@@ -76,13 +55,13 @@ const IndeterminateRadio = forwardRef(({ indeterminate, ...rest }, ref) => {
 function handleSaveCSV(data, filename) {
   const csv = Papa.unparse(data);
 
-  const blob = new Blob([csv], { type: 'text/csv' });
+  const blob = new Blob([csv], { type: "text/csv" });
   // Create an anchor element and dispatch a click event on it
   // to trigger a download
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.download = filename;
   a.href = window.URL.createObjectURL(blob);
-  const clickEvt = new MouseEvent('click', {
+  const clickEvt = new MouseEvent("click", {
     view: window,
     bubbles: true,
     cancelable: true,
@@ -91,13 +70,7 @@ function handleSaveCSV(data, filename) {
   a.remove();
 }
 
-export default function Table({
-  columns,
-  data,
-  options = {},
-  customOptions = {},
-  renderRowSubComponent = false,
-}) {
+export default function Table({ columns, data, options = {}, customOptions = {}, renderRowSubComponent = false }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -137,14 +110,11 @@ export default function Table({
       if (customOptions.rowSelectRadio) {
         hooks.visibleColumns.push((columns) => [
           {
-            id: 'selection',
+            id: "selection",
             disableSortBy: true,
             Cell: ({ row }) => (
               <div className="d-flex justify-content-center">
-                <IndeterminateRadio
-                  {...row.getToggleRowSelectedProps()}
-                  title={Object.values(row.values)[0]}
-                />
+                <IndeterminateRadio {...row.getToggleRowSelectedProps()} title={Object.values(row.values)[0]} />
               </div>
             ),
           },
@@ -155,17 +125,14 @@ export default function Table({
   );
 
   const paginationInput = {
-    width: '50px',
+    width: "50px",
   };
   return (
     <>
       <Row className="justify-content-end">
         {customOptions.download && (
           <Col sm="auto">
-            <Button
-              variant="link"
-              onClick={() => handleSaveCSV(data, customOptions.download)}
-            >
+            <Button variant="link" onClick={() => handleSaveCSV(data, customOptions.download)}>
               Save CSV
             </Button>
           </Col>
@@ -173,11 +140,7 @@ export default function Table({
         <Col sm="auto">
           {customOptions.hideColumns && (
             <Dropdown>
-              <Dropdown.Toggle
-                variant="secondary"
-                size="sm"
-                id={`toggle-umap-columns`}
-              >
+              <Dropdown.Toggle variant="secondary" size="sm" id={`toggle-umap-columns`}>
                 Columns
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -186,13 +149,8 @@ export default function Table({
                     <Form.Group
                       key={`${column.Header}-visible`}
                       controlId={`${column.Header}-visible`}
-                      className="my-1 px-2"
-                    >
-                      <Form.Check
-                        type="checkbox"
-                        label={column.Header}
-                        {...column.getToggleHiddenProps()}
-                      />
+                      className="my-1 px-2">
+                      <Form.Check type="checkbox" label={column.Header} {...column.getToggleHiddenProps()} />
                     </Form.Group>
                   ))}
                 </Form>
@@ -202,25 +160,13 @@ export default function Table({
         </Col>
       </Row>
       <div className="table-responsive">
-        <BootstrapTable
-          {...getTableProps()}
-          hover
-          size="sm"
-          responsive
-          className="mt-3"
-        >
+        <BootstrapTable {...getTableProps()} hover size="sm" responsive className="mt-3">
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr
-                {...headerGroup.getHeaderGroupProps()}
-                className="h5 sample-title"
-              >
+              <tr {...headerGroup.getHeaderGroupProps()} className="h5 sample-title">
                 {headerGroup.headers.map((column) => (
-                  <td
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    aria-label={column.Header + '-sort'}
-                  >
-                    {column.render('Header')}
+                  <td {...column.getHeaderProps(column.getSortByToggleProps())} aria-label={column.Header + "-sort"}>
+                    {column.render("Header")}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
                         <ChevronDown />
@@ -228,9 +174,7 @@ export default function Table({
                         <ChevronUp />
                       )
                     ) : (
-                      !column.disableSortBy && (
-                        <ChevronExpand className="ms-1" />
-                      )
+                      !column.disableSortBy && <ChevronExpand className="ms-1" />
                     )}
                   </td>
                 ))}
@@ -239,15 +183,10 @@ export default function Table({
 
             {!options.disableFilters &&
               headerGroups.map((headerGroup) => (
-                <tr
-                  {...headerGroup.getHeaderGroupProps()}
-                  className="search-bg"
-                >
+                <tr {...headerGroup.getHeaderGroupProps()} className="search-bg">
                   {headerGroup.headers.map((column) => (
                     <td {...column.getHeaderProps()}>
-                      <div className="py-2">
-                        {column.canFilter ? column.render('Filter') : null}
-                      </div>
+                      <div className="py-2">{column.canFilter ? column.render("Filter") : null}</div>
                     </td>
                   ))}
                 </tr>
@@ -269,17 +208,14 @@ export default function Table({
                         const { toggleRowExpanded, isExpanded } = row;
                         toggleRowExpanded(!isExpanded);
                       }
-                    }}
-                  >
+                    }}>
                     {row.cells.map((cell) => (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     ))}
                   </tr>
                   {row.isExpanded ? (
                     <tr>
-                      <td colSpan={visibleColumns.length}>
-                        {renderRowSubComponent({ row })}
-                      </td>
+                      <td colSpan={visibleColumns.length}>{renderRowSubComponent({ row })}</td>
                     </tr>
                   ) : null}
                 </Fragment>
@@ -304,8 +240,7 @@ export default function Table({
               name="select-page-size"
               aria-label="Select page size"
               value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-            >
+              onChange={(e) => setPageSize(Number(e.target.value))}>
               {[10, 25, 50, 100].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   Show {pageSize}
@@ -313,35 +248,20 @@ export default function Table({
               ))}
             </Form.Control>
           </div>
-          <div className="d-flex align-items-center">
-            {/* {(1 + pageIndex * pageSize).toLocaleString()} */}
-          </div>
+          <div className="d-flex align-items-center">{/* {(1 + pageIndex * pageSize).toLocaleString()} */}</div>
           <div className="d-flex">
             <Pagination aria-label="Previous" className="border border-0">
-              <Pagination.First
-                onClick={() => gotoPage(0)}
-                disabled={!canPreviousPage}
-              >
-                {'<<'}
+              <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                {"<<"}
               </Pagination.First>
-              <Pagination.Prev
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-                className="border border-0"
-              >
+              <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} className="border border-0">
                 Previous
               </Pagination.Prev>
-              <Pagination.Next
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
+              <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage}>
                 Next
               </Pagination.Next>
-              <Pagination.Last
-                onClick={() => gotoPage(pageCount - 1)}
-                disabled={!canNextPage}
-              >
-                {'>>'}
+              <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                {">>"}
               </Pagination.Last>
             </Pagination>
           </div>

@@ -32,7 +32,6 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^14.0.4",
     "http-proxy-middleware": "^2.0.4",
-    "prettier": "^2.6.1",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.0",
     "sass": "^1.49.10"
@@ -42,8 +41,7 @@
     "start:sudo": "sudo react-app-rewired --max_old_space_size=4096 start",
     "build": "react-app-rewired --max_old_space_size=4096 build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**/*.{js,json,css,scss}\""
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -64,8 +62,5 @@
     ]
   },
   "homepage": ".",
-  "proxy": "http://localhost:10000",
-  "prettier": {
-    "singleQuote": true
-  }
+  "proxy": "http://localhost:10000"
 }

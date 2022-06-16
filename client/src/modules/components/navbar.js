@@ -1,12 +1,12 @@
-import BootstrapNavbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { NavLink } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import classNames from 'classnames';
-import { sessionState } from '../session/session.state';
+import BootstrapNavbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { NavLink } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import classNames from "classnames";
+import { sessionState } from "../session/session.state";
 
 export function NavbarNativeLink({ path, title }) {
   return (
@@ -18,19 +18,13 @@ export function NavbarNativeLink({ path, title }) {
 
 export function NavbarRouterLink({ path, title, exact }) {
   return (
-    <NavLink
-      to={path}
-      className={({ isActive }) =>
-        classNames('nav-link px-4', isActive && 'active')
-      }
-      end={exact}
-    >
+    <NavLink to={path} className={({ isActive }) => classNames("nav-link px-4", isActive && "active")} end={exact}>
       {title}
     </NavLink>
   );
 }
 
-export function NavbarDropdown({ title, childLinks, align = 'start' }) {
+export function NavbarDropdown({ title, childLinks, align = "start" }) {
   return (
     <NavDropdown title={title} id={title} align={align}>
       {childLinks.map((link) => (
@@ -58,23 +52,12 @@ export default function Navbar({ linkGroups = [[]], className, children }) {
           <Nav key={`navbar-nav-${index}`}>
             {links?.filter(shouldShowLink).map((link, linkIndex) => (
               <>
-                {link.childLinks && (
-                  <NavbarDropdown
-                    key={`navbar-nav-dropdown-${index}-${linkIndex}`}
-                    {...link}
-                  />
-                )}
+                {link.childLinks && <NavbarDropdown key={`navbar-nav-dropdown-${index}-${linkIndex}`} {...link} />}
                 {!link.childLinks &&
                   (link.native ? (
-                    <NavbarNativeLink
-                      key={`navbar-nav-native-link-${index}-${linkIndex}`}
-                      {...link}
-                    />
+                    <NavbarNativeLink key={`navbar-nav-native-link-${index}-${linkIndex}`} {...link} />
                   ) : (
-                    <NavbarRouterLink
-                      key={`navbar-nav-link-${index}-${linkIndex}`}
-                      {...link}
-                    />
+                    <NavbarRouterLink key={`navbar-nav-link-${index}-${linkIndex}`} {...link} />
                   ))}
               </>
             ))}

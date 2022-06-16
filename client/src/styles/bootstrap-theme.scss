@@ -61,7 +61,7 @@ a,
 .form-label {
   display: flex;
   &.required::after {
-    content: '*';
+    content: "*";
     color: $danger;
     margin-left: 0.2rem;
   }

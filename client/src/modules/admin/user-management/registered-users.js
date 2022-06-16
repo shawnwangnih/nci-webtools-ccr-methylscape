@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Button, Modal } from 'react-bootstrap';
-import Table from '../../components/table';
-import axios from 'axios';
-import Alert from 'react-bootstrap/Alert';
-import Form from 'react-bootstrap/Form';
-import { groupBy } from 'lodash';
-import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
-import { rolesSelector, usersSelector } from './user-management.state';
-import { ConeStriped } from 'react-bootstrap-icons';
+import React, { useState, useEffect } from "react";
+import { Container, Button, Modal } from "react-bootstrap";
+import Table from "../../components/table";
+import axios from "axios";
+import Alert from "react-bootstrap/Alert";
+import Form from "react-bootstrap/Form";
+import { groupBy } from "lodash";
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from "recoil";
+import { rolesSelector, usersSelector } from "./user-management.state";
+import { ConeStriped } from "react-bootstrap-icons";
 
 export default function RegisterUsers() {
   const [alerts, setAlerts] = useState([]);
@@ -19,13 +19,10 @@ export default function RegisterUsers() {
   const [rejectionForm, setRejectionForm] = useState({});
   const refreshUsers = useRecoilRefresher_UNSTABLE(usersSelector);
   const [showRejectedUsers, setShowRejectedUsers] = useState(false);
-  const userGroups = groupBy(users, 'status');
-  const pendingUsers = userGroups['pending'] || [];
-  const rejectedUsers = userGroups['rejected'] || [];
-  const visibleUsers = [
-    ...pendingUsers,
-    ...(showRejectedUsers ? rejectedUsers : []),
-  ];
+  const userGroups = groupBy(users, "status");
+  const pendingUsers = userGroups["pending"] || [];
+  const rejectedUsers = userGroups["rejected"] || [];
+  const visibleUsers = [...pendingUsers, ...(showRejectedUsers ? rejectedUsers : [])];
 
   function openApprovalModal({ row }) {
     setShowApprovalModal(true);
@@ -63,46 +60,43 @@ export default function RegisterUsers() {
 
   const cols = [
     {
-      Header: 'Name',
-      accessor: 'firstName',
+      Header: "Name",
+      accessor: "firstName",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.row.original.lastName}, {e.value}
         </div>
       ),
     },
     {
-      Header: 'Type',
-      accessor: 'accountType',
+      Header: "Type",
+      accessor: "accountType",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
-          {e.value || 'NA'}
+            textAlign: "left",
+          }}>
+          {e.value || "NA"}
         </div>
       ),
     },
     {
-      Header: 'Email',
-      accessor: 'email',
+      Header: "Email",
+      accessor: "email",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Organization',
+      Header: "Organization",
       accessor: (e) => ({
         id: e.organizationId,
         name: e.organizationName,
@@ -111,42 +105,39 @@ export default function RegisterUsers() {
       Cell: ({ value }) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {value.name} {value.id === 1 && value.other && `(${value.other})`}
         </div>
       ),
     },
     {
-      Header: 'Submitted Date',
-      accessor: 'createdAt',
+      Header: "Submitted Date",
+      accessor: "createdAt",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
     showRejectedUsers && {
-      Header: 'Notes',
-      accessor: 'notes',
+      Header: "Notes",
+      accessor: "notes",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Actions',
-      id: 'actions',
+      Header: "Actions",
+      id: "actions",
       disableSortBy: true,
       Cell: ({ row }) => (
         <div>
@@ -155,10 +146,7 @@ export default function RegisterUsers() {
           </Button>
 
           {!showRejectedUsers && (
-            <Button
-              variant="danger"
-              onClick={() => openRejectionModal({ row })}
-            >
+            <Button variant="danger" onClick={() => openRejectionModal({ row })}>
               Reject
             </Button>
           )}
@@ -185,22 +173,14 @@ export default function RegisterUsers() {
         </Form.Check>
       </Form>
       {visibleUsers && visibleUsers.length > 0 ? (
-        <Table
-          responsive
-          data={visibleUsers}
-          columns={cols}
-          options={{ disableFilters: true }}
-        />
+        <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
       ) : (
         <div className="text-center py-5 text-primary">
           <h3>No pending users</h3>
         </div>
       )}
 
-      <Modal
-        show={showApprovalModal}
-        onHide={() => setShowApprovalModal(false)}
-      >
+      <Modal show={showApprovalModal} onHide={() => setShowApprovalModal(false)}>
         <Form onSubmit={handleApprovalFormSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -210,12 +190,7 @@ export default function RegisterUsers() {
           <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
               <Form.Label>User Role</Form.Label>
-              <Form.Select
-                name="roleId"
-                value={approvalForm.roleId || ''}
-                onChange={handleApprovalFormChange}
-                required
-              >
+              <Form.Select name="roleId" value={approvalForm.roleId || ""} onChange={handleApprovalFormChange} required>
                 <option value="" hidden>
                   Select Role
                 </option>
@@ -235,10 +210,7 @@ export default function RegisterUsers() {
         </Form>
       </Modal>
 
-      <Modal
-        show={showRejectionModal}
-        onHide={() => setShowRejectionModal(false)}
-      >
+      <Modal show={showRejectionModal} onHide={() => setShowRejectionModal(false)}>
         <Form onSubmit={handleRejectionFormSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -251,7 +223,7 @@ export default function RegisterUsers() {
               <Form.Control
                 as="textarea"
                 name="notes"
-                value={rejectionForm.notes || ''}
+                value={rejectionForm.notes || ""}
                 onChange={handleRejectionFormChange}
                 required
               />

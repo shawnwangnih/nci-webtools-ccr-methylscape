@@ -1,28 +1,24 @@
-import { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import Button from 'react-bootstrap/Button';
-import {
-  Fullscreen,
-  FullscreenExit,
-  BoxArrowUpRight,
-} from 'react-bootstrap-icons';
-import Overview from './overview/overview';
-import SampleQuality from './sampleQuality/sampleQuality';
-import CopyNumber from './copyNumber/copyNumber';
-import PromoterMethylation from './promoterMethylation/promoterMethylation';
-import CohortAnalysis from './cohortAnalysis/cohortAnalysis';
-import Survival from './survival/survival-tab';
-import Table from './table/table';
-import SubgroupAnalysis from './subgroupAnalysis/subgroupAnalysis';
-import Methodology from './methodology/methodology';
-import Metadata from './metadata/metadata';
+import { useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Button from "react-bootstrap/Button";
+import { Fullscreen, FullscreenExit, BoxArrowUpRight } from "react-bootstrap-icons";
+import Overview from "./overview/overview";
+import SampleQuality from "./sampleQuality/sampleQuality";
+import CopyNumber from "./copyNumber/copyNumber";
+import PromoterMethylation from "./promoterMethylation/promoterMethylation";
+import CohortAnalysis from "./cohortAnalysis/cohortAnalysis";
+import Survival from "./survival/survival-tab";
+import Table from "./table/table";
+import SubgroupAnalysis from "./subgroupAnalysis/subgroupAnalysis";
+import Methodology from "./methodology/methodology";
+import Metadata from "./metadata/metadata";
 
-import './analysis.scss';
+import "./analysis.scss";
 
 export default function Analysis() {
   const [expand, setExpand] = useState(false);
@@ -48,15 +44,10 @@ export default function Analysis() {
                   title="Open in new tab"
                   aria-label="Open Metadata in new tab"
                   href="#/metadata"
-                  target="_blank"
-                >
+                  target="_blank">
                   <BoxArrowUpRight /> View Metadata
                 </Button>
-                <Button
-                  id="expandLayout"
-                  aria-label="Expand"
-                  onClick={() => setExpand(!expand)}
-                >
+                <Button id="expandLayout" aria-label="Expand" onClick={() => setExpand(!expand)}>
                   {expand ? <FullscreenExit /> : <Fullscreen />}
                 </Button>
               </div>

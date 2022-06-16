@@ -1,10 +1,10 @@
-import { useRecoilState } from 'recoil';
-import { formState } from './metadata-plot.state';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import MultiSearch from '../../components/multi-search';
-import GroupSelect from '../../components/group-select';
+import { useRecoilState } from "recoil";
+import { formState } from "./metadata-plot.state";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import MultiSearch from "../../components/multi-search";
+import GroupSelect from "../../components/group-select";
 
 export default function MetadataForm({ className, onSelect }) {
   const [form, setForm] = useRecoilState(formState);
@@ -13,7 +13,7 @@ export default function MetadataForm({ className, onSelect }) {
   function handleChange(event) {
     let { name, value, checked, type } = event.target;
     mergeForm({
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   }
 
@@ -23,22 +23,22 @@ export default function MetadataForm({ className, onSelect }) {
 
   const colorOptions = [
     {
-      label: 'Categorical',
+      label: "Categorical",
       options: [
-        { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
-        { label: 'Sex', value: 'sex', type: 'categorical' },
+        { label: "NCI Metric", value: "nciMetric", type: "categorical" },
+        { label: "Sex", value: "sex", type: "categorical" },
       ],
     },
     {
-      label: 'Continuous',
+      label: "Continuous",
       options: [
         {
-          label: 'RF Purity (Absolute)',
-          value: 'rfPurityAbsolute',
-          type: 'continuous',
+          label: "RF Purity (Absolute)",
+          value: "rfPurityAbsolute",
+          type: "continuous",
           dtick: 0.05,
         },
-        { label: 'Age', value: 'age', type: 'continuous', dtick: 5 },
+        { label: "Age", value: "age", type: "continuous", dtick: 5 },
       ],
     },
   ];
@@ -49,15 +49,8 @@ export default function MetadataForm({ className, onSelect }) {
         <Col md="auto">
           <Form.Group id="organSystem" className="form-group mb-3">
             <Form.Label>Organ System</Form.Label>
-            <Form.Select
-              name="organSystem"
-              value={form.organSystem}
-              onChange={handleChange}
-              className="source"
-            >
-              <option value="centralNervousSystem">
-                Central Nervous System
-              </option>
+            <Form.Select name="organSystem" value={form.organSystem} onChange={handleChange} className="source">
+              <option value="centralNervousSystem">Central Nervous System</option>
               <option value="boneAndSoftTissue">Bone and Soft Tissue</option>
               <option value="hematopoietic">Hematopoietic</option>
               <option value="renal">Renal</option>
@@ -85,11 +78,7 @@ export default function MetadataForm({ className, onSelect }) {
         <Col md="auto">
           <Form.Group id="embedding" className="mb-3">
             <Form.Label>Embedding</Form.Label>
-            <Form.Select
-              name="embedding"
-              value={form.embedding}
-              onChange={handleChange}
-            >
+            <Form.Select name="embedding" value={form.embedding} onChange={handleChange}>
               <option>umap</option>
               <option>densmap</option>
             </Form.Select>
@@ -109,12 +98,7 @@ export default function MetadataForm({ className, onSelect }) {
         <Col md="3">
           <Form.Group id="search" className="mb-3">
             <Form.Label>Search</Form.Label>
-            <MultiSearch
-              name="search"
-              placeholder="Sample"
-              value={form.search}
-              onChange={handleSearch}
-            />
+            <MultiSearch name="search" placeholder="Sample" value={form.search} onChange={handleSearch} />
           </Form.Group>
         </Col>
         <Col md="auto">

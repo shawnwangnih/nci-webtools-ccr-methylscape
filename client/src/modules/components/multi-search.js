@@ -1,13 +1,7 @@
 // import CreatableSelect from 'react-select/creatable';
-import AsyncCreatableSelect from 'react-select/async-creatable';
+import AsyncCreatableSelect from "react-select/async-creatable";
 
-export default function MultiSearch({
-  name,
-  placeholder,
-  value,
-  onChange,
-  ...rest
-}) {
+export default function MultiSearch({ name, placeholder, value, onChange, ...rest }) {
   const customStyle = {
     //   hide prompts and indicators
     noOptionsMessage: () => null,
@@ -18,22 +12,20 @@ export default function MultiSearch({
     styles: {
       control: (provided, state) => ({
         ...provided,
-        borderRadius: '2rem',
-        borderColor: 'rgb(111, 208, 178)',
-        boxShadow: state.isFocused
-          ? '0 0 0 0.25rem rgba(111, 208, 178, 0.25)'
-          : 'none',
-        ':hover': {
-          borderColor: 'rgb(111, 208, 178)',
+        "borderRadius": "2rem",
+        "borderColor": "rgb(111, 208, 178)",
+        "boxShadow": state.isFocused ? "0 0 0 0.25rem rgba(111, 208, 178, 0.25)" : "none",
+        ":hover": {
+          borderColor: "rgb(111, 208, 178)",
         },
       }),
       multiValue: (provided, state) => ({
         ...provided,
-        borderRadius: '.75rem',
+        borderRadius: ".75rem",
       }),
       multiValueRemove: (provided, state) => ({
         ...provided,
-        borderRadius: '0 .75rem .75rem 0',
+        borderRadius: "0 .75rem .75rem 0",
       }),
     },
   };

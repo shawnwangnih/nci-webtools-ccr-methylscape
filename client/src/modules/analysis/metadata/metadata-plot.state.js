@@ -1,21 +1,21 @@
-import { atom, selector } from 'recoil';
-import axios from 'axios';
-import groupBy from 'lodash/groupBy';
-import meanBy from 'lodash/meanBy';
-import isNumber from 'lodash/isNumber';
-import colors from './colors.json';
-import nciMetricColors from './nciMetricColors';
+import { atom, selector } from "recoil";
+import axios from "axios";
+import groupBy from "lodash/groupBy";
+import meanBy from "lodash/meanBy";
+import isNumber from "lodash/isNumber";
+import colors from "./colors.json";
+import nciMetricColors from "./nciMetricColors";
 
 export const defaultFormState = {
-  organSystem: 'centralNervousSystem',
-  embedding: 'umap',
+  organSystem: "centralNervousSystem",
+  embedding: "umap",
   search: [],
   showAnnotations: true,
-  color: { label: 'NCI Metric', value: 'nciMetric', type: 'categorical' },
+  color: { label: "NCI Metric", value: "nciMetric", type: "categorical" },
 };
 
 export const formState = atom({
-  key: 'metadataPlot.formState',
+  key: "metadataPlot.formState",
   default: defaultFormState,
 });
 
@@ -24,7 +24,7 @@ export const defaultSelectedPoints = {
 };
 
 export const selectedPoints = atom({
-  key: 'metadataPlot.selected',
+  key: "metadataPlot.selected",
   default: defaultSelectedPoints,
 });
 
@@ -35,15 +35,14 @@ export const defaultPlotState = {
 };
 
 export const plotState = selector({
-  key: 'metadataPlot.plotState',
+  key: "metadataPlot.plotState",
   get: async ({ get }) => {
-    const { organSystem, embedding, search, showAnnotations, color } =
-      get(formState);
+    const { organSystem, embedding, search, showAnnotations, color } = get(formState);
 
     if (!organSystem || !embedding) return defaultPlotState;
 
     const params = { embedding, organSystem };
-    const { data } = await axios.get('/api/analysis/samples', { params });
+    const { data } = await axios.get("/api/analysis/samples", { params });
 
     // filter plot by search if show annotations is toggled false
     const searchQueries = search.map(({ value }) => value.toLowerCase());
@@ -64,10 +63,7 @@ export const plotState = selector({
     const useWebGl = data.length > 1000;
     // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
     // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
-    const dataGroupedByColor =
-      color.type == 'categorical'
-        ? Object.entries(groupBy(data, (e) => e[color.value]))
-        : [];
+    const dataGroupedByColor = color.type == "categorical" ? Object.entries(groupBy(data, (e) => e[color.value])) : [];
 
     // use mean x/y values for annotation positions
     // const labelAnnotations = dataGroupedByLabel
@@ -93,8 +89,7 @@ export const plotState = selector({
     //   }));
 
     const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
-    const isWeeklyAnnotation = ({ batchDate }) =>
-      batchDate && new Date(batchDate).getTime() > weeklyThreshold;
+    const isWeeklyAnnotation = ({ batchDate }) => batchDate && new Date(batchDate).getTime() > weeklyThreshold;
     const weeklyAnnotations = data.filter(isWeeklyAnnotation).map((value) => ({
       text: value.sample,
       x: value.x,
@@ -107,14 +102,8 @@ export const plotState = selector({
       ? data
           .filter(
             ({ sample, idatFilename }) =>
-              (sample &&
-                searchQueries.some((query) =>
-                  sample.toLowerCase().includes(query)
-                )) ||
-              (idatFilename &&
-                searchQueries.some((query) =>
-                  idatFilename.toLowerCase().includes(query)
-                ))
+              (sample && searchQueries.some((query) => sample.toLowerCase().includes(query))) ||
+              (idatFilename && searchQueries.some((query) => idatFilename.toLowerCase().includes(query)))
           )
           .map((e) => ({
             text: e.sample || e.idatFilename,
@@ -126,34 +115,29 @@ export const plotState = selector({
 
     const hovertemplate =
       [
-        'Sample: %{customdata.sample}',
-        'Metric: %{customdata.nciMetric}',
-        'Diagnosis: %{customdata.diagnosisProvided}',
-        'Sex: %{customdata.customSex}',
-        'RF Purity (Absolute): %{customdata.customRfPurityAbsolute}',
-        'Age: %{customdata.customAge}',
-      ].join('<br>') + '<extra></extra>';
+        "Sample: %{customdata.sample}",
+        "Metric: %{customdata.nciMetric}",
+        "Diagnosis: %{customdata.diagnosisProvided}",
+        "Sex: %{customdata.customSex}",
+        "RF Purity (Absolute): %{customdata.customRfPurityAbsolute}",
+        "Age: %{customdata.customAge}",
+      ].join("<br>") + "<extra></extra>";
 
     // Sort these keywords to the top so that their traces are rendered first and overlapped by others
-    const sortTopKeyWord = ['No_match', 'Unclassified', 'NotAvailable', 'null'];
+    const sortTopKeyWord = ["No_match", "Unclassified", "NotAvailable", "null"];
 
     const nciMetricColorMap = await nciMetricColors();
     let colorCount = 0;
 
     // maximum fixed precision formatter
-    const toFixed = (num, maxDigits = 2) =>
-      isNumber(num) && !isNaN(num) ? +num.toFixed(maxDigits) : num;
+    const toFixed = (num, maxDigits = 2) => (isNumber(num) && !isNaN(num) ? +num.toFixed(maxDigits) : num);
 
     // transform data to traces
     const dataTraces =
-      color.type == 'categorical'
+      color.type == "categorical"
         ? dataGroupedByColor
             .sort((a, b) =>
-              sortTopKeyWord.includes(a[0])
-                ? -1
-                : sortTopKeyWord.includes(b[0])
-                ? 1
-                : a[0].localeCompare(b[0])
+              sortTopKeyWord.includes(a[0]) ? -1 : sortTopKeyWord.includes(b[0]) ? 1 : a[0].localeCompare(b[0])
             )
             .map(([name, data]) => ({
               name,
@@ -161,13 +145,13 @@ export const plotState = selector({
               y: data.map((e) => e.y),
               customdata: data.map((d) => ({
                 ...d,
-                customSex: d.sex ?? 'N/A',
-                customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? 'N/A',
-                customAge: toFixed(d.age, 2) ?? 'N/A',
+                customSex: d.sex ?? "N/A",
+                customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? "N/A",
+                customAge: toFixed(d.age, 2) ?? "N/A",
               })),
-              mode: 'markers',
+              mode: "markers",
               hovertemplate: hovertemplate,
-              type: useWebGl ? 'scattergl' : 'scatter',
+              type: useWebGl ? "scattergl" : "scatter",
               marker: {
                 color: nciMetricColorMap[name] || colors[colorCount++],
               },
@@ -177,9 +161,9 @@ export const plotState = selector({
               x: data.map((e) => e.x),
               y: data.map((e) => e.y),
               customdata: data,
-              mode: 'markers',
+              mode: "markers",
               hovertemplate: hovertemplate,
-              type: useWebGl ? 'scattergl' : 'scatter',
+              type: useWebGl ? "scattergl" : "scatter",
               marker: {
                 color: data.map((e) => e[color.value]),
                 colorbar: { title: color.label, dtick: color.dtick },
@@ -188,11 +172,11 @@ export const plotState = selector({
           ];
 
     const plotTitles = {
-      centralNervousSystem: 'Central Nervous System',
-      boneAndSoftTissue: 'Bone and Soft Tissue',
-      hematopoietic: 'Hematopoietic',
-      renal: 'Renal',
-      panCancer: 'Pan-Cancer',
+      centralNervousSystem: "Central Nervous System",
+      boneAndSoftTissue: "Bone and Soft Tissue",
+      hematopoietic: "Hematopoietic",
+      renal: "Renal",
+      panCancer: "Pan-Cancer",
     };
 
     // set layout
@@ -212,11 +196,10 @@ export const plotState = selector({
             ...weeklyAnnotations,
           ]
         : [...sampleAnnotations],
-      uirevision:
-        organSystem + embedding + color.value + search + showAnnotations,
+      uirevision: organSystem + embedding + color.value + search + showAnnotations,
       legend: { title: { text: color.label } },
       autosize: true,
-      dragmode: 'select',
+      dragmode: "select",
     };
 
     const config = {

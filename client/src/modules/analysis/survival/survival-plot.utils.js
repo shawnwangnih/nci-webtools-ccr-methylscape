@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import { groupBy } from "lodash";
 
 export function getSummaryColumns(summary) {
   if (!summary || !summary.length) return [];
@@ -16,36 +16,36 @@ export function getSurvivalPlot(data, includeCensors = true) {
   let layout = {
     margin: { t: 0 },
     xaxis: {
-      title: 'Overall Survival (months)',
+      title: "Overall Survival (months)",
     },
     yaxis: {
-      title: 'Survival Probability',
+      title: "Survival Probability",
       range: [0, 1.1], // [0, 1] will cut off the top of the graph
     },
-    hovermode: 'x',
+    hovermode: "x",
   };
 
   if (!data) {
     return { data: traces, layout };
   }
 
-  const xKey = 'time';
-  const yKey = 'surv';
-  const censorKey = 'n.censor';
+  const xKey = "time";
+  const yKey = "surv";
+  const censorKey = "n.censor";
 
-  const groups = groupBy(data, 'strata');
+  const groups = groupBy(data, "strata");
 
   for (let name in groups) {
     const rows = groups[name];
-    const isUndefined = name === 'undefined';
+    const isUndefined = name === "undefined";
 
     const curve = {
-      name: isUndefined ? 'group=1' : name,
+      name: isUndefined ? "group=1" : name,
       x: rows.map((row) => row[xKey]),
       y: rows.map((row) => row[yKey]),
-      line: { shape: 'hv' },
-      mode: 'lines',
-      type: 'scatter',
+      line: { shape: "hv" },
+      mode: "lines",
+      type: "scatter",
       showlegend: !isUndefined,
     };
 
@@ -56,13 +56,13 @@ export function getSurvivalPlot(data, includeCensors = true) {
       const censors = {
         x: censoredRows.map((row) => row[xKey]),
         y: censoredRows.map((row) => row[yKey]),
-        mode: 'markers',
-        type: 'scatter',
+        mode: "markers",
+        type: "scatter",
         showlegend: false,
-        hoverinfo: 'skip',
+        hoverinfo: "skip",
         marker: {
           size: 4,
-          symbol: '203',
+          symbol: "203",
           opacity: 0.2,
         },
       };

@@ -1,14 +1,9 @@
-import {
-  useRecoilValue,
-  useSetRecoilState,
-  useRecoilCallback,
-  useRecoilState,
-} from 'recoil';
-import cloneDeep from 'lodash/cloneDeep';
-import { plotState, selectedPoints } from './metadata-plot.state';
-import { selectSampleState } from '../copyNumber/copyNumber.state';
-import { tableForm } from '../table/table.state';
-import Plot from 'react-plotly.js';
+import { useRecoilValue, useSetRecoilState, useRecoilCallback, useRecoilState } from "recoil";
+import cloneDeep from "lodash/cloneDeep";
+import { plotState, selectedPoints } from "./metadata-plot.state";
+import { selectSampleState } from "../copyNumber/copyNumber.state";
+import { tableForm } from "../table/table.state";
+import Plot from "react-plotly.js";
 
 export default function MetadataPlot({ onSelect }) {
   let { data, layout, config } = useRecoilValue(plotState);
@@ -53,7 +48,7 @@ export default function MetadataPlot({ onSelect }) {
     <Plot
       data={cloneDeep(data)}
       className="w-100"
-      style={{ height: '800px' }}
+      style={{ height: "800px" }}
       layout={cloneDeep(layout)}
       config={cloneDeep(config)}
       onClick={handleClick}

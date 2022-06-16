@@ -1,12 +1,12 @@
-import { useCallback } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import axios from 'axios';
-import { saveAs } from 'file-saver';
-import { samplesTableData } from './samples.state';
-import { PlusSquare, DashSquare } from 'react-bootstrap-icons';
-import Table from '../../components/table';
+import { useCallback } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import { Link, useSearchParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import axios from "axios";
+import { saveAs } from "file-saver";
+import { samplesTableData } from "./samples.state";
+import { PlusSquare, DashSquare } from "react-bootstrap-icons";
+import Table from "../../components/table";
 
 export default function Samples() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,82 +15,70 @@ export default function Samples() {
   const columns = [
     {
       Header: () => null,
-      id: 'expander',
-      aria: '',
+      id: "expander",
+      aria: "",
       disableSortBy: true,
       Cell: ({ row }) => (
-        <span {...row.getToggleRowExpandedProps()}>
-          {row.isExpanded ? <DashSquare /> : <PlusSquare />}
-        </span>
+        <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? <DashSquare /> : <PlusSquare />}</span>
       ),
     },
     {
-      id: 'sample_name',
-      accessor: 'sample_name',
-      Header: 'Sample Name',
-      aria: 'Sample Name',
+      id: "sample_name",
+      accessor: "sample_name",
+      Header: "Sample Name",
+      aria: "Sample Name",
     },
     {
-      id: 'project',
-      accessor: 'project',
-      Header: 'Project',
-      aria: 'Project',
-      Cell: (e) => (
-        <Link to={'/data/projects?project=' + e.data[e.row.index].project}>
-          {e.value}
-        </Link>
-      ),
+      id: "project",
+      accessor: "project",
+      Header: "Project",
+      aria: "Project",
+      Cell: (e) => <Link to={"/data/projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },
     {
-      id: 'experiment',
-      accessor: 'experiment',
-      Header: 'Experiment',
-      aria: 'Experiment',
-      Cell: (e) => (
-        <Link
-          to={'/data/experiments?experiment=' + e.data[e.row.index].experiment}
-        >
-          {e.value}
-        </Link>
-      ),
+      id: "experiment",
+      accessor: "experiment",
+      Header: "Experiment",
+      aria: "Experiment",
+      Cell: (e) => <Link to={"/data/experiments?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
     },
     {
-      id: 'pool_id',
-      accessor: 'pool_id',
-      Header: 'Sample Date',
-      aria: 'Sample Date',
+      id: "pool_id",
+      accessor: "pool_id",
+      Header: "Sample Date",
+      aria: "Sample Date",
     },
     {
-      id: 'surgical_case',
-      accessor: 'surgical_case',
-      Header: 'Surgical Case',
-      aria: 'Surgical Case',
+      id: "surgical_case",
+      accessor: "surgical_case",
+      Header: "Surgical Case",
+      aria: "Surgical Case",
     },
     {
-      id: 'gender',
-      accessor: 'gender',
-      Header: 'Gender',
-      aria: 'Gender',
+      id: "gender",
+      accessor: "gender",
+      Header: "Gender",
+      aria: "Gender",
     },
     {
-      id: 'age',
-      accessor: 'age',
-      Header: 'Age',
-      aria: 'Age',
+      id: "age",
+      accessor: "age",
+      Header: "Age",
+      aria: "Age",
     },
     {
-      id: 'diagnosis',
-      accessor: 'diagnosis',
-      Header: 'Diagnosis',
-      aria: 'Diagnosis',
+      id: "diagnosis",
+      accessor: "diagnosis",
+      Header: "Diagnosis",
+      aria: "Diagnosis",
     },
   ];
 
   const options = {
     initialState: {
       filters: [
-        { id: 'project', value: searchParams.get('project') || '' },
-        { id: 'experiment', value: searchParams.get('experiment') || '' },
+        { id: "project", value: searchParams.get("project") || "" },
+        { id: "experiment", value: searchParams.get("experiment") || "" },
       ],
     },
   };
@@ -100,10 +88,7 @@ export default function Samples() {
     return (
       <Container fluid="xxl">
         <Row className="ps-3">
-          <Col
-            md
-            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
-          >
+          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
             <Row>
               <Col className="text-primary small">
                 <b>DIAGNOSIS:</b>
@@ -139,9 +124,7 @@ export default function Samples() {
                 <b>MGMT SCORES:</b>
               </Col>
               <Col sm="6">
-                {original.mgmt_prediction == null
-                  ? ''
-                  : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+                {original.mgmt_prediction == null ? "" : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
               </Col>
             </Row>
             <Row>
@@ -151,10 +134,7 @@ export default function Samples() {
               <Col>{original.notes}</Col>
             </Row>
           </Col>
-          <Col
-            md
-            className="table table-bordered detail-table detail-table-divider mx-1 my-1"
-          >
+          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
             <Row>
               <Col className="text-primary small">
                 <b>TUMORE SITES:</b>
@@ -169,10 +149,7 @@ export default function Samples() {
                 <Button
                   variant="link"
                   className="p-0"
-                  onClick={() =>
-                    download(original.id, original.sample_name + '.html')
-                  }
-                >
+                  onClick={() => download(original.id, original.sample_name + ".html")}>
                   View Plot
                 </Button>
               </Col>
@@ -182,13 +159,7 @@ export default function Samples() {
                 <b>METHYLATION REPORT:</b>
               </Col>
               <Col>
-                <Button
-                  variant="link"
-                  className="p-0"
-                  onClick={() =>
-                    download(original.id, original.report_file_name)
-                  }
-                >
+                <Button variant="link" className="p-0" onClick={() => download(original.id, original.report_file_name)}>
                   Download Report
                 </Button>
               </Col>
@@ -202,8 +173,7 @@ export default function Samples() {
                   <Link
                     className="btn btn-link p-0"
                     target="_blank"
-                    to={`/qci?id=${original.id}&file=${original.xml_report}`}
-                  >
+                    to={`/qci?id=${original.id}&file=${original.xml_report}`}>
                     View Report
                   </Link>
                 ) : (
@@ -221,10 +191,7 @@ export default function Samples() {
                 <Button
                   variant="link"
                   className="p-0"
-                  onClick={() =>
-                    download(original.id, original.sample_name + '_NGS.pdf')
-                  }
-                >
+                  onClick={() => download(original.id, original.sample_name + "_NGS.pdf")}>
                   Download Report
                 </Button>
               </Col>
@@ -237,10 +204,7 @@ export default function Samples() {
                 <Button
                   variant="link"
                   className="p-0"
-                  onClick={() =>
-                    download(original.id, original.sample_name + '.jpg')
-                  }
-                >
+                  onClick={() => download(original.id, original.sample_name + ".jpg")}>
                   Download Image
                 </Button>
               </Col>
@@ -384,13 +348,13 @@ export default function Samples() {
       const response = await axios.post(
         `/api/reports/getFile`,
         {
-          sample: id + '/' + file,
+          sample: id + "/" + file,
         },
-        { responseType: 'blob' }
+        { responseType: "blob" }
       );
       saveAs(response.data, file);
     } catch (err) {
-      window.alert('File is unavailable');
+      window.alert("File is unavailable");
       console.log(err);
     }
   }

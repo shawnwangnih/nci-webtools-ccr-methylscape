@@ -1,22 +1,22 @@
-import { Container, Col, Row, Card, Tabs, Tab } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Col, Row, Card, Tabs, Tab } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function Admin() {
   const actions = [
     {
-      title: 'Manage Users',
-      icon: 'bi-people-fill',
-      link: '/admin/admin-user-management',
+      title: "Manage Users",
+      icon: "bi-people-fill",
+      link: "/admin/admin-user-management",
     },
     {
-      title: 'Manage Organizations',
-      icon: 'bi-building',
-      link: '/admin/admin-organization-management',
+      title: "Manage Organizations",
+      icon: "bi-building",
+      link: "/admin/admin-organization-management",
     },
     {
-      title: 'Import Data',
-      icon: 'bi-layer-backward',
-      link: '/admin/data-import',
+      title: "Import Data",
+      icon: "bi-layer-backward",
+      link: "/admin/data-import",
     },
   ];
 
@@ -32,11 +32,7 @@ export default function Admin() {
               <Card className="card-link card-accent-primary">
                 <Card.Body className="shadow">
                   <div className="text-center py-4 admin-manage-icons">
-                    <i
-                      className={`display-3 bi ${action.icon}`}
-                      role="img"
-                      aria-label={action.title}
-                    />
+                    <i className={`display-3 bi ${action.icon}`} role="img" aria-label={action.title} />
                     <h2 className="h5">{action.title}</h2>
                   </div>
                 </Card.Body>

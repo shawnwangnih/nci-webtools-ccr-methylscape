@@ -1,7 +1,7 @@
-import { atom, selector } from 'recoil';
-import axios from 'axios';
-import { groupBy } from 'lodash';
-const chrLines = require('./lines.json');
+import { atom, selector } from "recoil";
+import axios from "axios";
+import { groupBy } from "lodash";
+const chrLines = require("./lines.json");
 
 function getRange(array) {
   let min = array[0];
@@ -19,9 +19,7 @@ function createScale(inputRange, outputRange, clamp = false) {
     const [outMin, outMax] = outputRange;
     const scale = (value - min) / (max - min);
     const scaledValue = outMin + (outMax - outMin) * scale;
-    return clamp
-      ? Math.max(outMin, Math.min(outMax, scaledValue))
-      : scaledValue;
+    return clamp ? Math.max(outMin, Math.min(outMax, scaledValue)) : scaledValue;
   };
 }
 
@@ -30,7 +28,7 @@ export const defaultPreFormState = {
 };
 
 export const preFormState = atom({
-  key: 'copynumber.preFormState',
+  key: "copynumber.preFormState",
   default: defaultPreFormState,
 });
 
@@ -40,31 +38,31 @@ export const defaultFormState = {
 };
 
 export const formState = atom({
-  key: 'copynumber.formState',
+  key: "copynumber.formState",
   default: defaultFormState,
 });
 
 export const defaultSelectSample = {
-  idatFilename: '',
-  sample: '',
+  idatFilename: "",
+  sample: "",
 };
 
 export const selectSampleState = atom({
-  key: 'selectSampleState',
+  key: "selectSampleState",
   default: defaultSelectSample,
 });
 
 export const geneSelector = selector({
-  key: 'copyNumber.geneSelector',
+  key: "copyNumber.geneSelector",
   get: async () => {
-    const response = await axios.get('/api/analysis/genes');
+    const response = await axios.get("/api/analysis/genes");
     return response.data;
   },
   default: [],
 });
 
 export const geneOptionsSelector = selector({
-  key: 'copyNumber.geneOptionsSelector',
+  key: "copyNumber.geneOptionsSelector",
   get: async ({ get }) => {
     const genes = await get(geneSelector);
     return genes
@@ -81,16 +79,16 @@ export const defaultPlotState = {
 };
 
 export const copyNumberPlotDataSelector = selector({
-  key: 'copyNumber.copyNumberPlotDataSelector',
+  key: "copyNumber.copyNumberPlotDataSelector",
   get: async ({ get }) => {
     const { idatFilename } = get(selectSampleState);
 
     if (!idatFilename) return false;
     try {
-      const segmentsResponse = await axios.get('/api/analysis/cnv/segments', {
+      const segmentsResponse = await axios.get("/api/analysis/cnv/segments", {
         params: { idatFilename },
       });
-      const binsResponse = await axios.get('/api/analysis/cnv/bins', {
+      const binsResponse = await axios.get("/api/analysis/cnv/bins", {
         params: { idatFilename },
       });
       let binGeneMap = {};
@@ -119,7 +117,7 @@ export const copyNumberPlotDataSelector = selector({
 });
 
 export const plotState = selector({
-  key: 'cnPlotState',
+  key: "cnPlotState",
   get: async ({ get }) => {
     const copyNumberPlotData = get(copyNumberPlotDataSelector);
 
@@ -127,12 +125,10 @@ export const plotState = selector({
     if (copyNumberPlotData.error) return defaultPlotState.error;
 
     const { annotations, search } = get(formState);
-    const { idatFilename, segments, bins, binGeneMap } = get(
-      copyNumberPlotDataSelector
-    );
+    const { idatFilename, segments, bins, binGeneMap } = get(copyNumberPlotDataSelector);
 
     // determine x coordinates for each bin
-    const xOffsets = [0, ...chrLines.map((c) => c['pos.start'])];
+    const xOffsets = [0, ...chrLines.map((c) => c["pos.start"])];
     const xCoordinates = bins.map((bin) => {
       const offset = xOffsets[bin.chromosome];
       const midpoint = (bin.start + bin.end) / 2;
@@ -149,10 +145,7 @@ export const plotState = selector({
     // determine top points
     const sortedBins = [...bins].sort((a, b) => a.medianValue - b.medianValue);
     const topCount = Math.ceil(bins.length / 500); // top 0.5%
-    const topBins = [
-      ...sortedBins.slice(0, topCount),
-      ...sortedBins.slice(-topCount),
-    ];
+    const topBins = [...sortedBins.slice(0, topCount), ...sortedBins.slice(-topCount)];
 
     const data = [
       {
@@ -161,22 +154,20 @@ export const plotState = selector({
         customdata: bins,
         text: bins.map((bin) =>
           [
-            `Genes: ${bin.gene[0] || 'N/A'} ${
-              bin.gene.length > 1 ? ` + ${bin.gene.length - 1}` : ''
-            }`,
+            `Genes: ${bin.gene[0] || "N/A"} ${bin.gene.length > 1 ? ` + ${bin.gene.length - 1}` : ""}`,
             `Chromosome: ${bin.chromosome}`,
             `Log<sub>2</sub>ratio: ${bin.medianValue.toFixed(2)}`,
-          ].join('<br>')
+          ].join("<br>")
         ),
-        hovertemplate: '%{text}<extra></extra>',
-        mode: 'markers',
-        type: 'scattergl',
+        hovertemplate: "%{text}<extra></extra>",
+        mode: "markers",
+        type: "scattergl",
         marker: {
           color: yCoordinates.map(colorScale),
           colorscale: [
-            [0, 'rgb(255, 0, 0)'],
-            [0.5, 'rgb(180, 180, 180)'],
-            [1, 'rgb(0, 255, 0)'],
+            [0, "rgb(255, 0, 0)"],
+            [0.5, "rgb(180, 180, 180)"],
+            [1, "rgb(0, 255, 0)"],
           ],
         },
       },
@@ -184,9 +175,7 @@ export const plotState = selector({
 
     const binAnnotations = annotations
       ? topBins.map((bin) => ({
-          text: `${bin.gene[0] || 'No Gene'} ${
-            bin.gene.length > 1 ? `+ ${bin.gene.length - 1}` : ''
-          }`,
+          text: `${bin.gene[0] || "No Gene"} ${bin.gene.length > 1 ? `+ ${bin.gene.length - 1}` : ""}`,
           x: xOffsets[bin.chromosome] + bin.start,
           y: bin.medianValue,
         }))
@@ -207,47 +196,47 @@ export const plotState = selector({
       uirevision: idatFilename + annotations + search,
       title: `${idatFilename}`,
       showlegend: false,
-      dragmode: 'pan',
+      dragmode: "pan",
       xaxis: {
-        title: 'Chromosome',
+        title: "Chromosome",
         showgrid: false,
         showline: true,
-        tickmode: 'array',
+        tickmode: "array",
         tickvals: chrLines.map(({ center }) => center),
         ticktext: chrLines.map(({ chr }) => chr),
         tickangle: 0,
       },
       yaxis: {
-        title: 'log<sub>2</sub> ratio',
+        title: "log<sub>2</sub> ratio",
         zeroline: true,
         // zerolinecolor: '#eee',
         dtick: 0.25,
-        ticks: 'outside',
+        ticks: "outside",
         fixedrange: true,
       },
       annotations: [...binAnnotations, ...searchAnnotations],
       shapes: [
         // chromosome dividers
         ...chrLines.map((e) => ({
-          type: 'line',
-          x0: e['pos.start'],
-          x1: e['pos.start'],
+          type: "line",
+          x0: e["pos.start"],
+          x1: e["pos.start"],
           y0: yMin - bufferMargin,
           y1: yMax + bufferMargin,
           line: { width: 1 },
         })),
         // chromosome segment divider
         ...chrLines.map((e) => ({
-          type: 'line',
-          x0: e['pq'],
-          x1: e['pq'],
+          type: "line",
+          x0: e["pq"],
+          x1: e["pq"],
           y0: yMin - bufferMargin,
           y1: yMax + bufferMargin,
-          line: { dash: 'dot', width: 1 },
+          line: { dash: "dot", width: 1 },
         })),
         // chromosome segments
         ...segments.map((e) => ({
-          type: 'line',
+          type: "line",
           x0: xOffsets[e.chromosome] + e.start,
           x1: xOffsets[e.chromosome] + e.end,
           y0: e.medianValue,
@@ -255,10 +244,10 @@ export const plotState = selector({
         })),
         // y-axis zero line
         {
-          type: 'line',
+          type: "line",
           y0: 0,
           y1: 0,
-          line: { dash: 'dot' },
+          line: { dash: "dot" },
         },
       ],
       autosize: true,

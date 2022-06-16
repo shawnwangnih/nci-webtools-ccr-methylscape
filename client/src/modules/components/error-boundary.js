@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from "react";
 
 // Error boundaries currently have to be classes.
 export default class ErrorBoundary extends Component {
