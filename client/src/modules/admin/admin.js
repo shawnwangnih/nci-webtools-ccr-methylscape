@@ -6,12 +6,12 @@ export default function Admin() {
     {
       title: "Manage Users",
       icon: "bi-people-fill",
-      link: "/admin/admin-user-management",
+      link: "/admin/users",
     },
     {
       title: "Manage Organizations",
       icon: "bi-building",
-      link: "/admin/admin-organization-management",
+      link: "/admin/organizations",
     },
     {
       title: "Import Data",
