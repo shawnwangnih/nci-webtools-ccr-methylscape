@@ -2,7 +2,11 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { formState, geneOptionsSelector, preFormState } from './copyNumber.state';
+import {
+  formState,
+  geneOptionsSelector,
+  preFormState,
+} from './copyNumber.state';
 import MultiSearch from '../../components/multi-search';
 
 export default function CopyNumberForm() {
@@ -23,10 +27,14 @@ export default function CopyNumberForm() {
     if (preForm.significant) setForm({ ...form, annotations: false });
     setPreForm({ significant: !preForm.significant });
   }
-    
+
   function filterGenes(inputValue = '', limit = 100) {
     return geneOptions
-      .filter((g) => !inputValue || g.label.toLowerCase().startsWith(inputValue.toLowerCase()))
+      .filter(
+        (g) =>
+          !inputValue ||
+          g.label.toLowerCase().startsWith(inputValue.toLowerCase())
+      )
       .slice(0, limit);
   }
 

@@ -17,9 +17,11 @@ export default function DefaultUnauthorizedTemplate() {
               <h1>Unauthorized</h1>
             </Col>
             <Col md lg={6}>
-                <p>
-                    You are not authorized to access this page. If you have a Methylscape account, please contact the administrator to request access to this page.
-                </p>
+              <p>
+                You are not authorized to access this page. If you have a
+                Methylscape account, please contact the administrator to request
+                access to this page.
+              </p>
             </Col>
           </Row>
         </Container>

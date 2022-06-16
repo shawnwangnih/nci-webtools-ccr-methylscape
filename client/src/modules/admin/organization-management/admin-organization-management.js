@@ -55,7 +55,9 @@ export default function AdminOrganizationManagement() {
   async function handleAddOrgSubmit(e) {
     e.preventDefault();
 
-    const response = await axios.post('/api/organizations', { name: form.name });
+    const response = await axios.post('/api/organizations', {
+      name: form.name,
+    });
     const id = response.data[0].id;
     console.log(id);
     console.log(form);

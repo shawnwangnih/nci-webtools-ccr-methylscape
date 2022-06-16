@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { withAsync } = require("../middleware");
-const { requiresRouteAccessPolicy } = require('../auth/policyMiddleware');
+const { requiresRouteAccessPolicy } = require("../auth/policyMiddleware");
 const { getSamples, getGenes, getCnvBins, getCnvSegments } = require("../query");
 const { getSurvivalData } = require("../R/r");
 
@@ -8,7 +8,7 @@ const router = Router();
 
 router.get(
   "/samples",
-  requiresRouteAccessPolicy('AccessApi'),
+  requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
     const { embedding, organSystem } = request.query;
@@ -19,7 +19,7 @@ router.get(
 
 router.get(
   "/genes",
-  requiresRouteAccessPolicy('AccessApi'),
+  requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
     const results = await getGenes(connection);
@@ -29,7 +29,7 @@ router.get(
 
 router.get(
   "/cnv/segments",
-  requiresRouteAccessPolicy('AccessApi'),
+  requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
     const { idatFilename } = request.query;
@@ -40,7 +40,7 @@ router.get(
 
 router.get(
   "/cnv/bins",
-  requiresRouteAccessPolicy('AccessApi'),
+  requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
     const { idatFilename } = request.query;
@@ -51,7 +51,7 @@ router.get(
 
 router.post(
   "/survival",
-  requiresRouteAccessPolicy('AccessApi'),
+  requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const results = await getSurvivalData(request.body);
     response.json(results);

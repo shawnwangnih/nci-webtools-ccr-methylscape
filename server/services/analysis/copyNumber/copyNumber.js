@@ -1,7 +1,7 @@
-const { getKey, getDataFile } = require('../../aws');
-const { groupBy, chunk } = require('lodash');
-const Papa = require('papaparse');
-const { aws: awsConfig } = require('../../../config');
+const { getKey, getDataFile } = require("../../aws");
+const { groupBy, chunk } = require("lodash");
+const Papa = require("papaparse");
+const { aws: awsConfig } = require("../../../config");
 
 async function parseTSV(stream, options = {}) {
   return new Promise((resolve, reject) => {
@@ -11,13 +11,13 @@ async function parseTSV(stream, options = {}) {
       header: true,
     });
     stream.pipe(parseStream);
-    parseStream.on('error', (e) => {
+    parseStream.on("error", (e) => {
       reject(e);
     });
-    parseStream.on('data', (d) => {
+    parseStream.on("data", (d) => {
       data.push(d);
     });
-    parseStream.on('end', () => {
+    parseStream.on("end", () => {
       resolve(data);
     });
   });
@@ -26,16 +26,16 @@ async function parseTSV(stream, options = {}) {
 async function getCopyNumber(request) {
   const { id, search, annotation, significant } = request.body;
   const { connection } = request.app.locals;
-  const keyPrefix = awsConfig.s3DataKey || 'methylscape/';
+  const keyPrefix = awsConfig.s3DataKey || "methylscape/";
 
   // find and parse files
-  const binFind = await getKey(keyPrefix + 'CNV/bins/' + id);
+  const binFind = await getKey(keyPrefix + "CNV/bins/" + id);
   const binKey = binFind.Contents[0].Key;
 
   // const probeFind = await getKey(keyPrefix + 'CNV/probes/' + id);
   // const probeKey = probeFind.Contents[0].Key;
 
-  const segFind = await getKey(keyPrefix + 'CNV/segments/' + id);
+  const segFind = await getKey(keyPrefix + "CNV/segments/" + id);
   const segKey = segFind.Contents[0].Key;
 
   const binFile = await getDataFile(binKey);
@@ -46,8 +46,8 @@ async function getCopyNumber(request) {
   const parseFixDimensions = {
     beforeFirstChunk: (chunk) => {
       let lines = chunk.split(/\r\n|\r|\n/);
-      lines[0] = 'row\t' + lines[0];
-      return lines.join('\n');
+      lines[0] = "row\t" + lines[0];
+      return lines.join("\n");
     },
   };
 
@@ -57,9 +57,7 @@ async function getCopyNumber(request) {
 
   // get chromosome as index from string
   function getChr(chr) {
-    return parseInt(
-      chr.includes('X') ? 23 : chr.includes('Y') ? 24 : chr.replace(/^chr/, '')
-    );
+    return parseInt(chr.includes("X") ? 23 : chr.includes("Y") ? 24 : chr.replace(/^chr/, ""));
   }
 
   // const probesByChr = groupBy(
@@ -83,14 +81,11 @@ async function getCopyNumber(request) {
   // }
 
   async function getGenes(chr, start, end) {
-    const query = await connection('genes')
-      .select('*')
+    const query = await connection("genes")
+      .select("*")
       .where({ chr })
       .andWhere((e) => {
-        e.whereBetween('start', [start, end]).orWhereBetween('end', [
-          start,
-          end,
-        ]);
+        e.whereBetween("start", [start, end]).orWhereBetween("end", [start, end]);
       });
     return query.map((e) => e.geneId);
   }
@@ -148,11 +143,11 @@ async function getCopyNumber(request) {
   // parse segments
   const segments = seg.map((e) => {
     const cnv = (median) => {
-      if (median <= -0.6) return 'deletion';
-      if (median > -0.6 && median <= -0.1) return 'loss';
-      if (median > 0.1 && median < 0.6) return 'gain';
-      if (median >= 0.6) return 'amplification';
-      return '';
+      if (median <= -0.6) return "deletion";
+      if (median > -0.6 && median <= -0.1) return "loss";
+      if (median > 0.1 && median < 0.6) return "gain";
+      if (median >= 0.6) return "amplification";
+      return "";
     };
     const chr = getChr(e.chrom);
 
@@ -160,10 +155,10 @@ async function getCopyNumber(request) {
       // chr: chr,
       // posStart: parseInt(e['loc.start']),
       // posEnd: parseInt(e['loc.end']),
-      medianLog2Ratio: parseFloat(e['seg.median']),
+      medianLog2Ratio: parseFloat(e["seg.median"]),
       // CNV: cnv(parseFloat(e['seg.median'])),
-      x1: binPosOffset[chr] + parseInt(e['loc.start']),
-      x2: binPosOffset[chr] + parseInt(e['loc.end']),
+      x1: binPosOffset[chr] + parseInt(e["loc.start"]),
+      x2: binPosOffset[chr] + parseInt(e["loc.end"]),
       // width: e['loc.end'] - parseInt(e['loc.start']),
       // posStartNew: segPosOffset[chr] + parseInt(e['loc.start']),
       // posEndNew: segPosOffset[chr] + parseInt(e['loc.end']),
@@ -178,9 +173,7 @@ async function getCopyNumber(request) {
   const significantRange = 0.5;
 
   if (significant)
-    bins = bins.filter(
-      (e) => e.log2ratio > yMax * significantRange || e.log2ratio < yMin * significantRange
-    );
+    bins = bins.filter((e) => e.log2ratio > yMax * significantRange || e.log2ratio < yMin * significantRange);
 
   // get annotated genes
   bins = await Promise.all(

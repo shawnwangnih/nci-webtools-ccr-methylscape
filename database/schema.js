@@ -1,5 +1,4 @@
 export const schema = [
-
   /**
    * Source: Sample_sheet_master.xlsx
    * Contains sample metadata
@@ -63,7 +62,7 @@ export const schema = [
       table.double("overallSurvivalMonths");
       table.integer("overallSurvivalStatus");
       table.date("batchDate");
-    }
+    },
   },
 
   /**
@@ -80,10 +79,10 @@ export const schema = [
       table.string("embedding").index();
       table.double("x");
       table.double("y");
-    }
+    },
   },
 
- /**
+  /**
    * Source: chromosome.csv
    */
   {
@@ -94,15 +93,14 @@ export const schema = [
       table.string("name");
       table.integer("start").index();
       table.integer("centromere");
-    }
+    },
   },
 
-  
   /**
    * Source: genes.csv
    * Genome references for copy number
    */
-   {
+  {
     name: "gene",
     recreate: true,
     schema: (table) => {
@@ -111,7 +109,7 @@ export const schema = [
       table.integer("chromosome");
       table.integer("start");
       table.integer("end");
-      table.index(['chromosome', 'start']);
+      table.index(["chromosome", "start"]);
     },
   },
 
@@ -152,9 +150,8 @@ export const schema = [
       table.double("pValue");
       table.double("meanValue");
       table.double("medianValue");
-    }
+    },
   },
-
 
   /**
    * Stores import job status logs
@@ -171,7 +168,7 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
       table.string("updatedBy").defaultTo("system");
-    }
+    },
   },
 
   /**
@@ -190,12 +187,12 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
       table.string("updatedBy").defaultTo("system");
-    }
+    },
   },
 
   /**
    * Creates the rolePolicy table.
-   * Defines policies for each role. 
+   * Defines policies for each role.
    * Each policy defines an action and a resource
    * Example actions: CreateUser, ReadUser, UpdateUser, DeleteUser
    * Example resources: *, "user:1", etc
@@ -214,13 +211,13 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
       table.string("updatedBy").defaultTo("system");
-    }
+    },
   },
 
   /**
    * Create the organization table.
    */
-   {
+  {
     name: "organization",
     recreate: true,
     schema: (table, connection) => {
@@ -232,7 +229,7 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
       table.string("updatedBy").defaultTo("system");
-    }
+    },
   },
 
   /**
@@ -259,12 +256,12 @@ export const schema = [
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
       table.string("updatedBy").defaultTo("system");
-    }
+    },
   },
 
   {
-    name: 'mapBinsToGenes',
-    type: 'function',
+    name: "mapBinsToGenes",
+    type: "function",
     schema: () => {
       return `
         drop procedure if exists mapBinsToGenes;
@@ -299,12 +296,12 @@ export const schema = [
             );
           end
           $$;`;
-    }
+    },
   },
 
   {
-    name: 'mapAllBinsToGenes',
-    type: 'function',
+    name: "mapAllBinsToGenes",
+    type: "function",
     schema: () => {
       return `
         drop procedure if exists mapAllBinsToGenes;
@@ -322,12 +319,12 @@ export const schema = [
             end loop;
         end;
         $$;`;
-    }
+    },
   },
 
   {
-    name: 'getChromosomeOffset',
-    type: 'function',
+    name: "getChromosomeOffset",
+    type: "function",
     schema: () => {
       return `create or replace function getChromosomeOffset (chromosome numeric)
           returns numeric immutable as $$
@@ -358,7 +355,7 @@ export const schema = [
               when $1 = 24 then 3036303846
               else 0
           END
-      $$ language sql;`
-    }
-  }
+      $$ language sql;`;
+    },
+  },
 ];

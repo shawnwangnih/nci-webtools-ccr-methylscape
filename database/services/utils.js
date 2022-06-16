@@ -1,21 +1,21 @@
-import { basename } from 'path';
-import mapValues from 'lodash/mapValues.js';
-import { parse } from 'csv-parse';
-import * as XLSX from 'xlsx';
-import knex from 'knex';
-import postgres from 'pg';
+import { basename } from "path";
+import mapValues from "lodash/mapValues.js";
+import { parse } from "csv-parse";
+import * as XLSX from "xlsx";
+import knex from "knex";
+import postgres from "pg";
 
 export function createConnection(
   args = {
-    host: 'localhost',
+    host: "localhost",
     port: 5432,
-    user: 'methylscape',
-    password: 'methylscape',
-    database: 'methylscape',
+    user: "methylscape",
+    password: "methylscape",
+    database: "methylscape",
   }
 ) {
   return knex({
-    client: 'pg',
+    client: "pg",
     connection: args,
     pool: {
       min: 2,
@@ -24,21 +24,21 @@ export function createConnection(
       acquireTimeoutMillis: 100 * 1000,
       createTimeoutMillis: 100 * 1000,
       propagateCreateError: false,
-    }
+    },
   });
 }
 
 export async function createPostgresClient(
   args = {
-    host: 'localhost',
+    host: "localhost",
     port: 5432,
-    user: 'methylscape',
-    password: 'methylscape',
-    database: 'methylscape',
+    user: "methylscape",
+    password: "methylscape",
+    database: "methylscape",
   }
 ) {
   const client = new postgres.Client(args);
-  await client.connect()
+  await client.connect();
   return client;
 }
 
@@ -61,13 +61,13 @@ export function loadAwsCredentials(config) {
 
 export async function recreateTable(connection, name, schemaFn) {
   await connection.schema.dropTableIfExists(name);
-  await connection.schema.createTable(name, table => schemaFn(table, connection));
+  await connection.schema.createTable(name, (table) => schemaFn(table, connection));
   return true;
 }
 
 export async function initializeSchema(connection, schema) {
-  const tables = schema.filter(({type}) => !type || type === 'table');
-  const functions = schema.filter(({type}) => type === 'function');
+  const tables = schema.filter(({ type }) => !type || type === "table");
+  const functions = schema.filter(({ type }) => type === "function");
 
   // drop tables in reverse order to avoid foreign key constraints
   for (const { name } of [...tables].reverse()) {
@@ -79,14 +79,11 @@ export async function initializeSchema(connection, schema) {
   }
 
   for (const { name, schema, rawSchema, type, triggers } of tables) {
-    if (!type || type === 'table') {
-      if (rawSchema) { 
+    if (!type || type === "table") {
+      if (rawSchema) {
         await connection.schema.raw(rawSchema());
       } else if (schema) {
-        await connection.schema.createTable(
-          name, 
-          table => schema(table, connection)
-        );
+        await connection.schema.createTable(name, (table) => schema(table, connection));
       }
     }
 
@@ -99,7 +96,8 @@ export async function initializeSchema(connection, schema) {
 }
 
 export async function initializeSchemaForImport(connection, schema, sources, forceRecreate = false) {
-  const shouldRecreateTable = table => (forceRecreate || table.recreate) && sources.find(s => s.table === table.name);
+  const shouldRecreateTable = (table) =>
+    (forceRecreate || table.recreate) && sources.find((s) => s.table === table.name);
   const importSchema = schema.filter(shouldRecreateTable);
   return await initializeSchema(connection, importSchema);
 }
@@ -108,27 +106,26 @@ export function getFileMetadataFromPath(filePath) {
   return {
     filename: basename(filePath),
     filepath: filePath,
-  }
+  };
 }
 
 export async function createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig, logger }) {
-  const fileExtension = sourcePath.split('.').pop().toLowerCase();
+  const fileExtension = sourcePath.split(".").pop().toLowerCase();
   const inputStream = await sourceProvider.readFile(sourcePath);
   const metadata = getFileMetadataFromPath(sourcePath);
 
   switch (fileExtension) {
-    case 'csv':
-      return createCsvRecordIterator(inputStream, columns, { delimiter: ',', ...parseConfig}, metadata, logger);
-    case 'txt':
-    case 'tsv':
-      return createCsvRecordIterator(inputStream, columns, { delimiter: '\t', ...parseConfig}, metadata, logger);
-    case 'xlsx':
+    case "csv":
+      return createCsvRecordIterator(inputStream, columns, { delimiter: ",", ...parseConfig }, metadata, logger);
+    case "txt":
+    case "tsv":
+      return createCsvRecordIterator(inputStream, columns, { delimiter: "\t", ...parseConfig }, metadata, logger);
+    case "xlsx":
       return await createExcelRecordIterator(inputStream, columns, metadata, logger);
     default:
       throw new Error(`Unsupported file extension: ${fileExtension}`);
   }
 }
-
 
 export async function createExcelRecordIterator(stream, columns, metadata = {}, logger) {
   let buffers = [];
@@ -140,7 +137,7 @@ export async function createExcelRecordIterator(stream, columns, metadata = {}, 
 
   const [headers] = XLSX.utils.sheet_to_json(sheet, {
     header: 1,
-    range: 'A1:ZZZ1', // max column is XFD (2^14)
+    range: "A1:ZZZ1", // max column is XFD (2^14)
   });
   const errors = [];
 
@@ -151,7 +148,7 @@ export async function createExcelRecordIterator(stream, columns, metadata = {}, 
   }
 
   if (errors.length > 0) {
-    throw new Error(errors.join('\n'));
+    throw new Error(errors.join("\n"));
   }
 
   const records = XLSX.utils.sheet_to_json(sheet);
@@ -189,7 +186,7 @@ export async function importTable(connection, iterable, tableName, logger) {
       for (let record of buffer) {
         try {
           await connection(tableName).insert(record);
-        } catch(error) {
+        } catch (error) {
           logger.error(record);
           throw error;
         }
@@ -212,20 +209,20 @@ export async function importTable(connection, iterable, tableName, logger) {
 export async function importTableFromScript(connection, iterable, temporarySchema, importScript, logger) {
   const temporaryTable = `temp${process.hrtime()[1]}`;
   await connection.schema.dropTableIfExists(temporaryTable);
-  await connection.schema.createTable(temporaryTable, table => temporarySchema(table, connection));
+  await connection.schema.createTable(temporaryTable, (table) => temporarySchema(table, connection));
   const count = await importTable(connection, iterable, temporaryTable, logger);
-  await connection.raw(importScript(), {temporaryTable});
+  await connection.raw(importScript(), { temporaryTable });
   await connection.schema.dropTableIfExists(temporaryTable);
   return count;
 }
 
 export function castValue(value) {
-  const nullValues = ['', 'NA'];
+  const nullValues = ["", "NA"];
   if (nullValues.includes(value)) {
     return null;
   } else if (!isNaN(value)) {
     return parseFloat(value);
-  } else if (typeof value === 'number' && isNaN(value)) {
+  } else if (typeof value === "number" && isNaN(value)) {
     return null;
   } else {
     return value;
@@ -239,8 +236,8 @@ export function createRecordParser(columns, metadata, logger) {
       const sourceValue = record[sourceName] ?? defaultValue ?? null;
       const metadataValue = (sourceMetadataName && metadata[sourceMetadataName]) ?? null;
       let value = sourceMetadataName ? metadataValue : sourceValue;
-      
-      if (typeof formatter === 'function') {
+
+      if (typeof formatter === "function") {
         value = formatter(value, record, name, logger);
       }
 

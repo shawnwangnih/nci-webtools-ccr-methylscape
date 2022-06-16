@@ -12,7 +12,9 @@ export default function UserRegister() {
   const [form, setForm] = useRecoilState(formState);
   const resetForm = useResetRecoilState(formState);
   const organizations = useRecoilValue(organizationsSelector);
-  const activeOrganizations = organizations.filter(org => org.status === 'active');
+  const activeOrganizations = organizations.filter(
+    (org) => org.status === 'active'
+  );
 
   async function handleChange(e) {
     const { name, value } = e.target;
@@ -51,17 +53,17 @@ export default function UserRegister() {
         fluid="xxl"
         className="d-inline-flex justify-content-center mb-2 p-2"
       >
-      <Form className="bg-light p-3" onSubmit={handleSubmit}>
-        {alerts.map(({ type, message }, i) => (
-          <Alert
-            key={i}
-            variant={type}
-            onClose={() => setAlerts([])}
-            dismissible
-          >
-            {message}
-          </Alert>
-        ))}
+        <Form className="bg-light p-3" onSubmit={handleSubmit}>
+          {alerts.map(({ type, message }, i) => (
+            <Alert
+              key={i}
+              variant={type}
+              onClose={() => setAlerts([])}
+              dismissible
+            >
+              {message}
+            </Alert>
+          ))}
           <Form.Group controlId="accounttype">
             <Form.Label>Account Type</Form.Label>
             <Form.Check
@@ -104,30 +106,30 @@ export default function UserRegister() {
           </Row>
 
           <Form.Group className="mb-3" controlId="firstName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                maxLength={255}
-                value={form.firstName}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
+            <Form.Label>First Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              maxLength={255}
+              value={form.firstName}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="lastName">
-              <Form.Label>Last Name</Form.Label>
-              <FormControl
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                maxLength={255}
-                value={form.lastName}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="lastName">
+            <Form.Label>Last Name</Form.Label>
+            <FormControl
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              maxLength={255}
+              value={form.lastName}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email address</Form.Label>

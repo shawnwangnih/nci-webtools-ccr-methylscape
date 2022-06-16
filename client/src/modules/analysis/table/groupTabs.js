@@ -60,7 +60,6 @@ export default function GroupTabs() {
           - Group
         </Button>
       )}
-      
     </div>
   );
 }

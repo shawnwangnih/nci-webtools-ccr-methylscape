@@ -8,7 +8,6 @@ import SurvivalPlot from './survival-plot';
 export default function Survival() {
   return (
     <Container fluid>
-
       <ErrorBoundary
         fallback={
           <Alert variant="danger">

@@ -26,7 +26,8 @@ export default function Header() {
             <a
               href="https://ccr.cancer.gov/"
               target="_blank"
-              className="h5 mb-1" rel="noreferrer"
+              className="h5 mb-1"
+              rel="noreferrer"
             >
               <img
                 src="assets/images/nci-ccr-logo.png"
@@ -35,8 +36,7 @@ export default function Header() {
                 style={{ height: 'auto', maxWidth: '100%' }}
               />
               <span className="visually-hidden">
-                Center for Cancer Research
-                Methylscape Analysis
+                Center for Cancer Research Methylscape Analysis
               </span>
             </a>
           </Col>

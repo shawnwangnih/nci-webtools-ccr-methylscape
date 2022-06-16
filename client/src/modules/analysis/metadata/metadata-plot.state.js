@@ -141,10 +141,8 @@ export const plotState = selector({
     let colorCount = 0;
 
     // maximum fixed precision formatter
-    const toFixed = (num, maxDigits = 2) => 
-      isNumber(num) && !isNaN(num)
-        ? +num.toFixed(maxDigits) 
-        : num;
+    const toFixed = (num, maxDigits = 2) =>
+      isNumber(num) && !isNaN(num) ? +num.toFixed(maxDigits) : num;
 
     // transform data to traces
     const dataTraces =
@@ -161,7 +159,7 @@ export const plotState = selector({
               name,
               x: data.map((e) => e.x),
               y: data.map((e) => e.y),
-              customdata: data.map(d => ({
+              customdata: data.map((d) => ({
                 ...d,
                 customSex: d.sex ?? 'N/A',
                 customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? 'N/A',
