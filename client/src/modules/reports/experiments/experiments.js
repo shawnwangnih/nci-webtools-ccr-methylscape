@@ -15,13 +15,13 @@ export default function Experiments() {
       id: "project",
       accessor: "project",
       Header: "Project",
-      Cell: (e) => <Link to={"/data/projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },
     {
       id: "experiment",
       accessor: "experiment",
       Header: "Experiment",
-      Cell: (e) => <Link to={"/data/samples?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../samples?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
     },
     {
       id: "investigator",
@@ -32,7 +32,7 @@ export default function Experiments() {
       id: "samplesCount",
       accessor: "samplesCount",
       Header: "# of Samples",
-      Cell: (e) => <Link to={"/data/samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },
     {
       id: "date",
