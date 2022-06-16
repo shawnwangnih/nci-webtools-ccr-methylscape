@@ -34,8 +34,6 @@ export default function App() {
         title: 'Analysis',
         show: (session) => isAuthorized(session, 'GetPage', '/analysis'),
       },
-      //{ path: 'data/projects', title: 'Projects', show: (session) => session.authenticated  },
-      // { path: 'data/experiments', title: 'Experiments', show: (session) => session.authenticated  },
       {
         path: 'reports/samples',
         title: 'Samples',
@@ -48,20 +46,6 @@ export default function App() {
         path: 'admin',
         title: 'Admin',
         show: (session) => isAuthorized(session, 'GetPage', '/admin'),
-        // childLinks: [
-        //   {
-        //     //path: '/admin/admin-user-management',
-        //     path: 'admin',
-        //     title: 'Manage Users',
-        //     show: (session) => !session.authenticated,
-        //   },
-        //   {
-        //     path: '/#/admin/admin-organization-management',
-        //     title: 'Manage Oraganization',
-        //     native: true,
-        //     show: (session) => !session.authenticated,
-        //   },
-        // ],
       },
       {
         path: '/api/logout',
