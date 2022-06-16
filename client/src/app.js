@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { RecoilRoot } from 'recoil';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Loader from './modules/components/loader';
 import Navbar from './modules/components/navbar';
@@ -25,7 +25,6 @@ import RequirePolicy from './modules/require-policy/require-policy';
 import { isAuthorized } from './modules/require-policy/require-policy.utils';
 
 export default function App() {
-
   const navbarLinks = [
     [
       { path: '/', title: 'Home', exact: true },
@@ -103,25 +102,96 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="register/*" element={<UserRegister />} />
-                <Route path="analysis" element={<RequirePolicy action="GetPage"><Analysis /></RequirePolicy>} />
-                <Route path="metadata" element={<RequirePolicy action="GetPage"><MetadataSA /></RequirePolicy>} />
-                <Route path="reports" element={<RequirePolicy action="GetPage"><Reports /></RequirePolicy>}>
-                  <Route path="projects" element={<RequirePolicy action="GetPage"><Projects /></RequirePolicy>} />
-                  <Route path="experiments" element={<RequirePolicy action="GetPage"><Experiments /></RequirePolicy>} />
-                  <Route path="samples" element={<RequirePolicy action="GetPage"><Samples /></RequirePolicy>} />
+                <Route
+                  path="analysis"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <Analysis />
+                    </RequirePolicy>
+                  }
+                />
+                <Route
+                  path="metadata"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <MetadataSA />
+                    </RequirePolicy>
+                  }
+                />
+                <Route
+                  path="reports"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <Reports />
+                    </RequirePolicy>
+                  }
+                >
+                  <Route
+                    path="projects"
+                    element={
+                      <RequirePolicy action="GetPage">
+                        <Projects />
+                      </RequirePolicy>
+                    }
+                  />
+                  <Route
+                    path="experiments"
+                    element={
+                      <RequirePolicy action="GetPage">
+                        <Experiments />
+                      </RequirePolicy>
+                    }
+                  />
+                  <Route
+                    path="samples"
+                    element={
+                      <RequirePolicy action="GetPage">
+                        <Samples />
+                      </RequirePolicy>
+                    }
+                  />
                 </Route>
                 <Route path="about/*" element={<About />} />
-                <Route path="qci/*" element={<RequirePolicy action="GetPage"><QCI /></RequirePolicy>} />
-                <Route path="admin" element={<RequirePolicy action="GetPage"><Admin /></RequirePolicy>} />
+                <Route
+                  path="qci/*"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <QCI />
+                    </RequirePolicy>
+                  }
+                />
+                <Route
+                  path="admin"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <Admin />
+                    </RequirePolicy>
+                  }
+                />
                 <Route
                   path="admin/admin-user-management"
-                  element={<RequirePolicy action="GetPage"><AdminUserManagement /></RequirePolicy>}
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <AdminUserManagement />
+                    </RequirePolicy>
+                  }
                 />
                 <Route
                   path="/admin/admin-organization-management"
-                  element={<RequirePolicy action="GetPage"><AdminOrganizationManagement /></RequirePolicy>}
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <AdminOrganizationManagement />
+                    </RequirePolicy>
+                  }
                 />
-                <Route path="admin/data-import" element={<RequirePolicy action="GetPage"><DataImport /></RequirePolicy>} />
+                <Route
+                  path="admin/data-import"
+                  element={
+                    <RequirePolicy action="GetPage">
+                      <DataImport />
+                    </RequirePolicy>
+                  }
+                />
               </Routes>
             </Suspense>
           </ErrorBoundary>
