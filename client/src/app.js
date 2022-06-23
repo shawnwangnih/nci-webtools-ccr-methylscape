@@ -62,20 +62,8 @@ export default function App() {
         title: "Login",
         show: (session) => !session.authenticated,
         align: "end",
-        childLinks: [
-          {
-            path: "/api/login",
-            title: "NIH Users",
-            native: true,
-            show: (session) => !session.authenticated,
-          },
-          {
-            path: "/api/login/external",
-            title: "External Users",
-            native: true,
-            show: (session) => !session.authenticated,
-          },
-        ],
+        path: "/api/login",
+        native: true,
       },
     ],
   ];
