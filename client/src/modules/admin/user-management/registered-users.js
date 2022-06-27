@@ -112,6 +112,18 @@ export default function RegisterUsers() {
       ),
     },
     {
+      Header: "Status",
+      accessor: "status",
+      Cell: (e) => (
+        <div
+          style={{
+            textAlign: "left",
+          }}>
+          {e.value}
+        </div>
+      ),
+    },
+    {
       Header: "Submitted Date",
       accessor: "createdAt",
       Cell: (e) => (
@@ -162,18 +174,21 @@ export default function RegisterUsers() {
           {message}
         </Alert>
       ))}
-      <Form className="text-primary d-flex justify-content-center">
-        <Form.Check type="checkbox" id="show-rejected-user">
-          <Form.Check.Input
-            type="checkbox"
-            checked={showRejectedUsers}
-            onChange={(ev) => setShowRejectedUsers(ev.target.checked)}
-          />
-          <Form.Check.Label>Show Rejected Users</Form.Check.Label>
-        </Form.Check>
-      </Form>
+
       {visibleUsers && visibleUsers.length > 0 ? (
-        <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
+        <>
+          <Form className="text-primary d-flex justify-content-center">
+            <Form.Check type="checkbox" id="show-rejected-user">
+              <Form.Check.Input
+                type="checkbox"
+                checked={showRejectedUsers}
+                onChange={(ev) => setShowRejectedUsers(ev.target.checked)}
+              />
+              <Form.Check.Label>Include Rejected Users</Form.Check.Label>
+            </Form.Check>
+          </Form>
+          <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
+        </>
       ) : (
         <div className="text-center py-5 text-primary">
           <h3>No pending users</h3>
