@@ -1,8 +1,8 @@
-import { Button, Tabs, Tab } from 'react-bootstrap';
-import { useRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
-import { tableForm, tableData } from './table.state';
-import ReactTable from '../../components/table';
-import { selectedPoints } from '../metadata/metadata-plot.state';
+import { Button, Tabs, Tab } from "react-bootstrap";
+import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
+import { tableForm, tableData } from "./table.state";
+import ReactTable from "../../components/table";
+import { selectedPoints } from "../metadata/metadata-plot.state";
 
 export default function GroupTables({ showTable = true }) {
   const [formState, setState] = useRecoilState(tableForm);
@@ -15,29 +15,18 @@ export default function GroupTables({ showTable = true }) {
   }
 
   return (
-    <Tabs
-      id="controlled-tab-example"
-      activeKey={formState.group}
-      onSelect={handleSelect}
-      className="mb-3"
-    >
+    <Tabs id="controlled-tab-example" activeKey={formState.group} onSelect={handleSelect} className="mb-3">
       {umapPoints.points.map((_, i) => {
         const { data, cols } = tables[i];
         return (
-          <Tab
-            key={`table_tab_${i}`}
-            eventKey={`${i}`}
-            title={`Group ${i + 1}`}
-          >
+          <Tab key={`table_tab_${i}`} eventKey={`${i}`} title={`Group ${i + 1}`}>
             {showTable && data.length > 0 && (
               <ReactTable
                 data={data}
                 columns={cols}
                 options={{
                   initialState: {
-                    hiddenColumns: cols
-                      .filter((col) => col.show === false)
-                      .map((col) => col.accessor),
+                    hiddenColumns: cols.filter((col) => col.show === false).map((col) => col.accessor),
                   },
                 }}
                 customOptions={{
@@ -47,10 +36,9 @@ export default function GroupTables({ showTable = true }) {
               />
             )}
             {showTable && !data.length && (
-              <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
+              <div className="d-flex bg-light" style={{ minHeight: "300px" }}>
                 <p className="mx-auto my-auto">
-                  Use Box or Lasso Select in the UMAP plot to view details for
-                  multiple samples.
+                  Use Box or Lasso Select in the UMAP plot to view details for multiple samples.
                 </p>
               </div>
             )}

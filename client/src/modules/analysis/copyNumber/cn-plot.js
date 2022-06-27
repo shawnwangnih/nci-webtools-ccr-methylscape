@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { plotState } from './copyNumber.state';
-import Plot from 'react-plotly.js';
-import cloneDeep from 'lodash/cloneDeep';
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { plotState } from "./copyNumber.state";
+import Plot from "react-plotly.js";
+import cloneDeep from "lodash/cloneDeep";
 
 export default function CopyNumberPlot() {
   const { data, config, layout, error } = useRecoilValue(plotState) || {};
   const [state, setState] = useState({
-    x: '',
-    y: '',
+    x: "",
+    y: "",
     genes: [],
   });
 
@@ -26,10 +26,8 @@ export default function CopyNumberPlot() {
       {error ? (
         error
       ) : !data || !data.length ? (
-        <div className="d-flex bg-light" style={{ minHeight: '300px' }}>
-          <p className="mx-auto my-auto">
-            Please select a sample in the UMAP plot
-          </p>
+        <div className="d-flex bg-light" style={{ minHeight: "300px" }}>
+          <p className="mx-auto my-auto">Please select a sample in the UMAP plot</p>
         </div>
       ) : (
         <div>
@@ -42,7 +40,7 @@ export default function CopyNumberPlot() {
             config={cloneDeep(config)}
             className="w-100"
             useResizeHandler
-            style={{ height: '800px' }}
+            style={{ height: "800px" }}
             onClick={handleClick}
           />
           {state.ratio && (
@@ -50,14 +48,14 @@ export default function CopyNumberPlot() {
               <h4>Bin Info</h4>
               <div>
                 Location: {state.data.chromosome} ({state.data.start}
-                {' - '}
+                {" - "}
                 {state.data.end})
               </div>
               <div>
                 log<sub>2</sub>ratio: {state.data.medianLogIntensity}
               </div>
               <div>
-                Genes:{' '}
+                Genes:{" "}
                 <ul>
                   {state.data.gene.map((gene) => (
                     <li>{gene}</li>

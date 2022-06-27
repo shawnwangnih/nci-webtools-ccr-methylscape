@@ -1,3 +1,3 @@
 export default function PromoterMethylation() {
-  return 'Promoter Methylation';
+  return "Promoter Methylation";
 }

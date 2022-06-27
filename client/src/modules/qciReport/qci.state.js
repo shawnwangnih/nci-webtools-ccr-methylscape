@@ -1,19 +1,19 @@
-import { atom, selector } from 'recoil';
-import { json2xml, xml2js } from 'xml-js';
-import axios from 'axios';
+import { atom, selector } from "recoil";
+import { json2xml, xml2js } from "xml-js";
+import axios from "axios";
 
 export const defaultQCIState = {
-  id: '',
-  file: '',
+  id: "",
+  file: "",
 };
 
 export const QCIState = atom({
-  key: 'qciState',
+  key: "qciState",
   default: defaultQCIState,
 });
 
 export const qciData = selector({
-  key: 'qciData',
+  key: "qciData",
   get: async ({ get }) => {
     const { id, file } = get(QCIState);
 
@@ -22,9 +22,9 @@ export const qciData = selector({
         const response = await axios.post(
           `/api/reports/getFile`,
           {
-            sample: id + '/' + file,
+            sample: id + "/" + file,
           },
-          { responseType: 'text' }
+          { responseType: "text" }
         );
         return response.data;
       } catch (e) {
@@ -44,15 +44,9 @@ export const qciData = selector({
       const parsed = xml2js(file, { compact: true });
 
       let variants = parsed.report.variant;
-      !Array.isArray(variants)
-        ? (variants = [variants])
-        : (variants = variants.reverse());
-      const significant = variants.filter((v) =>
-        v.assessment._text.match(/pathogenic/gi)
-      );
-      const uncertain = variants.filter((v) =>
-        v.assessment._text.match(/uncertain/gi)
-      );
+      !Array.isArray(variants) ? (variants = [variants]) : (variants = variants.reverse());
+      const significant = variants.filter((v) => v.assessment._text.match(/pathogenic/gi));
+      const uncertain = variants.filter((v) => v.assessment._text.match(/uncertain/gi));
       return { ...sigVariants(significant), ...unknownVariants(uncertain) };
     }
 
@@ -68,17 +62,13 @@ export const qciData = selector({
 
         // SMALL NUCLEOTIDE VARIANTS (SNV)
         if (v.gene) {
-          const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
-            v.readdepth._text
-          } reads)`;
+          const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
           snvData.push({
             gene: v.gene._text,
             genomicLocation: loc,
             transcript: v.transcriptchange.transcript._text,
             nucleotideChange: v.transcriptchange.change._text,
-            aminoAcidChange: v.proteinchange
-              ? v.proteinchange.change._text
-              : '-',
+            aminoAcidChange: v.proteinchange ? v.proteinchange.change._text : "-",
             vaf: vaf,
             pathAssessment: v.assessment._text,
             tier: tier,
@@ -117,15 +107,13 @@ export const qciData = selector({
     function unknownVariants(variants) {
       let data = variants.map((v, i) => {
         const loc = `chr${v.chromosome._text}:${v.position._text}`;
-        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${
-          v.readdepth._text
-        } reads)`;
+        const vaf = `${Number.parseFloat(v.allelefraction._text)}% (of ${v.readdepth._text} reads)`;
         return {
           gene: v.gene._text,
           genomicLocation: loc,
           transcript: v.transcriptchange.transcript._text,
           nucleotideChange: v.transcriptchange.change._text,
-          aminoAcidChange: v.proteinchange ? v.proteinchange.change._text : '-',
+          aminoAcidChange: v.proteinchange ? v.proteinchange.change._text : "-",
           vaf: vaf,
         };
       });
@@ -141,8 +129,8 @@ export const qciData = selector({
     const snvTable = {
       columns: [
         {
-          Header: 'GENE',
-          accessor: 'gene',
+          Header: "GENE",
+          accessor: "gene",
           Cell: ({ value }) => (
             <b>
               <i>{value}</i>
@@ -150,25 +138,25 @@ export const qciData = selector({
           ),
         },
         {
-          Header: 'GENOMIC LOCATION',
-          accessor: 'genomicLocation',
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
         },
-        { Header: 'TRANSCRIPT', accessor: 'transcript' },
+        { Header: "TRANSCRIPT", accessor: "transcript" },
         {
-          Header: 'NUCLEOTIDE CHANGE',
-          accessor: 'nucleotideChange',
+          Header: "NUCLEOTIDE CHANGE",
+          accessor: "nucleotideChange",
         },
         {
-          Header: 'AMINO ACID CHANGE',
-          accessor: 'aminoAcidChange',
+          Header: "AMINO ACID CHANGE",
+          accessor: "aminoAcidChange",
         },
-        { Header: 'VAF* (%)', accessor: 'vaf' },
+        { Header: "VAF* (%)", accessor: "vaf" },
         {
-          Header: 'PATHOGENICITY ASSESSMENT',
-          accessor: 'pathAssessment',
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
           Cell: ({ value }) => <span className="textRed">{value}</span>,
         },
-        { Header: 'TIER**', accessor: 'tier' },
+        { Header: "TIER**", accessor: "tier" },
       ],
       data: data.snvData,
       options: { disableFilters: true },
@@ -177,29 +165,29 @@ export const qciData = selector({
     const cnvTable = {
       columns: [
         {
-          Header: 'GENE',
-          accessor: 'gene',
+          Header: "GENE",
+          accessor: "gene",
           Cell: ({ value }) => (
             <div>
               <div>
                 <b>
-                  <i>{value.split(' ')[0]}</i>
+                  <i>{value.split(" ")[0]}</i>
                 </b>
               </div>
-              <div>{value.split(' ')[1]}</div>
+              <div>{value.split(" ")[1]}</div>
             </div>
           ),
         },
         {
-          Header: 'GENOMIC LOCATION',
-          accessor: 'genomicLocation',
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
         },
         {
-          Header: 'PATHOGENICITY ASSESSMENT',
-          accessor: 'pathAssessment',
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
           Cell: ({ value }) => <span className="textRed">{value}</span>,
         },
-        { Header: 'TIER**', accessor: 'tier' },
+        { Header: "TIER**", accessor: "tier" },
       ],
       data: data.cnvData,
       options: { disableFilters: true },
@@ -208,30 +196,30 @@ export const qciData = selector({
     const fusionTable = {
       columns: [
         {
-          Header: 'GENE',
-          accessor: 'gene',
+          Header: "GENE",
+          accessor: "gene",
           Cell: ({ value }) => (
             <div>
               <div>
                 <b>
-                  <i>{value.split(' ')[0]}</i>
+                  <i>{value.split(" ")[0]}</i>
                 </b>
               </div>
-              <div>{value.split(' ')[1]}</div>
+              <div>{value.split(" ")[1]}</div>
             </div>
           ),
         },
         {
-          Header: 'GENOMIC LOCATION',
-          accessor: 'genomicLocation',
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
         },
-        { Header: 'READS', accessor: 'reads' },
+        { Header: "READS", accessor: "reads" },
         {
-          Header: 'PATHOGENICITY ASSESSMENT',
-          accessor: 'pathAssessment',
+          Header: "PATHOGENICITY ASSESSMENT",
+          accessor: "pathAssessment",
           Cell: ({ value }) => <span className="textRed">{value}</span>,
         },
-        { Header: 'TIER**', accessor: 'tier' },
+        { Header: "TIER**", accessor: "tier" },
       ],
       data: data.fusionData,
       options: { disableFilters: true },
@@ -239,21 +227,21 @@ export const qciData = selector({
 
     const unkTable = {
       columns: [
-        { Header: 'GENE', accessor: 'gene' },
+        { Header: "GENE", accessor: "gene" },
         {
-          Header: 'GENOMIC LOCATION',
-          accessor: 'genomicLocation',
+          Header: "GENOMIC LOCATION",
+          accessor: "genomicLocation",
         },
-        { Header: 'TRANSCRIPT', accessor: 'transcript' },
+        { Header: "TRANSCRIPT", accessor: "transcript" },
         {
-          Header: 'NUCLEOTIDE CHANGE',
-          accessor: 'nucleotideChange',
+          Header: "NUCLEOTIDE CHANGE",
+          accessor: "nucleotideChange",
         },
         {
-          Header: 'AMINO ACID CHANGE',
-          accessor: 'aminoAcidChange',
+          Header: "AMINO ACID CHANGE",
+          accessor: "aminoAcidChange",
         },
-        { Header: 'VAF* (%)', accessor: 'vaf' },
+        { Header: "VAF* (%)", accessor: "vaf" },
       ],
       data: data.unkData,
       options: { disableFilters: true },

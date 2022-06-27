@@ -1,26 +1,26 @@
 export const sources = [
   {
-    sourcePath: 'organization.csv',
-    table: 'organization',
-    description: 'Organization table',
+    sourcePath: "organization.csv",
+    table: "organization",
+    description: "Organization table",
     columns: [
       { sourceName: "order", name: "order" },
       { sourceName: "name", name: "name" },
     ],
   },
   {
-    sourcePath: 'role.csv',
-    table: 'role',
-    description: 'Role table',
+    sourcePath: "role.csv",
+    table: "role",
+    description: "Role table",
     columns: [
       { sourceName: "name", name: "name" },
       { sourceName: "description", name: "description" },
     ],
   },
   {
-    sourcePath: 'rolePolicy.csv',
-    table: 'rolePolicy',
-    description: 'rolePolicy table',
+    sourcePath: "rolePolicy.csv",
+    table: "rolePolicy",
+    description: "rolePolicy table",
     columns: [
       { sourceName: "roleId", name: "roleId" },
       { sourceName: "action", name: "action" },
@@ -28,9 +28,9 @@ export const sources = [
     ],
   },
   {
-    sourcePath: 'user.csv',
-    table: 'user',
-    description: 'Policy table',
+    sourcePath: "user.csv",
+    table: "user",
+    description: "Policy table",
     columns: [
       { sourceName: "roleId", name: "roleId" },
       { sourceName: "organizationId", name: "organizationId" },
@@ -44,6 +44,4 @@ export const sources = [
       { sourceName: "receiveNotification", name: "receiveNotification" },
     ],
   },
-
 ];
-

@@ -1,21 +1,16 @@
-import { useState } from 'react';
-import { Row, Col, Container, InputGroup, FormControl } from 'react-bootstrap';
-import { Search } from 'react-bootstrap-icons';
+import { useState } from "react";
+import { Row, Col, Container, InputGroup, FormControl } from "react-bootstrap";
+import { Search } from "react-bootstrap-icons";
 
 export default function Header() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   function handleSearch(query) {
-    if (search)
-      window.open(
-        'https://www.google.com/search?q=site:methylscape.ccr.cancer.gov ' +
-          query,
-        '_blank'
-      );
+    if (search) window.open("https://www.google.com/search?q=site:methylscape.ccr.cancer.gov " + query, "_blank");
   }
 
   function handleKeyDown(e) {
-    if (e.key === 'Enter') handleSearch(search);
+    if (e.key === "Enter") handleSearch(search);
   }
 
   return (
@@ -23,21 +18,14 @@ export default function Header() {
       <Container fluid>
         <Row className="justify-content-between">
           <Col>
-            <a
-              href="https://ccr.cancer.gov/"
-              target="_blank"
-              className="h5 mb-1" rel="noreferrer"
-            >
+            <a href="https://ccr.cancer.gov/" target="_blank" className="h5 mb-1" rel="noreferrer">
               <img
                 src="assets/images/nci-ccr-logo.png"
                 className="img-fluid my-3"
                 alt="National Cancer Institute"
-                style={{ height: 'auto', maxWidth: '100%' }}
+                style={{ height: "auto", maxWidth: "100%" }}
               />
-              <span className="visually-hidden">
-                Center for Cancer Research
-                Methylscape Analysis
-              </span>
+              <span className="visually-hidden">Center for Cancer Research Methylscape Analysis</span>
             </a>
           </Col>
           <Col className="my-auto">

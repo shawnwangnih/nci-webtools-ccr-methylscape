@@ -1,6 +1,6 @@
-const session = require('express-session');
-const MemoryStore = require('memorystore')(session);
-const { randomBytes } = require('crypto');
+const session = require("express-session");
+const MemoryStore = require("memorystore")(session);
+const { randomBytes } = require("crypto");
 
 function createSession({ sessionSecret, maxAge } = {}) {
   sessionSecret = sessionSecret || randomBytes(16).toString("hex");
@@ -16,7 +16,7 @@ function createSession({ sessionSecret, maxAge } = {}) {
     resave: false,
     secret: sessionSecret,
     saveUninitialized: true,
-  })
+  });
 }
 
-module.exports = { createSession }
+module.exports = { createSession };

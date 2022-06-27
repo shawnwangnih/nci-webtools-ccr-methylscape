@@ -11,7 +11,7 @@ module.exports = function override(config, env) {
   config.plugins.push(
     new ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
-    }),
+    })
   );
 
   return config;

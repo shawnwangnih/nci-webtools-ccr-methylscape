@@ -1,3 +1,3 @@
 export default function CohortAnalysis() {
-  return 'Cohort Analysis';
+  return "Cohort Analysis";
 }

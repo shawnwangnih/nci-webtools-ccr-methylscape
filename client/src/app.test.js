@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-test('renders main element', () => {
+test("renders main element", () => {
   render(<App />);
-  const mainElement = screen.getByRole('main');
+  const mainElement = screen.getByRole("main");
   expect(mainElement).toBeInTheDocument();
 });

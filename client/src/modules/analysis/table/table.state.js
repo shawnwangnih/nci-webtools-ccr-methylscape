@@ -1,20 +1,20 @@
-import { atom, selector } from 'recoil';
-import axios from 'axios';
-import { selectedPoints } from '../metadata/metadata-plot.state';
-import pick from 'lodash/pick';
-import isNumber from 'lodash/isNumber';
+import { atom, selector } from "recoil";
+import axios from "axios";
+import { selectedPoints } from "../metadata/metadata-plot.state";
+import pick from "lodash/pick";
+import isNumber from "lodash/isNumber";
 
 export const defaultTableForm = {
   group: 0,
 };
 
 export const tableForm = atom({
-  key: 'umapTableForm',
+  key: "umapTableForm",
   default: defaultTableForm,
 });
 
 export const tableData = selector({
-  key: 'umapSelectedTable',
+  key: "umapSelectedTable",
   get: ({ get }) => {
     const { points } = get(selectedPoints);
 
@@ -240,37 +240,37 @@ export const tableData = selector({
         show: false,
       },
 
-      { 
+      {
         accessor: "rfPurityAbsolute",
         Header: "RF Purity (Absolute)",
         show: false,
       },
-      { 
+      {
         accessor: "rfPurityEstimate",
         Header: "RF Purity (Estimate)",
         show: false,
       },
-      { 
+      {
         accessor: "lump",
         Header: "LUMP",
         show: false,
       },
-      { 
+      {
         accessor: "mcf",
         Header: "MCF",
         show: false,
       },
-      { 
+      {
         accessor: "mcfScore",
         Header: "MCF Score",
         show: false,
       },
-      { 
+      {
         accessor: "subclass",
         Header: "Subclass",
         show: false,
       },
-      { 
+      {
         accessor: "subclassScore",
         Header: "Subclass Score",
         show: false,
@@ -284,11 +284,11 @@ export const tableData = selector({
           cols: columns,
           data: data.length
             ? data.map((e) =>
-              pick(
-                e.customdata,
-                columns.map((e) => e.accessor)
+                pick(
+                  e.customdata,
+                  columns.map((e) => e.accessor)
+                )
               )
-            )
             : [],
         },
       }),
@@ -300,33 +300,30 @@ export const tableData = selector({
 });
 
 const survivalGroupsSelector = selector({
-  key: 'table.survivalGroupsSelector',
+  key: "table.survivalGroupsSelector",
   get: ({ get }) => {
     const { points } = get(selectedPoints);
     return points
-      .filter(p => p.length)
-      .map((pointGroup, groupIndex) => (
+      .filter((p) => p.length)
+      .map((pointGroup, groupIndex) =>
         pointGroup
-          .map(g => ({
+          .map((g) => ({
             group: groupIndex + 1,
             overallSurvivalMonths: g.customdata.overallSurvivalMonths,
             overallSurvivalStatus: g.customdata.overallSurvivalStatus,
           }))
-          .filter(data => (
-            isNumber(data.overallSurvivalMonths) && 
-            isNumber(data.overallSurvivalStatus)
-          ))
-      ))
+          .filter((data) => isNumber(data.overallSurvivalMonths) && isNumber(data.overallSurvivalStatus))
+      )
       .flat();
-  }
+  },
 });
 
 export const survivalDataSelector = selector({
-  key: 'survivalDataSelector',
+  key: "survivalDataSelector",
   get: async ({ get }) => {
     const selectedGroups = get(survivalGroupsSelector);
     if (selectedGroups?.length) {
-      const response = await axios.post('/api/analysis/survival', selectedGroups);
+      const response = await axios.post("/api/analysis/survival", selectedGroups);
       return response.data;
     } else {
       return null;

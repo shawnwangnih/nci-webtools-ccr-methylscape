@@ -1,17 +1,10 @@
-import { remove } from 'lodash';
-import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Button,
-  Row,
-  Modal,
-  Form,
-  FormControl,
-} from 'react-bootstrap';
-import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
-import Table from '../../components/table';
-import { organizationsSelector } from './organization-management.state';
-import axios from 'axios';
+import { remove } from "lodash";
+import React, { useState, useEffect } from "react";
+import { Container, Button, Row, Modal, Form, FormControl } from "react-bootstrap";
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from "recoil";
+import Table from "../../components/table";
+import { organizationsSelector } from "./organization-management.state";
+import axios from "axios";
 
 export default function AdminOrganizationManagement() {
   const organizations = useRecoilValue(organizationsSelector);
@@ -55,7 +48,9 @@ export default function AdminOrganizationManagement() {
   async function handleAddOrgSubmit(e) {
     e.preventDefault();
 
-    const response = await axios.post('/api/organizations', { name: form.name });
+    const response = await axios.post("/api/organizations", {
+      name: form.name,
+    });
     const id = response.data[0].id;
     console.log(id);
     console.log(form);
@@ -72,73 +67,68 @@ export default function AdminOrganizationManagement() {
   }
   const cols = [
     {
-      Header: 'Active Organizations',
-      accessor: 'name',
+      Header: "Active Organizations",
+      accessor: "name",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Created Date',
-      accessor: 'createdAt',
+      Header: "Created Date",
+      accessor: "createdAt",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
     {
-      Header: 'Created By',
-      accessor: 'createdBy',
+      Header: "Created By",
+      accessor: "createdBy",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Updated Date',
-      accessor: 'updatedAt',
+      Header: "Updated Date",
+      accessor: "updatedAt",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
     {
-      Header: 'Updated By',
-      accessor: 'updatedBy',
+      Header: "Updated By",
+      accessor: "updatedBy",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Actions',
-      id: 'actions',
+      Header: "Actions",
+      id: "actions",
       disableSortBy: true,
       Cell: (props) => {
         return (
@@ -163,21 +153,13 @@ export default function AdminOrganizationManagement() {
             <h1 className="h2">Manage Organizations/ Institutions</h1>
           </div>
           <div class="col-sm-2 col-xs-12 col-12 mb-2">
-            <Button
-              className="btn btn-success pull-right"
-              onClick={(e) => openAddOrgModal()}
-            >
+            <Button className="btn btn-success pull-right" onClick={(e) => openAddOrgModal()}>
               Add Organization
             </Button>
           </div>
         </Row>
         <div className="bg-white text-primary px-3">
-          <Table
-            responsive
-            data={organizations}
-            columns={cols}
-            options={{ disableFilters: true }}
-          />
+          <Table responsive data={organizations} columns={cols} options={{ disableFilters: true }} />
         </div>
 
         <Modal show={showAddOrgModal} onHide={() => setShowAddOrgModal(false)}>
@@ -209,10 +191,7 @@ export default function AdminOrganizationManagement() {
           </Form>
         </Modal>
 
-        <Modal
-          show={showRenameOrgModal}
-          onHide={() => setShowRenameOrgModal(false)}
-        >
+        <Modal show={showRenameOrgModal} onHide={() => setShowRenameOrgModal(false)}>
           <Form className="bg-light p-3" onSubmit={handleRenameSubmit}>
             <Modal.Header closeButton>
               <Modal.Title>Edit Organization</Modal.Title>

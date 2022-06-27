@@ -1,14 +1,7 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const {
-  DynamoDBDocumentClient,
-  ScanCommand,
-} = require('@aws-sdk/lib-dynamodb');
-const {
-  S3Client,
-  GetObjectCommand,
-  ListObjectsV2Command,
-} = require('@aws-sdk/client-s3');
-const { aws: config } = require('../config');
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
+const { S3Client, GetObjectCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
+const { aws: config } = require("../config");
 
 function loadAwsCredentials(config) {
   const { region, accessKeyId, secretAccessKey } = config;

@@ -1,5 +1,5 @@
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+const cluster = require("cluster");
+const numCPUs = require("os").cpus().length;
 
 /**
  * Forks the current process
@@ -14,7 +14,7 @@ function forkCluster(numProcesses = numCPUs, restartOnExit = true) {
 
   // unhandled exceptions will cause the current process to exit
   if (restartOnExit)
-    cluster.on('exit', (worker, code, signal) => {
+    cluster.on("exit", (worker, code, signal) => {
       cluster.fork();
     });
 

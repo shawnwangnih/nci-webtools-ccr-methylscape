@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Button, Modal, Form, Alert } from 'react-bootstrap';
-import { useRecoilValue, useRecoilRefresher_UNSTABLE } from 'recoil';
-import { groupBy } from 'lodash';
-import axios from 'axios';
-import Table from '../../components/table';
-import {
-  rolesSelector,
-  usersSelector,
-  organizationsSelector,
-} from './user-management.state';
+import React, { useState, useEffect } from "react";
+import { Container, Button, Modal, Form, Alert } from "react-bootstrap";
+import { useRecoilValue, useRecoilRefresher_UNSTABLE } from "recoil";
+import { groupBy } from "lodash";
+import axios from "axios";
+import Table from "../../components/table";
+import { rolesSelector, usersSelector, organizationsSelector } from "./user-management.state";
 
 export default function CurrentUsers() {
   const [alerts, setAlerts] = useState([]);
@@ -19,13 +15,10 @@ export default function CurrentUsers() {
   const [form, setForm] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const userGroups = groupBy(users, 'status');
-  const activeUsers = userGroups['active'] || [];
-  const inactiveUsers = userGroups['inactive'] || [];
-  const visibleUsers = [
-    ...activeUsers,
-    ...(showInactiveUsers ? inactiveUsers : []),
-  ];
+  const userGroups = groupBy(users, "status");
+  const activeUsers = userGroups["active"] || [];
+  const inactiveUsers = userGroups["inactive"] || [];
+  const visibleUsers = [...activeUsers, ...(showInactiveUsers ? inactiveUsers : [])];
   const organizations = useRecoilValue(organizationsSelector);
 
   async function openEditModal({ row }) {
@@ -35,10 +28,8 @@ export default function CurrentUsers() {
 
   async function handleFormChange(e) {
     let { name, value, checked, type, dataset } = e.target;
-    if (type === 'checkbox') {
-      value = checked
-        ? dataset.checkedvalue || true
-        : dataset.uncheckedvalue || false;
+    if (type === "checkbox") {
+      value = checked ? dataset.checkedvalue || true : dataset.uncheckedvalue || false;
     }
     setForm((form) => ({ ...form, [name]: value }));
   }
@@ -52,46 +43,43 @@ export default function CurrentUsers() {
 
   const cols = [
     {
-      Header: 'Name',
-      accessor: 'firstName',
+      Header: "Name",
+      accessor: "firstName",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}, {e.row.original.lastName}
         </div>
       ),
     },
     {
-      Header: 'Account',
-      accessor: 'accountType',
+      Header: "Account",
+      accessor: "accountType",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
-          {e.value || 'NA'}
+            textAlign: "left",
+          }}>
+          {e.value || "NA"}
         </div>
       ),
     },
     {
-      Header: 'Email',
-      accessor: 'email',
+      Header: "Email",
+      accessor: "email",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Organization',
+      Header: "Organization",
       accessor: (e) => ({
         id: e.organizationId,
         name: e.organizationName,
@@ -100,81 +88,75 @@ export default function CurrentUsers() {
       Cell: ({ value }) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {value.name} {value.id === 1 && value.other && `(${value.other})`}
         </div>
       ),
     },
     {
-      Header: 'Role',
-      accessor: 'roleName',
+      Header: "Role",
+      accessor: "roleName",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
-          {e.value || 'NA'}
+            textAlign: "left",
+          }}>
+          {e.value || "NA"}
         </div>
       ),
     },
     {
-      Header: 'Status',
-      accessor: 'status',
+      Header: "Status",
+      accessor: "status",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value}
         </div>
       ),
     },
     {
-      Header: 'Submitted Date',
-      accessor: 'createdAt',
+      Header: "Submitted Date",
+      accessor: "createdAt",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
     {
-      Header: 'Approved Date',
-      accessor: 'updatedAt',
+      Header: "Approved Date",
+      accessor: "updatedAt",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {new Date(e.value).toLocaleDateString()}
         </div>
       ),
     },
     {
-      Header: 'Receive Notification',
-      accessor: 'receiveNotification',
+      Header: "Receive Notification",
+      accessor: "receiveNotification",
       Cell: (e) => (
         <div
           style={{
-            textAlign: 'left',
-          }}
-        >
+            textAlign: "left",
+          }}>
           {e.value ? <p>YES</p> : <p>NO</p>}
         </div>
       ),
     },
     {
-      Header: 'Actions',
-      id: 'actions',
+      Header: "Actions",
+      id: "actions",
       disableSortBy: true,
       Cell: ({ row }) => (
         <div>
@@ -206,12 +188,7 @@ export default function CurrentUsers() {
               <Form.Check.Label>Include Inactive Users</Form.Check.Label>
             </Form.Check>
           </Form>
-          <Table
-            responsive
-            data={visibleUsers}
-            columns={cols}
-            options={{ disableFilters: true }}
-          />
+          <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
         </>
       ) : (
         <div className="text-center py-5 text-primary">
@@ -229,12 +206,7 @@ export default function CurrentUsers() {
           <Modal.Body>
             <Form.Group className="mb-3" controlId="approveModalId">
               <Form.Label>Update User Role</Form.Label>
-              <Form.Select
-                name="roleId"
-                value={form.roleId}
-                onChange={handleFormChange}
-                required
-              >
+              <Form.Select name="roleId" value={form.roleId} onChange={handleFormChange} required>
                 <option value="" hidden>
                   Select Role
                 </option>
@@ -248,12 +220,7 @@ export default function CurrentUsers() {
 
             <Form.Group className="mb-3" controlId="organization">
               <Form.Label>Update Organization/Institution</Form.Label>
-              <Form.Select
-                name="organizationId"
-                value={form.organizationId}
-                onChange={handleFormChange}
-                required
-              >
+              <Form.Select name="organizationId" value={form.organizationId} onChange={handleFormChange} required>
                 <option value="" hidden>
                   Select Organization/Instituiton
                 </option>
@@ -284,7 +251,7 @@ export default function CurrentUsers() {
                 name="status"
                 data-checkedvalue="active"
                 data-uncheckedvalue="inactive"
-                checked={form.status === 'active'}
+                checked={form.status === "active"}
                 onChange={handleFormChange}
               />
             </Form.Group>
