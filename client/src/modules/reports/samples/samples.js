@@ -33,14 +33,14 @@ export default function Samples() {
       accessor: "project",
       Header: "Project",
       aria: "Project",
-      Cell: (e) => <Link to={"/data/projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },
     {
       id: "experiment",
       accessor: "experiment",
       Header: "Experiment",
       aria: "Experiment",
-      Cell: (e) => <Link to={"/data/experiments?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../experiments?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
     },
     {
       id: "pool_id",

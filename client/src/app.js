@@ -97,7 +97,7 @@ export default function App() {
             <Suspense fallback={<Loader message="Loading Page" />}>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="register/*" element={<UserRegister />} />
+                <Route path="register" element={<UserRegister />} />
                 <Route
                   path="analysis"
                   element={
@@ -146,7 +146,7 @@ export default function App() {
                     }
                   />
                 </Route>
-                <Route path="about/*" element={<About />} />
+                <Route path="about" element={<About />} />
                 <Route
                   path="qci/*"
                   element={
@@ -164,7 +164,7 @@ export default function App() {
                   }
                 />
                 <Route
-                  path="admin/admin-user-management"
+                  path="admin/users"
                   element={
                     <RequirePolicy action="GetPage">
                       <AdminUserManagement />
@@ -172,7 +172,7 @@ export default function App() {
                   }
                 />
                 <Route
-                  path="/admin/admin-organization-management"
+                  path="admin/organizations"
                   element={
                     <RequirePolicy action="GetPage">
                       <AdminOrganizationManagement />

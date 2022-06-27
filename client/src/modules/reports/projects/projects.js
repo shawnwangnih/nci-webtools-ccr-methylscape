@@ -27,16 +27,14 @@ export default function Projects() {
       Header: "# of Experiments",
 
       Cell: (e) => (
-        <Link to={"/data/experiments?project=" + e.data[e.row.index].project}>
-          {e.data[e.row.index].experiments.size}
-        </Link>
+        <Link to={"../experiments?project=" + e.data[e.row.index].project}>{e.data[e.row.index].experiments.size}</Link>
       ),
     },
     {
       id: "samplesCount",
       accessor: "samplesCount",
       Header: "# of Samples",
-      Cell: (e) => <Link to={"/data/samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+      Cell: (e) => <Link to={"../samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },
   ];
   const options = {
