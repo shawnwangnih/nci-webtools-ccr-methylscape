@@ -36,6 +36,7 @@ async function scanTable() {
   return data;
 }
 
+// queue bucket
 async function getFile(key) {
   const s3Client = new S3Client({ region: config.region });
   const bucketParams = { Bucket: config.s3Bucket, Key: key };
@@ -44,9 +45,19 @@ async function getFile(key) {
   return await s3Client.send(new GetObjectCommand(bucketParams));
 }
 
-async function getDataFile(key) {
+// data bucket
+async function getAnalysisFile(key) {
   const s3Client = new S3Client({ region: config.region });
-  const bucketParams = { Bucket: config.s3DataBucket, Key: key };
+  const bucketParams = { Bucket: config.s3DataBucket, Key: config.s3AnalysisKey + key };
+  console.log(bucketParams);
+  // Get the object} from the Amazon S3 bucket. It is returned as a ReadableStream.
+  return await s3Client.send(new GetObjectCommand(bucketParams));
+}
+
+// data bucket
+async function getReportsFile(key) {
+  const s3Client = new S3Client({ region: config.region });
+  const bucketParams = { Bucket: config.s3DataBucket, Key: config.s3ReportsKey + key };
   console.log(bucketParams);
   // Get the object} from the Amazon S3 bucket. It is returned as a ReadableStream.
   return await s3Client.send(new GetObjectCommand(bucketParams));
@@ -64,6 +75,7 @@ module.exports = {
   loadAwsCredentials,
   scanTable,
   getFile,
-  getDataFile,
+  getAnalysisFile,
+  getReportsFile,
   getKey,
 };

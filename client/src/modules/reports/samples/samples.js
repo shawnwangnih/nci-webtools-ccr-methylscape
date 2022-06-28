@@ -346,7 +346,7 @@ export default function Samples() {
   async function download(id, file) {
     try {
       const response = await axios.post(
-        `/api/reports/getFile`,
+        `/api/reports/getReportsFile`,
         {
           sample: id + "/" + file,
         },

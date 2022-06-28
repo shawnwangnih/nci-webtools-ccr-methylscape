@@ -81,7 +81,7 @@ export default function Experiments() {
   async function download(experiment, file) {
     try {
       const response = await axios.post(
-        `/api/reports/getFile`,
+        `/api/reports/getReportsFile`,
         {
           qc: experiment + "/" + file,
         },
