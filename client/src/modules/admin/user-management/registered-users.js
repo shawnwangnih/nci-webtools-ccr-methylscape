@@ -151,13 +151,19 @@ export default function RegisterUsers() {
       Header: "Actions",
       id: "actions",
       disableSortBy: true,
+
       Cell: ({ row }) => (
         <div>
           <Button className="me-2" onClick={() => openApprovalModal({ row })}>
             Approve
           </Button>
 
-          {!showRejectedUsers && (
+          {/* {!showRejectedUsers && (
+            <Button variant="danger" onClick={() => openRejectionModal({ row })}>
+              Reject
+            </Button>
+          )} */}
+          {row.original.status !== "rejected" && (
             <Button variant="danger" onClick={() => openRejectionModal({ row })}>
               Reject
             </Button>
