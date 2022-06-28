@@ -22,7 +22,7 @@ if (isMainModule) {
   const providerName = args.provider || "s3";
   const defaultProviderArgs = {
     local: ["."],
-    s3: [`s3://${config.aws.s3DataBucket}/${config.aws.s3DataKey}`],
+    s3: [`s3://${config.aws.s3DataBucket}/${config.aws.s3AnalysisKey}`],
   }[providerName];
   const providerArgs = args._.length ? args._ : defaultProviderArgs;
 

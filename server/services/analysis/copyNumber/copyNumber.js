@@ -1,4 +1,4 @@
-const { getKey, getDataFile } = require("../../aws");
+const { getKey, getAnalysisFile } = require("../../aws");
 const { groupBy, chunk } = require("lodash");
 const Papa = require("papaparse");
 const { aws: awsConfig } = require("../../../config");
@@ -26,7 +26,7 @@ async function parseTSV(stream, options = {}) {
 async function getCopyNumber(request) {
   const { id, search, annotation, significant } = request.body;
   const { connection } = request.app.locals;
-  const keyPrefix = awsConfig.s3DataKey || "methylscape/";
+  const keyPrefix = awsConfig.s3AnalysisKey || "methylscape/analysis";
 
   // find and parse files
   const binFind = await getKey(keyPrefix + "CNV/bins/" + id);
@@ -38,9 +38,9 @@ async function getCopyNumber(request) {
   const segFind = await getKey(keyPrefix + "CNV/segments/" + id);
   const segKey = segFind.Contents[0].Key;
 
-  const binFile = await getDataFile(binKey);
-  // const probeFile = await getDataFile(probeKey);
-  const segFile = await getDataFile(segKey);
+  const binFile = await getAnalysisFile(binKey);
+  // const probeFile = await getAnalysisFile(probeKey);
+  const segFile = await getAnalysisFile(segKey);
 
   // fix for files that contain an extra column that is not defined
   const parseFixDimensions = {
