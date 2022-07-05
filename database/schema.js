@@ -23,7 +23,7 @@ export const schema = [
       table.text("variants");
       table.string("fusionsOrTranslocations");
       table.string("assay");
-      table.string("variantsReport");
+      table.text("variantsReport");
       table.string("fusionsOrTranslocationsReport");
       table.string("outsideAssay");
       table.text("variantsFormat");
