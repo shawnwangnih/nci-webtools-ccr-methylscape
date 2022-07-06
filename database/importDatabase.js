@@ -70,6 +70,10 @@ export async function importDatabase(
           if (shouldSkip(metadata)) continue;
 
           logger.info(`Importing ${sourcePath} => ${table} (${description})`);
+          if (!(await sourceProvider.readFileMetadata(sourcePath))) {
+            throw new Error(`Source file does not exist: ${sourcePath}`);
+          }
+
           const { results, duration } = await withDuration(async () => {
             const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig, logger });
             return await importTable(connection, records, table, logger);
