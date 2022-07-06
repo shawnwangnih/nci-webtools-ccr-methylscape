@@ -3,3 +3,4 @@ coverage
 logs
 .angular
 .env
+template/*.html
