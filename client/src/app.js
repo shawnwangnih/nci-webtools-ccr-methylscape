@@ -63,7 +63,7 @@ export default function App() {
         show: (session) => !session.authenticated,
         align: "end",
         path: "/api/login",
-        native: true
+        native: true,
       },
     ],
   ];

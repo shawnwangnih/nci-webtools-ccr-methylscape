@@ -275,6 +275,121 @@ export const tableData = selector({
         Header: "Subclass Score",
         show: false,
       },
+      {
+        accessor: "CNSv12b6",
+        Header: "CNSv12b6",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_score",
+        Header: "CNSv12b6 Score",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_superfamily",
+        Header: "CNSv12b6 Superfamily",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_superfamily_score",
+        Header: "CNSv12b6 Superfamily Score",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_family",
+        Header: "CNSv12b6 Family",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_family_score",
+        Header: "CNSv12b6 Family Score",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_class",
+        Header: "CNSv12b6 Class",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_class_score",
+        Header: "CNSv12b6 Class Score",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_subclass1",
+        Header: "CNSv12b6 Subclass 1",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_subclass1_score",
+        Header: "CNSv12b6 Subclass 1 Score",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_subclass2",
+        Header: "CNSv12b6 Subclass 2",
+        show: false,
+      },
+      {
+        accessor: "CNSv12b6_subclass2_score",
+        Header: "CNSv12b6 Subclass 2 Score",
+        show: false,
+      },
+      {
+        accessor: "mgmtStatus",
+        Header: "MGMT Status",
+        show: false,
+      },
+      {
+        accessor: "mgmtEstimated",
+        Header: "MGMT Estimated",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6",
+        Header: "SARv12b6",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_desc",
+        Header: "SARv12b6 Description",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_score",
+        Header: "SARv12b6 Score",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_second",
+        Header: "SARv12b6 Second",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_second_desc",
+        Header: "SARv12b6 Second Description",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_second_score",
+        Header: "SARv12b6 Second Score",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_third",
+        Header: "SARv12b6 Third",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_third_desc",
+        Header: "SARv12b6 Third Description",
+        show: false,
+      },
+      {
+        accessor: "SARv12b6_third_score",
+        Header: "SARv12b6 Third Score",
+        show: false,
+      },
     ];
 
     const tables = points.reduce(

@@ -5,6 +5,8 @@ import minimist from "minimist";
 import { getLogger } from "./services/logger.js";
 import { CustomTransport } from "./services/transports.js";
 import { loadAwsCredentials, createConnection, createPostgresClient } from "./services/utils.js";
+import { sendNotification } from "./services/notifications.js";
+import { UserManager } from "./services/userManager.js";
 import { importDatabase, getSourceProvider } from "./importDatabase.js";
 
 // determine if this script was launched from the command line
@@ -39,6 +41,7 @@ export async function importData(config, schema, sources, sourceProvider, logger
   const logConnection = await createPostgresClient(config.database); // use a separate connection for all log operations
   const importLog = await getPendingImportLog(connection);
   const forceRecreate = importLog.type === "full";
+  const userManager = new UserManager(connection);
 
   logger.info(`Started methylscape data import: ${importLog.type}`);
 
@@ -70,6 +73,18 @@ export async function importData(config, schema, sources, sourceProvider, logger
   } catch (exception) {
     logger.error(exception.stack);
     await updateImportLog({ status: "FAILED" });
+    await sendNotification({
+      userManager,
+      smtpConfig: config.email.smtp,
+      from: config.email.from,
+      roleName: "admin",
+      subject: "Methylscape Data Import Failed",
+      templateName: "admin-import-failure-email.html",
+      params: {
+        date: new Date(),
+        error: exception.stack || exception,
+      },
+    });
   } finally {
     logger.customTransport.setHandler(null);
   }

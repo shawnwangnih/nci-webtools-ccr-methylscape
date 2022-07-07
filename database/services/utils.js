@@ -171,7 +171,7 @@ export function createCsvRecordIterator(stream, columns, options = {}, metadata 
 
 export async function importTable(connection, iterable, tableName, logger) {
   let count = 0;
-  let bufferSize = 10000;
+  let bufferSize = 500;
   let buffer = [];
 
   async function flushBuffer() {

@@ -51,6 +51,7 @@ export class S3Provider {
       new GetObjectAttributesCommand({
         Bucket: bucket,
         Key: key,
+        ObjectAttributes: ["ETag", "Checksum", "ObjectParts", "StorageClass", "ObjectSize"],
       })
     );
     return s3Response;
