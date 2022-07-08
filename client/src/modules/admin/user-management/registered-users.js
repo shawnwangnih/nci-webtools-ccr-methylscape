@@ -190,10 +190,9 @@ export default function RegisterUsers() {
           <Form.Check.Label>Include Rejected Users</Form.Check.Label>
         </Form.Check>
       </Form>
+      <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
       {visibleUsers && visibleUsers.length > 0 ? (
-        <>
-          <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
-        </>
+        <></>
       ) : (
         <>
           <div className="text-center py-5 text-primary">

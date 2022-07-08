@@ -185,10 +185,9 @@ export default function CurrentUsers() {
           <Form.Check.Label>Include Inactive Users</Form.Check.Label>
         </Form.Check>
       </Form>
+      <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
       {visibleUsers && visibleUsers.length > 0 ? (
-        <>
-          <Table responsive data={visibleUsers} columns={cols} options={{ disableFilters: true }} />
-        </>
+        <></>
       ) : (
         <>
           <div className="text-center py-5 text-primary">
