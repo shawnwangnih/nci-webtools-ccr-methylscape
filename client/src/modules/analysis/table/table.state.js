@@ -27,7 +27,7 @@ export const tableData = selector({
       {
         accessor: "idatFilename",
         Header: ".IDAT Filename",
-        show: true,
+        show: false,
       },
       {
         accessor: "nihLabels",
