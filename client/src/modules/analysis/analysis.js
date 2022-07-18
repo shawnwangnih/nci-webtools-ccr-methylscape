@@ -43,7 +43,7 @@ export default function Analysis() {
                   variant="link"
                   title="Open in new tab"
                   aria-label="Open Metadata in new tab"
-                  href="#/metadata"
+                  href="/metadata"
                   target="_blank">
                   <BoxArrowUpRight /> View Metadata
                 </Button>
