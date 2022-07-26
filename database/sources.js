@@ -14,6 +14,7 @@ export const sources = [
     columns: [
       { sourceName: "Sample", name: "sample" },
       { sourceName: "idat_filename", name: "idatFilename" },
+      { sourceName: "Sentrix_ID", name: "sentrixId" },
       { sourceName: "NIH_labels", name: "nihLabels" },
       { sourceName: "NCI_METRIC", name: "nciMetric" },
       { sourceName: "NCI_GROUP", name: "nciGroup" },
