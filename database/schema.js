@@ -13,7 +13,6 @@ export const schema = [
       table.string("sentrixId");
       table.string("nihLabels");
       table.string("nciMetric");
-      table.string("nciGroup");
       table.string("v11b6");
       table.double("age");
       table.string("sex");
@@ -36,10 +35,6 @@ export const schema = [
       table.double("MCF1_v11b6_score");
       table.string("SC1_v11b6");
       table.double("SC1_v11b6_score");
-      table.string("MCF_v12_3");
-      table.double("MCF_v12_3_score");
-      table.string("MCF_v12_5");
-      table.double("MCF_v12_5_score");
       table.string("CNSv12b6");
       table.double("CNSv12b6_score");
       table.string("CNSv12b6_superfamily");
