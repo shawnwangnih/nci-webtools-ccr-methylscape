@@ -10,6 +10,10 @@ export const schema = [
       table.increments("id");
       table.string("sample");
       table.string("idatFilename").unique();
+      table.string("samplePlate");
+      table.string("PICollaborator");
+      table.string("surgeryDate");
+      table.string("notes");
       table.string("sentrixId");
       table.string("nihLabels");
       table.string("nciMetric");

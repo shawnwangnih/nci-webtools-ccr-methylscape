@@ -13,6 +13,10 @@ export const sources = [
     description: "master sample metadata",
     columns: [
       { sourceName: "Sample", name: "sample" },
+      { sourceName: "Sample_Plate", name: "samplePlate" },
+      { sourceName: "PI_Collaborator", name: "PICollaborator" },
+      { sourceName: "Surgery_date", name: "surgeryDate" },
+      { sourceName: "Notes", name: "notes" },
       { sourceName: "idat_filename", name: "idatFilename" },
       { sourceName: "Sentrix_ID", name: "sentrixId" },
       { sourceName: "NIH_labels", name: "nihLabels" },
