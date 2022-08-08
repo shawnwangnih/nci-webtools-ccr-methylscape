@@ -57,6 +57,20 @@ class UserManager {
     return user;
   }
 
+  async getUserForLogin(email, accountType) {
+    const user = await this.database("user")
+      .leftJoin("role", "user.roleId", "role.id")
+      .leftJoin("organization", "user.organizationId", "organization.id")
+      .where({ "user.email": email })
+      .where({ "user.accountType": accountType })
+      .select("user.*", "role.name as roleName", "organization.name as organizationName")
+      .first();
+
+    if (user) user.rolePolicies = await this.getUserRolePolicies(user.id);
+
+    return user;
+  }
+
   async addUser(user) {
     const userExists = await this.database("user").where({ name: user.name });
     if (userExists && userExists.length > 0) {

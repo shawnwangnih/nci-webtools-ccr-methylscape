@@ -40,11 +40,6 @@ export const tableData = selector({
         show: true,
       },
       {
-        accessor: "nciGroup",
-        Header: "NCI Group",
-        show: false,
-      },
-      {
         accessor: "v11b6",
         Header: "v11b6",
         show: true,
@@ -152,26 +147,6 @@ export const tableData = selector({
       {
         accessor: "SC1_v11b6_score",
         Header: "SC1_v11b6_score",
-        show: false,
-      },
-      {
-        accessor: "MCF_v12_3",
-        Header: "MCF_v12_3",
-        show: false,
-      },
-      {
-        accessor: "MCF_v12_3_score",
-        Header: "MCF_v12_3_score",
-        show: false,
-      },
-      {
-        accessor: "MCF_v12_5",
-        Header: "MCF_v12_5",
-        show: false,
-      },
-      {
-        accessor: "MCF_v12_5_score",
-        Header: "MCF_v12_5_score",
         show: false,
       },
       {

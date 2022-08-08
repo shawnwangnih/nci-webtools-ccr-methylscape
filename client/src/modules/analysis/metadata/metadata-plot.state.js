@@ -61,9 +61,6 @@ export const plotState = selector({
     // }
 
     const useWebGl = data.length > 1000;
-    // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
-    // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
-    const dataGroupedByColor = color.type == "categorical" ? Object.entries(groupBy(data, (e) => e[color.value])) : [];
 
     // use mean x/y values for annotation positions
     // const labelAnnotations = dataGroupedByLabel
@@ -126,6 +123,17 @@ export const plotState = selector({
     // Sort these keywords to the top so that their traces are rendered first and overlapped by others
     const sortTopKeyWord = ["No_match", "Unclassified", "NotAvailable", "null"];
 
+    // const dataGroupedByClass = Object.entries(groupBy(data, (e) => e.v11b6));
+    // const dataGroupedByLabel = Object.entries(groupBy(data, (e) => e.nihLabel));
+
+    // organize data for unique colors by categorical (multiple traces) or continuous (single trace) variables
+    const dataGroupedByColor =
+      color.type == "categorical"
+        ? Object.entries(groupBy(data, (e) => e[color.value])).sort((a, b) =>
+            sortTopKeyWord.includes(a[0]) ? -1 : sortTopKeyWord.includes(b[0]) ? 1 : a[0].localeCompare(b[0])
+          )
+        : [[color.value, data]];
+
     const nciMetricColorMap = await nciMetricColors();
     let colorCount = 0;
 
@@ -133,44 +141,27 @@ export const plotState = selector({
     const toFixed = (num, maxDigits = 2) => (isNumber(num) && !isNaN(num) ? +num.toFixed(maxDigits) : num);
 
     // transform data to traces
-    const dataTraces =
-      color.type == "categorical"
-        ? dataGroupedByColor
-            .sort((a, b) =>
-              sortTopKeyWord.includes(a[0]) ? -1 : sortTopKeyWord.includes(b[0]) ? 1 : a[0].localeCompare(b[0])
-            )
-            .map(([name, data]) => ({
-              name,
-              x: data.map((e) => e.x),
-              y: data.map((e) => e.y),
-              customdata: data.map((d) => ({
-                ...d,
-                customSex: d.sex ?? "N/A",
-                customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? "N/A",
-                customAge: toFixed(d.age, 2) ?? "N/A",
-              })),
-              mode: "markers",
-              hovertemplate: hovertemplate,
-              type: useWebGl ? "scattergl" : "scatter",
-              marker: {
-                color: nciMetricColorMap[name] || colors[colorCount++],
-              },
-            }))
-        : [
-            {
-              x: data.map((e) => e.x),
-              y: data.map((e) => e.y),
-              customdata: data,
-              mode: "markers",
-              hovertemplate: hovertemplate,
-              type: useWebGl ? "scattergl" : "scatter",
-              marker: {
-                color: data.map((e) => e[color.value]),
-                colorbar: { title: color.label, dtick: color.dtick },
-              },
-            },
-          ];
-
+    const dataTraces = dataGroupedByColor.map(([name, data]) => ({
+      name,
+      x: data.map((e) => e.x),
+      y: data.map((e) => e.y),
+      customdata: data.map((d) => ({
+        ...d,
+        customSex: d.sex ?? "N/A",
+        customRfPurityAbsolute: toFixed(d.rfPurityAbsolute, 2) ?? "N/A",
+        customAge: toFixed(d.age, 2) ?? "N/A",
+      })),
+      mode: "markers",
+      hovertemplate: hovertemplate,
+      type: useWebGl ? "scattergl" : "scatter",
+      marker: {
+        color:
+          color.type == "categorical"
+            ? nciMetricColorMap[name] || colors[colorCount++]
+            : data.map((e) => e[color.value]),
+        colorbar: color.type == "continuous" ? { title: color.label, dtick: color.dtick } : null,
+      },
+    }));
     const plotTitles = {
       centralNervousSystem: "Central Nervous System",
       boneAndSoftTissue: "Bone and Soft Tissue",
