@@ -8,8 +8,8 @@ export const schema = [
     recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.string("sample").unique();
-      table.string("idat");
+      table.string("sample");
+      table.string("idatFilename").unique();
       table.string("samplePlate");
       table.string("PICollaborator");
       table.string("surgeryDate");

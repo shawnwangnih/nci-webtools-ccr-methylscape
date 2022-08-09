@@ -4,7 +4,6 @@ import {
   invalidNumberFormatter,
   patternExtractionFormatter,
   unparsedColonNumericValueFormatter,
-  idat,
 } from "./services/formatters.js";
 
 export const sources = [
@@ -18,8 +17,8 @@ export const sources = [
       { sourceName: "PI_Collaborator", name: "PICollaborator" },
       { sourceName: "Surgery_date", name: "surgeryDate" },
       { sourceName: "Notes", name: "notes" },
-      { sourceName: "idat_filename", formatter: idat, name: "idat" },
       { sourceName: "Sentrix_ID", name: "sentrixId" },
+      { sourceName: "idat_filename", name: "idatFilename" },
       { sourceName: "NIH_labels", name: "nihLabels" },
       { sourceName: "NCI_METRIC", name: "nciMetric" },
       { sourceName: "v11b6", name: "v11b6" },
