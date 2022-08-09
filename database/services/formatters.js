@@ -16,11 +16,16 @@ export function idat(value) {
 }
 
 export function patternExtractionFormatter(regex, passthroughIfNoMatch = false) {
-  return function (value) {
+  return function (value, record, columnName, logger) {
     if (value === null || value === undefined) return null;
     const defaultValue = passthroughIfNoMatch ? value : null;
-    const matches = value.match(regex);
-    return matches ? matches[1] : defaultValue;
+    try {
+      const matches = value.match(regex);
+      return matches ? matches[1] : defaultValue;
+    } catch (e) {
+      logger?.warn(`Invalid value: ${value} in ${columnName} for ${format(record)}`);
+      return null;
+    }
   };
 }
 

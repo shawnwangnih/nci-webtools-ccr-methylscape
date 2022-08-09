@@ -7,6 +7,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Button from "react-bootstrap/Button";
 import { Fullscreen, FullscreenExit, BoxArrowUpRight } from "react-bootstrap-icons";
+import { useRecoilState } from "recoil";
 import Overview from "./overview/overview";
 import SampleQuality from "./sampleQuality/sampleQuality";
 import CopyNumber from "./copyNumber/copyNumber";
@@ -16,16 +17,16 @@ import Survival from "./survival/survival-tab";
 import Table from "./table/table";
 import SubgroupAnalysis from "./subgroupAnalysis/subgroupAnalysis";
 import Methodology from "./methodology/methodology";
-import Metadata from "./metadata/metadata";
+import { MemoizedMetadata } from "./metadata/metadata";
+import { analysisState } from "./analysis.state";
 
 import "./analysis.scss";
 
 export default function Analysis() {
   const [expand, setExpand] = useState(false);
 
-  function handleSelect(event) {
-    console.log(event);
-  }
+  const [state, setState] = useRecoilState(analysisState);
+  const mergeState = (newState) => setState((oldState) => ({ ...oldState, ...newState }));
 
   return (
     <Container fluid>
@@ -36,14 +37,14 @@ export default function Analysis() {
         <Col xl={expand ? 12 : 6} className="my-4">
           <Card className="h-100">
             <Card.Body>
-              <Metadata onSelect={handleSelect} />
+              <MemoizedMetadata />
               <div className="d-flex justify-content-between p-1">
                 <Button
                   size="sm"
                   variant="link"
                   title="Open in new tab"
                   aria-label="Open Metadata in new tab"
-                  href="#/metadata"
+                  href="/metadata"
                   target="_blank">
                   <BoxArrowUpRight /> View Metadata
                 </Button>
@@ -56,7 +57,10 @@ export default function Analysis() {
         </Col>
         <Col xl={expand ? 12 : 6} className="my-4">
           <Card className="h-100">
-            <Tabs defaultActiveKey="overview" className="mb-3">
+            <Tabs
+              activeKey={state.currentTab || "overview"}
+              onSelect={(key) => mergeState({ currentTab: key })}
+              className="mb-3">
               <Tab eventKey="overview" title="Overview">
                 <Overview className="px-3" />
               </Tab>
@@ -66,10 +70,10 @@ export default function Analysis() {
               <Tab eventKey="copyNumber" title="Copy number">
                 <CopyNumber className="px-3" />
               </Tab>
-              <Tab eventKey="Table" title="Table">
+              <Tab eventKey="table" title="Table">
                 <Table className="px-3" />
               </Tab>
-              <Tab eventKey="Survival" title="Survival">
+              <Tab eventKey="survival" title="Survival">
                 <Survival className="px-3" />
               </Tab>
               {/* <Tab eventKey="promoterMethylation" title="MGMT/MLH1">

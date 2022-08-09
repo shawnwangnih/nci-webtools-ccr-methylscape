@@ -19,14 +19,6 @@ router.get(
   }
 );
 
-router.get(
-  "/login/external",
-  passport.authenticate(config.auth[1].name, {
-    successRedirect: "/",
-    failureRedirect: "/api/login/external",
-  })
-);
-
 router.get("/logout", (request, response) => {
   request.logout(() => response.redirect("/"));
 });
