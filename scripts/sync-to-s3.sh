@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+# Load AWS module (execute only on Helix)
+module load aws
+
 # Ensure SOURCE and DESTINATION do NOT have trailing slashes
 AWS_PROFILE=example-profile-name
 SOURCE=/example/path/to/source
