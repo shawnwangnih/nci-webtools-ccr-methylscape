@@ -25,7 +25,7 @@ async function createOAuthStrategy({ baseUrl, clientId, clientSecret, redirectUr
 
   return new Strategy({ client, params }, async (tokenSet, done) => {
     const user = await client.userinfo(tokenSet);
-    await client.revoke(tokenSet);
+    await logoutOAuthToolkitSession({ baseUrl, clientId, clientSecret, tokenSet });
     done(null, user);
   });
 }
@@ -49,7 +49,6 @@ async function createPkceStrategy({ baseUrl, clientId, redirectUris, params }) {
 
   return new Strategy({ client, params }, async (tokenSet, done) => {
     const user = await client.userinfo(tokenSet);
-    await client.revoke(tokenSet);
     done(null, user);
   });
 }
