@@ -14,6 +14,7 @@ router.get(
     })(request, response, next);
   },
   (request, response) => {
+    request.session.expires = request.session.cookie.expires;
     const destination = request.query.state || "/";
     response.redirect(destination);
   }
@@ -24,11 +25,19 @@ router.get("/logout", (request, response) => {
 });
 
 router.get("/session", (request, response) => {
-  const { cookie, passport } = request.session;
-  const { expires } = cookie;
+  const { expires, passport } = request.session;
   const user = passport && passport.user ? { authenticated: true, user: request.user } : { authenticated: false };
-
   response.json({ expires, ...user });
+});
+
+router.post("/session", (request, response) => {
+  if (request.session?.passport?.user) {
+    request.session.touch();
+    request.session.expires = request.session.cookie.expires;
+    response.json(true);
+  } else {
+    response.json(false);
+  }
 });
 
 module.exports = router;
