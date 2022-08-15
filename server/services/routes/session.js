@@ -25,18 +25,30 @@ router.get("/logout", (request, response) => {
 });
 
 router.get("/session", (request, response) => {
-  const { expires, passport } = request.session;
-  const user = passport && passport.user ? { authenticated: true, user: request.user } : { authenticated: false };
-  response.json({ expires, ...user });
+  const { session } = request;
+  if (session.passport?.user) {
+    response.json({
+      authenticated: true,
+      expires: session.expires,
+      user: request.user,
+    });
+  } else {
+    response.json({ authenticated: false });
+  }
 });
 
 router.post("/session", (request, response) => {
-  if (request.session?.passport?.user) {
-    request.session.touch();
-    request.session.expires = request.session.cookie.expires;
-    response.json(true);
+  const { session } = request;
+  if (session.passport?.user) {
+    session.touch();
+    session.expires = session.cookie.expires;
+    response.json({
+      authenticated: true,
+      expires: session.expires,
+      user: request.user,
+    });
   } else {
-    response.json(false);
+    response.json({ authenticated: false });
   }
 });
 
