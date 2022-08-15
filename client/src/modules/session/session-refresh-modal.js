@@ -6,10 +6,26 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 export default function SessionRefreshModal({ warningThresholds = [300, 180, 60] }) {
+  const [sessionChannel, setSessionChannel] = useState(null);
   const [session, setSession] = useRecoilState(sessionState);
   const [remainingTime, setRemainingTime] = useState(getRemainingTime(session.expires));
   const [showWarning, setShowWarning] = useState(false);
 
+  // ensure sessions are synced across all windows
+  useEffect(() => {
+    const channel = new BroadcastChannel("methylscapeSession");
+    setSessionChannel(channel);
+    channel.onmessage = ({ data }) => {
+      setShowWarning(false);
+      setSession(data);
+    };
+    return () => {
+      setSessionChannel(null);
+      channel.close();
+    };
+  }, [setShowWarning, setSession, setSessionChannel]);
+
+  // show warnings at intervals
   useEffect(() => {
     const showWarningInterval = setInterval(() => {
       if (session.authenticated) {
@@ -26,11 +42,15 @@ export default function SessionRefreshModal({ warningThresholds = [300, 180, 60]
       }
     }, 500);
     return () => clearInterval(showWarningInterval);
-  }, [session, setRemainingTime, warningThresholds]);
+  }, [session, setSession, setRemainingTime, warningThresholds]);
 
   async function refreshUserSession() {
+    const session = await getRefreshedUserSession();
     setShowWarning(false);
-    setSession(await getRefreshedUserSession());
+    setSession(session);
+    if (sessionChannel) {
+      sessionChannel.postMessage(session);
+    }
   }
 
   return (
