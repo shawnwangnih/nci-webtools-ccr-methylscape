@@ -8,6 +8,7 @@ import Summary from "./summary";
 
 export default function Projects() {
   const [searchParams, setSearchParams] = useSearchParams();
+  console.log(projectsTableData);
   const tableData = useRecoilValue(projectsTableData);
   const [state, setState] = useRecoilState(projectState);
   const mergeState = (newState) => setState({ ...state, ...newState });
@@ -23,16 +24,12 @@ export default function Projects() {
     },
     {
       id: "experimentsCount",
-      accessor: "experimentsCount",
+      accessor: "experimentcount",
       Header: "# of Experiments",
-
-      Cell: (e) => (
-        <Link to={"../experiments?project=" + e.data[e.row.index].project}>{e.data[e.row.index].experiments.size}</Link>
-      ),
     },
     {
       id: "samplesCount",
-      accessor: "samplesCount",
+      accessor: "samplecount",
       Header: "# of Samples",
       Cell: (e) => <Link to={"../samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
     },

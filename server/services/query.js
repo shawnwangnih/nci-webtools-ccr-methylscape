@@ -9,6 +9,64 @@ async function getSamples(connection, { embedding, organSystem }) {
   }
 }
 
+
+async function getNewSamples(connection) {
+  const sampleColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"PICollaborator" as 	Investigator`),
+    connection.raw(`count(distinct "sample") as sampleCount`),
+    connection.raw(`count(distinct "sentrixId") as experimentCount`),
+  ];
+  const query = await connection
+    .select(sampleColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+    .groupBy('samplePlate')
+    .groupBy('PICollaborator')
+    .orderBy('samplePlate');
+    return query;
+}
+
+
+async function getAllSamples(connection) {
+  const sampleColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"sample"`),
+    connection.raw(`"sentrixId" as experiment`),
+    connection.raw(`"sex" as gender`),
+    connection.raw(`"age" as age`),
+    connection.raw(`"batchDate" as sampleDate`),
+    connection.raw(`"surgeryDate" as 	experimentDate`),
+
+  ];
+  const query = await connection
+    .select(sampleColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+
+    return query;
+}
+
+async function getExperiments(connection) {
+  const experimentColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"PICollaborator" as 	Investigator`),
+    connection.raw(`"surgeryDate" as 	experimentDate`),
+    connection.raw(`count(distinct "sample") as sampleCount`),
+    connection.raw(`"sentrixId" as experiment`),
+  ];
+  const query = await connection
+    .select(experimentColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+    .groupBy('sentrixId')
+    .groupBy('PICollaborator')
+    .groupBy('surgeryDate')
+    .groupBy('samplePlate')
+    .orderBy('sentrixId');
+    return query;
+}
+
 async function getCnvBins(connection, { idatFilename }) {
   if (idatFilename) {
     const [geneCountResult] = await connection("cnvBin")
@@ -53,4 +111,7 @@ module.exports = {
   getCnvBins,
   getCnvSegments,
   getImportLogs,
+  getNewSamples,
+  getExperiments,
+  getAllSamples,
 };

@@ -15,13 +15,13 @@ export default function Experiments() {
       id: "project",
       accessor: "project",
       Header: "Project",
-      Cell: (e) => <Link to={"../projects?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+   
     },
     {
       id: "experiment",
       accessor: "experiment",
       Header: "Experiment",
-      Cell: (e) => <Link to={"../samples?experiment=" + e.data[e.row.index].experiment}>{e.value}</Link>,
+   
     },
     {
       id: "investigator",
@@ -30,44 +30,15 @@ export default function Experiments() {
     },
     {
       id: "samplesCount",
-      accessor: "samplesCount",
+      accessor: "samplecount",
       Header: "# of Samples",
-      Cell: (e) => <Link to={"../samples?project=" + e.data[e.row.index].project}>{e.value}</Link>,
+
     },
     {
       id: "date",
-      accessor: "date",
+      accessor: "experimentdate",
       Header: "Experiment Date",
-    },
-    {
-      id: "qcSheet",
-      Header: "QC Sheet",
-      disableSortBy: true,
-      Cell: ({ row }) => {
-        const experiment = row.original.experiment;
-        return (
-          <Button variant="link" className="p-0" onClick={() => download(experiment, experiment + ".qcReport.pdf")}>
-            View PDF
-          </Button>
-        );
-      },
-    },
-    {
-      id: "qcSupplementary",
-      Header: "QC Supplementary",
-      disableSortBy: true,
-      Cell: ({ row }) => {
-        const experiment = row.original.experiment;
-        return (
-          <Button
-            variant="link"
-            className="p-0"
-            onClick={() => download(experiment, experiment + ".supplementary_plots.pdf")}>
-            View PDF
-          </Button>
-        );
-      },
-    },
+    }
   ];
   const options = {
     initialState: {

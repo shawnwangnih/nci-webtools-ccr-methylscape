@@ -17,27 +17,9 @@ export const projectsTableData = selector({
 
     if (!data.length) return [];
 
-    const projectsTable = [];
-    data.forEach((sample) => {
-      const curProject = sample.project;
-      if (curProject && sample.experiment) {
-        if (curProject in projectsTable) {
-          projectsTable[curProject].samplesCount += 1;
-          projectsTable[curProject].experiments.add(sample.experiment);
-        } else {
-          projectsTable[curProject] = {
-            project: curProject,
-            samplesCount: 1,
-            date: sample.date,
-            investigator: sample.investigator,
-            experiments: new Set([]),
-          };
-          projectsTable[curProject].experiments.add(sample.experiment);
-        }
-      }
-    });
+    
 
-    return Object.values(projectsTable);
+    return Object.values(data);
   },
 });
 
