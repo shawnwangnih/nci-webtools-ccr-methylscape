@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { withAsync } = require("../middleware");
 const { requiresRouteAccessPolicy } = require("../auth/policyMiddleware");
-const { getSamples, getGenes, getCnvBins, getCnvSegments } = require("../query");
+const { getSampleCoordinates, getSamples, getGenes, getCnvBins, getCnvSegments } = require("../query");
 const { getSurvivalData } = require("../R/r");
 
 const router = Router();
@@ -11,8 +11,17 @@ router.get(
   requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
-    const { embedding, organSystem } = request.query;
-    const results = await getSamples(connection, { embedding, organSystem });
+    const results = await getSampleCoordinates(connection, request.query);
+    response.json(results);
+  })
+);
+
+router.post(
+  "/samples",
+  requiresRouteAccessPolicy("AccessApi"),
+  withAsync(async (request, response) => {
+    const { connection } = request.app.locals;
+    const results = await getSamples(connection, request.body);
     response.json(results);
   })
 );
