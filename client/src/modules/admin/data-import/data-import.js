@@ -23,7 +23,7 @@ export default function DataImport() {
       Header: "Status",
       accessor: "status",
       Cell: ({ value, row }) =>
-        (!row.original.warnings || row.original.warnings) === 0 ? (
+        !row.original.warnings || row.original.warnings === 0 ? (
           value
         ) : (
           <OverlayTrigger
