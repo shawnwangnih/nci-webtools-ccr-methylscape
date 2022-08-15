@@ -2,8 +2,8 @@ async function getSampleCoordinates(connection, query) {
   if (query.embedding && query.organSystem) {
     return await connection("sample")
       .join("sampleCoordinate", "sample.idatFilename", "sampleCoordinate.sampleIdatFilename")
-      .where("sampleCoordinate.embedding", embedding)
-      .andWhere("sampleCoordinate.organSystem", organSystem);
+      .where("sampleCoordinate.embedding", query.embedding)
+      .andWhere("sampleCoordinate.organSystem", query.organSystem);
   } else {
     return [];
   }
