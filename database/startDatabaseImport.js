@@ -42,6 +42,7 @@ export async function importData(config, schema, sources, sourceProvider, logger
   const importLog = await getPendingImportLog(connection);
   const forceRecreate = importLog.type === "full";
   const userManager = new UserManager(connection);
+  const messageLevelCounts = {};
 
   logger.info(`Started methylscape data import: ${importLog.type}`);
 
@@ -52,10 +53,11 @@ export async function importData(config, schema, sources, sourceProvider, logger
       .connection(logConnection);
   }
 
-  async function handleLogEvent(event) {
-    const logMessage = `${event.timestamp} ${format(event.message)}`;
+  async function handleLogEvent({ level, message, timestamp }) {
+    messageLevelCounts[level] = (messageLevelCounts[level] || 0) + 1;
+    const logMessage = `[${timestamp}] [${level}] ${format(message)}`;
     const log = connection.raw(`concat("log", '\n', ?::text)`, [logMessage]);
-    await updateImportLog({ log });
+    await updateImportLog({ log, warnings: messageLevelCounts.warn });
   }
 
   async function shouldCancelImport() {
