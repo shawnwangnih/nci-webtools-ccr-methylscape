@@ -1,24 +1,15 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import axios from "axios";
 import { sessionState } from "./session.state";
+import { getUserSession } from "./session.utils";
 
 export default function Session({ children }) {
   const setSession = useSetRecoilState(sessionState);
   const location = useLocation();
 
   useEffect(() => {
-    async function updateSession() {
-      try {
-        const response = await axios.get("/api/session");
-        setSession(response.data);
-      } catch (error) {
-        console.error(error);
-        setSession({ authenticated: false });
-      }
-    }
-    updateSession();
+    getUserSession().then(setSession);
   }, [setSession, location]);
 
   return children;
