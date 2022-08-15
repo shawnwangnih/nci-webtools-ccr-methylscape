@@ -1,5 +1,5 @@
-async function getSamples(connection, { embedding, organSystem }) {
-  if (embedding && organSystem) {
+async function getSampleCoordinates(connection, query) {
+  if (query.embedding && query.organSystem) {
     return await connection("sample")
       .join("sampleCoordinate", "sample.idatFilename", "sampleCoordinate.sampleIdatFilename")
       .where("sampleCoordinate.embedding", embedding)
@@ -7,6 +7,22 @@ async function getSamples(connection, { embedding, organSystem }) {
   } else {
     return [];
   }
+}
+
+async function getSamples(connection, query) {
+  const { columns, conditions, offset, limit, orderBy } = query;
+
+  let sqlQuery = await connection("sample")
+    .select(columns || "*")
+    .offset(offset || 0)
+    .limit(limit || 10000)
+    .orderBy(orderBy || "id");
+
+  for (let condition of conditions || []) {
+    sqlQuery = sqlQuery.where(...condition);
+  }
+
+  return await sqlQuery;
 }
 
 async function getCnvBins(connection, { idatFilename }) {
@@ -43,13 +59,20 @@ async function getGenes(connection) {
   return await connection("gene").select("*");
 }
 
-async function getImportLogs(connection) {
-  return await connection("importLog").select("*").orderBy("createdAt", "desc");
+async function getImportLogs(connection, query) {
+  if (query.id) {
+    return await connection("importLog").select("*").where("id", query.id);
+  } else {
+    return await connection("importLog")
+      .select("id", "status", "warnings", "createdAt", "updatedAt")
+      .orderBy("createdAt", "desc");
+  }
 }
 
 module.exports = {
   getGenes,
   getSamples,
+  getSampleCoordinates,
   getCnvBins,
   getCnvSegments,
   getImportLogs,
