@@ -12,7 +12,7 @@ async function getSampleCoordinates(connection, query) {
 async function getSamples(connection, query) {
   const { columns, conditions, offset, limit, orderBy } = query;
 
-  let sqlQuery = await connection("sample")
+  let sqlQuery = connection("sample")
     .select(columns || "*")
     .offset(offset || 0)
     .limit(limit || 10000)
