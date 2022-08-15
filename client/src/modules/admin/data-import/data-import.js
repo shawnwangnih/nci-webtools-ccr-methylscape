@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
-import { Container, Button, Modal, SplitButton, Dropdown, DropdownButton } from "react-bootstrap";
+import { useState, useRef } from "react";
+import { Container, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useRecoilValue, useRecoilRefresher_UNSTABLE as useRecoilRefresher } from "recoil";
 import { importLogSelector } from "./data-import.state";
 import Table from "../../components/table";
@@ -16,19 +16,33 @@ export default function DataImport() {
   const refreshData = useRecoilRefresher(importLogSelector);
 
   const columns = [
-    { Header: "Date", accessor: "createdAt" },
-    { Header: "Status", accessor: "status" },
+    { Header: "Date", accessor: "createdAt", Cell: ({ value }) => new Date(value).toLocaleString() },
+    {
+      Header: "Status",
+      accessor: "status",
+      Cell: ({ value, row }) =>
+        row.original.warnings === 0 ? (
+          value
+        ) : (
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="warning-tooltip">
+                Some records may not have been imported due to data issues. View logs for details.
+              </Tooltip>
+            }>
+            <span>
+              {value} <span className="text-danger">*</span>
+            </span>
+          </OverlayTrigger>
+        ),
+    },
     {
       Header: "Actions",
       id: "actions",
       Cell: ({ row }) => (
-        <>
-          <div>
-            <Button size="sm" className="me-2" onClick={(ev) => viewImportLog(row.original)}>
-              View Logs
-            </Button>
-          </div>
-        </>
+        <Button size="sm" className="me-2" onClick={(ev) => viewImportLog(row.original)}>
+          View Logs
+        </Button>
       ),
     },
   ];
@@ -42,14 +56,14 @@ export default function DataImport() {
       await axios.post("/api/admin/importData", { forceRecreate });
       refreshData();
       setModal({
-        show: "true",
+        show: true,
         title: `Import Requested`,
         body: `Your request to import data has been submitted. Once complete, import status will be displayed on this page.`,
       });
     } catch (e) {
       console.error(e);
       setModal({
-        show: "true",
+        show: true,
         title: `Import Failed`,
         body: `Your request to import data could not be submitted. Please contact support if this issue persists.`,
       });
@@ -57,10 +71,13 @@ export default function DataImport() {
   }
 
   async function viewImportLog(importLog) {
+    const params = { id: importLog.id };
+    const { data } = await axios.get("/api/admin/importLogs", { params });
+    const log = data[0]?.log;
     setModal({
-      show: "true",
-      title: `Import Log`,
-      body: <pre style={{ height: "300px" }}>{importLog.log || "No log entries available"}</pre>,
+      show: true,
+      title: "Import Log",
+      body: <pre style={{ height: "300px" }}>{log || "No log entries available"}</pre>,
     });
   }
 
@@ -69,10 +86,7 @@ export default function DataImport() {
       <Container className="my-4 p-3 rounded bg-white">
         <h1 className="h4 mb-3 text-primary d-flex justify-content-between">
           Data Import
-          <DropdownButton id="import-type-selector" title="Run Import">
-            <Dropdown.Item onClick={() => runImport()}>Progressive Import</Dropdown.Item>
-            <Dropdown.Item onClick={() => runImport(true)}>Full Import</Dropdown.Item>
-          </DropdownButton>
+          <Button onClick={() => runImport()}>Run Import</Button>
         </h1>
         <Table data={data} columns={columns} options={{ disableFilters: true }} />
       </Container>
