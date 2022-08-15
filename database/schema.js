@@ -8,13 +8,14 @@ export const schema = [
     recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.string("sample").unique();
-      table.string("idat");
+      table.string("sample");
+      table.string("idatFilename").unique();
       table.string("samplePlate");
-      table.string("PICollaborator");
-      table.string("surgeryDate");
+      table.string("piCollaborator");
+      table.date("surgeryDate");
       table.string("notes");
-      table.string("sentrixId");
+      table.bigInteger("sentrixId");
+      table.string("sentrixPosition");
       table.string("nihLabels");
       table.string("nciMetric");
       table.string("v11b6");
@@ -187,6 +188,7 @@ export const schema = [
       table.string("status");
       table.string("type").defaultTo("progressive");
       table.text("log");
+      table.integer("warnings").defaultTo(0);
       table.timestamp("createdAt").defaultTo(connection.fn.now());
       table.timestamp("updatedAt").defaultTo(connection.fn.now());
       table.string("createdBy").defaultTo("system");
