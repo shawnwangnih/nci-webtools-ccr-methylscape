@@ -5,17 +5,11 @@ const { registerUserSerializers, registerAuthStrategies } = require("./services/
 const { createSession } = require("./services/session");
 const getLogger = require("./services/logger");
 const { apiRouter } = require("./services/api");
-const { forkCluster } = require("./services/cluster");
 const { logErrors } = require("./services/middleware");
 const UserManager = require("./services/auth/userManager");
 const { loadAwsCredentials } = require("./services/aws");
 const args = require("minimist")(process.argv.slice(2));
 const config = require("./config.json");
-const isProduction = process.env.NODE_ENV === "production" || args.production;
-
-// fork to multiple processes
-// note: this should not be enabled until session state is stored in the database
-// if (forkCluster()) return;
 
 if (require.main === module) {
   createApp(config).then((app) => {
