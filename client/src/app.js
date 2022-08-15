@@ -23,6 +23,7 @@ import Header from "./header";
 import UserRegister from "./modules/user/userRegister";
 import RequirePolicy from "./modules/require-policy/require-policy";
 import { isAuthorized } from "./modules/require-policy/require-policy.utils";
+import SessionRefreshModal from "./modules/session/session-refresh-modal";
 
 export default function App() {
   const navbarLinks = [
@@ -72,6 +73,7 @@ export default function App() {
     <RecoilRoot>
       <Router>
         <Session>
+          <SessionRefreshModal />
           <Header />
 
           <Navbar linkGroups={navbarLinks} className="shadow-sm navbar-bottom-line" />
