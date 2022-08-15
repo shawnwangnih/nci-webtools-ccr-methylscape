@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState, useRef } from "react";
-import { Container, Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Modal, OverlayTrigger, Tooltip, InputGroup } from "react-bootstrap";
 import { useRecoilValue, useRecoilRefresher_UNSTABLE as useRecoilRefresher } from "recoil";
 import { importLogSelector } from "./data-import.state";
 import Table from "../../components/table";
 
 export default function DataImport() {
+  const [statusFilter, setStatusFilter] = useState("");
   const [modal, setModal] = useState({
     show: false,
     title: "",
@@ -14,6 +15,7 @@ export default function DataImport() {
 
   const data = useRecoilValue(importLogSelector);
   const refreshData = useRecoilRefresher(importLogSelector);
+  const filteredData = data.filter((item) => !statusFilter || item.status === statusFilter);
 
   const columns = [
     { Header: "Date", accessor: "createdAt", Cell: ({ value }) => new Date(value).toLocaleString() },
@@ -21,7 +23,7 @@ export default function DataImport() {
       Header: "Status",
       accessor: "status",
       Cell: ({ value, row }) =>
-        row.original.warnings === 0 ? (
+        (!row.original.warnings || row.original.warnings) === 0 ? (
           value
         ) : (
           <OverlayTrigger
@@ -88,7 +90,26 @@ export default function DataImport() {
           Data Import
           <Button onClick={() => runImport()}>Run Import</Button>
         </h1>
-        <Table data={data} columns={columns} options={{ disableFilters: true }} />
+        <Row className="row row-cols-lg-auto">
+          <Col>
+            <InputGroup className="mb-2">
+              <InputGroup.Text className="bg-transparent border-0">Status</InputGroup.Text>
+              <Form.Select onChange={(ev) => setStatusFilter(ev.target.value)} value={statusFilter}>
+                <option value="">ALL</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="FAILED">FAILED</option>
+              </Form.Select>
+              <Button
+                variant="outline-primary"
+                className="bg-transparent border-0 text-primary"
+                onClick={(ev) => setStatusFilter("")}>
+                &#10005; Clear
+              </Button>
+            </InputGroup>
+          </Col>
+        </Row>
+
+        <Table data={filteredData} columns={columns} options={{ disableFilters: true }} />
       </Container>
 
       <Modal show={modal.show} onHide={closeModal} size="lg">
