@@ -12,7 +12,7 @@ router.get(
   requiresRouteAccessPolicy("AccessApi"),
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
-    const results = await getImportLogs(connection);
+    const results = await getImportLogs(connection, request.query);
     response.json(results);
   })
 );
