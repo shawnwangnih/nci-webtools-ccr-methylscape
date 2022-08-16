@@ -9,8 +9,6 @@ async function getSampleCoordinates(connection, query) {
   }
 }
 
-
-
 async function getNewSamples(connection) {
   const sampleColumns = [
     connection.raw(`"samplePlate" as project`),
@@ -20,14 +18,13 @@ async function getNewSamples(connection) {
   ];
   const query = await connection
     .select(sampleColumns)
-    .from('sample')
-    .whereNotNull('samplePlate')
-    .groupBy('samplePlate')
-    .groupBy('piCollaborator')
-    .orderBy('samplePlate');
-    return query;
+    .from("sample")
+    .whereNotNull("samplePlate")
+    .groupBy("samplePlate")
+    .groupBy("piCollaborator")
+    .orderBy("samplePlate");
+  return query;
 }
-
 
 async function getAllSamples(connection) {
   const sampleColumns = [
@@ -46,15 +43,11 @@ async function getAllSamples(connection) {
     connection.raw(`"mgmtEstimated" as tumore_sites`),
     connection.raw(`"batchDate"as sampleDate`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
-    connection.raw(`"lpCpNumber"`)
-
+    connection.raw(`"lpCpNumber"`),
   ];
-  const query = await connection
-    .select(sampleColumns)
-    .from('sample')
-    .whereNotNull('samplePlate')
+  const query = await connection.select(sampleColumns).from("sample").whereNotNull("samplePlate");
 
-    return query;
+  return query;
 }
 
 async function getExperiments(connection) {
@@ -67,14 +60,15 @@ async function getExperiments(connection) {
   ];
   const query = await connection
     .select(experimentColumns)
-    .from('sample')
-    .whereNotNull('samplePlate')
-    .groupBy('sentrixId')
-    .groupBy('piCollaborator')
-    .groupBy('surgeryDate')
-    .groupBy('samplePlate')
-    .orderBy('sentrixId');
-    return query;
+    .from("sample")
+    .whereNotNull("samplePlate")
+    .groupBy("sentrixId")
+    .groupBy("piCollaborator")
+    .groupBy("surgeryDate")
+    .groupBy("samplePlate")
+    .orderBy("sentrixId");
+  return query;
+}
 
 async function getSamples(connection, query) {
   const { columns, conditions, offset, limit, orderBy } = query;
@@ -90,7 +84,6 @@ async function getSamples(connection, query) {
   }
 
   return await sqlQuery;
-
 }
 
 async function getCnvBins(connection, { idatFilename }) {

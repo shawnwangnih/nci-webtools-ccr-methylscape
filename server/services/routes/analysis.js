@@ -1,9 +1,15 @@
 const { Router } = require("express");
 const { withAsync } = require("../middleware");
 const { requiresRouteAccessPolicy } = require("../auth/policyMiddleware");
-
-const { getSamples, getGenes, getCnvBins, getCnvSegments, getNewSamples, getExperiments, getAllSamples } = require("../query");
-=======
+const {
+  getSamples,
+  getGenes,
+  getCnvBins,
+  getCnvSegments,
+  getNewSamples,
+  getExperiments,
+  getAllSamples,
+} = require("../query");
 
 const { getSurvivalData } = require("../R/r");
 
@@ -28,7 +34,6 @@ router.post(
     response.json(results);
   })
 );
-
 
 router.get(
   "/newsamples",
