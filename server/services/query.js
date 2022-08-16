@@ -13,7 +13,7 @@ async function getSamples(connection, { embedding, organSystem }) {
 async function getNewSamples(connection) {
   const sampleColumns = [
     connection.raw(`"samplePlate" as project`),
-    connection.raw(`"PICollaborator" as 	Investigator`),
+    connection.raw(`"piCollaborator" as 	Investigator`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`count(distinct "sentrixId") as experimentCount`),
   ];
@@ -22,7 +22,7 @@ async function getNewSamples(connection) {
     .from('sample')
     .whereNotNull('samplePlate')
     .groupBy('samplePlate')
-    .groupBy('PICollaborator')
+    .groupBy('piCollaborator')
     .orderBy('samplePlate');
     return query;
 }
@@ -35,8 +35,17 @@ async function getAllSamples(connection) {
     connection.raw(`"sentrixId" as experiment`),
     connection.raw(`"sex" as gender`),
     connection.raw(`"age" as age`),
+    connection.raw(`"notes"`),
+    connection.raw(`"diagnosisProvided" as diagnosis`),
+    connection.raw(`"CNSv12b6_family" as mf`),
+    connection.raw(`"CNSv12b6_family_score" as mf_calibrated_score`),
+    connection.raw(`"CNSv12b6_subclass1" as mc`),
+    connection.raw(`"CNSv12b6_subclass1_score" as mc_calibrated_score`),
+    connection.raw(`"mgmtStatus" as mgmt_status`),
+    connection.raw(`"mgmtEstimated" as tumore_sites`),
     connection.raw(`"batchDate" as sampleDate`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
+    connection.raw(`"lpCpNumber"`)
 
   ];
   const query = await connection
@@ -50,7 +59,7 @@ async function getAllSamples(connection) {
 async function getExperiments(connection) {
   const experimentColumns = [
     connection.raw(`"samplePlate" as project`),
-    connection.raw(`"PICollaborator" as 	Investigator`),
+    connection.raw(`"piCollaborator" as 	Investigator`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`"sentrixId" as experiment`),
@@ -60,7 +69,7 @@ async function getExperiments(connection) {
     .from('sample')
     .whereNotNull('samplePlate')
     .groupBy('sentrixId')
-    .groupBy('PICollaborator')
+    .groupBy('piCollaborator')
     .groupBy('surgeryDate')
     .groupBy('samplePlate')
     .orderBy('sentrixId');

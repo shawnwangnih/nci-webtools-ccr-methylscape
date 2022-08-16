@@ -17,7 +17,7 @@ import SampleImg from "../home/images/SampleImage.png";
 import { Row, Col } from "react-bootstrap";
 
 export default function Data() {
-  const { data, projectsCount, experimentsCount, samplesCount } = useRecoilValue(methylscapeData);
+  const { data, projectsCount, experimentsCount, samplesCount,sampleData } = useRecoilValue(methylscapeData);
 
   return (
     <>
