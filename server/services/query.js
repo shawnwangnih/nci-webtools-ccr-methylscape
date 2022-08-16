@@ -9,6 +9,73 @@ async function getSampleCoordinates(connection, query) {
   }
 }
 
+
+
+async function getNewSamples(connection) {
+  const sampleColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"piCollaborator" as 	Investigator`),
+    connection.raw(`count(distinct "sample") as sampleCount`),
+    connection.raw(`count(distinct "sentrixId") as experimentCount`),
+  ];
+  const query = await connection
+    .select(sampleColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+    .groupBy('samplePlate')
+    .groupBy('piCollaborator')
+    .orderBy('samplePlate');
+    return query;
+}
+
+
+async function getAllSamples(connection) {
+  const sampleColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"sample"`),
+    connection.raw(`"sentrixId" as experiment`),
+    connection.raw(`"sex" as gender`),
+    connection.raw(`"age" as age`),
+    connection.raw(`"notes"`),
+    connection.raw(`"diagnosisProvided" as diagnosis`),
+    connection.raw(`"CNSv12b6_family" as mf`),
+    connection.raw(`"CNSv12b6_family_score" as mf_calibrated_score`),
+    connection.raw(`"CNSv12b6_subclass1" as mc`),
+    connection.raw(`"CNSv12b6_subclass1_score" as mc_calibrated_score`),
+    connection.raw(`"mgmtStatus" as mgmt_status`),
+    connection.raw(`"mgmtEstimated" as tumore_sites`),
+    connection.raw(`"batchDate"as sampleDate`),
+    connection.raw(`"surgeryDate" as 	experimentDate`),
+    connection.raw(`"lpCpNumber"`)
+
+  ];
+  const query = await connection
+    .select(sampleColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+
+    return query;
+}
+
+async function getExperiments(connection) {
+  const experimentColumns = [
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"piCollaborator" as 	Investigator`),
+    connection.raw(`"surgeryDate" as 	experimentDate`),
+    connection.raw(`count(distinct "sample") as sampleCount`),
+    connection.raw(`"sentrixId" as experiment`),
+  ];
+  const query = await connection
+    .select(experimentColumns)
+    .from('sample')
+    .whereNotNull('samplePlate')
+    .groupBy('sentrixId')
+    .groupBy('piCollaborator')
+    .groupBy('surgeryDate')
+    .groupBy('samplePlate')
+    .orderBy('sentrixId');
+    return query;
+
 async function getSamples(connection, query) {
   const { columns, conditions, offset, limit, orderBy } = query;
 
@@ -23,6 +90,7 @@ async function getSamples(connection, query) {
   }
 
   return await sqlQuery;
+
 }
 
 async function getCnvBins(connection, { idatFilename }) {
@@ -76,4 +144,7 @@ module.exports = {
   getCnvBins,
   getCnvSegments,
   getImportLogs,
+  getNewSamples,
+  getExperiments,
+  getAllSamples,
 };

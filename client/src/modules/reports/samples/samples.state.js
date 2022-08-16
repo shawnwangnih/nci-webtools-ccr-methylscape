@@ -4,11 +4,12 @@ import { methylscapeData } from "../data.state";
 export const samplesTableData = selector({
   key: "samplesTableData",
   get: ({ get }) => {
-    const { data } = get(methylscapeData);
+    const { sampleData } = get(methylscapeData);
 
-    if (!data.length) return [];
+    if (!sampleData.length) return [];
 
     //returns the methylation family if it exists
+    /*
     function getMF(data) {
       return Object.keys(data).length >= 2 ? String(Object.keys(data["0"])[0]).substring(25) : "";
     }
@@ -64,7 +65,7 @@ export const samplesTableData = selector({
           };
         }
       });
-
-    return Object.values(samples);
+*/
+    return sampleData;
   },
 });

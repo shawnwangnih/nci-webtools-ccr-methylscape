@@ -11,10 +11,6 @@ export function ageFormatter(value) {
   }
 }
 
-export function idat(value) {
-  return value.split("_")[0];
-}
-
 export function patternExtractionFormatter(regex, passthroughIfNoMatch = false) {
   return function (value, record, columnName, logger) {
     if (value === null || value === undefined) return null;

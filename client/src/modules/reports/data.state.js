@@ -3,6 +3,8 @@ import axios from "axios";
 
 export const defaultDataState = {
   data: [],
+  experimentData: [],
+  sampleData: [],
   projectsCount: 0,
   experimentsCount: 0,
   samplesCount: 0,
@@ -14,19 +16,58 @@ export const methylscapeData = selector({
   key: "methylscapeData",
   get: async (_) => {
     try {
-      const response = await axios.get("/api/reports/scanDynamoDB");
-      const data = response.data;
+   
+      const newResponse = await axios.get("/api/analysis/newsamples");
+      const experimentRes = await axios.get("/api/analysis/experiment");
+      const sampleRes = await axios.get("/api/analysis/allsample");
 
-      const projectsCount = [...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
-      const experimentsCount = [
-        ...new Set(data.filter(({ experiment }) => experiment).map(({ experiment }) => experiment)),
-      ].length;
-      const samplesCount = [
-        ...new Set(data.filter(({ sample_name }) => sample_name).map(({ sample_name }) => sample_name)),
-      ].length;
+
+      const data = newResponse.data;
+      const experimentData = experimentRes.data;
+      const sampleData = sampleRes.data;
+      for (let i = 0; i < sampleData.length; i++) {
+        const obj = sampleData[i];
+        if(obj.mc==null){
+          obj.mc="N/A";
+        }
+        if(obj.mc_calibrated_score==null){
+          obj.mc_calibrated_score="N/A";
+        }
+        if(obj.mf==null){
+          obj.mf="N/A";
+        }
+        if(obj.mf_calibrated_score==null){
+          obj.mf_calibrated_score="N/A";
+        }
+        if(obj.mgmt_status==null){
+          obj.mgmt_status="N/A";
+        }
+        if(obj.tumore_sites==null){
+          obj.tumore_sites="N/A";
+        }
+        if(obj.lpCpNumber==null){
+          obj.lpCpNumber="N/A";
+        }        if(obj.sex==null){
+          obj.sex="N/A";
+        }
+
+
+        if(obj.sampledate!=null){
+          obj.sampledate= obj.sampledate.split("T")[0];
+        }
+        sampleData[i]=obj;
+      }
+
+
+console.log(sampleData);
+      const projectsCount = data.length;//[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
+      const experimentsCount = experimentData.length;
+      const samplesCount=sampleData.length;
 
       return {
         data,
+        experimentData,
+        sampleData,
         projectsCount,
         experimentsCount,
         samplesCount,

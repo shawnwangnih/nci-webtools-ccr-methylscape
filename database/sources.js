@@ -1,4 +1,12 @@
-import { chromosomeFormatter, patternExtractionFormatter } from "./services/formatters.js";
+
+import {
+  ageFormatter,
+  chromosomeFormatter,
+  invalidNumberFormatter,
+  patternExtractionFormatter,
+  unparsedColonNumericValueFormatter,
+} from "./services/formatters.js";
+
 
 export const sources = [
   {

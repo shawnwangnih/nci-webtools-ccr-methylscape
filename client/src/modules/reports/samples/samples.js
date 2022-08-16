@@ -24,7 +24,7 @@ export default function Samples() {
     },
     {
       id: "sample_name",
-      accessor: "sample_name",
+      accessor: "sample",
       Header: "Sample Name",
       aria: "Sample Name",
     },
@@ -44,13 +44,13 @@ export default function Samples() {
     },
     {
       id: "pool_id",
-      accessor: "pool_id",
+      accessor: "sampledate",
       Header: "Sample Date",
       aria: "Sample Date",
     },
     {
       id: "surgical_case",
-      accessor: "surgical_case",
+      accessor: "lpCpNumber",
       Header: "Surgical Case",
       aria: "Surgical Case",
     },
@@ -99,32 +99,42 @@ export default function Samples() {
               <Col className="text-primary small">
                 <b>METHYLATION FAMILY (MF):</b>
               </Col>
-              <Col>{original.family}</Col>
+              <Col>{original.mf}</Col>
             </Row>
             <Row>
               <Col className="text-primary small">
                 <b>MF CALIBRATED SCORES:</b>
               </Col>
-              <Col>{original.family_score}</Col>
+              <Col>{original.mf_calibrated_score}</Col>
             </Row>
             <Row>
               <Col className="text-primary small">
                 <b>METHYLATION CLASS (MC):</b>
               </Col>
-              <Col>{original.class}</Col>
+              <Col>{original.mc}</Col>
+            </Row>
+           
+            
+          </Col>
+          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+            <Row>
+              <Col className="text-primary small">
+                <b>TUMORE SITES:</b>
+              </Col>
+              <Col>{original.tumore_sites}</Col>
             </Row>
             <Row className="text-primary small">
               <Col>
                 <b>MC CALIBRATED SCORES:</b>
               </Col>
-              <Col>{original.class_score}</Col>
+              <Col>{original.mc_calibrated_score}</Col>
             </Row>
             <Row>
               <Col className="text-primary small">
                 <b>MGMT SCORES:</b>
               </Col>
-              <Col sm="6">
-                {original.mgmt_prediction == null ? "" : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+              <Col className="text-primary small">
+              <Col>{original.mgmt_status}</Col>
               </Col>
             </Row>
             <Row>
@@ -133,86 +143,7 @@ export default function Samples() {
               </Col>
               <Col>{original.notes}</Col>
             </Row>
-          </Col>
-          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
-            <Row>
-              <Col className="text-primary small">
-                <b>TUMORE SITES:</b>
-              </Col>
-              <Col>{original.tumor_data}</Col>
-            </Row>
-            <Row>
-              <Col className="text-primary small">
-                <b>t-SNE PLOT:</b>
-              </Col>
-              <Col>
-                <Button
-                  variant="link"
-                  className="p-0"
-                  onClick={() => download(original.id, original.sample_name + ".html")}>
-                  View Plot
-                </Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="text-primary small">
-                <b>METHYLATION REPORT:</b>
-              </Col>
-              <Col>
-                <Button variant="link" className="p-0" onClick={() => download(original.id, original.report_file_name)}>
-                  Download Report
-                </Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="text-primary small">
-                <b>QCI REPORT:</b>
-              </Col>
-              <Col>
-                {original.xml_report ? (
-                  <Link
-                    className="btn btn-link p-0"
-                    target="_blank"
-                    to={`/qci?id=${original.id}&file=${original.xml_report}`}>
-                    View Report
-                  </Link>
-                ) : (
-                  <Button variant="link" className="p-0" disabled={true}>
-                    View Report
-                  </Button>
-                )}
-              </Col>
-            </Row>
-            <Row>
-              <Col className="text-primary small">
-                <b>NGS REPORT (LEGACY)</b>
-              </Col>
-              <Col>
-                <Button
-                  variant="link"
-                  className="p-0"
-                  onClick={() => download(original.id, original.sample_name + "_NGS.pdf")}>
-                  Download Report
-                </Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="text-primary small">
-                <b>SLIDE IMAGE:</b>
-              </Col>
-              <Col>
-                <Button
-                  variant="link"
-                  className="p-0"
-                  onClick={() => download(original.id, original.sample_name + ".jpg")}>
-                  Download Image
-                </Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col></Col>
-              <Col></Col>
-            </Row>
+
           </Col>
         </Row>
 
@@ -342,6 +273,11 @@ export default function Samples() {
       </Container>
     );
   }, []);
+
+  function convertDate(data){
+    return data;
+
+  }
 
   async function download(id, file) {
     try {
