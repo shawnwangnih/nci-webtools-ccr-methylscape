@@ -43,7 +43,7 @@ async function getAllSamples(connection) {
     connection.raw(`"CNSv12b6_subclass1_score" as mc_calibrated_score`),
     connection.raw(`"mgmtStatus" as mgmt_status`),
     connection.raw(`"mgmtEstimated" as tumore_sites`),
-    connection.raw(`"batchDate" as sampleDate`),
+    connection.raw(`"batchDate"as sampleDate`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
     connection.raw(`"lpCpNumber"`)
 

@@ -44,7 +44,7 @@ export default function Samples() {
     },
     {
       id: "pool_id",
-      accessor: "pool_id",
+      accessor: "sampledate",
       Header: "Sample Date",
       aria: "Sample Date",
     },
@@ -113,6 +113,16 @@ export default function Samples() {
               </Col>
               <Col>{original.mc}</Col>
             </Row>
+           
+            
+          </Col>
+          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
+            <Row>
+              <Col className="text-primary small">
+                <b>TUMORE SITES:</b>
+              </Col>
+              <Col>{original.tumore_sites}</Col>
+            </Row>
             <Row className="text-primary small">
               <Col>
                 <b>MC CALIBRATED SCORES:</b>
@@ -123,8 +133,8 @@ export default function Samples() {
               <Col className="text-primary small">
                 <b>MGMT SCORES:</b>
               </Col>
-              <Col sm="6">
-                {original.mgmt_prediction == null ? "" : parseFloat(original.mgmt_prediction.Estimated).toFixed(3)}
+              <Col className="text-primary small">
+              <Col>{original.mgmt_status}</Col>
               </Col>
             </Row>
             <Row>
@@ -133,16 +143,6 @@ export default function Samples() {
               </Col>
               <Col>{original.notes}</Col>
             </Row>
-          </Col>
-          <Col md className="table table-bordered detail-table detail-table-divider mx-1 my-1">
-            <Row>
-              <Col className="text-primary small">
-                <b>TUMORE SITES:</b>
-              </Col>
-              <Col>{original.tumore_sites}</Col>
-            </Row>
-
-
 
           </Col>
         </Row>
@@ -273,6 +273,11 @@ export default function Samples() {
       </Container>
     );
   }, []);
+
+  function convertDate(data){
+    return data;
+
+  }
 
   async function download(id, file) {
     try {

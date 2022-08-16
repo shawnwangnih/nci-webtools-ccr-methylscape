@@ -25,6 +25,41 @@ export const methylscapeData = selector({
       const data = newResponse.data;
       const experimentData = experimentRes.data;
       const sampleData = sampleRes.data;
+      for (let i = 0; i < sampleData.length; i++) {
+        const obj = sampleData[i];
+        if(obj.mc==null){
+          obj.mc="N/A";
+        }
+        if(obj.mc_calibrated_score==null){
+          obj.mc_calibrated_score="N/A";
+        }
+        if(obj.mf==null){
+          obj.mf="N/A";
+        }
+        if(obj.mf_calibrated_score==null){
+          obj.mf_calibrated_score="N/A";
+        }
+        if(obj.mgmt_status==null){
+          obj.mgmt_status="N/A";
+        }
+        if(obj.tumore_sites==null){
+          obj.tumore_sites="N/A";
+        }
+        if(obj.lpCpNumber==null){
+          obj.lpCpNumber="N/A";
+        }        if(obj.sex==null){
+          obj.sex="N/A";
+        }
+
+
+        if(obj.sampledate!=null){
+          obj.sampledate= obj.sampledate.split("T")[0];
+        }
+        sampleData[i]=obj;
+      }
+
+
+console.log(sampleData);
       const projectsCount = data.length;//[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
       const experimentsCount = experimentData.length;
       const samplesCount=sampleData.length;
