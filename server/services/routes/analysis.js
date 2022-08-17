@@ -3,6 +3,7 @@ const { withAsync } = require("../middleware");
 const { requiresRouteAccessPolicy } = require("../auth/policyMiddleware");
 const {
   getSamples,
+  getSampleCoordinates,
   getGenes,
   getCnvBins,
   getCnvSegments,
