@@ -43,6 +43,7 @@ export async function importData(config, schema, sources, sourceProvider, logger
   const forceRecreate = importLog.type === "full";
   const userManager = new UserManager(connection);
   const messageLevelCounts = {};
+  const startDate = new Date();
 
   logger.info(`Started methylscape data import: ${importLog.type}`);
 
@@ -56,7 +57,7 @@ export async function importData(config, schema, sources, sourceProvider, logger
   async function handleLogEvent({ level, message, timestamp }) {
     messageLevelCounts[level] = (messageLevelCounts[level] || 0) + 1;
     const logMessage = `[${timestamp}] [${level}] ${format(message)}`;
-    const log = connection.raw(`concat("log", '\n', ?::text)`, [logMessage]);
+    const log = connection.raw(`concat("log", ?::text, '\n')`, [logMessage]);
     await updateImportLog({ log, warnings: messageLevelCounts.warn });
   }
 
@@ -72,6 +73,17 @@ export async function importData(config, schema, sources, sourceProvider, logger
     await updateImportLog({ status: "IN PROGRESS" });
     await importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate, shouldCancelImport);
     await updateImportLog({ status: "COMPLETED" });
+    await sendNotification({
+      userManager,
+      smtpConfig: config.email.smtp,
+      from: config.email.from,
+      roleName: "admin",
+      subject: "Methylscape Data Import Succeeded",
+      templateName: "admin-import-success-email.html",
+      params: {
+        date: startDate,
+      },
+    });
   } catch (exception) {
     logger.error(exception.stack);
     await updateImportLog({ status: "FAILED" });
@@ -83,7 +95,7 @@ export async function importData(config, schema, sources, sourceProvider, logger
       subject: "Methylscape Data Import Failed",
       templateName: "admin-import-failure-email.html",
       params: {
-        date: new Date(),
+        date: startDate,
         error: exception.stack || exception,
       },
     });
