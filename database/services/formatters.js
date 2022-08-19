@@ -45,6 +45,14 @@ export function unparsedColonNumericValueFormatter(value, record, columnName) {
   }
 }
 
+export function formatProject(project){
+  if(project==null) return null;
+  if(project.toLowerCase().includes("testing") && project.toLowerCase().includes("clinical")){
+    return "CLINICAL TESTING";
+  }
+  return project.toUpperCase().replace("_", " ");
+}
+
 export function invalidNumberFormatter(value, record, columnName, logger) {
   if ([null, undefined, ""].includes(value)) {
     return null;

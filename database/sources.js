@@ -5,6 +5,7 @@ import {
   invalidNumberFormatter,
   patternExtractionFormatter,
   unparsedColonNumericValueFormatter,
+  formatProject
 } from "./services/formatters.js";
 
 
@@ -16,7 +17,7 @@ export const sources = [
     columns: [
       { sourceName: "Sample", name: "sample" },
       { sourceName: "idat_filename", name: "idatFilename" },
-      { sourceName: "Sample_Plate", name: "samplePlate" },
+      { sourceName: "Sample_Plate", name: "samplePlate", formatter: formatProject },
       { sourceName: "PI_Collaborator", name: "piCollaborator" },
       { sourceName: "Surgery_date", name: "surgeryDate" },
       { sourceName: "Notes", name: "notes" },
