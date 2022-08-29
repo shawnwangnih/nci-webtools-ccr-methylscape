@@ -190,7 +190,7 @@ export const plotState = selector({
       uirevision: organSystem + embedding + color.value + search + showAnnotations,
       legend: { title: { text: color.label } },
       autosize: true,
-      dragmode: "select",
+      dragmode: "zoom",
     };
 
     const config = {

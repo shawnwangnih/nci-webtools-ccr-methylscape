@@ -67,7 +67,7 @@ export async function getMetadataPlot({ organSystem, embedding, search, showAnno
     uirevision: organSystem + embedding + color.value + search + showAnnotations,
     legend: { title: { text: color.label } },
     autosize: true,
-    dragmode: "select",
+    dragmode: "zoom",
   };
 
   const config = {
