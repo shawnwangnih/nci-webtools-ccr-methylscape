@@ -57,13 +57,46 @@ export const methylscapeData = selector({
         }
         sampleData[i]=obj;
       }
+      for (let i = 0; i < data.length; i++) {
+        const obj = data[i];
+        const cp = obj.investigators;
+        if (cp !=null && cp.includes(",")) {  
+
+            obj.priInvestigators= cp.split(",")[0];
+            obj.multiInvestigator=true;
+            } else {
+              obj.priInvestigators= cp;
+              obj.multiInvestigator=false;
+        }
+       
 
 
-console.log(sampleData);
+
+        data[i]=obj;
+      }
+      
+
+
       const projectsCount = data.length;//[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
       const experimentsCount = experimentData.length;
       const samplesCount=sampleData.length;
-
+      data.map((sample) => {
+        const cp = sample.investigators;
+        if (cp !=null && cp.includes(",")) {
+          return {
+            ...sample,
+            priInvestigators: cp.split(",")[0],
+            multiInvestigator: true,
+          };
+        } else {
+          return {
+            ...sample,
+            priInvestigators: cp,
+            multiInvestigator: false,
+          };
+        }
+      });
+console.log(data);
       return {
         data,
         experimentData,
