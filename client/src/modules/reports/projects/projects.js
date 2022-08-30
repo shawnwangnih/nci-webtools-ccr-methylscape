@@ -19,13 +19,23 @@ export default function Projects() {
     {
       id: "investigator",
       accessor: "priInvestigators",
+      //row =>row.priInvestigators+ " and " + <span style={{textDecoration: 'underline blue'}}>others</span>
       Header: "Investigator Name",
       Cell: (row) => {
-        if(row.data[row.row.index].multiInvestigator){
-          return <span title={row.data[row.row.index].investigators}>{row.value}</span>;
+        if (row.data[row.row.index].multiInvestigator) {
+          return (
+            <span>
+              {row.value} and{" "}
+              <span
+                style={{ textDecoration: "underline blue", color: "blue" }}
+                title={row.data[row.row.index].investigators}>
+                {" "}
+                {row.data[row.row.index].numberOfOthers} others
+              </span>
+            </span>
+          );
         }
-        
-      }
+      },
     },
     {
       id: "experimentsCount",
@@ -68,7 +78,6 @@ export default function Projects() {
     <Container fluid>
       <Row>
         <Col>
-        
           {tableData.length > 0 && (
             <Table data={tableData} columns={columns} options={options} customOptions={{ rowSelectRadio: true }} />
           )}

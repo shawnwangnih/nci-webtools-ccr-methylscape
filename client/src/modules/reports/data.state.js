@@ -16,73 +16,67 @@ export const methylscapeData = selector({
   key: "methylscapeData",
   get: async (_) => {
     try {
-   
-      const newResponse = await axios.get("/api/analysis/newsamples");
+      const newResponse = await axios.get("/api/analysis/allproject");
       const experimentRes = await axios.get("/api/analysis/experiment");
       const sampleRes = await axios.get("/api/analysis/allsample");
-
 
       const data = newResponse.data;
       const experimentData = experimentRes.data;
       const sampleData = sampleRes.data;
       for (let i = 0; i < sampleData.length; i++) {
         const obj = sampleData[i];
-        if(obj.mc==null){
-          obj.mc="N/A";
+        if (obj.mc == null) {
+          obj.mc = "N/A";
         }
-        if(obj.mc_calibrated_score==null){
-          obj.mc_calibrated_score="N/A";
+        if (obj.mc_calibrated_score == null) {
+          obj.mc_calibrated_score = "N/A";
         }
-        if(obj.mf==null){
-          obj.mf="N/A";
+        if (obj.mf == null) {
+          obj.mf = "N/A";
         }
-        if(obj.mf_calibrated_score==null){
-          obj.mf_calibrated_score="N/A";
+        if (obj.mf_calibrated_score == null) {
+          obj.mf_calibrated_score = "N/A";
         }
-        if(obj.mgmt_status==null){
-          obj.mgmt_status="N/A";
+        if (obj.mgmt_status == null) {
+          obj.mgmt_status = "N/A";
         }
-        if(obj.tumore_sites==null){
-          obj.tumore_sites="N/A";
+        if (obj.tumore_sites == null) {
+          obj.tumore_sites = "N/A";
         }
-        if(obj.lpCpNumber==null){
-          obj.lpCpNumber="N/A";
-        }        if(obj.sex==null){
-          obj.sex="N/A";
+        if (obj.lpCpNumber == null) {
+          obj.lpCpNumber = "N/A";
+        }
+        if (obj.sex == null) {
+          obj.sex = "N/A";
         }
 
-
-        if(obj.sampledate!=null){
-          obj.sampledate= obj.sampledate.split("T")[0];
+        if (obj.sampledate != null) {
+          obj.sampledate = obj.sampledate.split("T")[0];
         }
-        sampleData[i]=obj;
+        sampleData[i] = obj;
       }
       for (let i = 0; i < data.length; i++) {
         const obj = data[i];
         const cp = obj.investigators;
-        if (cp !=null && cp.includes(",")) {  
-
-            obj.priInvestigators= cp.split(",")[0];
-            obj.multiInvestigator=true;
-            } else {
-              obj.priInvestigators= cp;
-              obj.multiInvestigator=false;
+        if (cp != null && cp.includes(",")) {
+          obj.priInvestigators = cp.split(",")[0];
+          obj.multiInvestigator = true;
+          obj.numberOfOthers = cp.split(",").length - 1;
+        } else {
+          obj.priInvestigators = cp;
+          obj.multiInvestigator = false;
+          obj.numberOfOthers = 0;
         }
-       
 
-
-
-        data[i]=obj;
+        data[i] = obj;
       }
-      
 
-
-      const projectsCount = data.length;//[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
+      const projectsCount = data.length; //[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
       const experimentsCount = experimentData.length;
-      const samplesCount=sampleData.length;
+      const samplesCount = sampleData.length;
       data.map((sample) => {
         const cp = sample.investigators;
-        if (cp !=null && cp.includes(",")) {
+        if (cp != null && cp.includes(",")) {
           return {
             ...sample,
             priInvestigators: cp.split(",")[0],
@@ -96,7 +90,7 @@ export const methylscapeData = selector({
           };
         }
       });
-console.log(data);
+      console.log(data);
       return {
         data,
         experimentData,

@@ -11,6 +11,7 @@ export const schema = [
       table.string("sample");
       table.string("idatFilename").unique();
       table.string("samplePlate");
+      table.string("UnifiedSamplePlate");
       table.string("piCollaborator");
       table.date("surgeryDate");
       table.string("notes");
