@@ -17,8 +17,6 @@ export const projectsTableData = selector({
 
     if (!data.length) return [];
 
-    
-
     return Object.values(data);
   },
 });
@@ -29,9 +27,8 @@ export const selectedRow = selector({
     const { selectedProject } = get(projectState);
     if (!selectedProject) return false;
 
-    let { data } = get(methylscapeData);
-
-    data = data.filter(({ project }) => project == selectedProject);
+    let { sampleData } = get(methylscapeData);
+    let data = sampleData.filter(({ project }) => project == selectedProject);
 
     const getMethylationClasses = () => {
       let cur = {};
