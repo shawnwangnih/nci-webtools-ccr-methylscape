@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState, useRecoilCallback, useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilCallback } from "recoil";
 import cloneDeep from "lodash/cloneDeep";
 import { plotState, selectedPoints } from "./metadata-plot.state";
 import { analysisState } from "../analysis.state";
@@ -6,7 +6,7 @@ import { selectSampleState } from "../copyNumber/copyNumber.state";
 import { tableForm } from "../table/table.state";
 import Plot from "react-plotly.js";
 
-export default function MetadataPlot() {
+export default function MatdataPlot() {
   let { data, layout, config } = useRecoilValue(plotState);
   const setSelectedPoints = useSetRecoilState(selectedPoints);
   const setTabs = useSetRecoilState(analysisState);
@@ -33,7 +33,11 @@ export default function MetadataPlot() {
       });
       setTabs((state) => {
         const { currentTab } = state;
-        if (currentTab != "table" || currentTab != "survival") return { ...state, currentTab: "table" };
+        if (currentTab != "table" || currentTab != "survival") {
+          return { ...state, currentTab: "table" };
+        } else {
+          return state;
+        }
       });
     }
   }
@@ -47,7 +51,11 @@ export default function MetadataPlot() {
       }));
       setTabs((state) => {
         const { currentTab } = state;
-        if (currentTab != "copyNumber") return { ...state, currentTab: "copyNumber" };
+        if (currentTab != "copyNumber") {
+          return { ...state, currentTab: "copyNumber" };
+        } else {
+          return state;
+        }
       });
     }
   }
