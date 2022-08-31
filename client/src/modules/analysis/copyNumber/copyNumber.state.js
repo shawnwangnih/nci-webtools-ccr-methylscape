@@ -119,13 +119,13 @@ export const copyNumberPlotDataSelector = selector({
 export const plotState = selector({
   key: "cnPlotState",
   get: async ({ get }) => {
-    const copyNumberPlotData = get(copyNumberPlotDataSelector);
+    const { error, ...cnData } = get(copyNumberPlotDataSelector);
 
-    if (!copyNumberPlotData) return defaultFormState;
-    if (copyNumberPlotData.error) return defaultPlotState.error;
+    if (!Object.keys(cnData).length) return defaultFormState;
+    if (error) return defaultPlotState.error;
 
     const { annotations, search } = get(formState);
-    const { idatFilename, segments, bins, binGeneMap } = get(copyNumberPlotDataSelector);
+    const { idatFilename, segments, bins, binGeneMap } = cnData;
 
     // determine x coordinates for each bin
     const xOffsets = [0, ...chrLines.map((c) => c["pos.start"])];
