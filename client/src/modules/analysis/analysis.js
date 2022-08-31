@@ -13,7 +13,7 @@ import SampleQuality from "./sampleQuality/sampleQuality";
 import CopyNumber from "./copyNumber/copyNumber";
 import PromoterMethylation from "./promoterMethylation/promoterMethylation";
 import CohortAnalysis from "./cohortAnalysis/cohortAnalysis";
-import Survival from "./survival/survival-tab";
+import Survival from "./survival/survival";
 import Table from "./table/table";
 import SubgroupAnalysis from "./subgroupAnalysis/subgroupAnalysis";
 import Methodology from "./methodology/methodology";
