@@ -33,7 +33,7 @@ export default function MatdataPlot() {
       });
       setTabs((state) => {
         const { currentTab } = state;
-        if (currentTab != "table" || currentTab != "survival") {
+        if (currentTab != "table" && currentTab != "survival") {
           return { ...state, currentTab: "table" };
         } else {
           return state;
