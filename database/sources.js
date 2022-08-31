@@ -16,7 +16,7 @@ export const sources = [
       { sourceName: "Sample", name: "sample" },
       { sourceName: "idat_filename", name: "idatFilename" },
       { sourceName: "Sample_Plate", name: "samplePlate" },
-      { sourceName: "Sample_Plate", name: "UnifiedSamplePlate", formatter: formatProject },
+      { sourceName: "Sample_Plate", name: "unifiedSamplePlate", formatter: formatProject },
       { sourceName: "PI_Collaborator", name: "piCollaborator" },
       { sourceName: "Surgery_date", name: "surgeryDate" },
       { sourceName: "Notes", name: "notes" },
