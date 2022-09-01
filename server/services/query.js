@@ -106,8 +106,8 @@ async function getCnvBins(connection, { idatFilename }) {
     for await (const record of s3Response.Body.pipe(parser)) {
       const key = [record.chromosome, record.start, record.end].join("-");
       const chromosome = parseChromosome(record.chromosome);
-      const genes = this.geneMap[key] || [];
-      results.push({ ...record, chromosome, genes });
+      const gene = this.geneMap[key] || [];
+      results.push({ ...record, chromosome, gene });
     }
     return results;
   } else {
