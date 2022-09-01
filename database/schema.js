@@ -130,10 +130,10 @@ export const schema = [
     recreate: true,
     schema: (table) => {
       table.increments("id");
-      table.string("name");
       table.integer("chromosome");
       table.integer("start");
       table.integer("end");
+      table.string("gene");
       table.index(["chromosome", "start"]);
     },
   },

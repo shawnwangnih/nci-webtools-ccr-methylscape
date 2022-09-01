@@ -249,10 +249,10 @@ export const sources = [
     table: "gene",
     description: "Genes",
     columns: [
-      { sourceName: "name", name: "name" },
       { sourceName: "chromosome", name: "chromosome" },
       { sourceName: "start", name: "start" },
       { sourceName: "end", name: "end" },
+      { sourceName: "gene", name: "gene" },
     ],
   },
   {
