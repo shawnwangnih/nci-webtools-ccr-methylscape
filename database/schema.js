@@ -133,7 +133,7 @@ export const schema = [
       table.string("chromosome");
       table.integer("start");
       table.integer("end");
-      table.string("gene");
+      table.text("gene");
       table.index(["chromosome", "start"]);
     },
   },
