@@ -48,7 +48,7 @@ export function unparsedColonNumericValueFormatter(value, record, columnName) {
 export function formatProject(project) {
   if (project == null) return null;
 
-  return project.toUpperCase().replaceAll("_", "").replaceAll(":", "").replaceAll("-", "");
+  return project.toLowerCase().replaceAll("_", "").replaceAll(":", "").replaceAll("-", "").replaceAll(" ", "");
 }
 
 export function invalidNumberFormatter(value, record, columnName, logger) {
