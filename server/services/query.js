@@ -9,19 +9,18 @@ async function getSampleCoordinates(connection, query) {
   }
 }
 
-async function getNewSamples(connection) {
+async function getallproject(connection) {
   const sampleColumns = [
     connection.raw(`"samplePlate" as project`),
-    connection.raw(`"piCollaborator" as 	Investigator`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`count(distinct "sentrixId") as experimentCount`),
+    connection.raw(`string_agg(distinct "piCollaborator", ', ' ) as Investigators`),
   ];
   const query = await connection
     .select(sampleColumns)
     .from("sample")
     .whereNotNull("samplePlate")
     .groupBy("samplePlate")
-    .groupBy("piCollaborator")
     .orderBy("samplePlate");
   return query;
 }
@@ -137,7 +136,7 @@ module.exports = {
   getCnvBins,
   getCnvSegments,
   getImportLogs,
-  getNewSamples,
+  getallproject,
   getExperiments,
   getAllSamples,
 };

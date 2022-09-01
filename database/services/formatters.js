@@ -45,12 +45,10 @@ export function unparsedColonNumericValueFormatter(value, record, columnName) {
   }
 }
 
-export function formatProject(project){
-  if(project==null) return null;
-  if(project.toLowerCase().includes("testing") && project.toLowerCase().includes("clinical")){
-    return "CLINICAL TESTING";
-  }
-  return project.toUpperCase().replace("_", " ");
+export function formatProject(project) {
+  if (project == null) return null;
+
+  return project.toLowerCase().replaceAll("_", "").replaceAll(":", "").replaceAll("-", "").replaceAll(" ", "");
 }
 
 export function invalidNumberFormatter(value, record, columnName, logger) {

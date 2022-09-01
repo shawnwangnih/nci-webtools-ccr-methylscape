@@ -7,7 +7,7 @@ const {
   getGenes,
   getCnvBins,
   getCnvSegments,
-  getNewSamples,
+  getallproject,
   getExperiments,
   getAllSamples,
 } = require("../query");
@@ -37,10 +37,10 @@ router.post(
 );
 
 router.get(
-  "/newsamples",
+  "/allproject",
   withAsync(async (request, response) => {
     const { connection } = request.app.locals;
-    const results = await getNewSamples(connection);
+    const results = await getallproject(connection);
     response.json(results);
   })
 );

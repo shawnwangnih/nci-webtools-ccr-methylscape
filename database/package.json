@@ -3,7 +3,8 @@
   "scripts": {
     "start": "node startQueueWorker.js",
     "createDatabase": "node createDatabase.js",
-    "importDatabase": "node importDatabase.js -- "
+    "importDatabase": "node importDatabase.js -- ",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.145.0",
@@ -16,5 +17,8 @@
     "pg": "^8.7.3",
     "winston": "^3.8.1",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "jest": "^29.0"
   }
 }

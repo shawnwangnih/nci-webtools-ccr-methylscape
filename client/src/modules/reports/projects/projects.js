@@ -12,15 +12,30 @@ export default function Projects() {
   const tableData = useRecoilValue(projectsTableData);
   const [state, setState] = useRecoilState(projectState);
   const mergeState = (newState) => setState({ ...state, ...newState });
-
   const { selectedProject } = state;
 
   const columns = [
     { id: "project", accessor: "project", Header: "Project" },
     {
       id: "investigator",
-      accessor: "investigator",
+      accessor: "priInvestigators",
+      //row =>row.priInvestigators+ " and " + <span style={{textDecoration: 'underline blue'}}>others</span>
       Header: "Investigator Name",
+      Cell: (row) => {
+        if (row.data[row.row.index].multiInvestigator) {
+          return (
+            <span>
+              {row.value} and{" "}
+              <span
+                style={{ textDecoration: "underline blue", color: "blue" }}
+                title={row.data[row.row.index].investigators}>
+                {" "}
+                {row.data[row.row.index].numberOfOthers} others
+              </span>
+            </span>
+          );
+        }
+      },
     },
     {
       id: "experimentsCount",

@@ -1,13 +1,11 @@
-
 import {
   ageFormatter,
   chromosomeFormatter,
   invalidNumberFormatter,
   patternExtractionFormatter,
   unparsedColonNumericValueFormatter,
-  formatProject
+  formatProject,
 } from "./services/formatters.js";
-
 
 export const sources = [
   {
@@ -17,7 +15,8 @@ export const sources = [
     columns: [
       { sourceName: "Sample", name: "sample" },
       { sourceName: "idat_filename", name: "idatFilename" },
-      { sourceName: "Sample_Plate", name: "samplePlate", formatter: formatProject },
+      { sourceName: "Sample_Plate", name: "samplePlate" },
+      { sourceName: "Sample_Plate", name: "unifiedSamplePlate", formatter: formatProject },
       { sourceName: "PI_Collaborator", name: "piCollaborator" },
       { sourceName: "Surgery_date", name: "surgeryDate" },
       { sourceName: "Notes", name: "notes" },
