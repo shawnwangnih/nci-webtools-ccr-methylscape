@@ -91,7 +91,7 @@ async function getSamples(connection, query) {
 async function getGeneMap(connection) {
   const keyColumn = connection.raw(`concat_ws('-', "chromosome", "start", "end") as key`);
   const genes = await connection.select(keyColumn, "gene").from("gene").options({ rowMode: "array" });
-  return Object.fromEntries(genes);
+  return Object.fromEntries(genes.map(([k, v]) => [k, v?.split(";")]));
 }
 
 async function getCnvBins(connection, { idatFilename }) {
@@ -106,7 +106,7 @@ async function getCnvBins(connection, { idatFilename }) {
     for await (const record of s3Response.Body.pipe(parser)) {
       const key = [record.chromosome, record.start, record.end].join("-");
       const chromosome = parseChromosome(record.chromosome);
-      const genes = this.geneMap[key]?.split(";") || [];
+      const genes = this.geneMap[key] || [];
       results.push({ ...record, chromosome, genes });
     }
     return results;
