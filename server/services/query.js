@@ -1,3 +1,6 @@
+const { getAnalysisFile } = require("./aws");
+const { getTxtParser, parseChromosome } = require("./utils");
+
 async function getSampleCoordinates(connection, query) {
   if (query.embedding && query.organSystem) {
     return await connection("sample")
@@ -85,23 +88,28 @@ async function getSamples(connection, query) {
   return await sqlQuery;
 }
 
+async function getGeneMap(connection) {
+  const keyColumn = connection.raw(`concat_ws('-', "chromosome", "start", "end") as key`);
+  const genes = await connection.select(keyColumn, "gene").from("gene").options({ rowMode: "array" });
+  return Object.fromEntries(genes);
+}
+
 async function getCnvBins(connection, { idatFilename }) {
+  if (!this.geneMap) {
+    this.geneMap = await getGeneMap(connection);
+  }
+
   if (idatFilename) {
-    const [geneCountResult] = await connection("cnvBin")
-      .count("gene", { as: "count" })
-      .whereNotNull("gene")
-      .andWhere("sampleIdatFilename", idatFilename);
-
-    if (+geneCountResult.count === 0) {
-      await connection.raw("call mapBinsToGenes(?)", [idatFilename]);
+    const s3Response = await getAnalysisFile(`CNV/bins/${idatFilename}.bins.txt`);
+    const parser = getTxtParser(["id", "chromosome", "start", "end", "feature", "medianValue"]);
+    const results = [];
+    for await (const record of s3Response.Body.pipe(parser)) {
+      const key = [record.chromosome, record.start, record.end].join("-");
+      const chromosome = parseChromosome(record.chromosome);
+      const genes = this.geneMap[key]?.split(";") || [];
+      results.push({ ...record, chromosome, genes });
     }
-
-    const cnvBins = await connection("cnvBin").where("sampleIdatFilename", idatFilename);
-
-    return cnvBins.map((cnvBin) => ({
-      ...cnvBin,
-      gene: cnvBin.gene ? cnvBin.gene.split(";") : [],
-    }));
+    return results;
   } else {
     return [];
   }
@@ -109,7 +117,25 @@ async function getCnvBins(connection, { idatFilename }) {
 
 async function getCnvSegments(connection, { idatFilename }) {
   if (idatFilename) {
-    return await connection("cnvSegment").where("sampleIdatFilename", idatFilename);
+    const s3Response = await getAnalysisFile(`CNV/segments/${idatFilename}.seg.txt`);
+    const parser = getTxtParser([
+      "id",
+      "sampleIdatFilename",
+      "chromosome",
+      "start",
+      "end",
+      "numberOfMarkers",
+      "bStatistic",
+      "pValue",
+      "meanValue",
+      "medianValue",
+    ]);
+    const results = [];
+    for await (const record of s3Response.Body.pipe(parser)) {
+      const chromosome = parseChromosome(record.chromosome);
+      results.push({ ...record, chromosome });
+    }
+    return results;
   } else {
     return [];
   }
