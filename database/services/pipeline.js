@@ -6,17 +6,15 @@ import format from "pg-format";
 export const COMMANDS = {
   createSchema,
   createTable,
-  createTemporaryTable,
   recreateTables,
   dropTables,
   copyTable,
   importTable,
 };
 
-export async function runTask(task, logger = console, commands = COMMANDS) {
+export async function runTask(task, commands = COMMANDS) {
   const command = commands[task.command];
   if (command) {
-    logger.info(task.description);
     return await command(task);
   } else {
     throw new Error(`Unknown command: ${task.command}`);
@@ -24,27 +22,21 @@ export async function runTask(task, logger = console, commands = COMMANDS) {
 }
 
 export async function createSchema({ connection, schema }) {
-  const tables = schema.map((s) => s.table);
-  await dropTables({ connection, tables });
-  for (const { table, columns } of schema) {
-    await createTable({ connection, table, columns });
-  }
+  const tables = schema.map((s) => s.table).filter(Boolean);
+  await recreateTables({ connection, schema, tables });
 }
 
-export async function createTable({ connection, table, columns }) {
+export async function createTable({ connection, table, columns, type = "" }) {
   const columnDefs = columns.map((c) => format("%I %s", c.name, c.type));
-  await connection.query(format("CREATE TABLE %I (%s)", table, columnDefs.join()));
-}
-
-export async function createTemporaryTable({ connection, table, columns }) {
-  const columnDefs = columns.map((column, index) => format("%I %s", column || index, "text"));
-  await connection.query(format("CREATE TEMPORARY TABLE %I (%s)", table, columnDefs.join(",")));
+  await connection.query(format("CREATE %s TABLE %I (%s)", type, table, columnDefs.join()));
 }
 
 export async function recreateTables({ connection, schema, tables }) {
   const tableSchemas = schema.filter((s) => tables.includes(s.table));
   await dropTables({ connection, tables });
-  await createSchema({ connection, schema: tableSchemas });
+  for (const { table, columns } of tableSchemas) {
+    await createTable({ connection, table, columns });
+  }
 }
 
 export async function dropTables({ connection, tables }) {
@@ -85,7 +77,7 @@ export async function importTable({ connection, schema, source, target, options 
     await createSchema({ connection, schema: [tableSchema] });
   } else {
     const columns = await getColumns(createReadStream(source), options);
-    await createTemporaryTable({ connection, table: target, columns });
+    await createTable({ connection, table: target, columns, type: "temporary" });
   }
   return await importTableFromStream(connection, createReadStream(source), target, options);
 }
@@ -93,21 +85,28 @@ export async function importTable({ connection, schema, source, target, options 
 export async function getColumns(inputStream, options) {
   const parser = inputStream.pipe(parse({ ...options, to_line: 1 }));
   for await (const line of parser) {
-    return line;
+    return line.map((v, i) => ({ name: v || i, type: "text" }));
   }
 }
 
 export function importTableFromStream(connection, inputStream, table, options = {}) {
+  options = {
+    delimiter: ",",
+    header: false,
+    nullString: "",
+    quoteCharacter: '"',
+    escapeCharacter: '"',
+    ...options,
+  };
   return new Promise((resolve, reject) => {
-    const { delimiter, nullString, header, quoteCharacter, escapeCharacter } = options;
     const query = format(
       "COPY %I FROM STDIN CSV %s DELIMITER %L NULL %L QUOTE %L ESCAPE %L",
       table,
-      header ? "HEADER" : "",
-      delimiter || ",",
-      nullString || "",
-      quoteCharacter || '"',
-      escapeCharacter || '"'
+      options.header ? "HEADER" : "",
+      options.delimiter,
+      options.nullString,
+      options.quoteCharacter,
+      options.escapeCharacter
     );
     const stream = connection.query(copyStreams.from(query));
     inputStream.on("error", reject);
