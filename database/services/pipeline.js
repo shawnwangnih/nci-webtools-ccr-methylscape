@@ -1,7 +1,9 @@
 import { createReadStream } from "fs";
+import { Readable } from "stream";
 import { parse } from "csv-parse";
 import copyStreams from "pg-copy-streams";
 import format from "pg-format";
+import XLSX from "xlsx";
 
 export const COMMANDS = {
   createSchema,
@@ -71,15 +73,16 @@ export async function copyTable({ connection, schema, source, target, columns })
   return await connection.query(insertStatement);
 }
 
-export async function importTable({ connection, schema, source, target, options }) {
+export async function importTable({ connection, schema, source, target, convert, options }) {
   const tableSchema = schema.find((s) => s.table === target);
+
   if (tableSchema) {
     await createSchema({ connection, schema: [tableSchema] });
   } else {
-    const columns = await getColumns(createReadStream(source), options);
+    const columns = await getColumns(await getConvertedStream(source, convert), options);
     await createTable({ connection, table: target, columns, type: "temporary" });
   }
-  return await importTableFromStream(connection, createReadStream(source), target, options);
+  return await importTableFromStream(connection, await getConvertedStream(source, convert), target, options);
 }
 
 export async function getColumns(inputStream, options) {
@@ -89,10 +92,45 @@ export async function getColumns(inputStream, options) {
   }
 }
 
+export async function convertStream(inputStream, sourceFormat, targetFormat) {
+  if (sourceFormat === targetFormat) {
+    return inputStream;
+  }
+  if (sourceFormat === "xlsx" && targetFormat === "csv") {
+    return await convertXLSXToCSV(inputStream);
+  } else {
+    throw new Error(`Unsupported conversion: ${sourceFormat} -> ${targetFormat}`);
+  }
+}
+
+export async function convertXLSXToCSV(inputStream, options = {}) {
+  let buffers = [];
+  for await (const chunk of inputStream) {
+    buffers.push(chunk);
+  }
+  const workbook = XLSX.read(Buffer.concat(buffers));
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const csv = XLSX.utils.sheet_to_csv(sheet, options);
+
+  const readable = new Readable();
+  readable.push(csv);
+  readable.push(null);
+  return readable;
+}
+
+export async function getConvertedStream(path, convert) {
+  const inputStream = createReadStream(path);
+  if (convert) {
+    return await convertStream(inputStream, convert.from, convert.to);
+  } else {
+    return inputStream;
+  }
+}
+
 export function importTableFromStream(connection, inputStream, table, options = {}) {
   options = {
     delimiter: ",",
-    header: false,
+    header: true,
     nullString: "",
     quoteCharacter: '"',
     escapeCharacter: '"',
