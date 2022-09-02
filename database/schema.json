@@ -163,6 +163,8 @@
       { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "roleId", "type": "integer", "constraints": ["references role"] },
       { "name": "organizationId", "type": "integer", "constraints": ["references organization"] },
+      { "name": "organizationOther", "type": "text" },
+      { "name": "accountType", "type": "text" },
       { "name": "name", "type": "text", "constraints": ["not null", "unique"] },
       { "name": "firstName", "type": "text" },
       { "name": "lastName", "type": "text" },
