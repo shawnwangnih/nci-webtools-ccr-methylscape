@@ -1,16 +1,9 @@
-import { basename, resolve } from "path";
-import { fileURLToPath, pathToFileURL } from "url";
+import { createPostgresClient } from "./services/utils.js";
+import { runTask } from "./services/pipeline.js";
+import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import minimist from "minimist";
-import {
-  createConnection,
-  createRecordIterator,
-  getFileMetadataFromPath,
-  importTable,
-  initializeSchemaForImport,
-  loadAwsCredentials,
-  withDuration,
-} from "./services/utils.js";
+import { loadAwsCredentials, withDuration } from "./services/utils.js";
 import { LocalProvider } from "./services/providers/localProvider.js";
 import { S3Provider } from "./services/providers/s3Provider.js";
 import { getLogger } from "./services/logger.js";
@@ -21,90 +14,39 @@ const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
 const require = createRequire(import.meta.url);
 
 if (isMainModule) {
-  const { aws, database } = require("./config.json");
   const args = minimist(process.argv.slice(2));
-  const schemaPath = pathToFileURL(args.schema || "./schema.js");
-  const sourcesPath = pathToFileURL(args.sources || "./sources.js");
+  const { aws, database } = require("./config.json");
+  const schema = require(args.schema || "./schema.json");
+  const sources = require(args.sources || "./samples.json");
   const providerName = args.provider || "local";
   const providerArgs = [...args._];
-  const forceRecreate = args.recreate;
   loadAwsCredentials(aws);
 
-  const connection = createConnection(database);
-  const { schema } = await import(schemaPath);
-  const { sources } = await import(sourcesPath);
+  const connection = await createPostgresClient(database);
   const sourceProvider = getSourceProvider(providerName, providerArgs);
   const logger = getLogger("import");
-  await importDatabase(connection, schema, sources, sourceProvider, logger, forceRecreate);
+  await importDatabase(connection, schema, sources, sourceProvider, logger);
   process.exit(0);
 }
 
-export async function importDatabase(
-  connection,
-  schema,
-  sources,
-  sourceProvider,
-  logger,
-  forceRecreate = false,
-  shouldCancel = async () => false
-) {
-  const tableSources = sources.filter((source) => source.table);
-  const postImportSources = sources.filter((source) => source.type === "postImport");
-  let totalCount = 0;
-
+export async function importDatabase(connection, schema, sources, sourceProvider, logger) {
   let { results, duration } = await withDuration(async () => {
-    return await connection.transaction(async (connection) => {
-      await initializeSchemaForImport(connection, schema, sources, forceRecreate);
-
-      for (let source of tableSources) {
-        const { description, table, columns, skipImport, parseConfig } = source;
-        const shouldSkip = skipImport ? await skipImport(connection) : () => false;
-        const sourcePaths = await getSourcePaths(source, sourceProvider);
-
-        for (const sourcePath of sourcePaths) {
-          if (await shouldCancel()) {
-            throw new Error(`Cancelled import`);
-          }
-
-          const metadata = getFileMetadataFromPath(sourcePath);
-          if (shouldSkip(metadata)) continue;
-
-          logger.info(`Importing ${sourcePath} => ${table} (${description})`);
-          if (!(await sourceProvider.readFileMetadata(sourcePath))) {
-            throw new Error(`Source file does not exist: ${sourcePath}`);
-          }
-
-          const { results, duration } = await withDuration(async () => {
-            const records = await createRecordIterator(sourcePath, sourceProvider, { columns, parseConfig, logger });
-            return await importTable(connection, records, table, logger);
-          });
-
-          logger.info(getStatusMessage({ results, duration }));
-          totalCount += results;
-        }
-      }
-      return totalCount;
-    });
+    await connection.query("begin");
+    let rowCount = 0;
+    for (const task of sources) {
+      logger.info(task.description);
+      const taskArgs = { ...task, schema, connection, sourceProvider };
+      const results = await runTask(taskArgs);
+      rowCount += results?.rowCount || 0;
+    }
+    await connection.query("commit");
+    return rowCount;
   });
 
-  // post-import callbacks are executed after the transaction is committed
-  // this is to allow the database to autovacuum/analyze/etc.
-  for (const source of postImportSources) {
-    logger.info(`Running post-import step: ${source.description}`);
-    const status = await withDuration(async () => await source.callback(connection));
-    logger.info(`${status.results} (${status.duration.toFixed(2)}s)`);
-    duration += status.duration;
-  }
-
-  logger.info(getStatusMessage({ results, duration }));
-}
-
-function getStatusMessage({ results, duration }) {
-  return `Finished importing ${results} rows in ${duration.toFixed(2)}s (${Math.round(results / duration)} rows/s)`;
-}
-
-async function getSourcePaths(source, sourceProvider) {
-  return source.type === "folder" ? await sourceProvider.listFiles(source.sourcePath) : [source.sourcePath];
+  const statusMessage = `Finished importing ${results} rows in ${duration.toFixed(2)}s (${Math.round(
+    results / duration
+  )} rows/s)`;
+  logger.info(statusMessage);
 }
 
 export function getSourceProvider(providerName, providerArgs) {
