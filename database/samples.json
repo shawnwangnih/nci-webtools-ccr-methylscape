@@ -1,5 +1,9 @@
 [
-  { "command": "recreateTables", "description": "Recreate tables", "tables": ["sample", "sampleCoordinate", "gene"] },
+  {
+    "command": "recreateTables",
+    "description": "Recreate tables",
+    "tables": ["sample", "sampleCoordinate", "gene"]
+  },
   {
     "command": "importTable",
     "description": "Import Sample_sheet_master.xlsx to staging table",
