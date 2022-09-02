@@ -7,49 +7,49 @@
   {
     "command": "importTable",
     "description": "Import Sample_sheet_master.xlsx to staging table",
-    "source": "data/Sample_sheet_master.xlsx",
+    "source": "Sample_sheet_master.xlsx",
     "target": "stage.sample",
     "convert": { "from": "xlsx", "to": "csv" }
   },
   {
     "command": "importTable",
     "description": "Import anno_heme.txt to staging table",
-    "source": "data/anno_heme.txt",
+    "source": "anno_heme.txt",
     "target": "stage.sampleCoordinateHematopoietic",
     "options": { "delimiter": "\t" }
   },
   {
     "command": "importTable",
-    "description": "Import data/anno_kidney.txt to staging table",
-    "source": "data/anno_kidney.txt",
+    "description": "Import anno_kidney.txt to staging table",
+    "source": "anno_kidney.txt",
     "target": "stage.sampleCoordinateRenal",
     "options": { "delimiter": "\t" }
   },
   {
     "command": "importTable",
-    "description": "Import data/anno_neuro.txt to staging table",
-    "source": "data/anno_neuro.txt",
+    "description": "Import anno_neuro.txt to staging table",
+    "source": "anno_neuro.txt",
     "target": "stage.sampleCoordinateCentralNervousSystem",
     "options": { "delimiter": "\t" }
   },
   {
     "command": "importTable",
-    "description": "Import data/anno_pan.txt to staging table",
-    "source": "data/anno_pan.txt",
+    "description": "Import anno_pan.txt to staging table",
+    "source": "anno_pan.txt",
     "target": "stage.sampleCoordinatePanCancer",
     "options": { "delimiter": "\t" }
   },
   {
     "command": "importTable",
-    "description": "Import data/anno_sarcoma.txt to staging table",
-    "source": "data/anno_sarcoma.txt",
+    "description": "Import anno_sarcoma.txt to staging table",
+    "source": "anno_sarcoma.txt",
     "target": "stage.sampleCoordinateSarcoma",
     "options": { "delimiter": "\t" }
   },
   {
     "command": "importTable",
-    "description": "Import data/genes.csv to gene table",
-    "source": "data/genes.csv",
+    "description": "Import genes.csv to gene table",
+    "source": "genes.csv",
     "target": "gene",
     "options": { "delimiter": "," }
   },
