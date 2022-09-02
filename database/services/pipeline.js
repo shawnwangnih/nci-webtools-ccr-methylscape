@@ -29,8 +29,10 @@ export async function createSchema({ connection, schema }) {
 }
 
 export async function createTable({ connection, table, columns, type = "" }) {
-  const columnDefs = columns.map((c) => format("%I %s", c.name, c.type));
-  await connection.query(format("CREATE %s TABLE %I (%s)", type, table, columnDefs.join()));
+  const columnDefs = columns.map((c) =>
+    format("%I %s %s %s", c.name, c.type, c.constraints?.join(" "), c.options?.join(" "))
+  );
+  await connection.query(format("CREATE %s TABLE %I (%s)", type, table, columnDefs));
 }
 
 export async function recreateTables({ connection, schema, tables }) {
@@ -63,13 +65,7 @@ export async function copyTable({ connection, schema, source, target, columns })
   };
   const columnNames = columns.map((column) => format("%I", column.name));
   const columnValues = columns.map(parseSourceValues);
-  const insertStatement = format(
-    "INSERT INTO %I (%s) SELECT %s FROM %I",
-    target,
-    columnNames.join(","),
-    columnValues.join(","),
-    source
-  );
+  const insertStatement = format("INSERT INTO %I (%s) SELECT %s FROM %I", target, columnNames, columnValues, source);
   return await connection.query(insertStatement);
 }
 
@@ -97,13 +93,13 @@ export async function convertStream(inputStream, sourceFormat, targetFormat) {
     return inputStream;
   }
   if (sourceFormat === "xlsx" && targetFormat === "csv") {
-    return await convertXLSXToCSV(inputStream);
+    return await convertXlsxToCsvStream(inputStream);
   } else {
     throw new Error(`Unsupported conversion: ${sourceFormat} -> ${targetFormat}`);
   }
 }
 
-export async function convertXLSXToCSV(inputStream, options = {}) {
+export async function convertXlsxToCsvStream(inputStream, options = {}) {
   let buffers = [];
   for await (const chunk of inputStream) {
     buffers.push(chunk);
