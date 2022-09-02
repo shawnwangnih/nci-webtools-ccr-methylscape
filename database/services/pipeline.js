@@ -69,16 +69,21 @@ export async function copyTable({ connection, schema, source, target, columns })
   return await connection.query(insertStatement);
 }
 
-export async function importTable({ connection, schema, source, target, convert, options }) {
+export async function importTable({ connection, schema, source, sourceProvider, target, convert, options }) {
   const tableSchema = schema.find((s) => s.table === target);
 
   if (tableSchema) {
     await createSchema({ connection, schema: [tableSchema] });
   } else {
-    const columns = await getColumns(await getConvertedStream(source, convert), options);
+    const columns = await getColumns(await getConvertedStream(source, sourceProvider, convert), options);
     await createTable({ connection, table: target, columns, type: "temporary" });
   }
-  return await importTableFromStream(connection, await getConvertedStream(source, convert), target, options);
+  return await importTableFromStream(
+    connection,
+    await getConvertedStream(source, sourceProvider, convert),
+    target,
+    options
+  );
 }
 
 export async function getColumns(inputStream, options) {
@@ -91,8 +96,7 @@ export async function getColumns(inputStream, options) {
 export async function convertStream(inputStream, sourceFormat, targetFormat) {
   if (sourceFormat === targetFormat) {
     return inputStream;
-  }
-  if (sourceFormat === "xlsx" && targetFormat === "csv") {
+  } else if (sourceFormat === "xlsx" && targetFormat === "csv") {
     return await convertXlsxToCsvStream(inputStream);
   } else {
     throw new Error(`Unsupported conversion: ${sourceFormat} -> ${targetFormat}`);
@@ -114,8 +118,8 @@ export async function convertXlsxToCsvStream(inputStream, options = {}) {
   return readable;
 }
 
-export async function getConvertedStream(path, convert) {
-  const inputStream = createReadStream(path);
+export async function getConvertedStream(source, sourceProvider, convert) {
+  const inputStream = await sourceProvider.readFile(source);
   if (convert) {
     return await convertStream(inputStream, convert.from, convert.to);
   } else {
