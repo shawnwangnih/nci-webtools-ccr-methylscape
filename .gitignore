@@ -5,3 +5,5 @@ database/data
 server/logs
 .DS_Store
 tmp
+.env
+coverage
