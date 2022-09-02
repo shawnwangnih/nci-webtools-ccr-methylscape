@@ -62,6 +62,10 @@
       { "sourceName": "Sample", "name": "sample" },
       { "sourceName": "idat_filename", "name": "idatFilename" },
       { "sourceName": "Sample_Plate", "name": "samplePlate" },
+      {
+        "sourceExpression": "lower(regexp_replace(\"Sample_Plate\", '[\\s\\:\\-_]', '', 'g'))",
+        "name": "unifiedSamplePlate"
+      },
       { "sourceName": "PI_Collaborator", "name": "piCollaborator" },
       { "sourceName": "Surgery_date", "name": "surgeryDate" },
       { "sourceName": "Notes", "name": "notes" },
