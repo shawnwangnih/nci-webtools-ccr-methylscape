@@ -2,10 +2,11 @@
   {
     "table": "sample",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "sample", "type": "text" },
-      { "name": "idatFilename", "type": "text" },
+      { "name": "idatFilename", "type": "text", "constraints": ["unique"] },
       { "name": "samplePlate", "type": "text" },
+      { "name": "unifiedSamplePlate", "type": "text" },
       { "name": "piCollaborator", "type": "text" },
       { "name": "surgeryDate", "type": "date" },
       { "name": "notes", "type": "text" },
@@ -86,7 +87,7 @@
   {
     "table": "sampleCoordinate",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "sampleIdatFilename", "type": "text" },
       { "name": "organSystem", "type": "text" },
       { "name": "embedding", "type": "text" },
@@ -97,7 +98,7 @@
   {
     "table": "gene",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "chromosome", "type": "text" },
       { "name": "start", "type": "integer" },
       { "name": "end", "type": "integer" },
@@ -107,72 +108,72 @@
   {
     "table": "importLog",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "status", "type": "text" },
       { "name": "type", "type": "text" },
       { "name": "log", "type": "text" },
-      { "name": "warnings", "type": "integer default 0" },
-      { "name": "createdAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "updatedAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "createdBy", "type": "text default 'system'" },
-      { "name": "updatedBy", "type": "text default 'system'" }
+      { "name": "warnings", "type": "integer", "options": ["default 0"] },
+      { "name": "createdAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "updatedAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "createdBy", "type": "text", "options": ["default 'system'"] },
+      { "name": "updatedBy", "type": "text", "options": ["default 'system'"] }
     ]
   },
   {
     "table": "role",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
-      { "name": "name", "type": "text not null unique" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
+      { "name": "name", "type": "text", "constraints": ["not null", "unique"] },
       { "name": "description", "type": "text" },
-      { "name": "createdAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "updatedAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "createdBy", "type": "text default 'system'" },
-      { "name": "updatedBy", "type": "text default 'system'" }
+      { "name": "createdAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "updatedAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "createdBy", "type": "text", "options": ["default 'system'"] },
+      { "name": "updatedBy", "type": "text", "options": ["default 'system'"] }
     ]
   },
   {
     "table": "rolePolicy",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
-      { "name": "roleId", "type": "integer not null references role" },
-      { "name": "action", "type": "text not null" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
+      { "name": "roleId", "type": "integer", "constraints": ["not null", "references role"] },
+      { "name": "action", "type": "text", "constraints": ["not null"] },
       { "name": "resource", "type": "text" },
-      { "name": "createdAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "updatedAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "createdBy", "type": "text default 'system'" },
-      { "name": "updatedBy", "type": "text default 'system'" }
+      { "name": "createdAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "updatedAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "createdBy", "type": "text", "options": ["default 'system'"] },
+      { "name": "updatedBy", "type": "text", "options": ["default 'system'"] }
     ]
   },
   {
     "table": "organization",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
       { "name": "order", "type": "integer" },
-      { "name": "name", "type": "text not null unique" },
-      { "name": "status", "type": "text default 'active'" },
-      { "name": "createdAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "updatedAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "createdBy", "type": "text default 'system'" },
-      { "name": "updatedBy", "type": "text default 'system'" }
+      { "name": "name", "type": "text", "constraints": ["not null", "unique"] },
+      { "name": "status", "type": "text", "options": ["default 'active'"] },
+      { "name": "createdAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "updatedAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "createdBy", "type": "text", "options": ["default 'system'"] },
+      { "name": "updatedBy", "type": "text", "options": ["default 'system'"] }
     ]
   },
   {
     "table": "user",
     "columns": [
-      { "name": "id", "type": "serial primary key" },
-      { "name": "roleId", "type": "integer references role" },
-      { "name": "organizationId", "type": "integer references organization" },
-      { "name": "name", "type": "text not null unique" },
+      { "name": "id", "type": "serial", "constraints": ["primary key"] },
+      { "name": "roleId", "type": "integer", "constraints": ["references role"] },
+      { "name": "organizationId", "type": "integer", "constraints": ["references organization"] },
+      { "name": "name", "type": "text", "constraints": ["not null", "unique"] },
       { "name": "firstName", "type": "text" },
       { "name": "lastName", "type": "text" },
-      { "name": "email", "type": "text unique" },
-      { "name": "status", "type": "text default 'pending'" },
-      { "name": "receiveNotification", "type": "boolean default true" },
+      { "name": "email", "type": "text", "constraints": ["unique"] },
+      { "name": "status", "type": "text", "options": ["default 'pending'"] },
+      { "name": "receiveNotification", "type": "boolean", "options": ["default true"] },
       { "name": "notes", "type": "text" },
-      { "name": "createdAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "updatedAt", "type": "timestamp default CURRENT_TIMESTAMP" },
-      { "name": "createdBy", "type": "text default 'system'" },
-      { "name": "updatedBy", "type": "text default 'system'" }
+      { "name": "createdAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "updatedAt", "type": "timestamp", "options": ["default CURRENT_TIMESTAMP"] },
+      { "name": "createdBy", "type": "text", "options": ["default 'system'"] },
+      { "name": "updatedBy", "type": "text", "options": ["default 'system'"] }
     ]
   }
 ]
