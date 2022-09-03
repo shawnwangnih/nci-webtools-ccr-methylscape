@@ -155,6 +155,7 @@ export const plotState = selector({
       hovertemplate: hovertemplate,
       type: useWebGl ? "scattergl" : "scatter",
       marker: {
+        size: 7,
         color:
           color.type == "categorical"
             ? nciMetricColorMap[name] || colors[colorCount++]
