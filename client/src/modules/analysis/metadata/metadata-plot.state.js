@@ -86,8 +86,9 @@ export const plotState = selector({
     //   }));
 
     const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
-    const isWeeklyAnnotation = ({ batchDate }) => batchDate && new Date(batchDate).getTime() > weeklyThreshold;
-    const weeklyAnnotations = data.filter(isWeeklyAnnotation).map((value) => ({
+    const isClinicalAnnotation = (d) =>
+      d.batchDate && new Date(d.batchDate).getTime() > weeklyThreshold && d.samplePlate === "Clinical Testing";
+    const weeklyAnnotations = data.filter(isClinicalAnnotation).map((value) => ({
       text: value.sample,
       x: value.x,
       y: value.y,
