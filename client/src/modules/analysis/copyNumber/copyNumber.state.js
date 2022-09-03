@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
-import { groupBy } from "lodash";
+import { mean } from "lodash";
 const chrLines = require("./lines.json");
 
 function getRange(array) {
@@ -21,6 +21,21 @@ function createScale(inputRange, outputRange, clamp = false) {
     const scaledValue = outMin + (outMax - outMin) * scale;
     return clamp ? Math.max(outMin, Math.min(outMax, scaledValue)) : scaledValue;
   };
+}
+
+function getStandardDeviation(values) {
+  const avg = mean(values);
+  const squareDiffs = values.map((value) => Math.pow(value - avg, 2));
+  return Math.sqrt(mean(squareDiffs));
+}
+
+function filterByStandardDeviation(values, key, threshold) {
+  const keyValues = values.map((v) => v[key]);
+  const avgValue = mean(keyValues);
+  const standardDeviation = getStandardDeviation(keyValues);
+  const minValue = avgValue - standardDeviation * threshold;
+  const maxValue = avgValue + standardDeviation * threshold;
+  return values.filter((v) => v[key] > minValue && v[key] < maxValue);
 }
 
 export const defaultPreFormState = {
@@ -124,8 +139,11 @@ export const plotState = selector({
     if (!Object.keys(cnData).length) return defaultFormState;
     if (error) return defaultPlotState.error;
 
-    const { annotations, search } = get(formState);
-    const { idatFilename, segments, bins, binGeneMap } = cnData;
+    let { annotations, search } = get(formState);
+    let { idatFilename, segments, bins, binGeneMap } = cnData;
+
+    bins = filterByStandardDeviation(bins, "medianValue", 4);
+    segments = filterByStandardDeviation(segments, "medianValue", 4);
 
     // determine x coordinates for each bin
     const xOffsets = [0, ...chrLines.map((c) => c["pos.start"])];
@@ -191,7 +209,7 @@ export const plotState = selector({
         y: bin.medianValue,
       }));
 
-    const bufferMargin = 0.25;
+    const bufferMargin = 0.1;
     const layout = {
       uirevision: idatFilename + annotations + search,
       title: `${idatFilename}`,
