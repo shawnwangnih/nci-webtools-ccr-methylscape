@@ -6,10 +6,9 @@
   },
   {
     "command": "importTable",
-    "description": "Import Sample_sheet_master.xlsx to staging table",
-    "source": "Sample_sheet_master.xlsx",
-    "target": "stage.sample",
-    "convert": { "from": "xlsx", "to": "csv" }
+    "description": "Import Sample_sheet_master.csv to staging table",
+    "source": "Sample_sheet_master.csv",
+    "target": "stage.sample"
   },
   {
     "command": "importTable",
