@@ -85,7 +85,8 @@ export const plotState = selector({
     //     showarrow: false,
     //   }));
 
-    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
+    // show annotations for samples from the past 10 days
+    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 10;
     const isClinicalAnnotation = (d) =>
       d.batchDate && new Date(d.batchDate).getTime() > weeklyThreshold && d.samplePlate === "Clinical Testing";
     const weeklyAnnotations = data.filter(isClinicalAnnotation).map((value) => ({
