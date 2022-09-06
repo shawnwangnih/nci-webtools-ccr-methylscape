@@ -37,7 +37,10 @@ export async function importDatabase(connection, schema, sources, sourceProvider
       logger.info(task.description);
       const taskArgs = { ...task, schema, connection, sourceProvider };
       const results = await runTask(taskArgs);
-      rowCount += results?.rowCount || 0;
+      if (results?.rowCount) {
+        logger.info(`${results.rowCount} rows imported`);
+        rowCount += results?.rowCount || 0;
+      }
     }
     await connection.query("commit");
     return rowCount;
