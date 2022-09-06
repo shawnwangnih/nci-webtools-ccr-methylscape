@@ -32,6 +32,8 @@ services:
       - "./database/logs:/app/database/logs"
       - "~/.aws/credentials:/root/.aws/credentials:ro"
 
+  # to start only the database container, run:
+  # docker compose --profile database up database
   database:
     image: postgres
     environment:
@@ -40,3 +42,5 @@ services:
       POSTGRES_DB: methylscape
     ports:
       - "5432:5432"
+    profiles:
+      - database
