@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
-import { mean } from "lodash";
+import { mean, uniq } from "lodash";
 const chrLines = require("./lines.json");
 
 function getRange(array) {
@@ -71,7 +71,13 @@ export const geneSelector = selector({
   key: "copyNumber.geneSelector",
   get: async () => {
     const response = await axios.get("/api/analysis/genes");
-    return response.data;
+    return uniq(
+      response.data
+        .map((g) => g.gene?.split(";"))
+        .flat()
+        .sort()
+        .filter(Boolean)
+    );
   },
   default: [],
 });
@@ -80,10 +86,7 @@ export const geneOptionsSelector = selector({
   key: "copyNumber.geneOptionsSelector",
   get: async ({ get }) => {
     const genes = await get(geneSelector);
-    return genes
-      .map((gene) => gene.name)
-      .sort()
-      .map((name) => ({ value: name, label: name }));
+    return genes.map((name) => ({ value: name, label: name }));
   },
 });
 
