@@ -19,10 +19,12 @@ export const methylscapeData = selector({
       const newResponse = await axios.get("/api/analysis/allproject");
       const experimentRes = await axios.get("/api/analysis/experiment");
       const sampleRes = await axios.get("/api/analysis/allsample");
-
+      const unifiedproject = await axios.get("/api/analysis/unifiedproject");
       const data = newResponse.data;
       const experimentData = experimentRes.data;
       const sampleData = sampleRes.data;
+      const unifiedprojectData = unifiedproject.data;
+
       for (let i = 0; i < sampleData.length; i++) {
         const obj = sampleData[i];
         if (obj.mc == null) {
@@ -82,10 +84,16 @@ export const methylscapeData = selector({
             priInvestigators: cp.split(",")[0],
             multiInvestigator: true,
           };
-        } else {
+        } else if (cp != null) {
           return {
             ...sample,
             priInvestigators: cp,
+            multiInvestigator: false,
+          };
+        } else {
+          return {
+            ...sample,
+            priInvestigators: "N/A",
             multiInvestigator: false,
           };
         }

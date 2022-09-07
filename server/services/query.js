@@ -14,6 +14,7 @@ async function getallproject(connection) {
     connection.raw(`"samplePlate" as project`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`count(distinct "sentrixId") as experimentCount`),
+    connection.raw(`"unifiedSamplePlate"`),
     connection.raw(`string_agg(distinct "piCollaborator", ', ' ) as Investigators`),
   ];
   const query = await connection
@@ -21,7 +22,25 @@ async function getallproject(connection) {
     .from("sample")
     .whereNotNull("samplePlate")
     .groupBy("samplePlate")
+    .groupBy("unifiedSamplePlate")
     .orderBy("samplePlate");
+
+  return query;
+}
+
+async function getUnifiedProject(connection) {
+  const sampleColumns = [
+    connection.raw(`count(distinct "sample") as sampleCount`),
+    connection.raw(`"samplePlate" as project`),
+    connection.raw(`"unifiedSamplePlate"`),
+  ];
+  const query = await connection
+    .select(sampleColumns)
+    .from("sample")
+    .whereNotNull("samplePlate")
+    .groupBy("unifiedSamplePlate")
+    .groupBy("samplePlate");
+
   return query;
 }
 
@@ -43,6 +62,7 @@ async function getAllSamples(connection) {
     connection.raw(`"batchDate"as sampleDate`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
     connection.raw(`"lpCpNumber"`),
+    connection.raw(`"unifiedSamplePlate"`),
   ];
   const query = await connection.select(sampleColumns).from("sample").whereNotNull("samplePlate");
 
@@ -139,4 +159,5 @@ module.exports = {
   getallproject,
   getExperiments,
   getAllSamples,
+  getUnifiedProject,
 };
