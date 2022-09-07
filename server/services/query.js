@@ -11,7 +11,6 @@ async function getSampleCoordinates(connection, query) {
 
 async function getallproject(connection) {
   const sampleColumns = [
-    connection.raw(`"samplePlate" as project`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`count(distinct "sentrixId") as experimentCount`),
     connection.raw(`"unifiedSamplePlate"`),
@@ -21,10 +20,7 @@ async function getallproject(connection) {
     .select(sampleColumns)
     .from("sample")
     .whereNotNull("samplePlate")
-    .groupBy("samplePlate")
-    .groupBy("unifiedSamplePlate")
-    .orderBy("samplePlate");
-
+    .groupBy("unifiedSamplePlate");
   return query;
 }
 
@@ -71,20 +67,20 @@ async function getAllSamples(connection) {
 
 async function getExperiments(connection) {
   const experimentColumns = [
-    connection.raw(`"samplePlate" as project`),
     connection.raw(`"piCollaborator" as 	Investigator`),
     connection.raw(`"surgeryDate" as 	experimentDate`),
     connection.raw(`count(distinct "sample") as sampleCount`),
     connection.raw(`"sentrixId" as experiment`),
+    connection.raw(`"unifiedSamplePlate"`),
   ];
   const query = await connection
     .select(experimentColumns)
     .from("sample")
     .whereNotNull("samplePlate")
     .groupBy("sentrixId")
+    .groupBy("unifiedSamplePlate")
     .groupBy("piCollaborator")
     .groupBy("surgeryDate")
-    .groupBy("samplePlate")
     .orderBy("sentrixId");
   return query;
 }
