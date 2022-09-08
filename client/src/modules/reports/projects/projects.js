@@ -34,6 +34,8 @@ export default function Projects() {
               </span>
             </span>
           );
+        } else {
+          return <span>{row.value}</span>;
         }
       },
     },

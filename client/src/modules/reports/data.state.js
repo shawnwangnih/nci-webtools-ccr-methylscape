@@ -19,10 +19,19 @@ export const methylscapeData = selector({
       const newResponse = await axios.get("/api/analysis/allproject");
       const experimentRes = await axios.get("/api/analysis/experiment");
       const sampleRes = await axios.get("/api/analysis/allsample");
-
+      const unifiedproject = await axios.get("/api/analysis/unifiedproject");
       const data = newResponse.data;
       const experimentData = experimentRes.data;
       const sampleData = sampleRes.data;
+      const unifiedprojectData = unifiedproject.data;
+      var dict = new Object();
+      for (let i = 0; i < unifiedprojectData.length; i++) {
+        let item = unifiedprojectData[i];
+        if (!(item.unifiedSamplePlate in dict)) {
+          dict[item.unifiedSamplePlate] = max(unifiedprojectData, item.unifiedSamplePlate);
+        }
+      }
+      console.log(dict);
       for (let i = 0; i < sampleData.length; i++) {
         const obj = sampleData[i];
         if (obj.mc == null) {
@@ -58,6 +67,7 @@ export const methylscapeData = selector({
       for (let i = 0; i < data.length; i++) {
         const obj = data[i];
         const cp = obj.investigators;
+        obj.project = dict[obj.unifiedSamplePlate];
         if (cp != null && cp.includes(",")) {
           obj.priInvestigators = cp.split(",")[0];
           obj.multiInvestigator = true;
@@ -68,6 +78,12 @@ export const methylscapeData = selector({
           obj.numberOfOthers = 0;
         }
 
+        data[i] = obj;
+      }
+
+      for (let i = 0; i < experimentData.length; i++) {
+        const obj = experimentData[i];
+        obj.project = dict[obj.unifiedSamplePlate];
         data[i] = obj;
       }
 
@@ -82,15 +98,20 @@ export const methylscapeData = selector({
             priInvestigators: cp.split(",")[0],
             multiInvestigator: true,
           };
-        } else {
+        } else if (cp != null) {
           return {
             ...sample,
             priInvestigators: cp,
             multiInvestigator: false,
           };
+        } else {
+          return {
+            ...sample,
+            priInvestigators: "N/A",
+            multiInvestigator: false,
+          };
         }
       });
-      console.log(data);
       return {
         data,
         experimentData,
@@ -105,3 +126,16 @@ export const methylscapeData = selector({
     }
   },
 });
+
+function max(list, maxItem) {
+  let tmpItem = list[0];
+  let count = 0;
+  console.log(maxItem);
+  for (let j = 0; j < list.length; j++) {
+    let newitem = list[j];
+    if (parseInt(newitem.samplecount) > count && newitem.unifiedSamplePlate == maxItem) {
+      tmpItem = newitem;
+    }
+  }
+  return tmpItem.project;
+}
