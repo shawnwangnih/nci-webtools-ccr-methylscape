@@ -31,7 +31,6 @@ export const methylscapeData = selector({
           dict[item.unifiedSamplePlate] = max(unifiedprojectData, item.unifiedSamplePlate);
         }
       }
-      console.log(dict);
       for (let i = 0; i < sampleData.length; i++) {
         const obj = sampleData[i];
         if (obj.mc == null) {
@@ -84,7 +83,7 @@ export const methylscapeData = selector({
       for (let i = 0; i < experimentData.length; i++) {
         const obj = experimentData[i];
         obj.project = dict[obj.unifiedSamplePlate];
-        data[i] = obj;
+        experimentData[i] = obj;
       }
 
       const projectsCount = data.length; //[...new Set(data.filter(({ project }) => project).map(({ project }) => project))].length;
@@ -130,7 +129,6 @@ export const methylscapeData = selector({
 function max(list, maxItem) {
   let tmpItem = list[0];
   let count = 0;
-  console.log(maxItem);
   for (let j = 0; j < list.length; j++) {
     let newitem = list[j];
     if (parseInt(newitem.samplecount) > count && newitem.unifiedSamplePlate == maxItem) {
