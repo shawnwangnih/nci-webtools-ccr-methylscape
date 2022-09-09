@@ -132,6 +132,7 @@ function max(list, maxItem) {
   for (let j = 0; j < list.length; j++) {
     let newitem = list[j];
     if (parseInt(newitem.samplecount) > count && newitem.unifiedSamplePlate == maxItem) {
+      count = parseInt(newitem.samplecount);
       tmpItem = newitem;
     }
   }
