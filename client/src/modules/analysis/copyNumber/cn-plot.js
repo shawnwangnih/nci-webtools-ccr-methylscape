@@ -5,7 +5,7 @@ import Plot from "react-plotly.js";
 import cloneDeep from "lodash/cloneDeep";
 
 export default function CopyNumberPlot() {
-  const { data, config, layout, error } = useRecoilValue(plotState) || {};
+  const { data, config, layout, error } = useRecoilValue(plotState);
   const [state, setState] = useState({
     x: "",
     y: "",
@@ -23,13 +23,13 @@ export default function CopyNumberPlot() {
 
   return (
     <div>
-      {error ? (
-        error
-      ) : !data || !data.length ? (
+      {error && error}
+      {(!data || !data.length) && (
         <div className="d-flex bg-light" style={{ minHeight: "300px" }}>
           <p className="mx-auto my-auto">Please select a sample in the UMAP plot</p>
         </div>
-      ) : (
+      )}
+      {data && data.length && (
         <div>
           <Plot
             data={cloneDeep(data)}

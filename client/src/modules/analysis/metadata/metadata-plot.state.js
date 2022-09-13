@@ -85,9 +85,11 @@ export const plotState = selector({
     //     showarrow: false,
     //   }));
 
-    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 7;
-    const isWeeklyAnnotation = ({ batchDate }) => batchDate && new Date(batchDate).getTime() > weeklyThreshold;
-    const weeklyAnnotations = data.filter(isWeeklyAnnotation).map((value) => ({
+    // show annotations for samples from the past 10 days
+    const weeklyThreshold = Date.now() - 1000 * 60 * 60 * 24 * 10;
+    const isClinicalAnnotation = (d) =>
+      d.batchDate && new Date(d.batchDate).getTime() > weeklyThreshold && d.samplePlate === "Clinical Testing";
+    const weeklyAnnotations = data.filter(isClinicalAnnotation).map((value) => ({
       text: value.sample,
       x: value.x,
       y: value.y,
@@ -155,6 +157,7 @@ export const plotState = selector({
       hovertemplate: hovertemplate,
       type: useWebGl ? "scattergl" : "scatter",
       marker: {
+        size: 7,
         color:
           color.type == "categorical"
             ? nciMetricColorMap[name] || colors[colorCount++]
@@ -190,7 +193,7 @@ export const plotState = selector({
       uirevision: organSystem + embedding + color.value + search + showAnnotations,
       legend: { title: { text: color.label } },
       autosize: true,
-      dragmode: "select",
+      dragmode: "zoom",
     };
 
     const config = {

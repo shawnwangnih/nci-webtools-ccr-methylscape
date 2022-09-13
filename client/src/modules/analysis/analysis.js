@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import { useRecoilState } from "recoil";
 import Overview from "./overview/overview";
 import CopyNumber from "./copyNumber/copyNumber";
-import Survival from "./survival/survival-tab";
+import Survival from "./survival/survival";
 import Table from "./table/table";
 import { MemoizedMetadata } from "./metadata/metadata";
 import { analysisState } from "./analysis.state";

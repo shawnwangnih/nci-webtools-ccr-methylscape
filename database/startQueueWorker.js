@@ -16,8 +16,8 @@ if (isMainModule) {
   loadAwsCredentials(config.aws);
 
   const args = minimist(process.argv.slice(2));
-  const schemaPath = pathToFileURL(args.schema || "./schema.js");
-  const sourcesPath = pathToFileURL(args.sources || "./sources.js");
+  const schema = require(args.schema || "./schema.json");
+  const sources = require(args.sources || "./samples.json");
 
   const providerName = args.provider || "s3";
   const defaultProviderArgs = {
@@ -25,10 +25,8 @@ if (isMainModule) {
     s3: [`s3://${config.aws.s3DataBucket}/${config.aws.s3AnalysisKey}`],
   }[providerName];
   const providerArgs = args._.length ? args._ : defaultProviderArgs;
-
-  const { schema } = await import(schemaPath);
-  const { sources } = await import(sourcesPath);
   const sourceProvider = getSourceProvider(providerName, providerArgs);
+
   const logger = createCustomLogger("methylscape-queue-worker");
   startQueueWorker(config, schema, sources, sourceProvider, logger);
 }
